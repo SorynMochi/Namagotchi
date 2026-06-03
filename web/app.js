@@ -6,16 +6,33 @@ const namiMessage = document.querySelector("#nami-message");
 const serverTime = document.querySelector("#server-time");
 const onlineUsers = document.querySelector("#online-users");
 
-const level = document.querySelector("#level");
-const syncXp = document.querySelector("#sync-xp");
-const credits = document.querySelector("#credits");
-const nibbles = document.querySelector("#nibbles");
-const namiCoin = document.querySelector("#namicoin");
+const wealthCredits = document.querySelector("#wealth-credits");
+const wealthNibbles = document.querySelector("#wealth-nibbles");
+const wealthNamiCoin = document.querySelector("#wealth-namicoin");
+const wealthInventory = document.querySelector("#wealth-inventory");
 
-const moodScore = document.querySelector("#mood-score");
-const namiStatus = document.querySelector("#nami-status");
-const moodBonus = document.querySelector("#mood-bonus");
+const topMood = document.querySelector("#top-mood");
+const topNamiStatus = document.querySelector("#top-nami-status");
+const topMoodBonus = document.querySelector("#top-mood-bonus");
 const personalMoodBonus = document.querySelector("#personal-mood-bonus");
+
+const playdeckTopLevel = document.querySelector("#playdeck-top-level");
+const playdeckEquipLevel = document.querySelector("#playdeck-equip-level");
+const playdeckIngredients = document.querySelector("#playdeck-ingredients");
+
+const resFans = document.querySelector("#res-fans");
+const resMemes = document.querySelector("#res-memes");
+const resLostItems = document.querySelector("#res-lost-items");
+const resConfidence = document.querySelector("#res-confidence");
+const resReceipts = document.querySelector("#res-receipts");
+const resPatterns = document.querySelector("#res-patterns");
+
+const actStreaming = document.querySelector("#act-streaming");
+const actDoomScrolling = document.querySelector("#act-doom-scrolling");
+const actCleaning = document.querySelector("#act-cleaning");
+const actExercising = document.querySelector("#act-exercising");
+const actShopping = document.querySelector("#act-shopping");
+const actDesigning = document.querySelector("#act-designing");
 
 const currentActionLabel = document.querySelector("#current-action-label");
 const playdeckHpLabel = document.querySelector("#playdeck-hp-label");
@@ -200,16 +217,34 @@ function renderPlayerStatus(status) {
   const tick = status.tick;
   const bonus = getMoodBonus(companion.moodScore);
 
-  level.textContent = player.level.toLocaleString();
-  syncXp.textContent = `${player.xpIntoLevel.toLocaleString()} / ${player.xpToNext.toLocaleString()}`;
-  credits.textContent = formatCredits(player.creditsCents ?? player.currencyCents);
-  nibbles.textContent = Number(player.nibbles ?? 0).toLocaleString();
-  namiCoin.textContent = Number(player.namiCoin ?? 0).toLocaleString();
+  wealthCredits.textContent = formatWholeCredits(player.creditsCents ?? player.currencyCents);
+wealthNibbles.textContent = Number(player.nibbles ?? 0).toLocaleString();
+wealthNamiCoin.textContent = Number(player.namiCoin ?? 0).toLocaleString();
+wealthInventory.textContent = "0 / 40";
 
-  moodScore.textContent = companion.moodScore;
-  namiStatus.textContent = capitalize(companion.status);
-  moodBonus.textContent = `+${bonus}%`;
-  personalMoodBonus.textContent = `+${bonus}% Resource Gain`;
+topMood.textContent = Math.round(Number(companion.moodScore));
+topNamiStatus.textContent = capitalize(companion.status);
+topMoodBonus.textContent = `+${bonus}%`;
+personalMoodBonus.textContent = `+${bonus}% Resource Gain`;
+
+playdeckTopLevel.textContent = Number(player.level).toLocaleString();
+playdeckEquipLevel.textContent = "—";
+playdeckIngredients.textContent = "0";
+playdeckIngredients.title = "Ingredients are not implemented yet.";
+
+resFans.textContent = Number(status.resources.fans ?? 0).toLocaleString();
+resMemes.textContent = Number(status.resources.memes ?? 0).toLocaleString();
+resLostItems.textContent = Number(status.resources.lostItems ?? 0).toLocaleString();
+resConfidence.textContent = Number(status.resources.confidence ?? 0).toLocaleString();
+resReceipts.textContent = Number(status.resources.receipts ?? 0).toLocaleString();
+resPatterns.textContent = Number(status.resources.patterns ?? 0).toLocaleString();
+
+actStreaming.textContent = "1";
+actDoomScrolling.textContent = "1";
+actCleaning.textContent = "1";
+actExercising.textContent = "1";
+actShopping.textContent = "1";
+actDesigning.textContent = "1";
 
   const xpPercent = percent(player.xpIntoLevel, player.xpToNext);
   playdeckXpLabel.textContent = `XP: ${player.xpIntoLevel.toLocaleString()} / ${player.xpToNext.toLocaleString()}`;
@@ -219,10 +254,6 @@ function renderPlayerStatus(status) {
   playdeckHpFill.style.width = "100%";
 
   currentActionLabel.textContent = `Playdeck + ${tick.activeGatheringName} [x${tick.playdeckStreak.toLocaleString()}]`;
-
-  activeTask.textContent = tick.activeGatheringName;
-  resourceRate.textContent = `${tick.resourcePerTickDisplay.toLocaleString()} ${tick.activeGatheringOutput}/tick`;
-  nextTick.textContent = `${tick.secondsUntilNextTick}s`;
 
   careStats.innerHTML = `
     ${renderStat("Satiety", companion.satiety)}
@@ -319,6 +350,10 @@ function formatCredits(cents) {
   return (Number(cents) / 100).toLocaleString(undefined, {
     maximumFractionDigits: 2,
   });
+}
+
+function formatWholeCredits(cents) {
+  return Math.round(Number(cents) / 100).toLocaleString();
 }
 
 function formatDateTime(value) {

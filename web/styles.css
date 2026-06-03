@@ -1067,3 +1067,117 @@ h2 {
 #current-action-label {
   color: #f4fbff;
 }
+
+/* Compact top operator stats strip */
+
+.center-column {
+  grid-template-rows: auto minmax(0, 1fr) 220px;
+}
+
+.top-stats-panel {
+  overflow: hidden;
+}
+
+.top-panel-toggle {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: rgba(73, 199, 255, 0.055);
+  text-align: left;
+  cursor: pointer;
+}
+
+.top-stats-compact {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  padding: 8px 10px 10px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 70%),
+    rgba(14, 24, 39, 0.92);
+}
+
+.top-stats-panel .collapse-body.collapsed {
+  display: none;
+}
+
+.stat-group.compact {
+  min-width: 0;
+  padding: 6px 14px 4px;
+  border: 0;
+  border-right: 1px solid rgba(143, 205, 255, 0.14);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.stat-group.compact:last-child {
+  border-right: 0;
+}
+
+.stat-group.compact h2 {
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(73, 199, 255, 0.2);
+  color: var(--cyan);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stat-lines,
+.compact-grid-lines {
+  display: grid;
+  gap: 4px;
+}
+
+.compact-grid-lines {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 12px;
+  row-gap: 4px;
+}
+
+.stat-group.compact p {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.stat-group.compact span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.stat-group.compact strong {
+  color: var(--text);
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 1600px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 8px;
+  }
+
+  .stat-group.compact {
+    border-right: 0;
+    border-bottom: 1px solid rgba(143, 205, 255, 0.14);
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -69,35 +69,68 @@
     </aside>
 
     <div class="center-column">
-      <header class="panel top-stats">
-        <div class="stat-group">
-          <h2>WEALTH</h2>
-          <p><span>Credits</span><strong id="credits">$0.00</strong></p>
-          <p><span>Nibbles</span><strong id="nibbles">0</strong></p>
-          <p><span>NamiCoin</span><strong id="namicoin">0</strong></p>
-        </div>
+      <section class="panel top-stats-panel">
+  <button class="panel-title collapse-toggle top-panel-toggle" data-collapse="top-stats-body" type="button">
+    OPERATOR STATS
+  </button>
 
-        <div class="stat-group">
-          <h2>PLAYDECK</h2>
-          <p><span>Level</span><strong id="level">1</strong></p>
-          <p><span>Sync XP</span><strong id="sync-xp">0</strong></p>
-          <p><span>Current Zone</span><strong id="current-zone">Starter Deck</strong></p>
-        </div>
+  <div class="collapse-body top-stats-compact" id="top-stats-body">
+    <section class="stat-group compact">
+      <h2>Wealth</h2>
+      <div class="stat-lines">
+        <p><span>Credits:</span><strong id="wealth-credits">0</strong></p>
+        <p><span>Nibbles:</span><strong id="wealth-nibbles">0</strong></p>
+        <p><span>NamiCoins:</span><strong id="wealth-namicoin">0</strong></p>
+        <p><span>Inventory:</span><strong id="wealth-inventory">0 / 40</strong></p>
+      </div>
+    </section>
 
-        <div class="stat-group">
-          <h2>NAMI-CHAN</h2>
-          <p><span>Mood</span><strong id="mood-score">80</strong></p>
-          <p><span>Status</span><strong id="nami-status">Awake</strong></p>
-          <p><span>Resource Bonus</span><strong id="mood-bonus">+40%</strong></p>
-        </div>
+    <section class="stat-group compact">
+      <h2>Nami-Chan</h2>
+      <div class="stat-lines">
+        <p><span>Mood:</span><strong id="top-mood">0</strong></p>
+        <p><span>Status:</span><strong id="top-nami-status">Awake</strong></p>
+        <p><span>Bonus:</span><strong id="top-mood-bonus">+0%</strong></p>
+      </div>
+    </section>
 
-        <div class="stat-group">
-          <h2>GATHERING</h2>
-          <p><span>Active Task</span><strong id="active-task">None</strong></p>
-          <p><span>Rate</span><strong id="resource-rate">0/tick</strong></p>
-          <p><span>Next Tick</span><strong id="next-tick">5s</strong></p>
-        </div>
-      </header>
+    <section class="stat-group compact">
+      <h2>Playdeck</h2>
+      <div class="stat-lines">
+        <p><span>Level:</span><strong id="playdeck-top-level">1</strong></p>
+        <p><span>Equip Level:</span><strong id="playdeck-equip-level">—</strong></p>
+        <p>
+          <span>Ingredients:</span>
+          <strong id="playdeck-ingredients" title="Ingredients are not implemented yet.">0</strong>
+        </p>
+      </div>
+    </section>
+
+    <section class="stat-group compact">
+      <h2>Resources</h2>
+      <div class="compact-grid-lines">
+        <p><span>Fans:</span><strong id="res-fans">0</strong></p>
+        <p><span>Memes:</span><strong id="res-memes">0</strong></p>
+        <p><span>Lost:</span><strong id="res-lost-items">0</strong></p>
+        <p><span>Confidence:</span><strong id="res-confidence">0</strong></p>
+        <p><span>Receipts:</span><strong id="res-receipts">0</strong></p>
+        <p><span>Patterns:</span><strong id="res-patterns">0</strong></p>
+      </div>
+    </section>
+
+    <section class="stat-group compact">
+      <h2>Activities</h2>
+      <div class="compact-grid-lines">
+        <p><span>Streaming:</span><strong id="act-streaming" title="Activity levels are not implemented yet.">1</strong></p>
+        <p><span>Doom Scroll:</span><strong id="act-doom-scrolling" title="Activity levels are not implemented yet.">1</strong></p>
+        <p><span>Cleaning:</span><strong id="act-cleaning" title="Activity levels are not implemented yet.">1</strong></p>
+        <p><span>Exercise:</span><strong id="act-exercising" title="Activity levels are not implemented yet.">1</strong></p>
+        <p><span>Shopping:</span><strong id="act-shopping" title="Activity levels are not implemented yet.">1</strong></p>
+        <p><span>Designing:</span><strong id="act-designing" title="Activity levels are not implemented yet.">1</strong></p>
+      </div>
+    </section>
+  </div>
+</section>
 
       <main class="panel main-panel">
         <section class="content-section active" id="section-home">
