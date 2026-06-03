@@ -9,7 +9,7 @@
 <body>
   <main class="app-shell">
     <section class="status-card">
-      <p class="eyebrow">Namagotchi Phase 1</p>
+      <p class="eyebrow">Namagotchi Phase 2</p>
       <h1>Server Status</h1>
 
       <div class="status-grid">
@@ -36,7 +36,19 @@
 
       <p id="message" class="message">Nami-chan is peeking at the server lights...</p>
 
-      <button id="refresh-button" type="button">Refresh Status</button>
+      <div class="button-row">
+        <button id="refresh-button" type="button">Refresh Status</button>
+        <button id="seed-button" type="button">Create Dev Player</button>
+      </div>
+    </section>
+
+    <section class="status-card companion-card">
+      <p class="eyebrow">Dev Player</p>
+      <h2>Soryn & Nami-chan</h2>
+
+      <div id="player-panel" class="player-panel">
+        <p class="message">No player loaded yet. Create the dev player first.</p>
+      </div>
     </section>
   </main>
 
