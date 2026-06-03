@@ -16,11 +16,12 @@ type Server struct {
 }
 
 type StatusResponse struct {
-	Server    string `json:"server"`
-	Database  string `json:"database"`
-	Timestamp string `json:"timestamp"`
-	Uptime    string `json:"uptime"`
-	Version   string `json:"version"`
+	Server      string `json:"server"`
+	Database    string `json:"database"`
+	Timestamp   string `json:"timestamp"`
+	Uptime      string `json:"uptime"`
+	Version     string `json:"version"`
+	OnlineUsers int    `json:"onlineUsers"`
 }
 
 type MessageResponse struct {
@@ -55,11 +56,12 @@ func (s *Server) HandleStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := StatusResponse{
-		Server:    "online",
-		Database:  s.databaseStatus(),
-		Timestamp: time.Now().Format(time.RFC3339),
-		Uptime:    time.Since(s.StartedAt).Round(time.Second).String(),
-		Version:   "phase-2",
+		Server:      "online",
+		Database:    s.databaseStatus(),
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Uptime:      time.Since(s.StartedAt).Round(time.Second).String(),
+		Version:     "phase-3a",
+		OnlineUsers: 1,
 	}
 
 	writeJSON(w, http.StatusOK, response)

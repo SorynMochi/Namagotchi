@@ -7,50 +7,322 @@
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <main class="app-shell">
-    <section class="status-card">
-      <p class="eyebrow">Namagotchi Phase 2</p>
-      <h1>Server Status</h1>
+  <div class="game-shell">
+    <aside class="left-rail">
+      <section class="panel user-card">
+        <div class="panel-title">[-] USER INFO</div>
+        <div class="player-name">💎 Soryn</div>
+        <div class="mini-progress">
+          <span>SYNC XP</span>
+          <div class="bar"><div class="fill xp-fill" style="width: 46%"></div></div>
+        </div>
+        <div class="mini-progress">
+          <span>NAMI MOOD</span>
+          <div class="bar"><div class="fill mood-fill" id="mini-mood-fill" style="width: 80%"></div></div>
+        </div>
+      </section>
 
-      <div class="status-grid">
-        <div>
-          <span class="label">Server</span>
-          <strong id="server-status">Checking...</strong>
+      <section class="panel nav-panel">
+        <div class="panel-title">[-] MENU</div>
+        <nav id="main-nav" class="main-nav" aria-label="Main menu">
+          <button class="nav-item active" data-section="home">⌂ Home</button>
+          <button class="nav-item" data-section="playdeck">🎮 Playdeck</button>
+          <button class="nav-item" data-section="gathering">✦ Gathering</button>
+          <button class="nav-item" data-section="studio">✂ Studio</button>
+          <button class="nav-item" data-section="inventory">🎒 Inventory</button>
+          <button class="nav-item" data-section="market">⇄ Market</button>
+          <button class="nav-item" data-section="home-shop">🏠 Home Shop</button>
+          <button class="nav-item" data-section="club">◆ Club</button>
+          <button class="nav-item" data-section="events">☄ Events</button>
+          <button class="nav-item" data-section="achievements">★ Achievements</button>
+          <button class="nav-item" data-section="help">? Help</button>
+          <button class="nav-item" data-section="settings">⚙ Settings</button>
+          <button class="nav-item premium" data-section="premium">★ Premium</button>
+        </nav>
+      </section>
+
+      <section class="panel orders-panel">
+        <div class="panel-title">[-] ORDERS</div>
+        <button class="primary-button full-width" data-section-link="orders">📋 Open Orders</button>
+        <div id="order-tracker" class="order-tracker hidden">
+          <div class="tracker-label">
+            <span>Daily Order</span>
+            <strong id="order-progress-text">0 / 0</strong>
+          </div>
+          <div class="bar"><div id="order-progress-fill" class="fill order-fill" style="width: 0%"></div></div>
+        </div>
+      </section>
+    </aside>
+
+    <div class="center-column">
+      <header class="panel top-stats">
+        <div class="stat-group">
+          <h2>WEALTH</h2>
+          <p><span>Credits</span><strong id="credits">$0.00</strong></p>
+          <p><span>Nibbles</span><strong id="nibbles">0</strong></p>
+          <p><span>NamiCoin</span><strong id="namicoin">0</strong></p>
         </div>
 
-        <div>
-          <span class="label">Database</span>
-          <strong id="database-status">Checking...</strong>
+        <div class="stat-group">
+          <h2>PLAYDECK</h2>
+          <p><span>Level</span><strong id="level">1</strong></p>
+          <p><span>Sync XP</span><strong id="sync-xp">0</strong></p>
+          <p><span>Current Zone</span><strong id="current-zone">Starter Deck</strong></p>
         </div>
 
-        <div>
-          <span class="label">Uptime</span>
-          <strong id="uptime">...</strong>
+        <div class="stat-group">
+          <h2>NAMI-CHAN</h2>
+          <p><span>Mood</span><strong id="mood-score">80</strong></p>
+          <p><span>Status</span><strong id="nami-status">Awake</strong></p>
+          <p><span>Resource Bonus</span><strong id="mood-bonus">+40%</strong></p>
         </div>
 
-        <div>
-          <span class="label">Version</span>
-          <strong id="version">...</strong>
+        <div class="stat-group">
+          <h2>GATHERING</h2>
+          <p><span>Active Task</span><strong id="active-task">None</strong></p>
+          <p><span>Rate</span><strong id="resource-rate">0/tick</strong></p>
+          <p><span>Next Tick</span><strong id="next-tick">5s</strong></p>
         </div>
-      </div>
+      </header>
 
-      <p id="message" class="message">Nami-chan is peeking at the server lights...</p>
+      <main class="panel main-panel">
+        <section class="content-section active" id="section-home">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Home</p>
+              <h1>Nami-chan</h1>
+            </div>
+            <button id="seed-button" class="secondary-button" type="button">Create Dev Player</button>
+          </div>
 
-      <div class="button-row">
-        <button id="refresh-button" type="button">Refresh Status</button>
-        <button id="seed-button" type="button">Create Dev Player</button>
-      </div>
-    </section>
+          <div class="home-grid">
+            <div class="nami-card">
+              <div class="nami-placeholder">
+                <div class="nami-sparkle">✦</div>
+                <p>Nami-chan display image slot</p>
+                <span>Static/animated art will live here.</span>
+              </div>
+              <p id="nami-message" class="nami-message">
+                Nami-chan is waiting in her cozy digital room, pretending she has not already checked the snack cabinet twice.
+              </p>
+            </div>
 
-    <section class="status-card companion-card">
-      <p class="eyebrow">Dev Player</p>
-      <h2>Soryn & Nami-chan</h2>
+            <div class="care-card">
+              <h2>Care Status</h2>
+              <div id="care-stats" class="stat-list">
+                <p class="muted">Create the dev player to load care stats.</p>
+              </div>
 
-      <div id="player-panel" class="player-panel">
-        <p class="message">No player loaded yet. Create the dev player first.</p>
-      </div>
-    </section>
-  </main>
+              <div class="care-actions">
+                <button class="care-button">Feed</button>
+                <button class="care-button">Drink</button>
+                <button class="care-button">Cuddle</button>
+                <button class="care-button">Play</button>
+                <button class="care-button">Bathe</button>
+                <button class="care-button">Sleep</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section" id="section-playdeck">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Playdeck</p>
+              <h1>Digital Battle Deck</h1>
+            </div>
+            <button class="secondary-button">View Last 10 Losses</button>
+          </div>
+
+          <div class="playdeck-layout">
+            <div class="zone-list">
+              <h2>Zones</h2>
+              <button class="zone-card active">
+                <strong>Starter Deck</strong>
+                <span>Min Lv 1 · Softcap 50</span>
+                <small>Training bots, pop-up goblins, and suspiciously smug tutorials.</small>
+              </button>
+              <button class="zone-card locked">
+                <strong>Cozy LAN Café</strong>
+                <span>Min Lv 50 · Softcap 100</span>
+                <small>Friendly chaos, snack-powered rivals, and rogue leaderboard gremlins.</small>
+              </button>
+              <button class="zone-card locked">
+                <strong>Neon Mall Net</strong>
+                <span>Min Lv 250 · Softcap 150</span>
+                <small>Fashion bots, coupon phantoms, and glittery malware.</small>
+              </button>
+            </div>
+
+            <div class="combat-panel">
+              <h2>Combat Status</h2>
+              <div class="combat-success">
+                <strong>&gt; PLAYDECK READY</strong>
+                <p>Nami-chan is standing by for one complete battle per 5-second tick.</p>
+              </div>
+
+              <div class="combat-log">
+                <div class="combat-log-header">
+                  <h2>Combat Log</h2>
+                  <label><input type="checkbox" checked /> Detailed Logs</label>
+                </div>
+                <div class="log-list">
+                  <p><span>[000]</span> [LOG] 🎯🛡️ Tutorial Pop-Up Gremlin Lv1 <em>(0r)</em> +0 Sync XP +0 Credits [+0 Nibbles]</p>
+                  <p><span>[000]</span> [LOG] 🧠✨ Cozy Cache Sprite Lv1 <em>(0r)</em> +0 Sync XP +0 Credits [+0 Nibbles]</p>
+                  <p><span>[000]</span> [LOG] 🐾💾 Idle Snack Daemon Lv1 <em>(0r)</em> +0 Sync XP +0 Credits [+0 Nibbles]</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section" id="section-gathering">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Gathering</p>
+              <h1>Resource Tasks</h1>
+            </div>
+          </div>
+
+          <div class="gathering-grid">
+            <article class="task-card active">
+              <h2>Streaming</h2>
+              <p>Generates <strong>Fans</strong>.</p>
+              <span>Idle</span>
+              <button>Start Streaming</button>
+            </article>
+            <article class="task-card">
+              <h2>Doom Scrolling</h2>
+              <p>Generates <strong>Memes</strong>.</p>
+              <span>Idle</span>
+              <button>Start Scrolling</button>
+            </article>
+            <article class="task-card">
+              <h2>Cleaning</h2>
+              <p>Generates <strong>Lost Items</strong>.</p>
+              <span>Idle</span>
+              <button>Start Cleaning</button>
+            </article>
+            <article class="task-card">
+              <h2>Exercising</h2>
+              <p>Generates <strong>Confidence</strong>.</p>
+              <span>Idle</span>
+              <button>Start Exercising</button>
+            </article>
+            <article class="task-card">
+              <h2>Shopping</h2>
+              <p>Generates <strong>Receipts</strong>.</p>
+              <span>Idle</span>
+              <button>Start Shopping</button>
+            </article>
+            <article class="task-card">
+              <h2>Designing</h2>
+              <p>Generates <strong>Patterns</strong>.</p>
+              <span>Idle</span>
+              <button>Start Designing</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="content-section" id="section-orders">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Orders</p>
+              <h1>Nami Orders</h1>
+            </div>
+          </div>
+          <div class="placeholder-copy">
+            Orders are daily randomized tasks for all player levels. They can ask for wins, special order drops, care actions, gathering tasks, or other activities. Rewards include <strong>NamiCoin</strong>, which only comes from Orders.
+          </div>
+        </section>
+
+        <section class="content-section" id="section-studio">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Studio</p>
+              <h1>Crafting Studio</h1>
+            </div>
+          </div>
+          <div class="placeholder-copy">Gear crafting, clothing crafting, cooking, and future creative systems will live here.</div>
+        </section>
+
+        <section class="content-section" id="section-inventory"><div class="placeholder-copy">Inventory shell. Items, ingredients, gear, food, and unlockables will live here.</div></section>
+        <section class="content-section" id="section-market"><div class="placeholder-copy">Player-controlled Market shell. Buy and sell everything here.</div></section>
+        <section class="content-section" id="section-home-shop"><div class="placeholder-copy">Home Shop shell. Spend Nibbles on upgrades, comforts, and useful little home improvements.</div></section>
+        <section class="content-section" id="section-club"><div class="placeholder-copy">Club shell. This will be the guild/social section.</div></section>
+        <section class="content-section" id="section-events"><div class="placeholder-copy">Events shell. We can rename this later once the system identity is clearer.</div></section>
+        <section class="content-section" id="section-achievements"><div class="placeholder-copy">Achievements shell. Milestones, unlocks, wardrobe rewards, and bragging rights will live here.</div></section>
+        <section class="content-section" id="section-help"><div class="placeholder-copy">Help shell. This will explain how to play, formulas, resources, care, Playdeck, Orders, and more.</div></section>
+        <section class="content-section" id="section-settings"><div class="placeholder-copy">Settings shell. Account, accessibility, UI preferences, notifications, and display options.</div></section>
+        <section class="content-section" id="section-premium"><div class="placeholder-copy">Premium shell. We’ll figure this out later without making the game gross. Tiny monetization goblin stays leashed.</div></section>
+      </main>
+
+      <section class="panel chat-panel" id="chat-panel">
+        <div class="chat-resize-handle" title="Chat resize handle"></div>
+        <div class="chat-tabs">
+          <button class="chat-tab active">[MAIN]</button>
+          <button class="chat-tab">[CLUB]</button>
+          <button class="chat-tab">[WHISPERS]</button>
+          <button class="chat-tab">[HELP]</button>
+          <button class="chat-tab">[SYSTEM]</button>
+        </div>
+        <div id="chat-log" class="chat-log" aria-live="polite">
+          <p><span>[System]</span> Welcome to Namagotchi Phase 3A.</p>
+          <p><span>[Nami-chan]</span> I found the chat box. I am behaving normally about it.</p>
+        </div>
+        <form id="chat-form" class="chat-form">
+          <span>&gt;</span>
+          <input id="chat-input" maxlength="255" placeholder="Message [MAIN]..." />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </div>
+
+    <aside class="right-rail">
+      <section class="panel info-panel">
+        <button class="collapse-toggle" type="button" data-collapse="game-info">[-] GAME INFO</button>
+        <div id="game-info" class="collapse-body">
+          <p><span>Date / Server Time</span><strong id="server-time">Checking...</strong></p>
+          <p><span>Online Users</span><strong id="online-users">1</strong></p>
+          <button class="side-link">Change Log</button>
+          <button class="side-link">Game Rules</button>
+          <button class="side-link">Rankings</button>
+        </div>
+      </section>
+
+      <section class="panel info-panel">
+        <button class="collapse-toggle" type="button" data-collapse="global-buffs">[-] GLOBAL BUFFS</button>
+        <div id="global-buffs" class="collapse-body">
+          <div class="buff-card">
+            <strong>Launch Sparkle</strong>
+            <span>+10% Gathering Resources</span>
+            <small>23:59:59 remaining</small>
+          </div>
+          <div class="buff-card">
+            <strong>Cozy Server Blessing</strong>
+            <span>+5% Sync XP</span>
+            <small>12:00:00 remaining</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel info-panel">
+        <button class="collapse-toggle" type="button" data-collapse="personal-buffs">[-] PERSONAL BUFFS</button>
+        <div id="personal-buffs" class="collapse-body">
+          <div class="buff-card">
+            <strong>Nami Mood Bonus</strong>
+            <span id="personal-mood-bonus">+40% Resource Gain</span>
+            <small>Updates live from Nami-chan’s mood.</small>
+          </div>
+          <div class="buff-card muted-card">
+            <strong>Food Buffs</strong>
+            <span>No active food buffs.</span>
+            <small>Cooking effects will appear here.</small>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
 
   <script src="/app.js"></script>
 </body>

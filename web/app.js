@@ -1,15 +1,65 @@
-const serverStatus = document.querySelector("#server-status");
-const databaseStatus = document.querySelector("#database-status");
-const uptime = document.querySelector("#uptime");
-const version = document.querySelector("#version");
-const message = document.querySelector("#message");
-const refreshButton = document.querySelector("#refresh-button");
+const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+const sections = document.querySelectorAll(".content-section");
 const seedButton = document.querySelector("#seed-button");
-const playerPanel = document.querySelector("#player-panel");
+const careStats = document.querySelector("#care-stats");
+const namiMessage = document.querySelector("#nami-message");
+const serverTime = document.querySelector("#server-time");
+const onlineUsers = document.querySelector("#online-users");
+const level = document.querySelector("#level");
+const syncXp = document.querySelector("#sync-xp");
+const credits = document.querySelector("#credits");
+const moodScore = document.querySelector("#mood-score");
+const namiStatus = document.querySelector("#nami-status");
+const moodBonus = document.querySelector("#mood-bonus");
+const personalMoodBonus = document.querySelector("#personal-mood-bonus");
+const miniMoodFill = document.querySelector("#mini-mood-fill");
+const chatForm = document.querySelector("#chat-form");
+const chatInput = document.querySelector("#chat-input");
+const chatLog = document.querySelector("#chat-log");
+const collapseToggles = document.querySelectorAll(".collapse-toggle");
+
+const MAX_CHAT_MESSAGES = 100;
+
+sectionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const section = button.dataset.section || button.dataset.sectionLink;
+    showSection(section);
+  });
+});
+
+collapseToggles.forEach((button) => {
+  button.addEventListener("click", () => {
+    const target = document.querySelector(`#${button.dataset.collapse}`);
+    target.classList.toggle("collapsed");
+    button.textContent = `${target.classList.contains("collapsed") ? "[+]" : "[-]"} ${button.textContent.replace(/^\\[[+-]\\]\\s*/, "")}`;
+  });
+});
+
+seedButton?.addEventListener("click", seedDevPlayer);
+
+chatForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const text = chatInput.value.trim();
+  if (!text) {
+    return;
+  }
+
+  addChatMessage("Soryn", text);
+  chatInput.value = "";
+});
+
+function showSection(sectionName) {
+  document.querySelectorAll(".nav-item").forEach((button) => {
+    button.classList.toggle("active", button.dataset.section === sectionName);
+  });
+
+  sections.forEach((section) => {
+    section.classList.toggle("active", section.id === `section-${sectionName}`);
+  });
+}
 
 async function loadStatus() {
-  setPending();
-
   try {
     const response = await fetch("/api/status");
 
@@ -19,25 +69,12 @@ async function loadStatus() {
 
     const status = await response.json();
 
-    setStatusText(serverStatus, status.server);
-    setStatusText(databaseStatus, status.database);
-    uptime.textContent = status.uptime;
-    version.textContent = status.version;
-
-    if (status.server === "online" && status.database === "online") {
-      message.textContent = "Nami-chan says the server lights are glowing and the database gremlin is behaving.";
-    } else if (status.server === "online") {
-      message.textContent = "Nami-chan is online, but she is side-eyeing the database very intensely.";
-    } else {
-      message.textContent = "Nami-chan cannot find the server heartbeat. Tiny panic blanket deployed.";
-    }
+    serverTime.textContent = formatDateTime(status.timestamp);
+    onlineUsers.textContent = status.onlineUsers ?? 1;
   } catch (error) {
     console.error(error);
-    setStatusText(serverStatus, "offline");
-    setStatusText(databaseStatus, "unknown");
-    uptime.textContent = "...";
-    version.textContent = "...";
-    message.textContent = "Nami-chan tried to check the server, but the status lantern flickered out.";
+    serverTime.textContent = "Offline";
+    onlineUsers.textContent = "?";
   }
 }
 
@@ -55,11 +92,11 @@ async function seedDevPlayer() {
     }
 
     const result = await response.json();
-    message.textContent = result.message;
+    namiMessage.textContent = result.message;
     await loadPlayerStatus();
   } catch (error) {
     console.error(error);
-    message.textContent = "Nami-chan tried to create the dev player, but a database goblin bit the clipboard.";
+    namiMessage.textContent = "Nami-chan tried to create the dev player, but a database goblin bit the clipboard.";
   } finally {
     seedButton.disabled = false;
     seedButton.textContent = "Create Dev Player";
@@ -71,7 +108,7 @@ async function loadPlayerStatus() {
     const response = await fetch("/api/player/status");
 
     if (!response.ok) {
-      playerPanel.innerHTML = `<p class="message">No player loaded yet. Create the dev player first.</p>`;
+      careStats.innerHTML = `<p class="muted">Create the dev player to load care stats.</p>`;
       return;
     }
 
@@ -79,98 +116,77 @@ async function loadPlayerStatus() {
     renderPlayerStatus(status);
   } catch (error) {
     console.error(error);
-    playerPanel.innerHTML = `<p class="message">Could not load player status.</p>`;
+    careStats.innerHTML = `<p class="muted">Could not load player status.</p>`;
   }
 }
 
 function renderPlayerStatus(status) {
   const player = status.player;
   const companion = status.companion;
-  const resources = status.resources;
+  const bonus = getMoodBonus(companion.moodScore);
 
-  playerPanel.innerHTML = `
-    <div class="mini-grid">
-      <div>
-        <span class="label">Player</span>
-        <strong>${escapeHTML(player.displayName)}</strong>
-      </div>
-      <div>
-        <span class="label">Level</span>
-        <strong>${player.level}</strong>
-      </div>
-      <div>
-        <span class="label">Currency</span>
-        <strong>${formatCurrency(player.currencyCents)}</strong>
-      </div>
-      <div>
-        <span class="label">Mood</span>
-        <strong>${companion.moodScore}</strong>
-      </div>
-    </div>
+  level.textContent = player.level;
+  syncXp.textContent = player.totalXp.toLocaleString();
+  credits.textContent = formatCurrency(player.currencyCents);
+  moodScore.textContent = companion.moodScore;
+  namiStatus.textContent = capitalize(companion.status);
+  moodBonus.textContent = `+${bonus}%`;
+  personalMoodBonus.textContent = `+${bonus}% Resource Gain`;
+  miniMoodFill.style.width = `${Math.max(0, Math.min(100, companion.moodScore))}%`;
 
-    <h3>${escapeHTML(companion.name)}</h3>
-
-    <div class="stat-list">
-      ${renderStat("Satiety", companion.satiety)}
-      ${renderStat("Connection", companion.connection)}
-      ${renderStat("Energy", companion.energy)}
-      ${renderStat("Comfort", companion.comfort)}
-      ${renderStat("Playfulness", companion.playfulness)}
-      ${renderStat("Inspiration", companion.inspiration)}
-      ${renderStat("Cleanliness", companion.cleanliness)}
-    </div>
-
-    <h3>Resources</h3>
-
-    <div class="resource-grid">
-      ${renderResource("Fans", resources.fans)}
-      ${renderResource("Memes", resources.memes)}
-      ${renderResource("Lost Items", resources.lostItems)}
-      ${renderResource("Confidence", resources.confidence)}
-      ${renderResource("Receipts", resources.receipts)}
-      ${renderResource("Patterns", resources.patterns)}
-      ${renderResource("Glitch Drops", resources.glitchDrops)}
-    </div>
+  careStats.innerHTML = `
+    ${renderStat("Satiety", companion.satiety)}
+    ${renderStat("Connection", companion.connection)}
+    ${renderStat("Energy", companion.energy)}
+    ${renderStat("Comfort", companion.comfort)}
+    ${renderStat("Playfulness", companion.playfulness)}
+    ${renderStat("Inspiration", companion.inspiration)}
+    ${renderStat("Cleanliness", companion.cleanliness)}
   `;
+
+  namiMessage.textContent = "Nami-chan is loaded into the command center and trying very hard not to press every button at once.";
 }
 
 function renderStat(name, value) {
   return `
     <div class="stat-row">
-      <span>${name}</span>
-      <div class="stat-bar" aria-label="${name}: ${value}/100">
-        <div class="stat-fill" style="width: ${value}%"></div>
+      <span>${escapeHTML(name)}</span>
+      <div class="bar stat-bar" aria-label="${escapeHTML(name)}: ${value}/100">
+        <div class="fill stat-fill" style="width: ${value}%"></div>
       </div>
       <strong>${value}</strong>
     </div>
   `;
 }
 
-function renderResource(name, value) {
-  return `
-    <div>
-      <span class="label">${name}</span>
-      <strong>${value}</strong>
-    </div>
-  `;
+function addChatMessage(username, text) {
+  const message = document.createElement("p");
+  message.innerHTML = `<span>[${escapeHTML(username)}]</span> ${escapeHTML(text)}`;
+  chatLog.appendChild(message);
+
+  while (chatLog.children.length > MAX_CHAT_MESSAGES) {
+    chatLog.removeChild(chatLog.firstElementChild);
+  }
+
+  chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-function setPending() {
-  serverStatus.textContent = "Checking...";
-  databaseStatus.textContent = "Checking...";
-  serverStatus.className = "";
-  databaseStatus.className = "";
-  uptime.textContent = "...";
-  version.textContent = "...";
-}
-
-function setStatusText(element, value) {
-  element.textContent = value;
-  element.className = value === "online" ? "online" : "offline";
+function getMoodBonus(mood) {
+  return Math.round((Number(mood) / 200) * 100);
 }
 
 function formatCurrency(cents) {
-  return `$${(cents / 100).toFixed(2)}`;
+  return `$${(Number(cents) / 100).toFixed(2)}`;
+}
+
+function formatDateTime(value) {
+  const date = new Date(value);
+  return date.toLocaleString();
+}
+
+function capitalize(value) {
+  const text = String(value);
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 function escapeHTML(value) {
@@ -181,13 +197,6 @@ function escapeHTML(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
-
-refreshButton.addEventListener("click", () => {
-  loadStatus();
-  loadPlayerStatus();
-});
-
-seedButton.addEventListener("click", seedDevPlayer);
 
 loadStatus();
 loadPlayerStatus();
