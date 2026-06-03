@@ -1,24 +1,41 @@
 const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
-const seedButton = document.querySelector("#seed-button");
+
 const careStats = document.querySelector("#care-stats");
 const namiMessage = document.querySelector("#nami-message");
 const serverTime = document.querySelector("#server-time");
 const onlineUsers = document.querySelector("#online-users");
+
 const level = document.querySelector("#level");
 const syncXp = document.querySelector("#sync-xp");
 const credits = document.querySelector("#credits");
+const nibbles = document.querySelector("#nibbles");
+const namiCoin = document.querySelector("#namicoin");
+
 const moodScore = document.querySelector("#mood-score");
 const namiStatus = document.querySelector("#nami-status");
 const moodBonus = document.querySelector("#mood-bonus");
 const personalMoodBonus = document.querySelector("#personal-mood-bonus");
-const miniMoodFill = document.querySelector("#mini-mood-fill");
+
+const currentActionLabel = document.querySelector("#current-action-label");
+const playdeckHpLabel = document.querySelector("#playdeck-hp-label");
+const playdeckHpFill = document.querySelector("#playdeck-hp-fill");
+const playdeckXpLabel = document.querySelector("#playdeck-xp-label");
+const playdeckXpFill = document.querySelector("#playdeck-xp-fill");
+
+const activeTask = document.querySelector("#active-task");
+const resourceRate = document.querySelector("#resource-rate");
+const nextTick = document.querySelector("#next-tick");
+
 const chatForm = document.querySelector("#chat-form");
 const chatInput = document.querySelector("#chat-input");
 const chatLog = document.querySelector("#chat-log");
 const collapseToggles = document.querySelectorAll(".collapse-toggle");
 
 const MAX_CHAT_MESSAGES = 100;
+
+let latestPlayerStatus = null;
+let forceTickButton = null;
 
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -59,7 +76,11 @@ document.querySelectorAll(".left-rail .panel > .panel-title").forEach((title) =>
   updateLeftPanelTitle(title, false);
 });
 
-seedButton?.addEventListener("click", seedDevPlayer);
+document.querySelectorAll(".task-card button").forEach((button) => {
+  button.addEventListener("click", () => {
+    setGatheringTask(taskFromButtonText(button.textContent));
+  });
+});
 
 chatForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -72,6 +93,8 @@ chatForm.addEventListener("submit", (event) => {
   addChatMessage("Soryn", text);
   chatInput.value = "";
 });
+
+createForceTickButton();
 
 function showSection(sectionName) {
   document.querySelectorAll(".nav-item").forEach((button) => {
@@ -102,41 +125,17 @@ async function loadStatus() {
   }
 }
 
-async function seedDevPlayer() {
-  seedButton.disabled = true;
-  seedButton.textContent = "Creating...";
-
-  try {
-    const response = await fetch("/api/dev/seed-player", {
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      throw new Error(`Seed request failed: ${response.status}`);
-    }
-
-    const result = await response.json();
-    namiMessage.textContent = result.message;
-    await loadPlayerStatus();
-  } catch (error) {
-    console.error(error);
-    namiMessage.textContent = "Nami-chan tried to create the dev player, but a database goblin bit the clipboard.";
-  } finally {
-    seedButton.disabled = false;
-    seedButton.textContent = "Create Dev Player";
-  }
-}
-
 async function loadPlayerStatus() {
   try {
     const response = await fetch("/api/player/status");
 
     if (!response.ok) {
-      careStats.innerHTML = `<p class="muted">Create the dev player to load care stats.</p>`;
+      careStats.innerHTML = `<p class="muted">Dev player not found. Visit /api/dev/seed-player once.</p>`;
       return;
     }
 
     const status = await response.json();
+    latestPlayerStatus = status;
     renderPlayerStatus(status);
   } catch (error) {
     console.error(error);
@@ -144,19 +143,86 @@ async function loadPlayerStatus() {
   }
 }
 
+async function forceTick() {
+  if (!forceTickButton) {
+    return;
+  }
+
+  forceTickButton.disabled = true;
+  forceTickButton.textContent = "Processing...";
+
+  try {
+    const response = await fetch("/api/dev/force-tick", {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Force tick failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+    addChatMessage("System", tickResultMessage(result));
+    await loadPlayerStatus();
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Force tick failed. The tick goblin dropped its tiny clipboard.");
+  } finally {
+    forceTickButton.disabled = false;
+    forceTickButton.textContent = "Force Tick";
+  }
+}
+
+async function setGatheringTask(task) {
+  try {
+    const response = await fetch("/api/player/gathering", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ task }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Set gathering task failed: ${response.status}`);
+    }
+
+    await loadPlayerStatus();
+    addChatMessage("System", `Gathering task changed to ${labelForTask(task)}.`);
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not change gathering task.");
+  }
+}
+
 function renderPlayerStatus(status) {
   const player = status.player;
   const companion = status.companion;
+  const tick = status.tick;
   const bonus = getMoodBonus(companion.moodScore);
 
-  level.textContent = player.level;
-  syncXp.textContent = player.totalXp.toLocaleString();
-  credits.textContent = formatCurrency(player.currencyCents);
+  level.textContent = player.level.toLocaleString();
+  syncXp.textContent = `${player.xpIntoLevel.toLocaleString()} / ${player.xpToNext.toLocaleString()}`;
+  credits.textContent = formatCredits(player.creditsCents ?? player.currencyCents);
+  nibbles.textContent = Number(player.nibbles ?? 0).toLocaleString();
+  namiCoin.textContent = Number(player.namiCoin ?? 0).toLocaleString();
+
   moodScore.textContent = companion.moodScore;
   namiStatus.textContent = capitalize(companion.status);
   moodBonus.textContent = `+${bonus}%`;
   personalMoodBonus.textContent = `+${bonus}% Resource Gain`;
-  miniMoodFill.style.width = `${Math.max(0, Math.min(100, companion.moodScore))}%`;
+
+  const xpPercent = percent(player.xpIntoLevel, player.xpToNext);
+  playdeckXpLabel.textContent = `XP: ${player.xpIntoLevel.toLocaleString()} / ${player.xpToNext.toLocaleString()}`;
+  playdeckXpFill.style.width = `${xpPercent}%`;
+
+  playdeckHpLabel.textContent = "HP: 100 / 100";
+  playdeckHpFill.style.width = "100%";
+
+  currentActionLabel.textContent = `Playdeck + ${tick.activeGatheringName} [x${tick.playdeckStreak.toLocaleString()}]`;
+
+  activeTask.textContent = tick.activeGatheringName;
+  resourceRate.textContent = `${tick.resourcePerTickDisplay.toLocaleString()} ${tick.activeGatheringOutput}/tick`;
+  nextTick.textContent = `${tick.secondsUntilNextTick}s`;
 
   careStats.innerHTML = `
     ${renderStat("Satiety", companion.satiety)}
@@ -168,7 +234,9 @@ function renderPlayerStatus(status) {
     ${renderStat("Cleanliness", companion.cleanliness)}
   `;
 
-  namiMessage.textContent = "Nami-chan is loaded into the command center and trying very hard not to press every button at once.";
+  updateGatheringCards(tick.activeGatheringTask);
+
+  namiMessage.textContent = "Nami-chan’s tick engine is running. She is now professionally obligated to be productive every five seconds.";
 }
 
 function renderStat(name, value) {
@@ -183,6 +251,40 @@ function renderStat(name, value) {
   `;
 }
 
+function updateGatheringCards(activeGatheringTask) {
+  document.querySelectorAll(".task-card").forEach((card) => {
+    const button = card.querySelector("button");
+    if (!button) {
+      return;
+    }
+
+    const task = taskFromButtonText(button.textContent);
+    const isActive = task === activeGatheringTask;
+
+    card.classList.toggle("active", isActive);
+    const status = card.querySelector("span");
+    if (status) {
+      status.textContent = isActive ? "Active" : "Idle";
+    }
+  });
+}
+
+function createForceTickButton() {
+  const header = document.querySelector("#section-playdeck .section-header");
+  if (!header || document.querySelector("#force-tick-button")) {
+    return;
+  }
+
+  forceTickButton = document.createElement("button");
+  forceTickButton.id = "force-tick-button";
+  forceTickButton.className = "secondary-button";
+  forceTickButton.type = "button";
+  forceTickButton.textContent = "Force Tick";
+  forceTickButton.addEventListener("click", forceTick);
+
+  header.appendChild(forceTickButton);
+}
+
 function addChatMessage(username, text) {
   const message = document.createElement("p");
   message.innerHTML = `<span>[${escapeHTML(username)}]</span> ${escapeHTML(text)}`;
@@ -195,12 +297,28 @@ function addChatMessage(username, text) {
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
+function tickResultMessage(result) {
+  if (!result || !result.ok) {
+    return "No tick result received.";
+  }
+
+  if (result.ticksProcessed === 0) {
+    return result.message || "No ticks ready yet.";
+  }
+
+  const levelText = result.levelUps > 0 ? `, ${result.levelUps} level-up(s)` : "";
+
+  return `Processed ${result.ticksProcessed} tick(s): +${result.syncXpGained.toLocaleString()} Sync XP, +${formatCredits(result.creditsCentsGained)} Credits, +${Number(result.nibblesGained).toLocaleString()} Nibbles, +${Number(result.resourceAmountGained).toLocaleString()} ${result.resourceName}${levelText}.`;
+}
+
 function getMoodBonus(mood) {
   return Math.round((Number(mood) / 200) * 100);
 }
 
-function formatCurrency(cents) {
-  return `$${(Number(cents) / 100).toFixed(2)}`;
+function formatCredits(cents) {
+  return (Number(cents) / 100).toLocaleString(undefined, {
+    maximumFractionDigits: 2,
+  });
 }
 
 function formatDateTime(value) {
@@ -242,6 +360,63 @@ function updateLeftPanelTitle(title, isCollapsed) {
   title.textContent = `${isCollapsed ? "[+]" : "[-]"} ${title.dataset.label}`;
 }
 
+function taskFromButtonText(text) {
+  const normalized = String(text).toLowerCase();
+
+  if (normalized.includes("stream")) {
+    return "streaming";
+  }
+
+  if (normalized.includes("scroll")) {
+    return "doom_scrolling";
+  }
+
+  if (normalized.includes("clean")) {
+    return "cleaning";
+  }
+
+  if (normalized.includes("exercis")) {
+    return "exercising";
+  }
+
+  if (normalized.includes("shop")) {
+    return "shopping";
+  }
+
+  if (normalized.includes("design")) {
+    return "designing";
+  }
+
+  return "streaming";
+}
+
+function labelForTask(task) {
+  switch (task) {
+    case "streaming":
+      return "Streaming";
+    case "doom_scrolling":
+      return "Doom Scrolling";
+    case "cleaning":
+      return "Cleaning";
+    case "exercising":
+      return "Exercising";
+    case "shopping":
+      return "Shopping";
+    case "designing":
+      return "Designing";
+    default:
+      return "Streaming";
+  }
+}
+
+function percent(value, max) {
+  if (!max || max <= 0) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(100, (Number(value) / Number(max)) * 100));
+}
+
 function capitalize(value) {
   const text = String(value);
   return text.charAt(0).toUpperCase() + text.slice(1);
@@ -260,3 +435,4 @@ loadStatus();
 loadPlayerStatus();
 
 setInterval(loadStatus, 10000);
+setInterval(loadPlayerStatus, 5000);

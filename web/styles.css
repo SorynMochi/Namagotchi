@@ -1051,3 +1051,19 @@ h2 {
 #section-home .section-header {
   align-items: center;
 }
+
+/* Phase 3B tick engine UI helpers */
+
+#force-tick-button {
+  margin-left: auto;
+}
+
+.task-card.active button {
+  background:
+    linear-gradient(180deg, rgba(168, 224, 95, 0.95), rgba(101, 168, 54, 0.9));
+  border-color: rgba(168, 224, 95, 0.48);
+}
+
+#current-action-label {
+  color: #f4fbff;
+}

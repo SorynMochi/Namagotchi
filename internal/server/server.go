@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/SorynMochi/Namagotchi/internal/database"
@@ -29,6 +30,10 @@ type MessageResponse struct {
 	Message string `json:"message"`
 }
 
+type GatheringRequest struct {
+	Task string `json:"task"`
+}
+
 func New(store *database.Store, startedAt time.Time) *Server {
 	return &Server{
 		Store:     store,
@@ -42,7 +47,10 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/status", s.HandleStatus)
 	mux.HandleFunc("/health", s.HandleStatus)
 	mux.HandleFunc("/api/dev/seed-player", s.HandleSeedDevPlayer)
+	mux.HandleFunc("/api/dev/force-tick", s.HandleForceTick)
 	mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
+	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
+	mux.HandleFunc("/api/player/gathering", s.HandleGatheringTask)
 
 	mux.Handle("/", http.FileServer(http.Dir("web")))
 
@@ -60,7 +68,7 @@ func (s *Server) HandleStatus(w http.ResponseWriter, r *http.Request) {
 		Database:    s.databaseStatus(),
 		Timestamp:   time.Now().Format(time.RFC3339),
 		Uptime:      time.Since(s.StartedAt).Round(time.Second).String(),
-		Version:     "phase-3a",
+		Version:     "phase-3b",
 		OnlineUsers: 1,
 	}
 
@@ -91,6 +99,8 @@ func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, _ = s.Store.SettleDevTicks(r.Context(), 0)
+
 	status, err := s.Store.GetDevPlayerStatus(r.Context())
 	if err != nil {
 		log.Printf("get player status failed: %v", err)
@@ -99,6 +109,63 @@ func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, status)
+}
+
+func (s *Server) HandleSettleTicks(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	result, err := s.Store.SettleDevTicks(r.Context(), 0)
+	if err != nil {
+		log.Printf("settle ticks failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "failed to settle ticks")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, result)
+}
+
+func (s *Server) HandleForceTick(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	result, err := s.Store.SettleDevTicks(r.Context(), 1)
+	if err != nil {
+		log.Printf("force tick failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "failed to force tick")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, result)
+}
+
+func (s *Server) HandleGatheringTask(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	var request GatheringRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid gathering request")
+		return
+	}
+
+	request.Task = strings.TrimSpace(strings.ToLower(request.Task))
+	if err := s.Store.SetDevGatheringTask(r.Context(), request.Task); err != nil {
+		log.Printf("set gathering task failed: %v", err)
+		writeError(w, http.StatusBadRequest, "invalid gathering task")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, MessageResponse{
+		OK:      true,
+		Message: "Gathering task updated.",
+	})
 }
 
 func (s *Server) databaseStatus() string {
