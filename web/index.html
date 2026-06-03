@@ -304,24 +304,25 @@
       </main>
 
       <section class="panel chat-panel" id="chat-panel">
-        <div class="chat-resize-handle" title="Chat resize handle"></div>
-        <div class="chat-tabs">
-          <button class="chat-tab active">[MAIN]</button>
-          <button class="chat-tab">[CLUB]</button>
-          <button class="chat-tab">[WHISPERS]</button>
-          <button class="chat-tab">[HELP]</button>
-          <button class="chat-tab">[SYSTEM]</button>
-        </div>
-        <div id="chat-log" class="chat-log" aria-live="polite">
-          <p><span>[System]</span> Welcome to Namagotchi Phase 3A.</p>
-          <p><span>[Nami-chan]</span> I found the chat box. I am behaving normally about it.</p>
-        </div>
-        <form id="chat-form" class="chat-form">
-          <span>&gt;</span>
-          <input id="chat-input" maxlength="255" placeholder="Message [MAIN]..." />
-          <button type="submit">Send</button>
-        </form>
-      </section>
+  <div class="chat-resize-handle" id="chat-resize-handle" title="Drag to resize chat"></div>
+
+  <div class="chat-tabs" id="chat-tabs" role="tablist" aria-label="Chat channels">
+    <button class="chat-tab active" type="button" data-chat-channel="lobby">[LOBBY]</button>
+    <button class="chat-tab" type="button" data-chat-channel="whispers">[WHISPERS]</button>
+    <button class="chat-tab" type="button" data-chat-channel="club">[CLUB]</button>
+    <button class="chat-tab" type="button" data-chat-channel="trade">[TRADE]</button>
+    <button class="chat-tab" type="button" data-chat-channel="help">[HELP]</button>
+    <button class="chat-tab" type="button" data-chat-channel="system">[SYSTEM]</button>
+  </div>
+
+  <div id="chat-log" class="chat-log" aria-live="polite"></div>
+
+  <form id="chat-form" class="chat-form">
+    <span class="chat-prompt">&gt;</span>
+    <input id="chat-input" maxlength="255" autocomplete="off" placeholder="Message [LOBBY]..." />
+    <button type="submit">Send</button>
+  </form>
+</section>
     </div>
 
     <aside class="right-rail">

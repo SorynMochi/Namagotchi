@@ -44,15 +44,31 @@ const activeTask = document.querySelector("#active-task");
 const resourceRate = document.querySelector("#resource-rate");
 const nextTick = document.querySelector("#next-tick");
 
+const chatPanel = document.querySelector("#chat-panel");
+const chatResizeHandle = document.querySelector("#chat-resize-handle");
+const chatTabs = document.querySelectorAll("[data-chat-channel]");
 const chatForm = document.querySelector("#chat-form");
 const chatInput = document.querySelector("#chat-input");
 const chatLog = document.querySelector("#chat-log");
 const collapseToggles = document.querySelectorAll(".collapse-toggle");
 
 const MAX_CHAT_MESSAGES = 100;
+const CHAT_CHANNELS = ["lobby", "whispers", "club", "trade", "help", "system"];
+const CHAT_LABELS = {
+  lobby: "LOBBY",
+  whispers: "WHISPERS",
+  club: "CLUB",
+  trade: "TRADE",
+  help: "HELP",
+  system: "SYSTEM",
+};
 
 let latestPlayerStatus = null;
 let forceTickButton = null;
+let currentChatChannel = "lobby";
+let chatMessages = createEmptyChatStore();
+let unreadChannels = new Set();
+let isResizingChat = false;
 
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -99,19 +115,17 @@ document.querySelectorAll(".task-card button").forEach((button) => {
   });
 });
 
-chatForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const text = chatInput.value.trim();
-  if (!text) {
-    return;
-  }
-
-  addChatMessage("Soryn", text);
-  chatInput.value = "";
+chatTabs.forEach((button) => {
+  button.addEventListener("click", () => {
+    switchChatChannel(button.dataset.chatChannel);
+  });
 });
 
+chatForm.addEventListener("submit", submitChatMessage);
+
 createForceTickButton();
+initializeChat();
+initializeChatResize();
 
 function showSection(sectionName) {
   document.querySelectorAll(".nav-item").forEach((button) => {
@@ -178,11 +192,11 @@ async function forceTick() {
     }
 
     const result = await response.json();
-    addChatMessage("System", tickResultMessage(result));
+    addChatMessage("System", tickResultMessage(result), "system");
     await loadPlayerStatus();
   } catch (error) {
     console.error(error);
-    addChatMessage("System", "Force tick failed. The tick goblin dropped its tiny clipboard.");
+    addChatMessage("System", "Force tick failed. The tick goblin dropped its tiny clipboard.", "system");
   } finally {
     forceTickButton.disabled = false;
     forceTickButton.textContent = "Force Tick";
@@ -204,10 +218,10 @@ async function setGatheringTask(task) {
     }
 
     await loadPlayerStatus();
-    addChatMessage("System", `Gathering task changed to ${labelForTask(task)}.`);
+    addChatMessage("System", `Gathering task changed to ${labelForTask(task)}.`, "system");
   } catch (error) {
     console.error(error);
-    addChatMessage("System", "Could not change gathering task.");
+    addChatMessage("System", "Could not change gathering task.", "system");
   }
 }
 
@@ -316,16 +330,168 @@ function createForceTickButton() {
   header.appendChild(forceTickButton);
 }
 
-function addChatMessage(username, text) {
-  const message = document.createElement("p");
-  message.innerHTML = `<span>[${escapeHTML(username)}]</span> ${escapeHTML(text)}`;
-  chatLog.appendChild(message);
+function createEmptyChatStore() {
+  return CHAT_CHANNELS.reduce((store, channel) => {
+    store[channel] = [];
+    return store;
+  }, {});
+}
 
-  while (chatLog.children.length > MAX_CHAT_MESSAGES) {
-    chatLog.removeChild(chatLog.firstElementChild);
+function initializeChat() {
+  pushChatMessage("system", "System", "Welcome to Namagotchi Phase 3B.");
+  pushChatMessage("lobby", "Nami-chan", "Lobby chat is online. I am absolutely not testing the buttons with my tiny chaos paws.");
+  pushChatMessage("help", "System", "Help chat will be used for player questions once multiplayer chat is wired in.");
+
+  unreadChannels.clear();
+  switchChatChannel("lobby");
+}
+
+function initializeChatResize() {
+  const savedHeight = Number(localStorage.getItem("namagotchi_chat_height"));
+  if (savedHeight) {
+    setChatHeight(savedHeight);
   }
 
+  chatResizeHandle.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    isResizingChat = true;
+    document.body.classList.add("is-resizing-chat");
+    chatResizeHandle.setPointerCapture(event.pointerId);
+  });
+
+  window.addEventListener("pointermove", (event) => {
+    if (!isResizingChat) {
+      return;
+    }
+
+    const centerColumn = document.querySelector(".center-column");
+    const rect = centerColumn.getBoundingClientRect();
+    const newHeight = rect.bottom - event.clientY;
+
+    setChatHeight(newHeight);
+  });
+
+  window.addEventListener("pointerup", () => {
+    if (!isResizingChat) {
+      return;
+    }
+
+    isResizingChat = false;
+    document.body.classList.remove("is-resizing-chat");
+
+    const chatHeight = Math.round(chatPanel.getBoundingClientRect().height);
+    localStorage.setItem("namagotchi_chat_height", String(chatHeight));
+  });
+}
+
+function setChatHeight(height) {
+  const clampedHeight = Math.max(120, Math.min(430, Number(height)));
+  document.documentElement.style.setProperty("--chat-height", `${clampedHeight}px`);
+}
+
+function submitChatMessage(event) {
+  event.preventDefault();
+
+  const text = chatInput.value.trim();
+  if (!text) {
+    return;
+  }
+
+  if (currentChatChannel === "system") {
+    addChatMessage("System", "System chat is read-only. Tiny velvet rope deployed.", "system");
+    chatInput.value = "";
+    return;
+  }
+
+  addChatMessage("Soryn", text, currentChatChannel);
+  chatInput.value = "";
+}
+
+function switchChatChannel(channel) {
+  if (!CHAT_CHANNELS.includes(channel)) {
+    return;
+  }
+
+  currentChatChannel = channel;
+  unreadChannels.delete(channel);
+
+  chatTabs.forEach((button) => {
+    const isActive = button.dataset.chatChannel === channel;
+    button.classList.toggle("active", isActive);
+    button.classList.toggle("has-unread", unreadChannels.has(button.dataset.chatChannel));
+  });
+
+  chatInput.placeholder = `Message [${CHAT_LABELS[channel]}]...`;
+  chatInput.disabled = channel === "system";
+
+  if (channel === "system") {
+    chatInput.placeholder = "System messages are read-only.";
+  }
+
+  renderChatChannel();
+}
+
+function addChatMessage(username, text, channel = currentChatChannel) {
+  const destination = username === "System" && channel === currentChatChannel ? "system" : channel;
+  pushChatMessage(destination, username, text);
+
+  if (destination === currentChatChannel) {
+    renderChatChannel();
+  } else {
+    unreadChannels.add(destination);
+    updateChatUnreadTabs();
+  }
+}
+
+function pushChatMessage(channel, username, text) {
+  if (!CHAT_CHANNELS.includes(channel)) {
+    channel = "lobby";
+  }
+
+  chatMessages[channel].push({
+    username,
+    text,
+    timestamp: getChatTimestamp(),
+  });
+
+  while (chatMessages[channel].length > MAX_CHAT_MESSAGES) {
+    chatMessages[channel].shift();
+  }
+
+  if (channel !== currentChatChannel) {
+    unreadChannels.add(channel);
+  }
+}
+
+function renderChatChannel() {
+  const messages = chatMessages[currentChatChannel];
+
+  chatLog.innerHTML = messages
+    .map((message) => {
+      return `
+        <p class="chat-message">
+          <span class="chat-time">[${escapeHTML(message.timestamp)}]</span>
+          <span class="chat-name">${escapeHTML(message.username)}:</span>
+          <span class="chat-text">${escapeHTML(message.text)}</span>
+        </p>
+      `;
+    })
+    .join("");
+
   chatLog.scrollTop = chatLog.scrollHeight;
+  updateChatUnreadTabs();
+}
+
+function updateChatUnreadTabs() {
+  chatTabs.forEach((button) => {
+    const channel = button.dataset.chatChannel;
+    button.classList.toggle("has-unread", unreadChannels.has(channel) && channel !== currentChatChannel);
+  });
+}
+
+function getChatTimestamp() {
+  const date = new Date();
+  return `${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
 }
 
 function tickResultMessage(result) {
