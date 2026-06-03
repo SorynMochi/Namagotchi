@@ -1342,3 +1342,112 @@ body.is-resizing-chat {
 .chat-log span {
   font-weight: inherit;
 }
+
+/* Emoji picker + hide/show chat */
+
+.chat-form {
+  grid-template-columns: auto 1fr auto auto;
+  position: relative;
+}
+
+.emoji-wrapper {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.chat-emoji-button,
+.chat-toggle-button {
+  height: 30px;
+  border: 1px solid rgba(143, 205, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.chat-emoji-button {
+  width: 34px;
+  padding: 0;
+}
+
+.chat-toggle-button {
+  padding: 5px 12px;
+  color: var(--cyan);
+}
+
+.chat-emoji-button:hover,
+.chat-toggle-button:hover {
+  border-color: rgba(73, 199, 255, 0.5);
+  background: rgba(73, 199, 255, 0.12);
+}
+
+.emoji-picker {
+  position: absolute;
+  left: 0;
+  bottom: 38px;
+  z-index: 20;
+  width: 244px;
+  max-height: 174px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid rgba(143, 205, 255, 0.24);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 104, 183, 0.14), transparent 10rem),
+    rgba(5, 11, 20, 0.98);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+}
+
+.emoji-picker.hidden {
+  display: none;
+}
+
+.emoji-option {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 1rem;
+}
+
+.emoji-option:hover {
+  border-color: rgba(73, 199, 255, 0.35);
+  background: rgba(73, 199, 255, 0.12);
+}
+
+/* Hide mode keeps only the tiny handle + show button visible. */
+.chat-panel.chat-hidden {
+  grid-template-rows: 8px 38px;
+  min-height: 46px;
+}
+
+.chat-panel.chat-hidden .chat-tabs,
+.chat-panel.chat-hidden .chat-log {
+  display: none;
+}
+
+.chat-panel.chat-hidden .chat-form {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 4px 10px 8px;
+}
+
+.chat-panel.chat-hidden .emoji-wrapper,
+.chat-panel.chat-hidden #chat-input,
+.chat-panel.chat-hidden .chat-form button[type="submit"] {
+  display: none;
+}
+
+.chat-panel.chat-hidden .chat-toggle-button {
+  display: inline-flex;
+  align-items: center;
+}

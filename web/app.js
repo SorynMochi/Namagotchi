@@ -50,9 +50,18 @@ const chatTabs = document.querySelectorAll("[data-chat-channel]");
 const chatForm = document.querySelector("#chat-form");
 const chatInput = document.querySelector("#chat-input");
 const chatLog = document.querySelector("#chat-log");
+const emojiButton = document.querySelector("#emoji-button");
+const emojiPicker = document.querySelector("#emoji-picker");
+const chatToggleButton = document.querySelector("#chat-toggle-button");
 const collapseToggles = document.querySelectorAll(".collapse-toggle");
 
 const MAX_CHAT_MESSAGES = 100;
+const CHAT_STORAGE_KEY = "namagotchi_chat_store_v1";
+const CHAT_CHANNEL_KEY = "namagotchi_chat_active_channel_v1";
+const CHAT_HIDDEN_KEY = "namagotchi_chat_hidden_v1";
+const CHAT_PREVIOUS_HEIGHT_KEY = "namagotchi_chat_previous_height_v1";
+const EMOJI_USAGE_KEY = "namagotchi_emoji_usage_v1";
+
 const CHAT_CHANNELS = ["lobby", "whispers", "club", "trade", "help", "system"];
 const CHAT_LABELS = {
   lobby: "LOBBY",
@@ -63,12 +72,23 @@ const CHAT_LABELS = {
   system: "SYSTEM",
 };
 
+const EMOJI_OPTIONS = [
+  "😀", "😄", "😁", "😂", "🤣", "😊", "😍", "🥰", "😘", "😎",
+  "😏", "😳", "🥺", "😭", "😤", "😈", "🤔", "🙃", "😴", "🤯",
+  "👍", "👎", "👏", "🙌", "🙏", "💪", "🫶", "👀", "✨", "💖",
+  "💕", "💜", "💙", "🔥", "⭐", "🌙", "☕", "🍪", "🍜", "🍕",
+  "🎮", "🎧", "💻", "📦", "💎", "🪙", "🐾", "🐱", "🦊", "👑"
+];
+
 let latestPlayerStatus = null;
 let forceTickButton = null;
 let currentChatChannel = "lobby";
 let chatMessages = createEmptyChatStore();
 let unreadChannels = new Set();
+let emojiUsage = loadEmojiUsage();
 let isResizingChat = false;
+let isChatHidden = false;
+let previousChatHeight = 190;
 
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -121,7 +141,15 @@ chatTabs.forEach((button) => {
   });
 });
 
+emojiButton.addEventListener("click", toggleEmojiPicker);
+chatToggleButton.addEventListener("click", () => setChatHidden(!isChatHidden));
 chatForm.addEventListener("submit", submitChatMessage);
+
+document.addEventListener("click", (event) => {
+  if (!emojiPicker.contains(event.target) && !emojiButton.contains(event.target)) {
+    closeEmojiPicker();
+  }
+});
 
 createForceTickButton();
 initializeChat();
@@ -338,12 +366,22 @@ function createEmptyChatStore() {
 }
 
 function initializeChat() {
-  pushChatMessage("system", "System", "Welcome to Namagotchi Phase 3B.");
-  pushChatMessage("lobby", "Nami-chan", "Lobby chat is online. I am absolutely not testing the buttons with my tiny chaos paws.");
-  pushChatMessage("help", "System", "Help chat will be used for player questions once multiplayer chat is wired in.");
+  chatMessages = loadChatStore();
+  currentChatChannel = getSavedChatChannel();
+
+  const hasStoredMessages = CHAT_CHANNELS.some((channel) => chatMessages[channel].length > 0);
+
+  if (!hasStoredMessages) {
+    pushChatMessage("system", "System", "Welcome to Namagotchi Phase 3B.", false);
+    pushChatMessage("lobby", "Nami-chan", "Lobby chat is online. I am absolutely not testing the buttons with my tiny chaos paws.", false);
+    pushChatMessage("help", "System", "Help chat will be used for player questions once multiplayer chat is wired in.", false);
+    saveChatStore();
+  }
 
   unreadChannels.clear();
-  switchChatChannel("lobby");
+  renderEmojiPicker();
+  initializeChatVisibility();
+  switchChatChannel(currentChatChannel);
 }
 
 function initializeChatResize() {
@@ -353,11 +391,15 @@ function initializeChatResize() {
   }
 
   chatResizeHandle.addEventListener("pointerdown", (event) => {
-    event.preventDefault();
-    isResizingChat = true;
-    document.body.classList.add("is-resizing-chat");
-    chatResizeHandle.setPointerCapture(event.pointerId);
-  });
+  if (isChatHidden) {
+    return;
+  }
+
+  event.preventDefault();
+  isResizingChat = true;
+  document.body.classList.add("is-resizing-chat");
+  chatResizeHandle.setPointerCapture(event.pointerId);
+});
 
   window.addEventListener("pointermove", (event) => {
     if (!isResizingChat) {
@@ -380,7 +422,9 @@ function initializeChatResize() {
     document.body.classList.remove("is-resizing-chat");
 
     const chatHeight = Math.round(chatPanel.getBoundingClientRect().height);
+    previousChatHeight = chatHeight;
     localStorage.setItem("namagotchi_chat_height", String(chatHeight));
+    localStorage.setItem(CHAT_PREVIOUS_HEIGHT_KEY, String(chatHeight));
   });
 }
 
@@ -392,7 +436,7 @@ function setChatHeight(height) {
 function submitChatMessage(event) {
   event.preventDefault();
 
-  const text = chatInput.value.trim();
+  const text = normalizeChatText(chatInput.value);
   if (!text) {
     return;
   }
@@ -413,6 +457,7 @@ function switchChatChannel(channel) {
   }
 
   currentChatChannel = channel;
+  localStorage.setItem(CHAT_CHANNEL_KEY, channel);
   unreadChannels.delete(channel);
 
   chatTabs.forEach((button) => {
@@ -443,14 +488,14 @@ function addChatMessage(username, text, channel = currentChatChannel) {
   }
 }
 
-function pushChatMessage(channel, username, text) {
+function pushChatMessage(channel, username, text, markUnread = true) {
   if (!CHAT_CHANNELS.includes(channel)) {
     channel = "lobby";
   }
 
   chatMessages[channel].push({
-    username,
-    text,
+    username: normalizeChatText(username, 40),
+    text: normalizeChatText(text),
     timestamp: getChatTimestamp(),
   });
 
@@ -458,7 +503,9 @@ function pushChatMessage(channel, username, text) {
     chatMessages[channel].shift();
   }
 
-  if (channel !== currentChatChannel) {
+  saveChatStore();
+
+  if (markUnread && channel !== currentChatChannel) {
     unreadChannels.add(channel);
   }
 }
@@ -466,17 +513,27 @@ function pushChatMessage(channel, username, text) {
 function renderChatChannel() {
   const messages = chatMessages[currentChatChannel];
 
-  chatLog.innerHTML = messages
-    .map((message) => {
-      return `
-        <p class="chat-message">
-          <span class="chat-time">[${escapeHTML(message.timestamp)}]</span>
-          <span class="chat-name">${escapeHTML(message.username)}:</span>
-          <span class="chat-text">${escapeHTML(message.text)}</span>
-        </p>
-      `;
-    })
-    .join("");
+  chatLog.replaceChildren();
+
+  messages.forEach((message) => {
+    const row = document.createElement("p");
+    row.className = "chat-message";
+
+    const time = document.createElement("span");
+    time.className = "chat-time";
+    time.textContent = `[${message.timestamp}]`;
+
+    const name = document.createElement("span");
+    name.className = "chat-name";
+    name.textContent = `${message.username}:`;
+
+    const text = document.createElement("span");
+    text.className = "chat-text";
+    text.textContent = message.text;
+
+    row.append(time, " ", name, " ", text);
+    chatLog.appendChild(row);
+  });
 
   chatLog.scrollTop = chatLog.scrollHeight;
   updateChatUnreadTabs();
@@ -492,6 +549,151 @@ function updateChatUnreadTabs() {
 function getChatTimestamp() {
   const date = new Date();
   return `${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
+}
+
+function normalizeChatText(value, maxLength = 255) {
+  return Array.from(String(value).trim()).slice(0, maxLength).join("");
+}
+
+function loadChatStore() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY));
+    return normalizeChatStore(parsed);
+  } catch {
+    return createEmptyChatStore();
+  }
+}
+
+function saveChatStore() {
+  localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chatMessages));
+}
+
+function normalizeChatStore(value) {
+  const store = createEmptyChatStore();
+
+  if (!value || typeof value !== "object") {
+    return store;
+  }
+
+  CHAT_CHANNELS.forEach((channel) => {
+    if (!Array.isArray(value[channel])) {
+      return;
+    }
+
+    store[channel] = value[channel]
+      .slice(-MAX_CHAT_MESSAGES)
+      .map((message) => {
+        return {
+          username: normalizeChatText(message.username ?? "Unknown", 40),
+          text: normalizeChatText(message.text ?? ""),
+          timestamp: normalizeChatText(message.timestamp ?? getChatTimestamp(), 12),
+        };
+      });
+  });
+
+  return store;
+}
+
+function getSavedChatChannel() {
+  const savedChannel = localStorage.getItem(CHAT_CHANNEL_KEY);
+  return CHAT_CHANNELS.includes(savedChannel) ? savedChannel : "lobby";
+}
+
+function loadEmojiUsage() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(EMOJI_USAGE_KEY));
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveEmojiUsage() {
+  localStorage.setItem(EMOJI_USAGE_KEY, JSON.stringify(emojiUsage));
+}
+
+function renderEmojiPicker() {
+  emojiPicker.replaceChildren();
+
+  getSortedEmojis().forEach((emoji) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "emoji-option";
+    button.textContent = emoji;
+    button.title = `${emojiUsage[emoji] ?? 0} use(s)`;
+
+    button.addEventListener("click", () => {
+      addEmojiToChat(emoji);
+    });
+
+    emojiPicker.appendChild(button);
+  });
+}
+
+function getSortedEmojis() {
+  return [...EMOJI_OPTIONS].sort((a, b) => {
+    const countDifference = (emojiUsage[b] ?? 0) - (emojiUsage[a] ?? 0);
+
+    if (countDifference !== 0) {
+      return countDifference;
+    }
+
+    return EMOJI_OPTIONS.indexOf(a) - EMOJI_OPTIONS.indexOf(b);
+  });
+}
+
+function toggleEmojiPicker() {
+  const isHidden = emojiPicker.classList.toggle("hidden");
+  emojiButton.setAttribute("aria-expanded", String(!isHidden));
+}
+
+function closeEmojiPicker() {
+  emojiPicker.classList.add("hidden");
+  emojiButton.setAttribute("aria-expanded", "false");
+}
+
+function addEmojiToChat(emoji) {
+  const currentValue = chatInput.value;
+  chatInput.value = Array.from(`${currentValue}${emoji}`).slice(0, 255).join("");
+  chatInput.focus();
+
+  emojiUsage[emoji] = (emojiUsage[emoji] ?? 0) + 1;
+  saveEmojiUsage();
+  renderEmojiPicker();
+  closeEmojiPicker();
+}
+
+function initializeChatVisibility() {
+  previousChatHeight =
+    Number(localStorage.getItem(CHAT_PREVIOUS_HEIGHT_KEY)) ||
+    Number(localStorage.getItem("namagotchi_chat_height")) ||
+    190;
+
+  setChatHidden(localStorage.getItem(CHAT_HIDDEN_KEY) === "true", false);
+}
+
+function setChatHidden(hidden, shouldSave = true) {
+  isChatHidden = hidden;
+
+  if (hidden) {
+    previousChatHeight = Math.round(chatPanel.getBoundingClientRect().height) || previousChatHeight || 190;
+    localStorage.setItem(CHAT_PREVIOUS_HEIGHT_KEY, String(previousChatHeight));
+
+    chatPanel.classList.add("chat-hidden");
+    chatToggleButton.textContent = "Show Chat";
+    chatToggleButton.setAttribute("aria-pressed", "true");
+    closeEmojiPicker();
+    setChatHeight(46);
+  } else {
+    chatPanel.classList.remove("chat-hidden");
+    chatToggleButton.textContent = "Hide Chat";
+    chatToggleButton.setAttribute("aria-pressed", "false");
+    setChatHeight(previousChatHeight || 190);
+  }
+
+  if (shouldSave) {
+    localStorage.setItem(CHAT_HIDDEN_KEY, String(hidden));
+  }
 }
 
 function tickResultMessage(result) {

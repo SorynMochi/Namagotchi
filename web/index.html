@@ -318,10 +318,16 @@
   <div id="chat-log" class="chat-log" aria-live="polite"></div>
 
   <form id="chat-form" class="chat-form">
-    <span class="chat-prompt">&gt;</span>
-    <input id="chat-input" maxlength="255" autocomplete="off" placeholder="Message [LOBBY]..." />
-    <button type="submit">Send</button>
-  </form>
+  <div class="emoji-wrapper">
+    <button id="emoji-button" class="chat-emoji-button" type="button" aria-label="Open emoji picker" aria-expanded="false">😊</button>
+    <div id="emoji-picker" class="emoji-picker hidden" aria-label="Emoji picker"></div>
+  </div>
+
+  <input id="chat-input" maxlength="255" autocomplete="off" placeholder="Message [LOBBY]..." />
+
+  <button type="submit">Send</button>
+  <button id="chat-toggle-button" class="chat-toggle-button" type="button" aria-pressed="false">Hide Chat</button>
+</form>
 </section>
     </div>
 
