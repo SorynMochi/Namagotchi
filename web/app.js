@@ -28,11 +28,35 @@ sectionButtons.forEach((button) => {
 });
 
 collapseToggles.forEach((button) => {
+  button.dataset.label = cleanCollapseLabel(button.textContent);
+
   button.addEventListener("click", () => {
     const target = document.querySelector(`#${button.dataset.collapse}`);
+    if (!target) {
+      return;
+    }
+
     target.classList.toggle("collapsed");
-    button.textContent = `${target.classList.contains("collapsed") ? "[+]" : "[-]"} ${button.textContent.replace(/^\\[[+-]\\]\\s*/, "")}`;
+    updateCollapseButton(button, target.classList.contains("collapsed"));
   });
+
+  updateCollapseButton(button, false);
+});
+
+document.querySelectorAll(".left-rail .panel > .panel-title").forEach((title) => {
+  title.dataset.label = cleanCollapseLabel(title.textContent);
+  title.setAttribute("role", "button");
+  title.setAttribute("tabindex", "0");
+
+  title.addEventListener("click", () => toggleLeftPanel(title));
+  title.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleLeftPanel(title);
+    }
+  });
+
+  updateLeftPanelTitle(title, false);
 });
 
 seedButton?.addEventListener("click", seedDevPlayer);
@@ -181,7 +205,41 @@ function formatCurrency(cents) {
 
 function formatDateTime(value) {
   const date = new Date(value);
-  return date.toLocaleString();
+
+  const year = date.getFullYear();
+  const month = pad2(date.getMonth() + 1);
+  const day = pad2(date.getDate());
+  const hours = pad2(date.getHours());
+  const minutes = pad2(date.getMinutes());
+  const seconds = pad2(date.getSeconds());
+
+  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function pad2(value) {
+  return String(value).padStart(2, "0");
+}
+
+function cleanCollapseLabel(value) {
+  return String(value).replace(/^(\[[+-]\]\s*)+/, "").trim();
+}
+
+function updateCollapseButton(button, isCollapsed) {
+  button.textContent = `${isCollapsed ? "[+]" : "[-]"} ${button.dataset.label}`;
+}
+
+function toggleLeftPanel(title) {
+  const panel = title.closest(".panel");
+  if (!panel) {
+    return;
+  }
+
+  panel.classList.toggle("is-collapsed");
+  updateLeftPanelTitle(title, panel.classList.contains("is-collapsed"));
+}
+
+function updateLeftPanelTitle(title, isCollapsed) {
+  title.textContent = `${isCollapsed ? "[+]" : "[-]"} ${title.dataset.label}`;
 }
 
 function capitalize(value) {

@@ -9,18 +9,32 @@
 <body>
   <div class="game-shell">
     <aside class="left-rail">
-      <section class="panel user-card">
-        <div class="panel-title">[-] USER INFO</div>
-        <div class="player-name">💎 Soryn</div>
-        <div class="mini-progress">
-          <span>SYNC XP</span>
-          <div class="bar"><div class="fill xp-fill" style="width: 46%"></div></div>
-        </div>
-        <div class="mini-progress">
-          <span>NAMI MOOD</span>
-          <div class="bar"><div class="fill mood-fill" id="mini-mood-fill" style="width: 80%"></div></div>
-        </div>
-      </section>
+<section class="panel user-card">
+  <div class="panel-title">[-] USER INFO</div>
+
+  <div class="player-name">💎 Soryn</div>
+
+  <div class="user-meter tick-meter">
+    <div class="meter-label" id="current-action-label">Playdeck + Gathering [x0]</div>
+    <div class="meter-track">
+      <div class="meter-fill tick-fill" id="tick-fill"></div>
+    </div>
+  </div>
+
+  <div class="user-meter">
+    <div class="meter-label" id="playdeck-hp-label">HP: 100 / 100</div>
+    <div class="meter-track">
+      <div class="meter-fill hp-fill" id="playdeck-hp-fill" style="width: 100%"></div>
+    </div>
+  </div>
+
+  <div class="user-meter">
+    <div class="meter-label" id="playdeck-xp-label">XP: 0 / 720</div>
+    <div class="meter-track">
+      <div class="meter-fill xp-fill" id="playdeck-xp-fill" style="width: 0%"></div>
+    </div>
+  </div>
+</section>
 
       <section class="panel nav-panel">
         <div class="panel-title">[-] MENU</div>
@@ -88,12 +102,11 @@
       <main class="panel main-panel">
         <section class="content-section active" id="section-home">
           <div class="section-header">
-            <div>
-              <p class="eyebrow">Home</p>
-              <h1>Nami-chan</h1>
-            </div>
-            <button id="seed-button" class="secondary-button" type="button">Create Dev Player</button>
-          </div>
+  <div>
+    <p class="eyebrow">Home</p>
+    <h1>Nami-chan</h1>
+  </div>
+</div>
 
           <div class="home-grid">
             <div class="nami-card">
@@ -282,8 +295,8 @@
       <section class="panel info-panel">
         <button class="collapse-toggle" type="button" data-collapse="game-info">[-] GAME INFO</button>
         <div id="game-info" class="collapse-body">
-          <p><span>Date / Server Time</span><strong id="server-time">Checking...</strong></p>
-          <p><span>Online Users</span><strong id="online-users">1</strong></p>
+          <p class="server-clock"><strong id="server-time">Checking...</strong></p>
+<p><span>Online Users</span><strong id="online-users">1</strong></p>
           <button class="side-link">Change Log</button>
           <button class="side-link">Game Rules</button>
           <button class="side-link">Rankings</button>

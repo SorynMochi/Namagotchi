@@ -890,3 +890,164 @@ h2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Phase 3A UI fix pass */
+
+/* Collapsible left panels */
+.panel-title {
+  user-select: none;
+}
+
+.left-rail .panel > .panel-title {
+  cursor: pointer;
+}
+
+.left-rail .panel > .panel-title:hover {
+  color: var(--pink-soft);
+}
+
+.left-rail .panel.is-collapsed > :not(.panel-title) {
+  display: none;
+}
+
+/* Tighter left navigation */
+.main-nav {
+  gap: 1px;
+  padding: 7px 8px;
+}
+
+.nav-item {
+  min-height: 0;
+  padding: 5px 8px;
+  border-radius: 7px;
+  font-size: 0.8rem;
+  line-height: 1.15;
+}
+
+/* User info layout */
+.user-card {
+  padding-bottom: 14px;
+}
+
+.user-card .player-name {
+  margin-bottom: 14px;
+}
+
+.user-meter {
+  position: relative;
+  width: calc(100% - 28px);
+  margin: 9px auto 0;
+}
+
+.meter-track {
+  position: relative;
+  height: 28px;
+  overflow: hidden;
+  border-radius: 7px;
+  background: rgba(3, 8, 15, 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.045),
+    inset 0 0 18px rgba(0, 0, 0, 0.26);
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 180ms linear;
+}
+
+.meter-label {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 0 8px;
+  color: #f4fbff;
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-align: center;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.65),
+    0 0 8px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.tick-meter .meter-track {
+  height: 25px;
+}
+
+.tick-fill {
+  width: 0%;
+  background: linear-gradient(90deg, var(--cyan), var(--pink));
+  animation: tickProgress 5s linear infinite;
+}
+
+.hp-fill {
+  background: linear-gradient(90deg, #7ca500, #76d07a);
+}
+
+.xp-fill {
+  background: linear-gradient(90deg, var(--pink), var(--orange));
+}
+
+@keyframes tickProgress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+/* Right panel collapse button fix and tighter Game Info */
+.collapse-toggle {
+  white-space: normal;
+}
+
+.info-panel p {
+  margin: 4px 0;
+  line-height: 1.25;
+}
+
+#game-info {
+  gap: 5px;
+}
+
+.server-clock {
+  display: block !important;
+  margin-bottom: 8px !important;
+}
+
+.server-clock strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.98rem;
+  letter-spacing: 0.02em;
+}
+
+/* Right panel list links tighter */
+.side-link {
+  padding: 2px 0;
+  line-height: 1.2;
+}
+
+/* Slightly reduce oversized right-side buff spacing */
+.buff-card {
+  gap: 2px;
+  padding-bottom: 7px;
+}
+
+.buff-card span {
+  line-height: 1.25;
+}
+
+.buff-card small {
+  line-height: 1.25;
+}
+
+/* The Home header no longer needs button spacing */
+#section-home .section-header {
+  align-items: center;
+}
