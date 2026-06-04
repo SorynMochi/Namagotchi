@@ -75,7 +75,7 @@ const GATHERING_TASK_CONFIG = {
     resource: "Fans",
   },
   doom_scrolling: {
-    name: "Scrolling",
+    name: "Doom Scrolling",
     resource: "Memes",
   },
   cleaning: {
@@ -83,7 +83,7 @@ const GATHERING_TASK_CONFIG = {
     resource: "Lost Items",
   },
   exercising: {
-    name: "Exercising",
+    name: "Exercise",
     resource: "Confidence",
   },
   shopping: {
@@ -1857,7 +1857,7 @@ function labelForTask(task) {
     case "cleaning":
       return "Cleaning";
     case "exercising":
-      return "Exercising";
+      return "Exercisize";
     case "shopping":
       return "Shopping";
     case "designing":

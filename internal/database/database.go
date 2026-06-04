@@ -940,7 +940,7 @@ func GatheringTaskName(task string) string {
 	case "cleaning":
 		return "Cleaning"
 	case "exercising":
-		return "Exercising"
+		return "Exercise"
 	case "shopping":
 		return "Shopping"
 	case "designing":
