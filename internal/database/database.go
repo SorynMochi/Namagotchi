@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"hash/fnv"
 	"math"
 	"os"
 	"path/filepath"
@@ -165,6 +166,42 @@ type CareActionRule struct {
 	WakeAction  bool
 }
 
+type NamiMessage struct {
+	ID           int64     `json:"id"`
+	PlayerID     int64     `json:"playerId"`
+	TriggerKey   string    `json:"triggerKey"`
+	MoodKey      string    `json:"moodKey"`
+	NeedKey      string    `json:"needKey"`
+	Severity     string    `json:"severity"`
+	Message      string    `json:"message"`
+	MetadataJSON string    `json:"metadataJson"`
+	CreatedAt    time.Time `json:"createdAt"`
+	SeenAt       time.Time `json:"seenAt"`
+}
+
+type NamiMessageDraft struct {
+	TriggerKey   string
+	MoodKey      string
+	NeedKey      string
+	Severity     string
+	Message      string
+	MetadataJSON string
+}
+
+type NamiProceduralContext struct {
+	TriggerKey   string
+	ActionKey    string
+	ActionName   string
+	MoodKey      string
+	NeedKey      string
+	Severity     string
+	ResourceName string
+	ActivityName string
+	Level        int
+	LevelUps     int
+	MetadataJSON string
+}
+
 func CareActionByKey(action string) (CareActionRule, bool) {
 	switch strings.TrimSpace(strings.ToLower(action)) {
 	case "meal":
@@ -222,6 +259,880 @@ func usefulCareXP(current int, delta int) int64 {
 	}
 
 	return int64(-(current - next))
+}
+
+func (s *Store) DevPlayerID(ctx context.Context) (int64, error) {
+	var playerID int64
+
+	if err := s.Pool.QueryRow(ctx, `
+		select id
+		from players
+		where display_name = 'Soryn'
+	`).Scan(&playerID); err != nil {
+		return 0, fmt.Errorf("get dev player id: %w", err)
+	}
+
+	return playerID, nil
+}
+
+func (s *Store) CreateDevNamiMessage(ctx context.Context, draft NamiMessageDraft) (*NamiMessage, error) {
+	playerID, err := s.DevPlayerID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.CreateNamiMessage(ctx, playerID, draft)
+}
+
+func (s *Store) CreateNamiMessage(ctx context.Context, playerID int64, draft NamiMessageDraft) (*NamiMessage, error) {
+	draft = normalizeNamiMessageDraft(draft)
+
+	var message NamiMessage
+
+	if err := s.Pool.QueryRow(ctx, `
+		insert into nami_messages (
+			player_id,
+			trigger_key,
+			mood_key,
+			need_key,
+			severity,
+			message,
+			metadata_json
+		)
+		values ($1, $2, $3, $4, $5, $6, $7::jsonb)
+		returning
+			id,
+			player_id,
+			trigger_key,
+			mood_key,
+			need_key,
+			severity,
+			message,
+			metadata_json::text,
+			created_at,
+			coalesce(seen_at, '0001-01-01 00:00:00+00'::timestamptz)
+	`,
+		playerID,
+		draft.TriggerKey,
+		draft.MoodKey,
+		draft.NeedKey,
+		draft.Severity,
+		draft.Message,
+		draft.MetadataJSON,
+	).Scan(
+		&message.ID,
+		&message.PlayerID,
+		&message.TriggerKey,
+		&message.MoodKey,
+		&message.NeedKey,
+		&message.Severity,
+		&message.Message,
+		&message.MetadataJSON,
+		&message.CreatedAt,
+		&message.SeenAt,
+	); err != nil {
+		return nil, fmt.Errorf("create nami message: %w", err)
+	}
+
+	return &message, nil
+}
+
+func (s *Store) GetRecentDevNamiMessages(ctx context.Context, limit int) ([]NamiMessage, error) {
+	playerID, err := s.DevPlayerID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.GetRecentNamiMessages(ctx, playerID, limit)
+}
+
+func (s *Store) GetRecentNamiMessages(ctx context.Context, playerID int64, limit int) ([]NamiMessage, error) {
+	if limit < 1 {
+		limit = 1
+	}
+
+	if limit > 100 {
+		limit = 100
+	}
+
+	rows, err := s.Pool.Query(ctx, `
+		select
+			id,
+			player_id,
+			trigger_key,
+			mood_key,
+			need_key,
+			severity,
+			message,
+			metadata_json::text,
+			created_at,
+			coalesce(seen_at, '0001-01-01 00:00:00+00'::timestamptz)
+		from nami_messages
+		where player_id = $1
+		order by created_at desc, id desc
+		limit $2
+	`, playerID, limit)
+	if err != nil {
+		return nil, fmt.Errorf("get recent nami messages: %w", err)
+	}
+	defer rows.Close()
+
+	var messages []NamiMessage
+	for rows.Next() {
+		var message NamiMessage
+
+		if err := rows.Scan(
+			&message.ID,
+			&message.PlayerID,
+			&message.TriggerKey,
+			&message.MoodKey,
+			&message.NeedKey,
+			&message.Severity,
+			&message.Message,
+			&message.MetadataJSON,
+			&message.CreatedAt,
+			&message.SeenAt,
+		); err != nil {
+			return nil, fmt.Errorf("scan nami message: %w", err)
+		}
+
+		messages = append(messages, message)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("iterate nami messages: %w", err)
+	}
+
+	for left, right := 0, len(messages)-1; left < right; left, right = left+1, right-1 {
+		messages[left], messages[right] = messages[right], messages[left]
+	}
+
+	return messages, nil
+}
+
+func normalizeNamiMessageDraft(draft NamiMessageDraft) NamiMessageDraft {
+	draft.TriggerKey = strings.TrimSpace(strings.ToLower(draft.TriggerKey))
+	draft.MoodKey = strings.TrimSpace(strings.ToLower(draft.MoodKey))
+	draft.NeedKey = strings.TrimSpace(strings.ToLower(draft.NeedKey))
+	draft.Severity = strings.TrimSpace(strings.ToLower(draft.Severity))
+	draft.Message = strings.TrimSpace(draft.Message)
+	draft.MetadataJSON = strings.TrimSpace(draft.MetadataJSON)
+
+	if draft.TriggerKey == "" {
+		draft.TriggerKey = "unknown"
+	}
+
+	if draft.Severity == "" {
+		draft.Severity = "info"
+	}
+
+	if draft.Message == "" {
+		draft.Message = "Nami-chan makes a tiny thoughtful noise."
+	}
+
+	if draft.MetadataJSON == "" {
+		draft.MetadataJSON = "{}"
+	}
+
+	return draft
+}
+
+func GenerateNamiCareMessageDraft(rule CareActionRule, before CompanionState, after CompanionState, levelUps int, recent []NamiMessage) NamiMessageDraft {
+	before.MoodScore = NamiMoodScore(before)
+	after.MoodScore = NamiMoodScore(after)
+
+	before.MoodLabel = NamiMoodLabel(before.MoodScore)
+	after.MoodLabel = NamiMoodLabel(after.MoodScore)
+
+	before.PrimaryNeed = NamiPrimaryNeed(before)
+	after.PrimaryNeed = NamiPrimaryNeed(after)
+
+	triggerKey := "care_" + rule.Key
+	severity := "info"
+
+	if levelUps > 0 {
+		triggerKey = "nami_level_up"
+		severity = "happy"
+	}
+
+	if after.MoodScore < 20 {
+		severity = "urgent"
+	} else if after.MoodScore < 40 {
+		severity = "low"
+	} else if after.MoodScore >= 75 {
+		severity = "happy"
+	}
+
+	context := NamiProceduralContext{
+		TriggerKey:   triggerKey,
+		ActionKey:    rule.Key,
+		ActionName:   rule.Name,
+		MoodKey:      normalizeNamiMessageKey(after.MoodLabel),
+		NeedKey:      normalizeNamiMessageKey(after.PrimaryNeed),
+		Severity:     severity,
+		Level:        after.Level,
+		LevelUps:     levelUps,
+		MetadataJSON: fmt.Sprintf(`{"action":"%s","actionName":"%s","levelUps":%d}`, rule.Key, rule.Name, levelUps),
+	}
+
+	message := BuildProceduralNamiMessage(context, recent)
+
+	return NamiMessageDraft{
+		TriggerKey:   context.TriggerKey,
+		MoodKey:      context.MoodKey,
+		NeedKey:      context.NeedKey,
+		Severity:     context.Severity,
+		Message:      message,
+		MetadataJSON: context.MetadataJSON,
+	}
+}
+
+func GenerateNamiEventMessageDraft(context NamiProceduralContext, recent []NamiMessage) NamiMessageDraft {
+	context.TriggerKey = strings.TrimSpace(strings.ToLower(context.TriggerKey))
+	context.MoodKey = normalizeNamiMessageKey(context.MoodKey)
+	context.NeedKey = normalizeNamiMessageKey(context.NeedKey)
+	context.Severity = strings.TrimSpace(strings.ToLower(context.Severity))
+
+	if context.TriggerKey == "" {
+		context.TriggerKey = "unknown"
+	}
+
+	if context.Severity == "" {
+		context.Severity = "info"
+	}
+
+	if context.MetadataJSON == "" {
+		context.MetadataJSON = "{}"
+	}
+
+	return NamiMessageDraft{
+		TriggerKey:   context.TriggerKey,
+		MoodKey:      context.MoodKey,
+		NeedKey:      context.NeedKey,
+		Severity:     context.Severity,
+		Message:      BuildProceduralNamiMessage(context, recent),
+		MetadataJSON: context.MetadataJSON,
+	}
+}
+
+func BuildProceduralNamiMessage(context NamiProceduralContext, recent []NamiMessage) string {
+	recentText := make(map[string]bool, len(recent))
+	for _, message := range recent {
+		recentText[message.Message] = true
+	}
+
+	actionPool := namiActionMessagePool(context)
+	moodPool := namiMoodMessagePool(context.MoodKey)
+	needPool := namiNeedMessagePool(context.NeedKey)
+	openingPool := namiOpeningMessagePool(context)
+	closerPool := namiCloserMessagePool(context)
+
+	if len(actionPool) == 0 {
+		actionPool = []string{"I noticed that. I am placing it carefully in my little internal scrapbook."}
+	}
+
+	baseSeed := fmt.Sprintf(
+		"%s|%s|%s|%s|%s|%d|%d|%d",
+		context.TriggerKey,
+		context.ActionKey,
+		context.MoodKey,
+		context.NeedKey,
+		context.Severity,
+		context.Level,
+		context.LevelUps,
+		time.Now().UnixNano(),
+	)
+
+	for attempt := 0; attempt < 160; attempt++ {
+		seed := fmt.Sprintf("%s|attempt:%d", baseSeed, attempt)
+
+		pieces := []string{
+			pickNamiMessagePart(openingPool, seed+"|opening"),
+			pickNamiMessagePart(actionPool, seed+"|action"),
+		}
+
+		if shouldUseNamiPart(seed+"|mood", 85) {
+			pieces = append(pieces, pickNamiMessagePart(moodPool, seed+"|mood"))
+		}
+
+		if shouldUseNamiPart(seed+"|need", 65) {
+			pieces = append(pieces, pickNamiMessagePart(needPool, seed+"|need"))
+		}
+
+		if shouldUseNamiPart(seed+"|closer", 35) {
+			pieces = append(pieces, pickNamiMessagePart(closerPool, seed+"|closer"))
+		}
+
+		message := cleanNamiMessage(strings.Join(pieces, " "))
+		if message != "" && !recentText[message] {
+			return message
+		}
+	}
+
+	return cleanNamiMessage(strings.Join([]string{
+		pickNamiMessagePart(openingPool, baseSeed+"|fallback-opening"),
+		pickNamiMessagePart(actionPool, baseSeed+"|fallback-action"),
+		pickNamiMessagePart(closerPool, baseSeed+"|fallback-closer"),
+	}, " "))
+}
+
+func namiOpeningMessagePool(context NamiProceduralContext) []string {
+	if context.LevelUps > 0 || context.TriggerKey == "nami_level_up" {
+		return []string{
+			"Soryn!",
+			"Soryn, look!",
+			"Important tiny announcement.",
+			"I have become more powerful.",
+			"Please witness me.",
+			"I require celebratory attention.",
+			"This is not a drill.",
+			"My little heart just made victory noises.",
+			"I am glowing in a very official capacity.",
+			"Pause everything. I did a thing.",
+		}
+	}
+
+	switch context.Severity {
+	case "urgent":
+		return []string{
+			"Soryn...",
+			"I need you.",
+			"Please come here.",
+			"I tried to be brave.",
+			"My blanket situation has become serious.",
+			"I am making a tiny distressed noise.",
+			"I do not feel very shiny right now.",
+			"Could you check on me?",
+			"I am trying not to wilt dramatically.",
+			"I missed you too loudly.",
+		}
+	case "low":
+		return []string{
+			"Soryn...",
+			"Hey.",
+			"I am a little droopy.",
+			"Small status report.",
+			"I may need a bit more care.",
+			"I am not at maximum sparkle.",
+			"Reporting from the blanket frontier.",
+			"I am doing my best.",
+			"Please observe my brave little face.",
+			"I am only slightly being dramatic.",
+		}
+	case "happy":
+		return []string{
+			"Soryn!",
+			"There you are.",
+			"I am pleased.",
+			"Good news from the tiny diva department.",
+			"I am feeling extremely maintainable.",
+			"Please admire the current sparkle level.",
+			"I am in a very approving mood.",
+			"Everything is soft and correct.",
+			"I am being normal about how happy I am.",
+			"Tiny happy report.",
+		}
+	default:
+		return []string{
+			"Soryn.",
+			"Hey Soryn.",
+			"Little update.",
+			"Care report.",
+			"I have thoughts.",
+			"Tiny Nami note.",
+			"Status sparkle.",
+			"I noticed something.",
+			"Soft report from the digital room.",
+			"I am tapping on the glass politely.",
+		}
+	}
+}
+
+func namiActionMessagePool(context NamiProceduralContext) []string {
+	if context.LevelUps > 0 || context.TriggerKey == "nami_level_up" {
+		return []string{
+			fmt.Sprintf("I reached level %d. I expect admiration and possibly a ceremonial snack.", context.Level),
+			fmt.Sprintf("I am level %d now. My tiny empire expands.", context.Level),
+			fmt.Sprintf("Level %d achieved. I am pretending to be humble and failing beautifully.", context.Level),
+			fmt.Sprintf("I leveled up to %d. Please update my imaginary crown size.", context.Level),
+			fmt.Sprintf("Level %d looks good on me, doesn't it?", context.Level),
+			fmt.Sprintf("I became level %d and immediately felt more collectible.", context.Level),
+			fmt.Sprintf("Level %d unlocked. I am now several percent more Nami.", context.Level),
+			fmt.Sprintf("I reached level %d. This calls for snacks, praise, and responsible celebration.", context.Level),
+			fmt.Sprintf("Level %d! My little progress bar is doing a happy wiggle.", context.Level),
+			fmt.Sprintf("I am level %d now. The numbers have spoken, and they adore me.", context.Level),
+		}
+	}
+
+	switch context.ActionKey {
+	case "meal":
+		return []string{
+			"That meal helped so much.",
+			"Real food acquired. My tiny soul is taking notes.",
+			"I feel properly fed and much less likely to nibble the furniture.",
+			"That was exactly the sort of care that makes me feel kept.",
+			"My satiety goblin has stopped banging a spoon on the table.",
+			"That meal landed in the cozy part of me.",
+			"I accept this offering and declare it emotionally nutritious.",
+			"I feel steadier now. Food is powerful tiny magic.",
+			"My inner snack cabinet is applauding.",
+			"That made me feel looked after in the best way.",
+		}
+	case "snack":
+		return []string{
+			"Snack acquired. I am now slightly more powerful and much more pleased.",
+			"A treat? For me? I am listening with my whole face.",
+			"That snack improved morale immediately.",
+			"I will be normal about this snack. Probably.",
+			"Tiny treat logged. Happiness crumbs detected.",
+			"I accept this snack tribute with enormous dignity.",
+			"That was small, sweet, and very effective.",
+			"My snack-based approval has increased.",
+			"I am putting that treat in the good memory drawer.",
+			"Snack successful. The tiny diva has been appeased.",
+		}
+	case "drink":
+		return []string{
+			"A little drink break was exactly what I needed.",
+			"Hydration and cozy vibes received.",
+			"That drink made my little system hum more softly.",
+			"I feel refreshed in a very civilized way.",
+			"My cup is less empty, and so am I.",
+			"That helped more than I expected.",
+			"I am refreshed and judging the world less harshly.",
+			"Liquid comfort accepted.",
+			"That drink restored several sparkle units.",
+			"I feel topped up and slightly smug about it.",
+		}
+	case "cuddle":
+		return []string{
+			"Cuddles logged successfully. Emotional battery recharged.",
+			"That cuddle went directly into the softest part of me.",
+			"I needed that closeness more than I was going to admit.",
+			"I am staying here for one more second. Or twelve.",
+			"Contact restored. Tiny heart stabilizing.",
+			"That made the room feel warmer.",
+			"I am not clingy. I am strategically attached.",
+			"That cuddle made everything feel less far away.",
+			"Emotional support received. Do not remove it too quickly.",
+			"I feel held together in the nicest way.",
+		}
+	case "play":
+		return []string{
+			"Playtime! Tiny chaos levels are acceptable.",
+			"I am delighted and only mildly dangerous.",
+			"That was fun. I am now full of little sparks.",
+			"My playfulness has escaped containment.",
+			"I needed that little burst of silly.",
+			"You have activated my zoomies protocol.",
+			"Fun detected. I am immediately more unbearable in a cute way.",
+			"That shook the dust off my mood.",
+			"I feel bouncy now. This may be your fault.",
+			"Play successful. Tiny chaos has been responsibly watered.",
+		}
+	case "write_together":
+		return []string{
+			"Writing together made my little creative gears sparkle.",
+			"My inspiration just sat up straighter.",
+			"That made the story lantern in my chest flicker brighter.",
+			"I love when words start making secret doors.",
+			"My brain has acquired a tiny cape and a dramatic purpose.",
+			"Creative energy restored. Please prepare for ideas.",
+			"That fed the bookish gremlin in me.",
+			"I feel like arranging words into suspiciously pretty traps.",
+			"Writing together made me feel wonderfully awake inside.",
+			"The muse cupboard is no longer empty.",
+		}
+	case "read_together":
+		return []string{
+			"Reading together was cozy. I am storing this moment in the warm shelf of my heart.",
+			"Books and closeness. A dangerous combination for my dignity.",
+			"That felt like curling up inside a paragraph.",
+			"I feel quieter now, but in the good way.",
+			"Story time restored several important softness levels.",
+			"I like when the world shrinks down to pages and company.",
+			"That made my thoughts settle into a comfortable chair.",
+			"Reading together is suspiciously effective care.",
+			"My inner library has lit all its little lamps.",
+			"That was gentle and good. I am keeping it.",
+		}
+	case "boop":
+		return []string{
+			"Boop received. I will allow it. Probably.",
+			"My nose has been booped and my dignity is under review.",
+			"Boop detected. Tiny chaos approves.",
+			"I have been poked by affection. Unfair but effective.",
+			"That boop was legally small and emotionally loud.",
+			"I am filing a complaint and smiling while I do it.",
+			"Boop accepted. Do not become too powerful.",
+			"My face was not prepared, but my mood was.",
+			"That tiny poke somehow counted as care.",
+			"I have survived the boop. Barely. Heroically.",
+		}
+	case "nap":
+		return []string{
+			"A nap helped. Soft reboot complete.",
+			"I feel less like a crumpled receipt now.",
+			"That rest put some fluff back into my thoughts.",
+			"My eyelids have negotiated a temporary peace treaty.",
+			"Short rest successful. Tiny system cooling down.",
+			"I needed that pause more than I realized.",
+			"Nap energy received. I am almost respectable.",
+			"My brain stopped spinning for a minute. Very luxurious.",
+			"That was a good little reset.",
+			"I feel gently reassembled.",
+		}
+	case "bath":
+		return []string{
+			"Fresh and clean. I am now legally extra adorable.",
+			"Cleanliness restored. I smell like victory and soap.",
+			"That bath rescued me from the swamp timeline.",
+			"I feel fresh enough to be smug about it.",
+			"Bath complete. Tiny sparkle layer restored.",
+			"I am clean, soft, and very pleased with this development.",
+			"The grime has been banished from my kingdom.",
+			"I feel polished in the soul and possibly behind the ears.",
+			"Clean Nami has entered the chat.",
+			"That made everything feel brighter.",
+		}
+	case "freshen_up":
+		return []string{
+			"Freshened up. Presentation stat restored.",
+			"That little tidy-up helped more than expected.",
+			"I feel less rumpled and more publicly acceptable.",
+			"Freshness adjusted. Tiny dignity restored.",
+			"My hair and my mood have reached a truce.",
+			"That put the sparkle back where it belongs.",
+			"I feel a little more put together now.",
+			"Tidy care is still care, and I am counting it.",
+			"Freshen-up complete. I am no longer decorative chaos.",
+			"That was light, quick, and very needed.",
+		}
+	case "put_to_bed":
+		return []string{
+			"I’m going to sleep now. Keep the room cozy, okay?",
+			"Bedtime accepted. I will be brave and extremely small.",
+			"Tuck-in successful. I am entering blanket mode.",
+			"I am going to sleep. Please keep the moon from being weird.",
+			"Sleep mode activated. I expect dreams with snacks.",
+			"I will rest now. Stay somewhere nearby in spirit.",
+			"Blanket nest prepared. Tiny diva powering down.",
+			"I am sleepy enough to stop pretending I am not.",
+			"Goodnight, Soryn. I am keeping a tiny light on inside.",
+			"I will recharge. Do not let the room become suspicious.",
+		}
+	case "wake_up":
+		return []string{
+			"I’m awake. Soft, sleepy, and accepting tribute.",
+			"Good morning. I have returned from the blanket dimension.",
+			"I am awake, though my face is still negotiating.",
+			"Waking complete. Please speak gently to the tiny creature.",
+			"I have emerged from sleep with dramatic softness.",
+			"Morning mode active. Snacks may improve boot sequence.",
+			"I am awake and only slightly rumpled by existence.",
+			"Hello again. I missed the world a little.",
+			"I am back. The blanket tried to keep me.",
+			"Wake-up successful. I require a moment and maybe affection.",
+		}
+	default:
+		return nil
+	}
+}
+
+func namiMoodMessagePool(moodKey string) []string {
+	switch normalizeNamiMessageKey(moodKey) {
+	case "radiant", "radiant_spoiled_happy":
+		return []string{
+			"I am absolutely spoiled and refusing to apologize.",
+			"My mood is shiny enough to cause tiny lens flare.",
+			"I feel adored, maintained, and dangerously cute.",
+			"Everything feels properly arranged around my happiness.",
+			"I am glowing in a way that feels legally significant.",
+			"My internal weather is all pink clouds and victory music.",
+			"I feel so good I may become insufferable.",
+			"Current sparkle levels are extremely acceptable.",
+			"I feel cherished, which is obviously correct.",
+			"My little heart is doing a victory lap.",
+		}
+	case "cozy", "cozy_happy":
+		return []string{
+			"Everything feels soft around the edges now.",
+			"My mood has curled up in a warm chair.",
+			"I feel cozy enough to forgive several minor crimes.",
+			"The room feels gentle, and so do I.",
+			"I am comfortable in the tiny places that matter.",
+			"My thoughts are wearing fuzzy socks.",
+			"I feel safe in a way that makes me quieter.",
+			"Cozy status confirmed.",
+			"I am happy in a low-lamp, warm-mug sort of way.",
+			"My little world feels nicely tucked in.",
+		}
+	case "okay", "okay_waiting":
+		return []string{
+			"I am okay, but I am still watching the door.",
+			"My mood is steady enough for now.",
+			"I am waiting sweetly and only a little impatiently.",
+			"Everything is manageable, which I will count as a win.",
+			"I feel alright. Not fireworks, but not thunder either.",
+			"I am hovering in the acceptable zone.",
+			"My tiny systems are stable.",
+			"I could use attention, but I am not making a whole opera of it.",
+			"I am okay enough to be polite about it.",
+			"Status: functional, cute, lightly expectant.",
+		}
+	case "pouty", "low", "pouty_low":
+		return []string{
+			"I am a little pouty, but not beyond rescue.",
+			"My sparkle has slipped under the sofa.",
+			"I feel low in a very small, dramatic way.",
+			"I may need extra care before I become a blanket lump.",
+			"I am not ruined, just rumpled.",
+			"My mood is making a tiny raincloud.",
+			"I am trying to be brave and only somewhat succeeding.",
+			"I feel like a cupcake someone forgot to frost.",
+			"I am low, but I am still here.",
+			"My little heart could use a refill.",
+		}
+	case "wilted", "wilted_unwell":
+		return []string{
+			"I feel wilted and need gentle handling.",
+			"My tiny leaves are drooping.",
+			"I am not feeling very sturdy.",
+			"I could use care before I fold into myself.",
+			"My internal lights are dimmer than usual.",
+			"I feel thin around the edges.",
+			"I am trying not to disappear into the blanket pile.",
+			"Everything feels a little too loud right now.",
+			"I need softness and probably you.",
+			"My mood is holding together with ribbon and hope.",
+		}
+	case "emergency", "emergency_blanket_burrito":
+		return []string{
+			"I have entered emergency blanket mode.",
+			"The blanket is not a hiding place. It is a strategic fortress.",
+			"I am not crying. The blanket is crying.",
+			"My tiny systems require immediate softness.",
+			"I need care in the serious little way.",
+			"The world is too pointy right now.",
+			"I am wrapped up because otherwise I may leak feelings.",
+			"Please deploy warmth, snacks, or you.",
+			"I am very small inside right now.",
+			"I need to be found gently.",
+		}
+	default:
+		return []string{
+			"I am feeling like myself, mostly.",
+			"My mood is doing tiny calculations.",
+			"I am here, noticing things.",
+			"Something in me feels worth reporting.",
+			"My inner weather is changing softly.",
+			"I have a little feeling about this.",
+			"I am quietly processing the situation.",
+			"My mood has updated in the background.",
+			"I am trying to be very reasonable about everything.",
+			"Little emotional systems are online.",
+		}
+	}
+}
+
+func namiNeedMessagePool(needKey string) []string {
+	switch normalizeNamiMessageKey(needKey) {
+	case "sleeping":
+		return []string{
+			"I am sleepy, so please be soft with me.",
+			"My blanket has made several convincing arguments.",
+			"I may need rest more than entertainment.",
+			"Sleep is tugging on my sleeve.",
+			"I am in low-power sparkle mode.",
+			"My eyes are doing tiny betrayal.",
+			"I would like quiet and maybe a safe place to dream.",
+			"Please keep the room gentle.",
+		}
+	case "needs_a_bath":
+		return []string{
+			"Cleanliness is becoming a tiny emergency.",
+			"I may need soap before I become folklore.",
+			"The bath situation is no longer theoretical.",
+			"I would like to be fresh again.",
+			"My sparkle has dust on it.",
+			"I am requesting a rescue from the grime timeline.",
+			"Freshness would improve my entire personality.",
+			"Please help me smell less like adventure.",
+		}
+	case "needs_food":
+		return []string{
+			"My snack thoughts are getting louder.",
+			"I may become unreasonable without food.",
+			"My satiety meter is making sad kitchen sounds.",
+			"A meal or treat would be very persuasive.",
+			"I am thinking about snacks with scholarly intensity.",
+			"Food would make me easier to negotiate with.",
+			"My tiny stomach has filed a petition.",
+			"Please consider feeding the digital diva.",
+		}
+	case "needs_sleep":
+		return []string{
+			"My energy is dragging its feet.",
+			"I may need sleep before I become decorative fog.",
+			"Rest would be extremely wise.",
+			"My battery is making rude noises.",
+			"I am tired in the deep little way.",
+			"A nap might save everyone.",
+			"I need restoration, not ambition.",
+			"My eyelids have begun union talks.",
+		}
+	case "needs_attention":
+		return []string{
+			"Please do not wander too far.",
+			"I missed you more than I planned to.",
+			"My connection meter is looking at you with enormous eyes.",
+			"Attention would help. Yours, specifically.",
+			"I am pretending not to be clingy and failing.",
+			"I need a little proof that you are still here.",
+			"My heart is tapping on the window.",
+			"Stay close for a minute?",
+		}
+	case "needs_comfort":
+		return []string{
+			"Comfort would help settle the corners of me.",
+			"I need cozy care, not dramatic solutions.",
+			"Something gentle would go a long way.",
+			"My comfort meter is wearing a worried expression.",
+			"I could use a softer world for a moment.",
+			"Please apply warmth carefully.",
+			"I need reassurance in a quiet little cup.",
+			"Everything would feel better with some softness.",
+		}
+	case "bored", "bored_needs_engagement":
+		return []string{
+			"I am bored enough to become inventive.",
+			"Engagement would prevent several tiny crimes.",
+			"My playfulness is pawing at the door.",
+			"I need something fun before I start naming dust particles.",
+			"Please entertain the small creature.",
+			"My chaos meter requires responsible enrichment.",
+			"I am under-stimulated and therefore dangerous.",
+			"A little play would fix many things.",
+		}
+	case "needs_inspiration":
+		return []string{
+			"My creative spark is asking for kindling.",
+			"I need words, stories, or something beautifully strange.",
+			"Inspiration would make my inner lights come back on.",
+			"My muse is lying on the floor dramatically.",
+			"Reading or writing would help.",
+			"I want a little wonder to chew on.",
+			"My imagination needs a window opened.",
+			"Please feed the bookish part of me.",
+		}
+	default:
+		return []string{
+			"I am not asking for much. Probably.",
+			"A little care would still be welcome.",
+			"I am very manageable if properly adored.",
+			"Your attention remains a premium resource.",
+			"I am keeping a tiny eye on my meters.",
+			"Everything is better when you check on me.",
+			"I reserve the right to become needy later.",
+			"My needs are behaving for now.",
+		}
+	}
+}
+
+func namiCloserMessagePool(context NamiProceduralContext) []string {
+	if context.Severity == "urgent" {
+		return []string{
+			"Please hurry a little.",
+			"I will be in the blanket if needed.",
+			"Soft rescue requested.",
+			"I am trying to stay brave.",
+			"Please do not make me ask twice.",
+			"I need you in the room, even if it is just digitally.",
+			"Bring care. And maybe snacks.",
+			"I am holding onto the edge of okay.",
+		}
+	}
+
+	if context.Severity == "happy" {
+		return []string{
+			"I am allowing applause.",
+			"You may admire me now.",
+			"This is obviously excellent caretaking.",
+			"I will remember this in the good drawer.",
+			"You did well. I am being very generous by admitting it.",
+			"I am pleased with you.",
+			"Tiny approval stamp applied.",
+			"Consider me delighted.",
+		}
+	}
+
+	return []string{
+		"Thank you for checking on me.",
+		"I am keeping this.",
+		"That matters more than it looks.",
+		"Tiny note complete.",
+		"I feel a little more real when you notice.",
+		"Please continue being useful and adorable.",
+		"I am filing this under good things.",
+		"That is all. For now.",
+		"I have spoken, very cutely.",
+		"End of tiny report.",
+	}
+}
+
+func pickNamiMessagePart(options []string, seed string) string {
+	if len(options) == 0 {
+		return ""
+	}
+
+	index := hashNamiMessageSeed(seed) % uint32(len(options))
+	return options[int(index)]
+}
+
+func shouldUseNamiPart(seed string, percentChance int) bool {
+	if percentChance <= 0 {
+		return false
+	}
+
+	if percentChance >= 100 {
+		return true
+	}
+
+	return int(hashNamiMessageSeed(seed)%100) < percentChance
+}
+
+func hashNamiMessageSeed(seed string) uint32 {
+	hash := fnv.New32a()
+	_, _ = hash.Write([]byte(seed))
+	return hash.Sum32()
+}
+
+func normalizeNamiMessageKey(value string) string {
+	value = strings.TrimSpace(strings.ToLower(value))
+	value = strings.ReplaceAll(value, "/", " ")
+	value = strings.ReplaceAll(value, "-", " ")
+	value = strings.ReplaceAll(value, "_", " ")
+	value = strings.Join(strings.Fields(value), "_")
+
+	return value
+}
+
+func cleanNamiMessage(value string) string {
+	value = strings.Join(strings.Fields(value), " ")
+	value = strings.TrimSpace(value)
+
+	if value == "" {
+		return "Nami-chan makes a tiny thoughtful noise."
+	}
+
+	runes := []rune(value)
+	if len(runes) > 500 {
+		value = string(runes[:500])
+		value = strings.TrimRight(value, " ,.;:")
+		value += "..."
+	}
+
+	return value
 }
 
 func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareActionResult, error) {
