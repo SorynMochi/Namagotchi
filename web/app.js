@@ -63,6 +63,7 @@ const CHAT_HIDDEN_KEY = "namagotchi_chat_hidden_v1";
 const CHAT_PREVIOUS_HEIGHT_KEY = "namagotchi_chat_previous_height_v1";
 const EMOJI_USAGE_KEY = "namagotchi_emoji_usage_v1";
 const EMOJI_CATEGORY_KEY = "namagotchi_emoji_category_v1";
+const RECENT_EMOJI_LIMIT = 50;
 const CHAT_IGNORE_KEY = "namagotchi_chat_ignore_list_v1";
 const CHAT_LAST_WHISPER_KEY = "namagotchi_chat_last_whisper_v1";
 const CHAT_OFFLINE_WHISPERS_KEY = "namagotchi_offline_whispers_v1";
@@ -217,9 +218,12 @@ const EMOJI_OPTIONS = [
   "📃", "📄", "📑", "📊", "📈", "📉", "🗃️", "🗄️", "🗑️"
 ];
 
+const EMOJI_OPTION_SET = new Set(EMOJI_OPTIONS);
+const EMOJI_INDEX = new Map(EMOJI_OPTIONS.map((emoji, index) => [emoji, index]));
+
 const EMOJI_CATEGORIES = {
   all: {
-    label: "All",
+    label: "Recent",
     emojis: null,
   },
   faces: {
@@ -337,7 +341,7 @@ let currentChatChannel = "lobby";
 let chatMessages = createEmptyChatStore();
 let unreadChannels = new Set();
 let emojiUsage = loadEmojiUsage();
-let activeEmojiCategory = getSavedEmojiCategory();
+let activeEmojiCategory = "recent";
 let ignoredPlayers = loadIgnoredPlayers();
 let lastWhisperName = localStorage.getItem(CHAT_LAST_WHISPER_KEY) || "";
 let activeChatUserMenu = null;
@@ -1503,13 +1507,17 @@ function renderEmojiPicker() {
   emojiPicker.append(tabs, grid);
 }
 
-function getSortedEmojis(categoryKey = "all") {
-  const category = EMOJI_CATEGORIES[categoryKey] ?? EMOJI_CATEGORIES.all;
-  const emojiSource = category.emojis ?? EMOJI_OPTIONS;
+function getSortedEmojis(categoryKey = "recent") {
+  if (categoryKey === "recent") {
+    return getRecentEmojis();
+  }
+
+  const category = EMOJI_CATEGORIES[categoryKey] ?? EMOJI_CATEGORIES.recent;
+  const emojiSource = category.emojis ?? [];
 
   return [...emojiSource]
     .filter((emoji, index, array) => array.indexOf(emoji) === index)
-    .filter((emoji) => EMOJI_OPTIONS.includes(emoji))
+    .filter((emoji) => EMOJI_OPTION_SET.has(emoji))
     .sort((a, b) => {
       const countDifference = (emojiUsage[b] ?? 0) - (emojiUsage[a] ?? 0);
 
@@ -1517,8 +1525,19 @@ function getSortedEmojis(categoryKey = "all") {
         return countDifference;
       }
 
-      return EMOJI_OPTIONS.indexOf(a) - EMOJI_OPTIONS.indexOf(b);
+      return (EMOJI_INDEX.get(a) ?? 999999) - (EMOJI_INDEX.get(b) ?? 999999);
     });
+}
+
+function getRecentEmojis() {
+  const usedEmojis = Object.entries(emojiUsage)
+    .filter(([emoji, count]) => EMOJI_OPTION_SET.has(emoji) && Number(count) > 0)
+    .sort((a, b) => Number(b[1]) - Number(a[1]))
+    .map(([emoji]) => emoji);
+
+  const fallbackEmojis = EMOJI_OPTIONS.filter((emoji) => !usedEmojis.includes(emoji));
+
+  return [...usedEmojis, ...fallbackEmojis].slice(0, RECENT_EMOJI_LIMIT);
 }
 
 function setEmojiCategory(categoryKey) {
@@ -1535,7 +1554,12 @@ function setEmojiCategory(categoryKey) {
 
 function getSavedEmojiCategory() {
   const savedCategory = localStorage.getItem(EMOJI_CATEGORY_KEY);
-  return EMOJI_CATEGORIES[savedCategory] ? savedCategory : "all";
+
+  if (savedCategory === "all") {
+    return "recent";
+  }
+
+  return EMOJI_CATEGORIES[savedCategory] ? savedCategory : "recent";
 }
 
 function initializeEmojiPickerPortal() {
@@ -1597,10 +1621,16 @@ function toggleEmojiPicker(event) {
   event?.stopPropagation();
 
   if (!isEmojiPickerOpen()) {
-    if (emojiPickerNeedsRender || emojiPicker.childElementCount === 0) {
-      renderEmojiPicker();
-      emojiPickerNeedsRender = false;
-    }
+  if (activeEmojiCategory !== "recent") {
+    activeEmojiCategory = "recent";
+    localStorage.setItem(EMOJI_CATEGORY_KEY, "recent");
+    emojiPickerNeedsRender = true;
+  }
+
+  if (emojiPickerNeedsRender || emojiPicker.childElementCount === 0) {
+    renderEmojiPicker();
+    emojiPickerNeedsRender = false;
+  }
 
     positionEmojiPickerInstant();
     emojiPicker.classList.add("is-open");
@@ -1616,6 +1646,12 @@ function closeEmojiPicker() {
   emojiPicker.style.setProperty("--emoji-picker-x", "-9999px");
   emojiPicker.style.setProperty("--emoji-picker-y", "-9999px");
   emojiButton.setAttribute("aria-expanded", "false");
+
+  if (activeEmojiCategory !== "recent") {
+    activeEmojiCategory = "recent";
+    localStorage.setItem(EMOJI_CATEGORY_KEY, "recent");
+    scheduleEmojiPickerPreload();
+  }
 }
 
 function scheduleEmojiPickerPreload() {
@@ -1630,8 +1666,9 @@ if (isEmojiPickerOpen()) {
   return;
 }
 
-    renderEmojiPicker();
-    emojiPickerNeedsRender = false;
+activeEmojiCategory = "recent";
+renderEmojiPicker();
+emojiPickerNeedsRender = false;
 emojiPicker.style.setProperty("--emoji-picker-x", "-9999px");
 emojiPicker.style.setProperty("--emoji-picker-y", "-9999px");
   }, 40);
