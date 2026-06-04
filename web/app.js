@@ -61,6 +61,7 @@ const CHAT_CHANNEL_KEY = "namagotchi_chat_active_channel_v1";
 const CHAT_HIDDEN_KEY = "namagotchi_chat_hidden_v1";
 const CHAT_PREVIOUS_HEIGHT_KEY = "namagotchi_chat_previous_height_v1";
 const EMOJI_USAGE_KEY = "namagotchi_emoji_usage_v1";
+const EMOJI_CATEGORY_KEY = "namagotchi_emoji_category_v1";
 
 const CHAT_CHANNELS = ["lobby", "whispers", "club", "trade", "help", "system"];
 const CHAT_LABELS = {
@@ -160,12 +161,127 @@ const EMOJI_OPTIONS = [
   "📃", "📄", "📑", "📊", "📈", "📉", "🗃️", "🗄️", "🗑️"
 ];
 
+const EMOJI_CATEGORIES = {
+  all: {
+    label: "All",
+    emojis: null,
+  },
+  faces: {
+    label: "Faces",
+    emojis: [
+      "😀", "😃", "😄", "😁", "😆", "😂", "🤣", "😊", "😇", "🙂",
+      "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚", "😋",
+      "😛", "😜", "🤪", "😝", "🤑", "🤗", "🤭", "🫢", "🫣", "🤫",
+      "🤔", "🫡", "🤤", "😴", "🤯", "🥳", "🥺", "😭", "😤", "😈",
+      "👿", "😎", "🤓", "🧐", "😳", "🥵", "🥶", "😱", "😵", "💀",
+      "☠️", "👻", "👽", "🤖", "😺", "😸", "😹", "😻", "😼", "🙀",
+      "😅", "😬", "🥲", "🫠", "🫥", "😶", "😶‍🌫️", "😐", "😑", "😒",
+      "🙄", "😏", "😕", "🫤", "🙁", "☹️", "😟", "😔", "😞", "😣",
+      "😖", "😫", "😩", "🥱", "😮", "😯", "😲", "😦", "😧", "😨",
+      "😰", "😥", "😓", "😢", "😪", "😮‍💨", "😵‍💫", "🥴", "🤠", "🥸",
+      "🤥", "🤨", "🤐", "🤢", "🤮", "🤧", "🤒", "🤕", "😷", "🤬",
+      "😽", "😿", "😾", "🙈", "🙉", "🙊", "👾", "👹", "👺", "🌚"
+    ],
+  },
+  hands: {
+    label: "Hands",
+    emojis: [
+      "👍", "👎", "👏", "🙌", "👐", "🤲", "🙏", "💪", "🫶", "🤝",
+      "👋", "🤚", "🖐️", "✋", "🖖", "👌", "🤌", "🤏", "✌️", "🤞",
+      "🫰", "🤟", "🤘", "🤙", "👈", "👉", "👆", "👇", "☝️", "✍️",
+      "👊", "✊", "🤛", "🤜", "🫷", "🫸", "🫱", "🫲", "🫳", "🫴"
+    ],
+  },
+  hearts: {
+    label: "Hearts",
+    emojis: [
+      "💖", "💗", "💓", "💕", "💞", "💘", "💝", "💜", "💙", "🩵",
+      "💚", "💛", "🧡", "❤️", "🩷", "🖤", "🤍", "🤎", "❤️‍🔥", "❤️‍🩹",
+      "❣️", "💔", "💟", "💌", "💋", "🫦", "✨", "💫", "⭐", "🌟"
+    ],
+  },
+  food: {
+    label: "Food",
+    emojis: [
+      "☕", "🍵", "🍪", "🍩", "🍰", "🧁", "🍫", "🍬", "🍭", "🍜",
+      "🍣", "🍙", "🍕", "🍔", "🍟", "🥐", "🥞", "🥓", "🍓", "🍒",
+      "🍑", "🍎", "🍏", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🫐",
+      "🥝", "🥭", "🍍", "🥥", "🥑", "🍆", "🥕", "🌽", "🌶️", "🥒",
+      "🥬", "🥦", "🧄", "🧅", "🥔", "🍠", "🥯", "🍞", "🥖", "🧀",
+      "🥚", "🍳", "🧇", "🥨", "🥩", "🍗", "🍖", "🌭", "🥪", "🌮",
+      "🌯", "🫔", "🥙", "🧆", "🥘", "🍲", "🥣", "🥗", "🍿", "🧈",
+      "🧂", "🥫", "🍱", "🍘", "🍥", "🥮", "🍡", "🥠", "🥡", "🦪",
+      "🍤", "🍛", "🍚", "🍝", "🥟", "🍧", "🍨", "🍦", "🥧", "🍮",
+      "🍯", "🥛", "🍼", "🫖", "🧋", "🧃", "🥤"
+    ],
+  },
+  animals: {
+    label: "Animals",
+    emojis: [
+      "🐾", "🐱", "🐈", "🐈‍⬛", "🦊", "🐰", "🐹", "🐻", "🐼", "🐧",
+      "🦄", "🐶", "🐕", "🐩", "🦁", "🐯", "🐅", "🐆", "🐴", "🫎",
+      "🫏", "🐎", "🦌", "🦬", "🐮", "🐂", "🐃", "🐄", "🐷", "🐖",
+      "🐗", "🐽", "🐏", "🐑", "🐐", "🐪", "🐫", "🦙", "🦒", "🐘",
+      "🦣", "🦏", "🦛", "🐭", "🐁", "🐀", "🦔", "🦇", "🐿️", "🦫",
+      "🦥", "🦦", "🦨", "🦘", "🦡", "🦃", "🐔", "🐓", "🐣", "🐤",
+      "🐥", "🐦", "🐦‍⬛", "🪿", "🦆", "🦅", "🦉", "🦤", "🪶", "🦩",
+      "🦚", "🦜", "🪽", "🐸", "🐊", "🐢", "🦎", "🐍", "🐲", "🐉",
+      "🦕", "🦖", "🐳", "🐋", "🐬", "🦭", "🐟", "🐠", "🐡", "🦈",
+      "🐙", "🐚", "🪸", "🪼", "🐌", "🦋", "🐛", "🐜", "🐝", "🪲",
+      "🐞", "🦗", "🪳", "🕷️", "🕸️", "🦂", "🦟", "🪰", "🪱", "🦠"
+    ],
+  },
+  nature: {
+    label: "Nature",
+    emojis: [
+      "🌙", "☀️", "🌈", "❄️", "🌸", "🌺", "🌷", "🍄", "🪴", "🌍",
+      "🌎", "🌏", "🪐", "🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗",
+      "🌘", "🌝", "🌞", "🌠", "☄️", "💧", "🌊", "🌫️", "🌪️", "🌧️",
+      "⛈️", "🌩️", "⚡", "☔", "☁️", "⛄", "☃️", "🌬️", "🌤️", "⛅",
+      "🌥️", "🌦️", "☂️", "🌡️", "🍀", "☘️", "🌿", "🌱", "🌲", "🌳",
+      "🌴", "🌵", "🌾", "💐", "🥀", "🌹", "🪷", "🪻", "🌼", "🌻",
+      "🍁", "🍂", "🍃", "🪹", "🪺", "🪵", "🪨"
+    ],
+  },
+  gaming: {
+    label: "Gaming",
+    emojis: [
+      "🎮", "🕹️", "🎲", "🎧", "🎤", "🎬", "🎨", "💻", "⌨️", "🖱️",
+      "📱", "🖥️", "💽", "💾", "💿", "📀", "👾", "🤖", "🧑‍💻", "👩‍💻",
+      "👨‍💻", "⚔️", "🛡️", "🎯", "🏆", "🥇", "🥈", "🥉"
+    ],
+  },
+  objects: {
+    label: "Objects",
+    emojis: [
+      "📦", "💎", "🪙", "💰", "🔑", "🔒", "🔓", "🧸", "👑", "🎀",
+      "🎁", "🎉", "🎊", "📚", "📖", "🔖", "📝", "✏️", "🖊️", "🖋️",
+      "🖌️", "🖍️", "📌", "📍", "📎", "🖇️", "✂️", "📏", "📐", "📓",
+      "📔", "📕", "📗", "📘", "📙", "🧩", "🎭", "🎵", "🎶", "📷",
+      "📸", "📹", "🎥", "📺", "📻", "⏰", "⌚", "🧭", "🗺️", "👜",
+      "👛", "👝", "🎒", "🧳", "👓", "🕶️", "👗", "👚", "👠", "👢",
+      "💄", "🧵", "🪡", "💍", "🏠", "🏡", "🛋️", "🛏️", "🪞", "🧺",
+      "🧼", "🧽", "🪣", "🛁", "🚿", "🧾", "🔨", "🛠️", "⚙️", "🔋"
+    ],
+  },
+  symbols: {
+    label: "Symbols",
+    emojis: [
+      "✅", "☑️", "✔️", "❌", "❎", "➕", "➖", "➗", "✖️", "🔔",
+      "🔕", "📣", "📢", "💬", "🗯️", "💭", "🗨️", "🔊", "🔇", "🔈",
+      "🔉", "➡️", "⬅️", "⬆️", "⬇️", "↗️", "↘️", "↙️", "↖️", "🔄",
+      "🔁", "🔀", "💯", "💠", "🔆", "🔅"
+    ],
+  },
+};
+
 let latestPlayerStatus = null;
 let forceTickButton = null;
 let currentChatChannel = "lobby";
 let chatMessages = createEmptyChatStore();
 let unreadChannels = new Set();
 let emojiUsage = loadEmojiUsage();
+let activeEmojiCategory = getSavedEmojiCategory();
 let isResizingChat = false;
 let isChatHidden = false;
 let previousChatHeight = 190;
@@ -695,7 +811,27 @@ function saveEmojiUsage() {
 function renderEmojiPicker() {
   emojiPicker.replaceChildren();
 
-  getSortedEmojis().forEach((emoji) => {
+  const tabs = document.createElement("div");
+  tabs.className = "emoji-picker-tabs";
+
+  Object.entries(EMOJI_CATEGORIES).forEach(([categoryKey, category]) => {
+    const tab = document.createElement("button");
+    tab.type = "button";
+    tab.className = "emoji-category-tab";
+    tab.classList.toggle("active", categoryKey === activeEmojiCategory);
+    tab.textContent = category.label;
+
+    tab.addEventListener("click", () => {
+      setEmojiCategory(categoryKey);
+    });
+
+    tabs.appendChild(tab);
+  });
+
+  const grid = document.createElement("div");
+  grid.className = "emoji-grid";
+
+  getSortedEmojis(activeEmojiCategory).forEach((emoji) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "emoji-option";
@@ -706,20 +842,43 @@ function renderEmojiPicker() {
       addEmojiToChat(emoji);
     });
 
-    emojiPicker.appendChild(button);
+    grid.appendChild(button);
   });
+
+  emojiPicker.append(tabs, grid);
 }
 
-function getSortedEmojis() {
-  return [...EMOJI_OPTIONS].sort((a, b) => {
-    const countDifference = (emojiUsage[b] ?? 0) - (emojiUsage[a] ?? 0);
+function getSortedEmojis(categoryKey = "all") {
+  const category = EMOJI_CATEGORIES[categoryKey] ?? EMOJI_CATEGORIES.all;
+  const emojiSource = category.emojis ?? EMOJI_OPTIONS;
 
-    if (countDifference !== 0) {
-      return countDifference;
-    }
+  return [...emojiSource]
+    .filter((emoji, index, array) => array.indexOf(emoji) === index)
+    .filter((emoji) => EMOJI_OPTIONS.includes(emoji))
+    .sort((a, b) => {
+      const countDifference = (emojiUsage[b] ?? 0) - (emojiUsage[a] ?? 0);
 
-    return EMOJI_OPTIONS.indexOf(a) - EMOJI_OPTIONS.indexOf(b);
-  });
+      if (countDifference !== 0) {
+        return countDifference;
+      }
+
+      return EMOJI_OPTIONS.indexOf(a) - EMOJI_OPTIONS.indexOf(b);
+    });
+}
+
+function setEmojiCategory(categoryKey) {
+  if (!EMOJI_CATEGORIES[categoryKey]) {
+    return;
+  }
+
+  activeEmojiCategory = categoryKey;
+  localStorage.setItem(EMOJI_CATEGORY_KEY, categoryKey);
+  renderEmojiPicker();
+}
+
+function getSavedEmojiCategory() {
+  const savedCategory = localStorage.getItem(EMOJI_CATEGORY_KEY);
+  return EMOJI_CATEGORIES[savedCategory] ? savedCategory : "all";
 }
 
 function toggleEmojiPicker() {
