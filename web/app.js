@@ -62,6 +62,34 @@ const CHAT_HIDDEN_KEY = "namagotchi_chat_hidden_v1";
 const CHAT_PREVIOUS_HEIGHT_KEY = "namagotchi_chat_previous_height_v1";
 const EMOJI_USAGE_KEY = "namagotchi_emoji_usage_v1";
 const EMOJI_CATEGORY_KEY = "namagotchi_emoji_category_v1";
+const CHAT_IGNORE_KEY = "namagotchi_chat_ignore_list_v1";
+const CHAT_LAST_WHISPER_KEY = "namagotchi_chat_last_whisper_v1";
+const CHAT_OFFLINE_WHISPERS_KEY = "namagotchi_offline_whispers_v1";
+
+const CURRENT_PLAYER_NAME = "Soryn";
+
+const DEV_PLAYER_DIRECTORY = {
+  soryn: {
+    displayName: "Soryn",
+    online: true,
+    level: 2,
+  },
+  "nami-chan": {
+    displayName: "Nami-chan",
+    online: true,
+    level: 1,
+  },
+  pixelpuff: {
+    displayName: "PixelPuff",
+    online: true,
+    level: 12,
+  },
+  mochimancer: {
+    displayName: "MochiMancer",
+    online: false,
+    level: 8,
+  },
+};
 
 const CHAT_CHANNELS = ["lobby", "whispers", "club", "trade", "help", "system"];
 const CHAT_LABELS = {
@@ -282,6 +310,10 @@ let chatMessages = createEmptyChatStore();
 let unreadChannels = new Set();
 let emojiUsage = loadEmojiUsage();
 let activeEmojiCategory = getSavedEmojiCategory();
+let ignoredPlayers = loadIgnoredPlayers();
+let lastWhisperName = localStorage.getItem(CHAT_LAST_WHISPER_KEY) || "";
+let activeChatUserMenu = null;
+let activeChatProfileModal = null;
 let isResizingChat = false;
 let isChatHidden = false;
 let previousChatHeight = 190;
@@ -344,6 +376,10 @@ chatForm.addEventListener("submit", submitChatMessage);
 document.addEventListener("click", (event) => {
   if (!emojiPicker.contains(event.target) && !emojiButton.contains(event.target)) {
     closeEmojiPicker();
+  }
+
+  if (activeChatUserMenu && !activeChatUserMenu.contains(event.target)) {
+    closeChatUserMenu();
   }
 });
 
@@ -644,7 +680,7 @@ function submitChatMessage(event) {
     return;
   }
 
-  addChatMessage("Soryn", text, currentChatChannel);
+  handleChatInput(text);
   chatInput.value = "";
 }
 
@@ -670,12 +706,18 @@ function switchChatChannel(channel) {
     chatInput.placeholder = "System messages are read-only.";
   }
 
+  if (channel === "whispers" && lastWhisperName && !chatInput.value.trim()) {
+    chatInput.value = `/w ${lastWhisperName} `;
+    setChatCursorToEnd();
+  }
+
   renderChatChannel();
 }
 
-function addChatMessage(username, text, channel = currentChatChannel) {
+function addChatMessage(username, text, channel = currentChatChannel, options = {}) {
   const destination = username === "System" && channel === currentChatChannel ? "system" : channel;
-  pushChatMessage(destination, username, text);
+
+  pushChatMessage(destination, username, text, options);
 
   if (destination === currentChatChannel) {
     renderChatChannel();
@@ -685,16 +727,27 @@ function addChatMessage(username, text, channel = currentChatChannel) {
   }
 }
 
-function pushChatMessage(channel, username, text, markUnread = true) {
+function pushChatMessage(channel, username, text, optionsOrMarkUnread = {}) {
   if (!CHAT_CHANNELS.includes(channel)) {
     channel = "lobby";
   }
 
-  chatMessages[channel].push({
+  const options =
+    typeof optionsOrMarkUnread === "boolean"
+      ? { markUnread: optionsOrMarkUnread }
+      : optionsOrMarkUnread;
+
+  const message = {
     username: normalizeChatText(username, 40),
     text: normalizeChatText(text),
     timestamp: getChatTimestamp(),
-  });
+    kind: options.kind || "normal",
+    target: options.target || "",
+    whisperTo: options.whisperTo || "",
+    whisperFrom: options.whisperFrom || "",
+  };
+
+  chatMessages[channel].push(message);
 
   while (chatMessages[channel].length > MAX_CHAT_MESSAGES) {
     chatMessages[channel].shift();
@@ -702,7 +755,7 @@ function pushChatMessage(channel, username, text, markUnread = true) {
 
   saveChatStore();
 
-  if (markUnread && channel !== currentChatChannel) {
+  if ((options.markUnread ?? true) && channel !== currentChatChannel) {
     unreadChannels.add(channel);
   }
 }
@@ -712,25 +765,48 @@ function renderChatChannel() {
 
   chatLog.replaceChildren();
 
-  messages.forEach((message) => {
-    const row = document.createElement("p");
-    row.className = "chat-message";
+  messages
+    .filter((message) => !isIgnored(message.username))
+    .forEach((message) => {
+      const row = document.createElement("p");
+      row.className = "chat-message";
+      row.classList.toggle("chat-emote", message.kind === "emote");
+      row.classList.toggle("chat-whisper", message.kind === "whisper");
+      row.classList.toggle("chat-mentioned", messageMentionsCurrentPlayer(message));
 
-    const time = document.createElement("span");
-    time.className = "chat-time";
-    time.textContent = `[${message.timestamp}]`;
+      const time = document.createElement("span");
+      time.className = "chat-time";
+      time.textContent = `[${message.timestamp}]`;
 
-    const name = document.createElement("span");
-    name.className = "chat-name";
-    name.textContent = `${message.username}:`;
+      row.append(time, " ");
 
-    const text = document.createElement("span");
-    text.className = "chat-text";
-    text.textContent = message.text;
+      if (message.kind === "emote") {
+        const emote = document.createElement("span");
+        emote.className = "chat-emote-text";
 
-    row.append(time, " ", name, " ", text);
-    chatLog.appendChild(row);
-  });
+        const nameButton = createPlayerNameButton(message.username);
+        emote.append(nameButton, " ");
+        appendFormattedChatText(emote, message.text);
+
+        row.append(emote);
+      } else {
+        const nameButton = createPlayerNameButton(message.username);
+        row.append(nameButton);
+
+        if (message.kind !== "system") {
+          row.append(": ");
+        } else {
+          row.append(" ");
+        }
+
+        const text = document.createElement("span");
+        text.className = "chat-text";
+        appendFormattedChatText(text, message.text);
+        row.append(text);
+      }
+
+      chatLog.appendChild(row);
+    });
 
   chatLog.scrollTop = chatLog.scrollHeight;
   updateChatUnreadTabs();
@@ -746,6 +822,465 @@ function updateChatUnreadTabs() {
 function getChatTimestamp() {
   const date = new Date();
   return `${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
+}
+
+function handleChatInput(text) {
+  if (text.startsWith("/")) {
+    handleChatCommand(text);
+    return;
+  }
+
+  addChatMessage(CURRENT_PLAYER_NAME, text, currentChatChannel);
+}
+
+function handleChatCommand(text) {
+  const [commandRaw, ...parts] = text.split(/\s+/);
+  const command = commandRaw.toLowerCase();
+  const rest = text.slice(commandRaw.length).trim();
+
+  switch (command) {
+    case "/me":
+      handleMeCommand(rest);
+      return;
+
+    case "/w":
+    case "/whisper":
+      handleWhisperCommand(rest);
+      return;
+
+    case "/ignore":
+      handleIgnoreCommand(parts[0]);
+      return;
+
+    case "/unignore":
+      handleUnignoreCommand(parts[0]);
+      return;
+
+    case "/ignored":
+      handleIgnoredCommand();
+      return;
+
+    case "/profile":
+      handleProfileCommand(parts[0]);
+      return;
+
+    default:
+      addChatMessage("System", `Unknown command: ${commandRaw}`, "system");
+  }
+}
+
+function handleMeCommand(message) {
+  if (!message) {
+    addChatMessage("System", "Usage: /me action text", "system");
+    return;
+  }
+
+  addChatMessage(CURRENT_PLAYER_NAME, message, currentChatChannel, {
+    kind: "emote",
+  });
+}
+
+function handleWhisperCommand(rest) {
+  const match = rest.match(/^(\S+)\s+([\s\S]+)$/);
+
+  if (!match) {
+    addChatMessage("System", "Usage: /w playername message", "whispers");
+    switchChatChannel("whispers");
+    return;
+  }
+
+  const requestedName = match[1];
+  const message = normalizeChatText(match[2]);
+  const player = getPlayerByName(requestedName);
+
+  switchChatChannel("whispers");
+
+  if (!player) {
+    addChatMessage("System", `Player "${requestedName}" does not exist.`, "whispers");
+    return;
+  }
+
+  if (isIgnored(player.displayName)) {
+    addChatMessage("System", `You are ignoring ${player.displayName}. Use /unignore ${player.displayName} first.`, "whispers");
+    return;
+  }
+
+  setLastWhisperName(player.displayName);
+
+  addChatMessage(CURRENT_PLAYER_NAME, `to ${player.displayName}: ${message}`, "whispers", {
+    kind: "whisper",
+    whisperTo: player.displayName,
+    whisperFrom: CURRENT_PLAYER_NAME,
+  });
+
+  if (!player.online) {
+    queueOfflineWhisper(player.displayName, message);
+    addChatMessage("System", `${player.displayName} is offline. Your whisper will be delivered when they come online again.`, "whispers");
+  }
+}
+
+function handleIgnoreCommand(name) {
+  const player = getPlayerByName(name);
+
+  if (!name) {
+    addChatMessage("System", "Usage: /ignore playername", "system");
+    return;
+  }
+
+  if (!player) {
+    addChatMessage("System", `Player "${name}" does not exist.`, "system");
+    return;
+  }
+
+  if (normalizePlayerName(player.displayName) === normalizePlayerName(CURRENT_PLAYER_NAME)) {
+    addChatMessage("System", "You cannot ignore yourself. Even if past-you deserved it.", "system");
+    return;
+  }
+
+  ignoredPlayers.add(normalizePlayerName(player.displayName));
+  saveIgnoredPlayers();
+  addChatMessage("System", `You are now ignoring ${player.displayName}.`, "system");
+  renderChatChannel();
+}
+
+function handleUnignoreCommand(name) {
+  const player = getPlayerByName(name);
+
+  if (!name) {
+    addChatMessage("System", "Usage: /unignore playername", "system");
+    return;
+  }
+
+  const normalizedName = normalizePlayerName(player?.displayName || name);
+
+  if (!ignoredPlayers.has(normalizedName)) {
+    addChatMessage("System", `${name} is not on your ignore list.`, "system");
+    return;
+  }
+
+  ignoredPlayers.delete(normalizedName);
+  saveIgnoredPlayers();
+  addChatMessage("System", `You are no longer ignoring ${player?.displayName || name}.`, "system");
+  renderChatChannel();
+}
+
+function handleIgnoredCommand() {
+  const ignored = [...ignoredPlayers];
+
+  if (!ignored.length) {
+    addChatMessage("System", "Your ignore list is empty.", "system");
+    return;
+  }
+
+  addChatMessage("System", `Ignored players: ${ignored.join(", ")}`, "system");
+}
+
+function handleProfileCommand(name) {
+  if (!name) {
+    addChatMessage("System", "Usage: /profile playername", "system");
+    return;
+  }
+
+  const player = getPlayerByName(name);
+
+  if (!player) {
+    addChatMessage("System", `Player "${name}" does not exist.`, "system");
+    return;
+  }
+
+  openProfileModal(player.displayName);
+}
+
+function queueOfflineWhisper(playerName, message) {
+  const queued = loadOfflineWhispers();
+
+  queued.push({
+    to: playerName,
+    from: CURRENT_PLAYER_NAME,
+    text: message,
+    queuedAt: new Date().toISOString(),
+  });
+
+  localStorage.setItem(CHAT_OFFLINE_WHISPERS_KEY, JSON.stringify(queued.slice(-100)));
+}
+
+function loadOfflineWhispers() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(CHAT_OFFLINE_WHISPERS_KEY));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function setLastWhisperName(name) {
+  lastWhisperName = name;
+  localStorage.setItem(CHAT_LAST_WHISPER_KEY, name);
+}
+
+function getPlayerByName(name) {
+  if (!name) {
+    return null;
+  }
+
+  return DEV_PLAYER_DIRECTORY[normalizePlayerName(name)] || null;
+}
+
+function normalizePlayerName(name) {
+  return String(name || "").trim().toLowerCase();
+}
+
+function isIgnored(name) {
+  return ignoredPlayers.has(normalizePlayerName(name));
+}
+
+function loadIgnoredPlayers() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(CHAT_IGNORE_KEY));
+    return new Set(Array.isArray(parsed) ? parsed.map(normalizePlayerName) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveIgnoredPlayers() {
+  localStorage.setItem(CHAT_IGNORE_KEY, JSON.stringify([...ignoredPlayers]));
+}
+
+function messageMentionsCurrentPlayer(message) {
+  return getMentionedNames(message.text).some((name) => normalizePlayerName(name) === normalizePlayerName(CURRENT_PLAYER_NAME));
+}
+
+function getMentionedNames(text) {
+  return [...String(text).matchAll(/@([A-Za-z0-9_-]{2,32})/g)].map((match) => match[1]);
+}
+
+function appendFormattedChatText(parent, text) {
+  const source = String(text);
+  const pattern = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|@[A-Za-z0-9_-]{2,32})/g;
+
+  let lastIndex = 0;
+
+  source.replace(pattern, (match, _ignored, offset) => {
+    appendPlainChatText(parent, source.slice(lastIndex, offset));
+
+    if (match.startsWith("@")) {
+      appendMention(parent, match);
+    } else if (match.startsWith("***") && match.endsWith("***")) {
+      const strong = document.createElement("strong");
+      const em = document.createElement("em");
+      em.textContent = match.slice(3, -3);
+      strong.appendChild(em);
+      parent.appendChild(strong);
+    } else if (match.startsWith("**") && match.endsWith("**")) {
+      const strong = document.createElement("strong");
+      strong.textContent = match.slice(2, -2);
+      parent.appendChild(strong);
+    } else if (match.startsWith("*") && match.endsWith("*")) {
+      const em = document.createElement("em");
+      em.textContent = match.slice(1, -1);
+      parent.appendChild(em);
+    }
+
+    lastIndex = offset + match.length;
+    return match;
+  });
+
+  appendPlainChatText(parent, source.slice(lastIndex));
+}
+
+function appendPlainChatText(parent, text) {
+  if (text) {
+    parent.appendChild(document.createTextNode(text));
+  }
+}
+
+function appendMention(parent, mentionText) {
+  const playerName = mentionText.slice(1);
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "chat-mention";
+  button.textContent = mentionText;
+
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openChatUserMenu(playerName, button);
+  });
+
+  parent.appendChild(button);
+}
+
+function createPlayerNameButton(username) {
+  if (username === "System") {
+    const span = document.createElement("span");
+    span.className = "chat-name system-name";
+    span.textContent = "System";
+    return span;
+  }
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "chat-name chat-player-name";
+  button.textContent = username;
+
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openChatUserMenu(username, button);
+  });
+
+  return button;
+}
+
+function openChatUserMenu(playerName, anchorElement) {
+  closeChatUserMenu();
+
+  const player = getPlayerByName(playerName);
+  const displayName = player?.displayName || playerName;
+
+  activeChatUserMenu = document.createElement("div");
+  activeChatUserMenu.className = "chat-user-menu";
+
+  activeChatUserMenu.append(
+    createChatUserMenuButton("@Mention", () => {
+      insertIntoChatInput(`@${displayName} `);
+      closeChatUserMenu();
+    }),
+    createChatUserMenuButton("Message", () => {
+      setLastWhisperName(displayName);
+      switchChatChannel("whispers");
+      chatInput.value = `/w ${displayName} `;
+      setChatCursorToEnd();
+      closeChatUserMenu();
+    }),
+    createChatUserMenuButton("Profile", () => {
+      openProfileModal(displayName);
+      closeChatUserMenu();
+    }),
+    createChatUserMenuButton("View Market", () => {
+      showSection("market");
+      addChatMessage("System", `Showing market listings for ${displayName}. Full market filtering comes later.`, "system");
+      closeChatUserMenu();
+    }),
+    createChatUserMenuButton(isIgnored(displayName) ? "Unignore User" : "Ignore User", () => {
+      const playerRecord = getPlayerByName(displayName);
+
+      if (!playerRecord) {
+        addChatMessage("System", `Player "${displayName}" does not exist.`, "system");
+        closeChatUserMenu();
+        return;
+      }
+
+      if (isIgnored(displayName)) {
+        ignoredPlayers.delete(normalizePlayerName(displayName));
+        addChatMessage("System", `You are no longer ignoring ${displayName}.`, "system");
+      } else {
+        ignoredPlayers.add(normalizePlayerName(displayName));
+        addChatMessage("System", `You are now ignoring ${displayName}.`, "system");
+      }
+
+      saveIgnoredPlayers();
+      renderChatChannel();
+      closeChatUserMenu();
+    })
+  );
+
+  document.body.appendChild(activeChatUserMenu);
+  positionFloatingElement(activeChatUserMenu, anchorElement);
+}
+
+function createChatUserMenuButton(label, action) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = label;
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    action();
+  });
+  return button;
+}
+
+function closeChatUserMenu() {
+  if (activeChatUserMenu) {
+    activeChatUserMenu.remove();
+    activeChatUserMenu = null;
+  }
+}
+
+function openProfileModal(playerName) {
+  const player = getPlayerByName(playerName);
+
+  if (!player) {
+    addChatMessage("System", `Player "${playerName}" does not exist.`, "system");
+    return;
+  }
+
+  closeProfileModal();
+
+  activeChatProfileModal = document.createElement("div");
+  activeChatProfileModal.className = "chat-profile-modal";
+  activeChatProfileModal.innerHTML = "";
+
+  const title = document.createElement("h2");
+  title.textContent = player.displayName;
+
+  const status = document.createElement("p");
+  status.textContent = `Status: ${player.online ? "Online" : "Offline"}`;
+
+  const level = document.createElement("p");
+  level.textContent = `Level: ${player.level.toLocaleString()}`;
+
+  const note = document.createElement("p");
+  note.className = "muted";
+  note.textContent = "Full player profiles will be server-backed later.";
+
+  const close = document.createElement("button");
+  close.type = "button";
+  close.textContent = "Close";
+  close.addEventListener("click", closeProfileModal);
+
+  activeChatProfileModal.append(title, status, level, note, close);
+  document.body.appendChild(activeChatProfileModal);
+}
+
+function closeProfileModal() {
+  if (activeChatProfileModal) {
+    activeChatProfileModal.remove();
+    activeChatProfileModal = null;
+  }
+}
+
+function positionFloatingElement(element, anchorElement) {
+  const rect = anchorElement.getBoundingClientRect();
+  const gap = 8;
+  const padding = 8;
+
+  const width = element.offsetWidth || 180;
+  const height = element.offsetHeight || 180;
+
+  let left = rect.left;
+  let top = rect.bottom + gap;
+
+  left = Math.max(padding, Math.min(left, window.innerWidth - width - padding));
+
+  if (top + height > window.innerHeight - padding) {
+    top = rect.top - height - gap;
+  }
+
+  top = Math.max(padding, Math.min(top, window.innerHeight - height - padding));
+
+  element.style.left = `${left}px`;
+  element.style.top = `${top}px`;
+}
+
+function insertIntoChatInput(text) {
+  chatInput.value = `${chatInput.value}${text}`;
+  chatInput.focus();
+  setChatCursorToEnd();
+}
+
+function setChatCursorToEnd() {
+  const end = chatInput.value.length;
+  chatInput.setSelectionRange(end, end);
 }
 
 function normalizeChatText(value, maxLength = 255) {
@@ -784,6 +1319,10 @@ function normalizeChatStore(value) {
           username: normalizeChatText(message.username ?? "Unknown", 40),
           text: normalizeChatText(message.text ?? ""),
           timestamp: normalizeChatText(message.timestamp ?? getChatTimestamp(), 12),
+          kind: normalizeChatText(message.kind ?? "normal", 20),
+          target: normalizeChatText(message.target ?? "", 40),
+          whisperTo: normalizeChatText(message.whisperTo ?? "", 40),
+          whisperFrom: normalizeChatText(message.whisperFrom ?? "", 40),
         };
       });
   });
