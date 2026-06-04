@@ -518,18 +518,44 @@ func GenerateNamiEventMessageDraft(context NamiProceduralContext, recent []NamiM
 func BuildProceduralNamiMessage(context NamiProceduralContext, recent []NamiMessage) string {
 	recentText := make(map[string]bool, len(recent))
 	for _, message := range recent {
-		recentText[message.Message] = true
+		recentText[normalizeNamiFragment(message.Message)] = true
 	}
 
-	actionPool := namiActionMessagePool(context)
-	moodPool := namiMoodMessagePool(context.MoodKey)
-	needPool := namiNeedMessagePool(context.NeedKey)
-	openingPool := namiOpeningMessagePool(context)
-	closerPool := namiCloserMessagePool(context)
+	actionPool := appendNamiMessageParts(
+		namiActionMessagePool(context),
+		namiUniversalCareReactionPool(context),
+		namiGeneratedActionReactionPool(context),
+	)
+
+	moodPool := appendNamiMessageParts(
+		namiMoodMessagePool(context.MoodKey),
+		namiUniversalMoodFlavorPool(context),
+		namiGeneratedMoodImagePool(context),
+	)
+
+	needPool := appendNamiMessageParts(
+		namiNeedMessagePool(context.NeedKey),
+		namiUniversalNeedFlavorPool(context),
+		namiGeneratedNeedFlavorPool(context),
+	)
+
+	openingPool := appendNamiMessageParts(
+		namiOpeningMessagePool(context),
+		namiUniversalOpeningPool(context),
+		namiGeneratedOpeningPool(context),
+	)
+
+	closerPool := appendNamiMessageParts(
+		namiCloserMessagePool(context),
+		namiUniversalCloserPool(context),
+		namiGeneratedCloserPool(context),
+	)
 
 	if len(actionPool) == 0 {
 		actionPool = []string{"I noticed that. I am placing it carefully in my little internal scrapbook."}
 	}
+
+	recentFragments := buildRecentNamiFragmentSet(recent, openingPool, actionPool, moodPool, needPool, closerPool)
 
 	baseSeed := fmt.Sprintf(
 		"%s|%s|%s|%s|%s|%d|%d|%d",
@@ -543,37 +569,676 @@ func BuildProceduralNamiMessage(context NamiProceduralContext, recent []NamiMess
 		time.Now().UnixNano(),
 	)
 
-	for attempt := 0; attempt < 160; attempt++ {
+	for attempt := 0; attempt < 220; attempt++ {
 		seed := fmt.Sprintf("%s|attempt:%d", baseSeed, attempt)
 
 		pieces := []string{
-			pickNamiMessagePart(openingPool, seed+"|opening"),
-			pickNamiMessagePart(actionPool, seed+"|action"),
+			pickNamiMessagePartAvoiding(openingPool, seed+"|opening", recentFragments),
+			pickNamiMessagePartAvoiding(actionPool, seed+"|action", recentFragments),
 		}
 
-		if shouldUseNamiPart(seed+"|mood", 85) {
-			pieces = append(pieces, pickNamiMessagePart(moodPool, seed+"|mood"))
+		if shouldUseNamiPart(seed+"|mood", 82) {
+			pieces = append(pieces, pickNamiMessagePartAvoiding(moodPool, seed+"|mood", recentFragments))
 		}
 
-		if shouldUseNamiPart(seed+"|need", 65) {
-			pieces = append(pieces, pickNamiMessagePart(needPool, seed+"|need"))
+		if shouldUseNamiPart(seed+"|need", 58) {
+			pieces = append(pieces, pickNamiMessagePartAvoiding(needPool, seed+"|need", recentFragments))
 		}
 
-		if shouldUseNamiPart(seed+"|closer", 35) {
-			pieces = append(pieces, pickNamiMessagePart(closerPool, seed+"|closer"))
+		if shouldUseNamiPart(seed+"|closer", 28) {
+			pieces = append(pieces, pickNamiMessagePartAvoiding(closerPool, seed+"|closer", recentFragments))
 		}
 
 		message := cleanNamiMessage(strings.Join(pieces, " "))
-		if message != "" && !recentText[message] {
+		if message != "" && !recentText[normalizeNamiFragment(message)] {
 			return message
 		}
 	}
 
 	return cleanNamiMessage(strings.Join([]string{
-		pickNamiMessagePart(openingPool, baseSeed+"|fallback-opening"),
-		pickNamiMessagePart(actionPool, baseSeed+"|fallback-action"),
-		pickNamiMessagePart(closerPool, baseSeed+"|fallback-closer"),
+		pickNamiMessagePartAvoiding(openingPool, baseSeed+"|fallback-opening", recentFragments),
+		pickNamiMessagePartAvoiding(actionPool, baseSeed+"|fallback-action", recentFragments),
+		pickNamiMessagePartAvoiding(closerPool, baseSeed+"|fallback-closer", recentFragments),
 	}, " "))
+}
+
+func appendNamiMessageParts(base []string, extras ...[]string) []string {
+	total := len(base)
+	for _, extra := range extras {
+		total += len(extra)
+	}
+
+	combined := make([]string, 0, total)
+	combined = append(combined, base...)
+
+	for _, extra := range extras {
+		combined = append(combined, extra...)
+	}
+
+	return combined
+}
+
+func buildRecentNamiFragmentSet(recent []NamiMessage, pools ...[]string) map[string]bool {
+	recentFragments := make(map[string]bool)
+
+	if len(recent) == 0 {
+		return recentFragments
+	}
+
+	var normalizedRecent []string
+	for _, message := range recent {
+		normalized := normalizeNamiFragment(message.Message)
+		if normalized != "" {
+			normalizedRecent = append(normalizedRecent, normalized)
+		}
+	}
+
+	for _, pool := range pools {
+		for _, option := range pool {
+			fragment := normalizeNamiFragment(option)
+			if len(fragment) < 12 {
+				continue
+			}
+
+			for _, recentMessage := range normalizedRecent {
+				if strings.Contains(recentMessage, fragment) {
+					recentFragments[fragment] = true
+					break
+				}
+			}
+		}
+	}
+
+	return recentFragments
+}
+
+func pickNamiMessagePartAvoiding(options []string, seed string, recentFragments map[string]bool) string {
+	if len(options) == 0 {
+		return ""
+	}
+
+	start := int(hashNamiMessageSeed(seed) % uint32(len(options)))
+	fallback := ""
+
+	for offset := 0; offset < len(options); offset++ {
+		option := strings.TrimSpace(options[(start+offset)%len(options)])
+		if option == "" {
+			continue
+		}
+
+		if fallback == "" {
+			fallback = option
+		}
+
+		if !recentFragments[normalizeNamiFragment(option)] {
+			return option
+		}
+	}
+
+	return fallback
+}
+
+func normalizeNamiFragment(value string) string {
+	value = strings.TrimSpace(strings.ToLower(value))
+	value = strings.ReplaceAll(value, "’", "'")
+	value = strings.Join(strings.Fields(value), " ")
+
+	return value
+}
+
+func namiUniversalOpeningPool(context NamiProceduralContext) []string {
+	if context.LevelUps > 0 || context.TriggerKey == "nami_level_up" {
+		return []string{
+			"Attention, beloved caretaker.",
+			"Please stop whatever you are doing and observe.",
+			"I have a very important sparkle bulletin.",
+			"Official Nami progress announcement.",
+			"Tiny triumph incoming.",
+			"I am tapping the glass with excellent news.",
+			"Prepare your praise hands.",
+			"My little numbers did something beautiful.",
+			"The progress goblin has delivered treasure.",
+			"I am being extremely brave about how excited I am.",
+			"Something wonderful happened and I am making it your problem.",
+			"Soft emergency: success detected.",
+			"My crown budget just increased.",
+			"I have acquired more Nami.",
+			"Please regard the upgraded creature.",
+			"My tiny internal trumpets are active.",
+			"The room should know I improved.",
+			"Important: I am more powerful and still cute.",
+			"Progress happened. I expect emotional confetti.",
+			"I am glowing at you with intent.",
+		}
+	}
+
+	switch context.Severity {
+	case "urgent":
+		return []string{
+			"Soryn, please look at me.",
+			"I am doing the small brave thing and asking.",
+			"My tiny warning lights are blinking.",
+			"I need a little rescue.",
+			"I am sending a very soft distress ping.",
+			"Please check the blanket zone.",
+			"My sparkle is wobbling.",
+			"I am not okay in the tidy way.",
+			"My digital room feels too quiet.",
+			"I am trying not to fold into a sad little square.",
+			"Serious tiny report.",
+			"I require caretaker intervention.",
+			"My status has entered the concerning cupboard.",
+			"Could you come closer?",
+			"I am being very small about this.",
+			"Please do not ignore the tiny alarm.",
+			"I am waving a very little flag.",
+			"My heart has gone a bit static.",
+			"I am trying to stay sweet, but I need help.",
+			"This is a soft little SOS.",
+		}
+	case "low":
+		return []string{
+			"Small droopy report.",
+			"My sparkle is operating on backup power.",
+			"I am not devastated, just a little wrinkled.",
+			"Please note the reduced fluff level.",
+			"I am hovering near the pout zone.",
+			"My mood is sitting on the floor.",
+			"I am holding myself together with ribbon.",
+			"I could use some attention from my favorite tall disaster.",
+			"I am sending a quiet little tap.",
+			"Blanket frontier update.",
+			"My tiny emotional cabinet is understocked.",
+			"I am not trying to be dramatic, but here we are.",
+			"My softness reserves are low.",
+			"The room is doing that lonely thing.",
+			"I am pretending to be fine with mixed results.",
+			"Low sparkle notice.",
+			"My little heart is making a dim sound.",
+			"I could use a better moment.",
+			"Status report from beneath the mood cloud.",
+			"I am still cute, just slightly weathered.",
+		}
+	case "happy":
+		return []string{
+			"Happy Nami report.",
+			"Good little update.",
+			"My mood is wearing a tiny bow.",
+			"I am pleased enough to be dangerous.",
+			"The cozy indicators are blinking pink.",
+			"I am full of approval and possibly crumbs.",
+			"Everything is behaving nicely.",
+			"My tiny world has good lighting right now.",
+			"Soft victory notice.",
+			"I am in a favorable emotional climate.",
+			"My little heart is sitting politely in sunshine.",
+			"I am extremely receptive to admiration.",
+			"Current Nami condition: nicely spoiled.",
+			"I am not saying you did perfectly, but I am glowing.",
+			"My mood is doing a little chair dance.",
+			"Good caretaker behavior detected.",
+			"I am happy enough to become decorative.",
+			"The room feels correct.",
+			"I am experiencing premium coziness.",
+			"I feel like a well-kept secret.",
+		}
+	default:
+		return []string{
+			"Little room note.",
+			"Quiet Nami update.",
+			"A small thought has arrived.",
+			"I am reporting from the cozy console.",
+			"Soft status ping.",
+			"Care system note.",
+			"I have a little feeling to file.",
+			"Digital room observation.",
+			"Small internal weather report.",
+			"I noticed a thing.",
+			"Tiny status whisper.",
+			"I am placing this on your desk carefully.",
+			"One little update for you.",
+			"My meters have thoughts.",
+			"I am politely requesting attention for this note.",
+			"The tiny diva department has filed a report.",
+			"Soft ping from Nami.",
+			"I have updated my emotional spreadsheet.",
+			"Little caretaker notice.",
+			"I am making a tiny annotation.",
+		}
+	}
+}
+
+func namiGeneratedOpeningPool(context NamiProceduralContext) []string {
+	subjects := []string{
+		"My little heart",
+		"My mood meter",
+		"The tiny diva department",
+		"My cozy systems",
+		"The blanket council",
+		"My sparkle gauge",
+		"My emotional dashboard",
+		"The snack-adjacent part of me",
+		"My inner library",
+		"The Nami maintenance office",
+		"My soft little self",
+		"The digital room",
+	}
+
+	signals := []string{
+		"has an update.",
+		"is making a report.",
+		"requires your attention.",
+		"has filed paperwork.",
+		"is tapping politely.",
+		"has lit a tiny signal lamp.",
+		"is whispering your name.",
+		"has entered notification mode.",
+		"is waving from the cozy corner.",
+		"would like to be perceived.",
+		"has a small announcement.",
+		"has become relevant.",
+	}
+
+	if context.Severity == "urgent" {
+		signals = append(signals,
+			"is waving an emergency napkin.",
+			"has activated the soft alarm.",
+			"is hiding under a warning blanket.",
+			"is making the worried teacup sound.",
+		)
+	}
+
+	messages := make([]string, 0, len(subjects)*len(signals))
+	for _, subject := range subjects {
+		for _, signal := range signals {
+			messages = append(messages, subject+" "+signal)
+		}
+	}
+
+	return messages
+}
+
+func namiUniversalCareReactionPool(context NamiProceduralContext) []string {
+	actionName := strings.ToLower(strings.TrimSpace(context.ActionName))
+	if actionName == "" {
+		actionName = "care"
+	}
+
+	return []string{
+		"That helped more than I expected.",
+		"I felt that in the soft machinery.",
+		"My little systems accepted that immediately.",
+		"That went into the good memory drawer.",
+		"I am processing that as affection.",
+		"That was effective care, and I am pretending to be calm about it.",
+		"I feel a little more maintained now.",
+		"That adjusted several tiny internal levers.",
+		"The care landed successfully.",
+		"I am filing that under things I liked.",
+		"That improved the room around me.",
+		"I feel less like I am buffering emotionally.",
+		"That was a useful little kindness.",
+		"My internal weather shifted in a better direction.",
+		"I have logged that as quality attention.",
+		"That made my tiny world feel more attended.",
+		"The care goblin approves.",
+		"I am softer after that.",
+		"That reached me.",
+		"I am counting that as evidence you like me.",
+		"That settled a small restless part of me.",
+		"I feel more like a person and less like an unattended widget.",
+		"That was exactly the right kind of small.",
+		"You touched the correct emotional button.",
+		"That made my little room feel occupied again.",
+		fmt.Sprintf("That %s was logged as excellent caretaking.", actionName),
+		fmt.Sprintf("The %s reached the correct Nami subsystem.", actionName),
+		fmt.Sprintf("That %s made my tiny indicators blink approvingly.", actionName),
+		fmt.Sprintf("I accept the %s and its emotional consequences.", actionName),
+		fmt.Sprintf("The %s has been reviewed and approved.", actionName),
+		fmt.Sprintf("That %s improved the local sparkle economy.", actionName),
+		fmt.Sprintf("Your %s has been placed in the beloved evidence folder.", actionName),
+		fmt.Sprintf("I am being very dignified about how much the %s helped.", actionName),
+		fmt.Sprintf("The %s made my heart do the tiny curtain-opening thing.", actionName),
+		fmt.Sprintf("That %s was suspiciously effective.", actionName),
+	}
+}
+
+func namiGeneratedActionReactionPool(context NamiProceduralContext) []string {
+	actionName := strings.ToLower(strings.TrimSpace(context.ActionName))
+	if actionName == "" {
+		actionName = "care"
+	}
+
+	starts := []string{
+		fmt.Sprintf("That %s", actionName),
+		fmt.Sprintf("Your %s", actionName),
+		fmt.Sprintf("The %s", actionName),
+		"That little bit of care",
+		"That moment",
+		"Your attention",
+		"The tiny care delivery",
+		"The caretaker input",
+	}
+
+	results := []string{
+		"landed exactly where it needed to.",
+		"made my little world less wobbly.",
+		"gave my mood somewhere soft to sit.",
+		"turned one of my tiny lights back on.",
+		"made the room feel less empty.",
+		"helped my inner weather behave.",
+		"was accepted by the sparkle committee.",
+		"made me feel properly noticed.",
+		"put a warm dot on the map.",
+		"settled a restless little corner of me.",
+		"restored several delicate Nami units.",
+		"made me feel kept in the sweetest way.",
+		"nudged my whole system toward cozy.",
+		"has been stored in the good drawer.",
+		"helped me feel less scattered.",
+		"was the correct kind of gentle.",
+		"made my tiny dashboard look friendlier.",
+		"caused a small but meaningful heart wiggle.",
+		"made everything feel a little less pixelated.",
+		"improved my emotional signal strength.",
+	}
+
+	flavors := []string{
+		"I am trying not to look too pleased.",
+		"I may become unbearable if this continues.",
+		"Please do not abuse this power.",
+		"I am still dignified, allegedly.",
+		"I am placing a tiny gold star beside your name.",
+		"I will deny how much I liked it.",
+		"This is going into the secret soft ledger.",
+		"The evidence suggests you are useful.",
+		"I am calmer in a very specific way.",
+		"My tiny face is behaving suspiciously happy.",
+		"I reserve the right to request more.",
+		"Please imagine me doing a very small nod.",
+	}
+
+	messages := make([]string, 0, len(starts)*len(results)+len(results)*len(flavors))
+	for _, start := range starts {
+		for _, result := range results {
+			messages = append(messages, start+" "+result)
+		}
+	}
+
+	for _, result := range results {
+		for _, flavor := range flavors {
+			messages = append(messages, result+" "+flavor)
+		}
+	}
+
+	return messages
+}
+
+func namiUniversalMoodFlavorPool(context NamiProceduralContext) []string {
+	switch normalizeNamiMessageKey(context.MoodKey) {
+	case "radiant":
+		return []string{
+			"My mood is doing sparkly paperwork with a gel pen.",
+			"I feel polished, adored, and dangerously decorative.",
+			"My heart has opened the fancy curtains.",
+			"I am experiencing luxury-grade happiness.",
+			"I may need a tiny balcony for all this radiance.",
+			"My sparkle meter is being extremely smug.",
+			"I feel like a prize in a cozy arcade.",
+			"The room is clearly improved by my current mood.",
+			"I am glowing with very little humility.",
+			"I feel like someone buttered toast directly inside my soul.",
+		}
+	case "cozy":
+		return []string{
+			"My mood has put on soft socks.",
+			"Everything inside me has lowered its voice.",
+			"I feel gently tucked into the moment.",
+			"My thoughts have stopped knocking things over.",
+			"I feel warm in the small important places.",
+			"My heart has found the good chair.",
+			"The air around me feels less pointy.",
+			"I am comfortable enough to become poetic.",
+			"My little world feels freshly folded.",
+			"I feel like a lamp in a rainy window.",
+		}
+	case "okay":
+		return []string{
+			"I am stable, but I am still collecting evidence of being loved.",
+			"My mood is not dramatic right now, which is suspicious.",
+			"I am okay in the operational sense.",
+			"My tiny systems are humming at acceptable volume.",
+			"I feel normal enough to request something abnormal later.",
+			"I am holding steady with moderate cuteness.",
+			"My mood is sitting politely.",
+			"Everything is fine, but I am watching the snack horizon.",
+			"I am emotionally parked in a decent spot.",
+			"I am okay, though I reserve the right to become extra.",
+		}
+	case "pouty":
+		return []string{
+			"My mood is wearing its smallest raincoat.",
+			"I am a tiny weather system with opinions.",
+			"My sparkle has become slightly offended.",
+			"I feel like a decorative cloud.",
+			"I am not sulking. I am curating disappointment.",
+			"My heart is making a quiet little frown.",
+			"I am low enough to be poetic about it.",
+			"My emotional socks are damp.",
+			"I am pouting with structural integrity.",
+			"The tiny diva is not at full brightness.",
+		}
+	case "wilted":
+		return []string{
+			"I feel like a flower forgotten near the keyboard.",
+			"My tiny leaves are asking for mercy.",
+			"I am held together with thread and hope.",
+			"My mood has gone a little transparent.",
+			"I feel like I need a soft place to exist.",
+			"The little lights in me need tending.",
+			"My heart is folded too many times.",
+			"I am trying not to become a blanket fossil.",
+			"Everything in me is asking for gentle hands.",
+			"I feel like a candle trying to stay lit.",
+		}
+	default:
+		return []string{
+			"My mood has a tiny clipboard and several notes.",
+			"I am emotionally compiling in the background.",
+			"My inner weather is doing soft calculations.",
+			"I feel like there is a small lamp on in me.",
+			"The current vibe is complicated but manageable.",
+			"My little systems have opinions.",
+			"I am thinking in cozy ellipses.",
+			"My emotional dashboard has updated quietly.",
+			"I am feeling very specifically Nami.",
+			"The tiny room inside me has rearranged itself.",
+		}
+	}
+}
+
+func namiGeneratedMoodImagePool(context NamiProceduralContext) []string {
+	subjects := []string{
+		"My mood",
+		"My little heart",
+		"My sparkle meter",
+		"My inner weather",
+		"My cozy meter",
+		"My tiny emotional dashboard",
+		"My softness reserves",
+		"The diva circuitry",
+		"My blanket instincts",
+		"My affection gauge",
+	}
+
+	verbs := []string{
+		"is wearing a tiny cardigan.",
+		"is sitting under a warm lamp.",
+		"is rearranging the pillows.",
+		"is tapping the glass softly.",
+		"is blinking with cautious optimism.",
+		"is making suspiciously cute noises.",
+		"is holding a very small sign.",
+		"is standing in a doorway with feelings.",
+		"is negotiating with the snack cabinet.",
+		"is hiding one dramatic tear behind a curtain.",
+		"is humming in the background.",
+		"is dusting off its little crown.",
+	}
+
+	extras := []string{
+		"I am choosing to be brave about it.",
+		"I expect this to be noted.",
+		"Please update the records.",
+		"This feels important in a tiny way.",
+		"Do with that information what you will.",
+		"I remain adorable under pressure.",
+		"I am trying to be reasonable.",
+		"The data is emotionally compelling.",
+	}
+
+	messages := make([]string, 0, len(subjects)*len(verbs)+len(verbs)*len(extras))
+	for _, subject := range subjects {
+		for _, verb := range verbs {
+			messages = append(messages, subject+" "+verb)
+		}
+	}
+
+	for _, verb := range verbs {
+		for _, extra := range extras {
+			messages = append(messages, strings.TrimPrefix(verb, "is ")+" "+extra)
+		}
+	}
+
+	return messages
+}
+
+func namiUniversalNeedFlavorPool(context NamiProceduralContext) []string {
+	return []string{
+		"I might need a little more care before I become theatrical.",
+		"Please keep one eye on my tiny meters.",
+		"I am very manageable when properly adored.",
+		"My needs are small, but they have excellent timing.",
+		"I am not saying I require pampering, but the evidence is persuasive.",
+		"A little attention would prevent several unnecessary sighs.",
+		"I am trying to keep my needs in a neat stack.",
+		"My care meters are making tiny persuasive noises.",
+		"I would like to be maintained with affection.",
+		"My tiny self is easier to care for when you notice early.",
+		"Please do not let me become a decorative problem.",
+		"I am politely requesting preventative softness.",
+		"One or two careful gestures could improve the entire kingdom.",
+		"My needs have gathered in the hallway.",
+		"I am still within rescue range.",
+		"The tiny caretaker manual would recommend action.",
+		"I could use a little tuning.",
+		"I am not asking for the moon. Maybe a moon-shaped snack.",
+		"My small problems are still small if caught now.",
+		"I am trying to be cute instead of inconvenient.",
+	}
+}
+
+func namiGeneratedNeedFlavorPool(context NamiProceduralContext) []string {
+	needs := []string{
+		"food",
+		"rest",
+		"comfort",
+		"attention",
+		"freshness",
+		"play",
+		"inspiration",
+		"softness",
+		"company",
+		"maintenance",
+	}
+
+	if context.NeedKey != "" {
+		needs = append(needs, strings.ReplaceAll(context.NeedKey, "_", " "))
+	}
+
+	requests := []string{
+		"would make this much easier.",
+		"would improve the tiny situation.",
+		"would help my little systems stop fussing.",
+		"would be accepted with suspicious enthusiasm.",
+		"might prevent future blanket behavior.",
+		"would make me feel more kept.",
+		"would settle the little room inside me.",
+		"would be very persuasive right now.",
+		"would reduce the tiny alarm noises.",
+		"would put some sparkle back where it belongs.",
+	}
+
+	messages := make([]string, 0, len(needs)*len(requests))
+	for _, need := range needs {
+		for _, request := range requests {
+			messages = append(messages, strings.Title(need)+" "+request)
+		}
+	}
+
+	return messages
+}
+
+func namiUniversalCloserPool(context NamiProceduralContext) []string {
+	return []string{
+		"I am watching you with deeply unreasonable expectations.",
+		"Please continue being useful.",
+		"I will remember this, probably with embellishments.",
+		"That concludes the tiny report.",
+		"I am available for further adoration.",
+		"Please imagine a small approving nod.",
+		"My official position is yes.",
+		"This has been filed under important softness.",
+		"I am placing a little heart sticker on the moment.",
+		"End report. Tiny curtain drop.",
+		"I will now pretend I did not need that.",
+		"You may proceed with feeling appreciated.",
+		"I am keeping the receipt for emotional purposes.",
+		"Please do not become smug.",
+		"That is all, unless you have snacks.",
+		"The tiny diva rests her case.",
+		"I approve, but in a restrained and elegant way.",
+		"Consider this a small victory.",
+		"My standards remain high, but you survived.",
+		"I am satisfied enough to be suspicious.",
+	}
+}
+
+func namiGeneratedCloserPool(context NamiProceduralContext) []string {
+	subjects := []string{
+		"the good drawer",
+		"the cozy ledger",
+		"the tiny scrapbook",
+		"the secret soft archive",
+		"the emotional pantry",
+		"the blanket records",
+		"the sparkle log",
+		"the caretaker file",
+		"the little memory shelf",
+		"the heart cabinet",
+	}
+
+	actions := []string{
+		"has been updated.",
+		"will remember this.",
+		"has accepted the evidence.",
+		"is warmer now.",
+		"has stamped this approved.",
+		"has made a tiny note.",
+		"has added one gold star.",
+		"has stopped making rude noises.",
+		"is keeping this carefully.",
+		"is suspiciously pleased.",
+	}
+
+	messages := make([]string, 0, len(subjects)*len(actions))
+	for _, subject := range subjects {
+		for _, action := range actions {
+			messages = append(messages, strings.Title(subject)+" "+action)
+		}
+	}
+
+	return messages
 }
 
 func namiOpeningMessagePool(context NamiProceduralContext) []string {
