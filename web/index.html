@@ -231,43 +231,90 @@
           </div>
 
           <div class="gathering-grid">
-            <article class="task-card active">
-              <h2>Streaming</h2>
-              <p>Generates <strong>Fans</strong>.</p>
-              <span>Idle</span>
-              <button>Start Streaming</button>
-            </article>
-            <article class="task-card">
-              <h2>Doom Scrolling</h2>
-              <p>Generates <strong>Memes</strong>.</p>
-              <span>Idle</span>
-              <button>Start Scrolling</button>
-            </article>
-            <article class="task-card">
-              <h2>Cleaning</h2>
-              <p>Generates <strong>Lost Items</strong>.</p>
-              <span>Idle</span>
-              <button>Start Cleaning</button>
-            </article>
-            <article class="task-card">
-              <h2>Exercising</h2>
-              <p>Generates <strong>Confidence</strong>.</p>
-              <span>Idle</span>
-              <button>Start Exercising</button>
-            </article>
-            <article class="task-card">
-              <h2>Shopping</h2>
-              <p>Generates <strong>Receipts</strong>.</p>
-              <span>Idle</span>
-              <button>Start Shopping</button>
-            </article>
-            <article class="task-card">
-              <h2>Designing</h2>
-              <p>Generates <strong>Patterns</strong>.</p>
-              <span>Idle</span>
-              <button>Start Designing</button>
-            </article>
-          </div>
+  <article class="task-card active" data-gathering-task="streaming">
+    <div class="task-card-header">
+      <h2>Streaming</h2>
+      <span class="task-status">Idle</span>
+    </div>
+    <div class="task-meta">
+      <p><span>Level:</span><strong class="task-level">1</strong></p>
+      <p><span>XP:</span><strong class="task-xp">0 / 720</strong></p>
+      <p><span>Generates:</span><strong class="task-generates">0 Fans/tick</strong></p>
+    </div>
+    <div class="task-xp-bar bar"><div class="fill task-xp-fill" style="width: 0%"></div></div>
+    <button>Start Streaming</button>
+  </article>
+
+  <article class="task-card" data-gathering-task="doom_scrolling">
+    <div class="task-card-header">
+      <h2>Scrolling</h2>
+      <span class="task-status">Idle</span>
+    </div>
+    <div class="task-meta">
+      <p><span>Level:</span><strong class="task-level">1</strong></p>
+      <p><span>XP:</span><strong class="task-xp">0 / 720</strong></p>
+      <p><span>Generates:</span><strong class="task-generates">0 Memes/tick</strong></p>
+    </div>
+    <div class="task-xp-bar bar"><div class="fill task-xp-fill" style="width: 0%"></div></div>
+    <button>Start Scrolling</button>
+  </article>
+
+  <article class="task-card" data-gathering-task="cleaning">
+    <div class="task-card-header">
+      <h2>Cleaning</h2>
+      <span class="task-status">Idle</span>
+    </div>
+    <div class="task-meta">
+      <p><span>Level:</span><strong class="task-level">1</strong></p>
+      <p><span>XP:</span><strong class="task-xp">0 / 720</strong></p>
+      <p><span>Generates:</span><strong class="task-generates">0 Lost Items/tick</strong></p>
+    </div>
+    <div class="task-xp-bar bar"><div class="fill task-xp-fill" style="width: 0%"></div></div>
+    <button>Start Cleaning</button>
+  </article>
+
+  <article class="task-card" data-gathering-task="exercising">
+    <div class="task-card-header">
+      <h2>Exercising</h2>
+      <span class="task-status">Idle</span>
+    </div>
+    <div class="task-meta">
+      <p><span>Level:</span><strong class="task-level">1</strong></p>
+      <p><span>XP:</span><strong class="task-xp">0 / 720</strong></p>
+      <p><span>Generates:</span><strong class="task-generates">0 Confidence/tick</strong></p>
+    </div>
+    <div class="task-xp-bar bar"><div class="fill task-xp-fill" style="width: 0%"></div></div>
+    <button>Start Exercising</button>
+  </article>
+
+  <article class="task-card" data-gathering-task="shopping">
+    <div class="task-card-header">
+      <h2>Shopping</h2>
+      <span class="task-status">Idle</span>
+    </div>
+    <div class="task-meta">
+      <p><span>Level:</span><strong class="task-level">1</strong></p>
+      <p><span>XP:</span><strong class="task-xp">0 / 720</strong></p>
+      <p><span>Generates:</span><strong class="task-generates">0 Receipts/tick</strong></p>
+    </div>
+    <div class="task-xp-bar bar"><div class="fill task-xp-fill" style="width: 0%"></div></div>
+    <button>Start Shopping</button>
+  </article>
+
+  <article class="task-card" data-gathering-task="designing">
+    <div class="task-card-header">
+      <h2>Designing</h2>
+      <span class="task-status">Idle</span>
+    </div>
+    <div class="task-meta">
+      <p><span>Level:</span><strong class="task-level">1</strong></p>
+      <p><span>XP:</span><strong class="task-xp">0 / 720</strong></p>
+      <p><span>Generates:</span><strong class="task-generates">0 Patterns/tick</strong></p>
+    </div>
+    <div class="task-xp-bar bar"><div class="fill task-xp-fill" style="width: 0%"></div></div>
+    <button>Start Designing</button>
+  </article>
+</div>
         </section>
 
         <section class="content-section" id="section-orders">

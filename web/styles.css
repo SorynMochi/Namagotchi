@@ -2380,3 +2380,110 @@ body > .emoji-picker-floating .emoji-option:hover {
   width: 0%;
   transition: width 90ms linear;
 }
+
+/* Compact gathering skill cards */
+
+.gathering-grid {
+  grid-template-columns: repeat(4, minmax(210px, 1fr));
+  gap: 9px;
+  align-items: start;
+}
+
+.task-card {
+  gap: 7px;
+  padding: 10px 11px;
+  border-radius: 10px;
+}
+
+.task-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(143, 205, 255, 0.22);
+}
+
+.task-card h2 {
+  margin: 0;
+  color: var(--cyan);
+  font-size: 0.74rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.task-status {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--muted);
+  font-size: 0.56rem !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.task-card.active .task-status {
+  background: rgba(168, 224, 95, 0.95);
+  color: #102000;
+}
+
+.task-meta {
+  display: grid;
+  gap: 2px;
+}
+
+.task-meta p {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  color: rgba(189, 208, 220, 0.7);
+  font-size: 0.66rem;
+  line-height: 1.15;
+}
+
+.task-meta strong {
+  color: var(--text-soft);
+  font-weight: 850;
+  text-align: right;
+}
+
+.task-card .task-xp-bar {
+  height: 18px;
+  margin-top: 1px;
+  border-radius: 4px;
+}
+
+.task-xp-fill {
+  background: linear-gradient(90deg, var(--cyan), var(--pink));
+  box-shadow: none;
+}
+
+.task-card button {
+  width: 100%;
+  min-height: 25px;
+  justify-self: stretch;
+  margin-top: 1px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.66rem;
+  box-shadow: none;
+}
+
+.task-card button:disabled {
+  cursor: default;
+  opacity: 0.9;
+}
+
+@media (max-width: 1500px) {
+  .gathering-grid {
+    grid-template-columns: repeat(3, minmax(210px, 1fr));
+  }
+}
+
+@media (max-width: 1200px) {
+  .gathering-grid {
+    grid-template-columns: repeat(2, minmax(210px, 1fr));
+  }
+}

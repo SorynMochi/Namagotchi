@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -133,7 +134,19 @@ func (s *Server) HandleForceTick(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := s.Store.SettleDevTicks(r.Context(), 1)
+	ticks := int64(1)
+
+	if rawTicks := r.URL.Query().Get("ticks"); rawTicks != "" {
+		parsedTicks, err := strconv.ParseInt(rawTicks, 10, 64)
+		if err != nil || parsedTicks < 1 {
+			writeError(w, http.StatusBadRequest, "ticks must be a positive whole number")
+			return
+		}
+
+		ticks = parsedTicks
+	}
+
+	result, err := s.Store.SettleDevTicks(r.Context(), ticks)
 	if err != nil {
 		log.Printf("force tick failed: %v", err)
 		writeError(w, http.StatusInternalServerError, "failed to force tick")

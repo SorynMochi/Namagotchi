@@ -69,6 +69,33 @@ const CHAT_OFFLINE_WHISPERS_KEY = "namagotchi_offline_whispers_v1";
 
 const CURRENT_PLAYER_NAME = "Soryn";
 
+const GATHERING_TASK_CONFIG = {
+  streaming: {
+    name: "Streaming",
+    resource: "Fans",
+  },
+  doom_scrolling: {
+    name: "Scrolling",
+    resource: "Memes",
+  },
+  cleaning: {
+    name: "Cleaning",
+    resource: "Lost Items",
+  },
+  exercising: {
+    name: "Exercising",
+    resource: "Confidence",
+  },
+  shopping: {
+    name: "Shopping",
+    resource: "Receipts",
+  },
+  designing: {
+    name: "Designing",
+    resource: "Patterns",
+  },
+};
+
 const DEV_PLAYER_DIRECTORY = {
   soryn: {
     displayName: "Soryn",
@@ -365,7 +392,9 @@ document.querySelectorAll(".left-rail .panel > .panel-title").forEach((title) =>
 
 document.querySelectorAll(".task-card button").forEach((button) => {
   button.addEventListener("click", () => {
-    setGatheringTask(taskFromButtonText(button.textContent));
+    const taskCard = button.closest(".task-card");
+    const task = taskCard?.dataset.gatheringTask || taskFromButtonText(button.textContent);
+    setGatheringTask(task);
   });
 });
 
@@ -552,7 +581,7 @@ currentActionLabel.textContent = `Playdeck + ${progressActionName} [x${tick.play
     ${renderStat("Cleanliness", companion.cleanliness)}
   `;
 
-  updateGatheringCards(tick.activeGatheringTask);
+  updateGatheringCards(status);
 
   namiMessage.textContent = "Nami-chan’s tick engine is running. She is now professionally obligated to be productive every five seconds.";
 }
@@ -573,20 +602,56 @@ function renderStat(name, value) {
   `;
 }
 
-function updateGatheringCards(activeGatheringTask) {
-  document.querySelectorAll(".task-card").forEach((card) => {
-    const button = card.querySelector("button");
-    if (!button) {
-      return;
-    }
+function updateGatheringCards(status) {
+  const activeGatheringTask = status.tick.activeGatheringTask;
+  const moodScore = Number(status.companion.moodScore ?? 0);
 
-    const task = taskFromButtonText(button.textContent);
+  document.querySelectorAll(".task-card").forEach((card) => {
+    const task = card.dataset.gatheringTask || taskFromButtonText(card.querySelector("button")?.textContent ?? "");
+    const config = GATHERING_TASK_CONFIG[task] ?? GATHERING_TASK_CONFIG.streaming;
+    const activity = getActivityForTask(status.activities, task);
+    const level = Number(activity?.level ?? 1);
+    const xpIntoLevel = Number(activity?.xpIntoLevel ?? 0);
+    const xpToNext = Number(activity?.xpToNext ?? 720);
+    const generatedPerTick = resourcePerTickForActivity(level, moodScore);
     const isActive = task === activeGatheringTask;
 
     card.classList.toggle("active", isActive);
-    const status = card.querySelector("span");
-    if (status) {
-      status.textContent = isActive ? "Active" : "Idle";
+
+    const title = card.querySelector("h2");
+    if (title) {
+      title.textContent = config.name;
+    }
+
+    const statusBadge = card.querySelector(".task-status");
+    if (statusBadge) {
+      statusBadge.textContent = isActive ? "Active" : "Idle";
+    }
+
+    const levelElement = card.querySelector(".task-level");
+    if (levelElement) {
+      levelElement.textContent = level.toLocaleString();
+    }
+
+    const xpElement = card.querySelector(".task-xp");
+    if (xpElement) {
+      xpElement.textContent = `${xpIntoLevel.toLocaleString()} / ${xpToNext.toLocaleString()}`;
+    }
+
+    const generatesElement = card.querySelector(".task-generates");
+    if (generatesElement) {
+      generatesElement.textContent = `${generatedPerTick.toLocaleString()} ${config.resource}/tick`;
+    }
+
+    const fill = card.querySelector(".task-xp-fill");
+    if (fill) {
+      fill.style.width = `${percent(xpIntoLevel, xpToNext)}%`;
+    }
+
+    const button = card.querySelector("button");
+    if (button) {
+      button.textContent = isActive ? `Capturing ${config.resource}...` : `Start ${config.name}`;
+      button.disabled = isActive;
     }
   });
 }
@@ -1265,6 +1330,34 @@ function closeProfileModal() {
   }
 }
 
+function getActivityForTask(activities, task) {
+  switch (task) {
+    case "streaming":
+      return activities?.streaming;
+    case "doom_scrolling":
+      return activities?.doomScrolling;
+    case "cleaning":
+      return activities?.cleaning;
+    case "exercising":
+      return activities?.exercising;
+    case "shopping":
+      return activities?.shopping;
+    case "designing":
+      return activities?.designing;
+    default:
+      return activities?.streaming;
+  }
+}
+
+function resourcePerTickForActivity(level, moodScore) {
+  const safeLevel = Math.max(1, Number(level) || 1);
+  const safeMood = Math.max(0, Math.min(100, Number(moodScore) || 0));
+  const base = Math.pow(safeLevel, 1.1) + 100;
+  const moodMultiplier = safeMood / 200 + 1;
+
+  return Math.round(base * moodMultiplier);
+}
+
 function positionFloatingElement(element, anchorElement) {
   const rect = anchorElement.getBoundingClientRect();
   const gap = 8;
@@ -1591,15 +1684,24 @@ function tickResultMessage(result) {
     return result.message || "No ticks ready yet.";
   }
 
-const levelText = result.levelUps > 0 ? `, ${result.levelUps} Playdeck level-up(s)` : "";
-const activityText = result.activityXpGained > 0
-  ? `, +${Number(result.activityXpGained).toLocaleString()} ${result.activityName} XP`
-  : "";
-const activityLevelText = result.activityLevelUps > 0
-  ? `, ${result.activityLevelUps} ${result.activityName} level-up(s)`
-  : "";
+  const activityName = result.activityName || "Activity";
+  const activityXPGained = Number(result.activityXpGained ?? 0);
+  const syncXPGained = Number(result.syncXpGained ?? 0);
+  const creditsGained = Number(result.creditsCentsGained ?? 0);
+  const nibblesGained = Number(result.nibblesGained ?? 0);
+  const resourceAmountGained = Number(result.resourceAmountGained ?? 0);
+  const resourceName = result.resourceName || "Resources";
 
-return `Processed ${result.ticksProcessed} tick(s): +${result.syncXpGained.toLocaleString()} Sync XP, +${formatCredits(result.creditsCentsGained)} Credits, +${Number(result.nibblesGained).toLocaleString()} Nibbles, +${Number(result.resourceAmountGained).toLocaleString()} ${result.resourceName}${activityText}${levelText}${activityLevelText}.`;}
+  const levelText = Number(result.levelUps ?? 0) > 0
+    ? `, ${Number(result.levelUps).toLocaleString()} Playdeck level-up(s)`
+    : "";
+
+  const activityLevelText = Number(result.activityLevelUps ?? 0) > 0
+    ? `, ${Number(result.activityLevelUps).toLocaleString()} ${activityName} level-up(s)`
+    : "";
+
+  return `Processed ${Number(result.ticksProcessed).toLocaleString()} tick(s): +${syncXPGained.toLocaleString()} Sync XP, +${formatCredits(creditsGained)} Credits, +${nibblesGained.toLocaleString()} Nibbles, +${resourceAmountGained.toLocaleString()} ${resourceName}, +${activityXPGained.toLocaleString()} ${activityName} XP${levelText}${activityLevelText}.`;
+}
 
 function getMoodBonus(mood) {
   return Math.round((Number(mood) / 200) * 100);
