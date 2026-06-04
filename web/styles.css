@@ -1569,3 +1569,82 @@ body.is-resizing-chat {
   height: 28px;
   margin-left: auto;
 }
+
+/* Hard override: remove generic chat button styling from emoji controls */
+
+.chat-form .chat-emoji-button {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(143, 205, 255, 0.18) !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  font-size: 1.25rem !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.chat-form .chat-emoji-button:hover {
+  border-color: rgba(255, 104, 183, 0.42) !important;
+  background: rgba(255, 104, 183, 0.08) !important;
+}
+
+/* Picker container */
+.chat-form .emoji-picker {
+  left: 0 !important;
+  bottom: 36px !important;
+  width: 276px !important;
+  max-width: 276px !important;
+  max-height: 184px !important;
+
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  align-content: flex-start !important;
+  align-items: flex-start !important;
+
+  gap: 2px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
+  padding: 6px !important;
+  border: 1px solid rgba(143, 205, 255, 0.22) !important;
+  border-radius: 12px !important;
+  background: rgba(5, 11, 20, 0.98) !important;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42) !important;
+}
+
+.chat-form .emoji-picker.hidden {
+  display: none !important;
+}
+
+/* Picker emoji buttons */
+.chat-form .emoji-picker .emoji-option {
+  flex: 0 0 26px !important;
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  border: 1px solid transparent !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  color: var(--text) !important;
+
+  font-size: 1.22rem !important;
+  line-height: 1 !important;
+
+  box-shadow: none !important;
+}
+
+.chat-form .emoji-picker .emoji-option:hover {
+  border-color: rgba(73, 199, 255, 0.32) !important;
+  background: rgba(73, 199, 255, 0.1) !important;
+}
