@@ -836,7 +836,6 @@ function saveNamiMessages() {
 
 function namiCareMessage(result) {
   const actionName = result?.actionName || "Care";
-  const xpGained = Number(result?.xpGained ?? 0);
   const companion = result?.companion || {};
   const caption = companion.caption || "";
 
@@ -846,33 +845,33 @@ function namiCareMessage(result) {
 
   switch (result?.action) {
     case "meal":
-      return `That meal helped so much. +${xpGained.toLocaleString()} care XP.`;
+      return "That meal helped so much.";
     case "snack":
-      return `Snack acquired. I am now slightly more powerful and much more pleased. +${xpGained.toLocaleString()} care XP.`;
+      return "Snack acquired. I am now slightly more powerful and much more pleased.";
     case "drink":
-      return `A little drink break was exactly what I needed. +${xpGained.toLocaleString()} care XP.`;
+      return "A little drink break was exactly what I needed.";
     case "cuddle":
-      return `Cuddles logged successfully. Emotional battery recharged. +${xpGained.toLocaleString()} care XP.`;
+      return "Cuddles logged successfully. Emotional battery recharged.";
     case "play":
-      return `Playtime! Tiny chaos levels are acceptable. +${xpGained.toLocaleString()} care XP.`;
+      return "Playtime! Tiny chaos levels are acceptable.";
     case "write_together":
-      return `Writing together made my little creative gears sparkle. +${xpGained.toLocaleString()} care XP.`;
+      return "Writing together made my little creative gears sparkle.";
     case "read_together":
-      return `Reading together was cozy. I am storing this moment in the warm shelf of my heart. +${xpGained.toLocaleString()} care XP.`;
+      return "Reading together was cozy. I am storing this moment in the warm shelf of my heart.";
     case "boop":
-      return `Boop received. I will allow it. Probably. +${xpGained.toLocaleString()} care XP.`;
+      return "Boop received. I will allow it. Probably.";
     case "nap":
-      return `A nap helped. Soft reboot complete. +${xpGained.toLocaleString()} care XP.`;
+      return "A nap helped. Soft reboot complete.";
     case "bath":
-      return `Fresh and clean. I am now legally extra adorable. +${xpGained.toLocaleString()} care XP.`;
+      return "Fresh and clean. I am now legally extra adorable.";
     case "freshen_up":
-      return `Freshened up. Presentation stat restored. +${xpGained.toLocaleString()} care XP.`;
+      return "Freshened up. Presentation stat restored.";
     case "put_to_bed":
       return "I’m going to sleep now. Keep the room cozy, okay?";
     case "wake_up":
       return "I’m awake. Soft, sleepy, and accepting tribute.";
     default:
-      return caption || `${actionName} complete. +${xpGained.toLocaleString()} care XP.`;
+      return caption || `${actionName} complete.`;
   }
 }
 
