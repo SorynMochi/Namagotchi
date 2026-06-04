@@ -1530,7 +1530,7 @@ function setEmojiCategory(categoryKey) {
   localStorage.setItem(EMOJI_CATEGORY_KEY, categoryKey);
   renderEmojiPicker();
   emojiPickerNeedsRender = false;
-  requestAnimationFrame(positionEmojiPickerFast);
+  requestAnimationFrame(positionEmojiPickerInstant);
 }
 
 function getSavedEmojiCategory() {
@@ -1543,9 +1543,10 @@ function initializeEmojiPickerPortal() {
     document.body.appendChild(emojiPicker);
   }
 
-  emojiPicker.classList.add("emoji-picker-floating", "hidden");
-  emojiPicker.style.left = "-9999px";
-  emojiPicker.style.top = "-9999px";
+  emojiPicker.classList.remove("hidden");
+  emojiPicker.classList.add("emoji-picker-floating");
+  emojiPicker.style.setProperty("--emoji-picker-x", "-9999px");
+  emojiPicker.style.setProperty("--emoji-picker-y", "-9999px");
 
   renderEmojiPicker();
   emojiPickerNeedsRender = false;
@@ -1558,9 +1559,13 @@ function initializeEmojiPickerPortal() {
   window.addEventListener("scroll", positionVisibleEmojiPicker, true);
 }
 
+function isEmojiPickerOpen() {
+  return emojiPicker.classList.contains("is-open");
+}
+
 function positionVisibleEmojiPicker() {
-  if (!emojiPicker.classList.contains("hidden")) {
-    positionEmojiPickerFast();
+  if (isEmojiPickerOpen()) {
+    positionEmojiPickerInstant();
   }
 }
 
@@ -1591,16 +1596,14 @@ function toggleEmojiPicker(event) {
   event?.preventDefault();
   event?.stopPropagation();
 
-  const shouldOpen = emojiPicker.classList.contains("hidden");
-
-  if (shouldOpen) {
+  if (!isEmojiPickerOpen()) {
     if (emojiPickerNeedsRender || emojiPicker.childElementCount === 0) {
       renderEmojiPicker();
       emojiPickerNeedsRender = false;
     }
 
-    positionEmojiPickerFast();
-    emojiPicker.classList.remove("hidden");
+    positionEmojiPickerInstant();
+    emojiPicker.classList.add("is-open");
     emojiButton.setAttribute("aria-expanded", "true");
     return;
   }
@@ -1609,7 +1612,9 @@ function toggleEmojiPicker(event) {
 }
 
 function closeEmojiPicker() {
-  emojiPicker.classList.add("hidden");
+  emojiPicker.classList.remove("is-open");
+  emojiPicker.style.setProperty("--emoji-picker-x", "-9999px");
+  emojiPicker.style.setProperty("--emoji-picker-y", "-9999px");
   emojiButton.setAttribute("aria-expanded", "false");
 }
 
@@ -1621,14 +1626,14 @@ function scheduleEmojiPickerPreload() {
   }
 
   emojiPickerPreloadTimer = setTimeout(() => {
-    if (!emojiPicker.classList.contains("hidden")) {
-      return;
-    }
+if (isEmojiPickerOpen()) {
+  return;
+}
 
     renderEmojiPicker();
     emojiPickerNeedsRender = false;
-    emojiPicker.style.left = "-9999px";
-    emojiPicker.style.top = "-9999px";
+emojiPicker.style.setProperty("--emoji-picker-x", "-9999px");
+emojiPicker.style.setProperty("--emoji-picker-y", "-9999px");
   }, 40);
 }
 
@@ -1664,6 +1669,28 @@ function positionEmojiPickerFast() {
 
   emojiPicker.style.left = `${left}px`;
   emojiPicker.style.top = `${top}px`;
+}
+
+function positionEmojiPickerInstant() {
+  const buttonRect = emojiButton.getBoundingClientRect();
+  const gap = 8;
+  const pagePadding = 8;
+  const pickerWidth = 324;
+  const pickerHeight = Math.min(260, window.innerHeight - pagePadding * 2);
+
+  let left = buttonRect.left;
+  let top = buttonRect.top - pickerHeight - gap;
+
+  left = Math.max(pagePadding, Math.min(left, window.innerWidth - pickerWidth - pagePadding));
+
+  if (top < pagePadding) {
+    top = buttonRect.bottom + gap;
+  }
+
+  top = Math.max(pagePadding, Math.min(top, window.innerHeight - pickerHeight - pagePadding));
+
+  emojiPicker.style.setProperty("--emoji-picker-x", `${Math.round(left)}px`);
+  emojiPicker.style.setProperty("--emoji-picker-y", `${Math.round(top)}px`);
 }
 
 function initializeChatVisibility() {
