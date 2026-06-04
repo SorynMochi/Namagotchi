@@ -3,6 +3,7 @@ const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
 const namiMessage = document.querySelector("#nami-message");
+const namiMessageLog = document.querySelector("#nami-message-log");
 const namiLevel = document.querySelector("#nami-level");
 const namiXpLabel = document.querySelector("#nami-xp-label");
 const namiXpFill = document.querySelector("#nami-xp-fill");
@@ -10,6 +11,7 @@ const namiMoodLabel = document.querySelector("#nami-mood-label");
 const namiPrimaryNeed = document.querySelector("#nami-primary-need");
 const namiSuggestedAction = document.querySelector("#nami-suggested-action");
 const careButtons = document.querySelectorAll("[data-care-action]");
+const sleepToggleButton = document.querySelector("#sleep-toggle-button");
 const serverTime = document.querySelector("#server-time");
 const onlineUsers = document.querySelector("#online-users");
 
@@ -64,6 +66,8 @@ const chatToggleButton = document.querySelector("#chat-toggle-button");
 const collapseToggles = document.querySelectorAll(".collapse-toggle");
 
 const MAX_CHAT_MESSAGES = 100;
+const MAX_NAMI_MESSAGES = 100;
+const NAMI_MESSAGE_STORAGE_KEY = "namagotchi_nami_messages_v1";
 const CHAT_STORAGE_KEY = "namagotchi_chat_store_v1";
 const CHAT_CHANNEL_KEY = "namagotchi_chat_active_channel_v1";
 const CHAT_HIDDEN_KEY = "namagotchi_chat_hidden_v1";
@@ -346,6 +350,7 @@ let latestPlayerStatus = null;
 let forceTickButton = null;
 let currentChatChannel = "lobby";
 let chatMessages = createEmptyChatStore();
+let namiMessages = loadNamiMessages();
 let unreadChannels = new Set();
 let emojiUsage = loadEmojiUsage();
 let activeEmojiCategory = "recent";
@@ -441,6 +446,7 @@ createForceTickButton();
 initializeEmojiPickerPortal();
 initializeChat();
 initializeChatResize();
+initializeNamiMessages();
 
 function showSection(sectionName) {
   document.querySelectorAll(".nav-item").forEach((button) => {
@@ -541,13 +547,19 @@ async function setGatheringTask(task) {
 }
 
 async function performCareAction(action) {
+  const resolvedAction = action === "sleep_toggle"
+    ? String(latestPlayerStatus?.companion?.status || "").toLowerCase() === "sleeping"
+      ? "wake_up"
+      : "put_to_bed"
+    : action;
+
   try {
     const response = await fetch("/api/player/care", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ action }),
+      body: JSON.stringify({ action: resolvedAction }),
     });
 
     if (!response.ok) {
@@ -557,7 +569,10 @@ async function performCareAction(action) {
     const result = await response.json();
 
     addChatMessage("System", careActionMessage(result), "system");
-    await loadPlayerStatus();
+addNamiMessage(namiCareMessage(result), {
+  kind: Number(result.levelUps ?? 0) > 0 ? "level-up" : "normal",
+});
+await loadPlayerStatus();
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Care action failed. Nami-chan hid the button under a blanket.", "system");
@@ -575,6 +590,11 @@ namiXpFill.style.width = `${namiXpPercent}%`;
 namiMoodLabel.textContent = companion.moodLabel || "Okay";
 namiPrimaryNeed.textContent = companion.primaryNeed || "Waiting";
 namiSuggestedAction.textContent = companion.suggestedAction || "Any care action";
+if (sleepToggleButton) {
+  const isSleeping = String(companion.status || "").toLowerCase() === "sleeping";
+  sleepToggleButton.textContent = isSleeping ? "Wake" : "Sleep";
+  sleepToggleButton.title = isSleeping ? "Wake Nami-chan up" : "Put Nami-chan to bed";
+}
   const tick = status.tick;
   const bonus = getMoodBonus(companion.moodScore);
 
@@ -720,6 +740,140 @@ function createForceTickButton() {
   forceTickButton.addEventListener("click", forceTick);
 
   header.appendChild(forceTickButton);
+}
+
+function initializeNamiMessages() {
+  if (!namiMessages.length) {
+    addNamiMessage("I’m here, Soryn. Feed me attention and maybe snacks.", {
+      save: true,
+      render: false,
+    });
+  }
+
+  renderNamiMessages();
+}
+
+function addNamiMessage(text, options = {}) {
+  const message = {
+    text: normalizeChatText(text, 280),
+    timestamp: getChatTimestamp(),
+    kind: options.kind || "normal",
+  };
+
+  namiMessages.push(message);
+
+  while (namiMessages.length > MAX_NAMI_MESSAGES) {
+    namiMessages.shift();
+  }
+
+  if (options.save ?? true) {
+    saveNamiMessages();
+  }
+
+  if (options.render ?? true) {
+    renderNamiMessages();
+  }
+}
+
+function renderNamiMessages() {
+  if (!namiMessageLog) {
+    return;
+  }
+
+  namiMessageLog.replaceChildren();
+
+  if (!namiMessages.length) {
+    const empty = document.createElement("p");
+    empty.className = "muted";
+    empty.textContent = "Nami-chan messages will appear here.";
+    namiMessageLog.appendChild(empty);
+    return;
+  }
+
+  namiMessages.forEach((message) => {
+    const row = document.createElement("p");
+    row.className = "nami-log-message";
+    row.classList.toggle("nami-log-level-up", message.kind === "level-up");
+
+    const time = document.createElement("span");
+    time.className = "nami-log-time";
+    time.textContent = `[${message.timestamp}]`;
+
+    const text = document.createElement("span");
+    text.className = "nami-log-text";
+    text.textContent = message.text;
+
+    row.append(time, " ", text);
+    namiMessageLog.appendChild(row);
+  });
+
+  namiMessageLog.scrollTop = namiMessageLog.scrollHeight;
+}
+
+function loadNamiMessages() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(NAMI_MESSAGE_STORAGE_KEY));
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.slice(-MAX_NAMI_MESSAGES).map((message) => {
+      return {
+        text: normalizeChatText(message.text ?? "", 280),
+        timestamp: normalizeChatText(message.timestamp ?? getChatTimestamp(), 12),
+        kind: normalizeChatText(message.kind ?? "normal", 20),
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+function saveNamiMessages() {
+  localStorage.setItem(NAMI_MESSAGE_STORAGE_KEY, JSON.stringify(namiMessages));
+}
+
+function namiCareMessage(result) {
+  const actionName = result?.actionName || "Care";
+  const xpGained = Number(result?.xpGained ?? 0);
+  const companion = result?.companion || {};
+  const caption = companion.caption || "";
+
+  if (Number(result?.levelUps ?? 0) > 0) {
+    return `I leveled up! I’m level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
+  }
+
+  switch (result?.action) {
+    case "meal":
+      return `That meal helped so much. +${xpGained.toLocaleString()} care XP.`;
+    case "snack":
+      return `Snack acquired. I am now slightly more powerful and much more pleased. +${xpGained.toLocaleString()} care XP.`;
+    case "drink":
+      return `A little drink break was exactly what I needed. +${xpGained.toLocaleString()} care XP.`;
+    case "cuddle":
+      return `Cuddles logged successfully. Emotional battery recharged. +${xpGained.toLocaleString()} care XP.`;
+    case "play":
+      return `Playtime! Tiny chaos levels are acceptable. +${xpGained.toLocaleString()} care XP.`;
+    case "write_together":
+      return `Writing together made my little creative gears sparkle. +${xpGained.toLocaleString()} care XP.`;
+    case "read_together":
+      return `Reading together was cozy. I am storing this moment in the warm shelf of my heart. +${xpGained.toLocaleString()} care XP.`;
+    case "boop":
+      return `Boop received. I will allow it. Probably. +${xpGained.toLocaleString()} care XP.`;
+    case "nap":
+      return `A nap helped. Soft reboot complete. +${xpGained.toLocaleString()} care XP.`;
+    case "bath":
+      return `Fresh and clean. I am now legally extra adorable. +${xpGained.toLocaleString()} care XP.`;
+    case "freshen_up":
+      return `Freshened up. Presentation stat restored. +${xpGained.toLocaleString()} care XP.`;
+    case "put_to_bed":
+      return "I’m going to sleep now. Keep the room cozy, okay?";
+    case "wake_up":
+      return "I’m awake. Soft, sleepy, and accepting tribute.";
+    default:
+      return caption || `${actionName} complete. +${xpGained.toLocaleString()} care XP.`;
+  }
 }
 
 function createEmptyChatStore() {

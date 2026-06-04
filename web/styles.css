@@ -2684,3 +2684,399 @@ body > .emoji-picker-floating .emoji-option {
   padding: 8px 6px;
   font-size: 0.72rem;
 }
+
+/* Compact Home care layout pass */
+
+.home-grid {
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.nami-card,
+.care-card {
+  padding: 12px;
+  border-radius: 16px;
+}
+
+.nami-card {
+  gap: 10px;
+  align-content: start;
+}
+
+.nami-placeholder {
+  width: min(100%, 220px);
+  border-radius: 16px;
+  gap: 7px;
+}
+
+.nami-sparkle {
+  width: 52px;
+  height: 52px;
+  font-size: 2rem;
+}
+
+.nami-placeholder p {
+  font-size: 0.82rem;
+}
+
+.nami-placeholder span {
+  max-width: 150px;
+  font-size: 0.68rem;
+  line-height: 1.25;
+}
+
+.nami-message {
+  padding: 10px 11px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.care-card {
+  display: grid;
+  gap: 10px;
+}
+
+.care-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.85fr) minmax(310px, 1.15fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.nami-care-summary,
+.care-status-compact,
+.nami-progression-card,
+.nami-need-card {
+  min-width: 0;
+}
+
+.nami-care-summary,
+.care-status-compact {
+  padding: 10px;
+  border: 1px solid rgba(143, 205, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.028);
+}
+
+.nami-care-summary h2,
+.care-status-compact h2 {
+  margin: 0 0 8px;
+  color: var(--pink-soft);
+  font-size: 0.82rem;
+  font-weight: 950;
+  letter-spacing: 0.02em;
+}
+
+.nami-progression-card,
+.nami-need-card {
+  display: grid;
+  gap: 7px;
+  padding: 9px;
+  border: 1px solid rgba(143, 205, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.nami-need-card {
+  margin-top: 8px;
+}
+
+.mini-stat-line,
+.nami-need-card p {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 850;
+  line-height: 1.15;
+}
+
+.mini-stat-line strong,
+.nami-need-card strong {
+  color: var(--text);
+  text-align: right;
+}
+
+.nami-progression-card .bar {
+  height: 11px;
+  margin-top: 1px;
+}
+
+.compact-stat-list {
+  gap: 6px;
+}
+
+.compact-stat-list .stat-row {
+  grid-template-columns: 82px minmax(0, 1fr) 30px;
+  gap: 8px;
+  font-size: 0.72rem;
+  line-height: 1.05;
+}
+
+.compact-stat-list .stat-bar {
+  height: 8px;
+}
+
+.compact-stat-list .stat-row strong {
+  font-size: 0.72rem;
+}
+
+.compact-care-actions {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 0;
+}
+
+.compact-care-actions .care-button {
+  min-height: 28px;
+  padding: 5px 7px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 1380px) {
+  .home-grid {
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+
+  .nami-placeholder {
+    width: min(100%, 200px);
+  }
+
+  .care-overview-grid {
+    grid-template-columns: minmax(210px, 0.9fr) minmax(280px, 1.1fr);
+  }
+
+  .compact-care-actions .care-button {
+    min-height: 26px;
+    font-size: 0.64rem;
+  }
+}
+
+/* Align Nami Status and Care Status rows */
+
+.care-overview-grid {
+  grid-template-columns: minmax(330px, 0.8fr) minmax(520px, 1.2fr);
+  align-items: stretch;
+}
+
+.nami-care-summary,
+.care-status-compact {
+  display: grid;
+  min-height: 186px;
+  padding: 10px 12px;
+  border-radius: 14px;
+}
+
+.nami-care-summary {
+  grid-template-rows: 22px repeat(7, 18px);
+  row-gap: 5px;
+}
+
+.care-status-compact {
+  grid-template-rows: 22px 1fr;
+  row-gap: 5px;
+}
+
+.nami-care-summary h2,
+.care-status-compact h2 {
+  margin: 0;
+  color: var(--pink-soft);
+  font-size: 0.82rem;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.nami-progression-card,
+.nami-need-card {
+  display: contents;
+}
+
+.nami-progression-card .mini-stat-line:nth-child(1) {
+  grid-row: 2;
+}
+
+.nami-progression-card .mini-stat-line:nth-child(2) {
+  grid-row: 3;
+}
+
+.nami-progression-card > .bar {
+  grid-row: 4;
+  align-self: center;
+  height: 9px;
+  margin: 0;
+}
+
+.nami-need-card p:nth-child(1) {
+  grid-row: 5;
+}
+
+.nami-need-card p:nth-child(2) {
+  grid-row: 6;
+}
+
+.nami-need-card p:nth-child(3) {
+  grid-row: 8;
+}
+
+.mini-stat-line,
+.nami-need-card p,
+.compact-stat-list .stat-row {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.72rem;
+  font-weight: 760;
+  line-height: 1;
+}
+
+.mini-stat-line,
+.nami-need-card p {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.mini-stat-line span,
+.nami-need-card span {
+  color: var(--text-soft);
+  font-weight: 760;
+}
+
+.mini-stat-line strong,
+.nami-need-card strong,
+.compact-stat-list .stat-row strong {
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: right;
+}
+
+.nami-need-card p:nth-child(3) strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-stat-list {
+  display: grid;
+  grid-template-rows: repeat(7, 18px);
+  gap: 5px;
+  align-content: start;
+}
+
+.compact-stat-list .stat-row {
+  grid-template-columns: 92px minmax(0, 1fr) 34px;
+  gap: 9px;
+  align-items: center;
+}
+
+.compact-stat-list .stat-bar {
+  height: 8px;
+}
+
+.nami-care-summary .nami-progression-card,
+.nami-care-summary .nami-need-card {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+/* Nami message log */
+
+.home-grid {
+  align-items: stretch;
+}
+
+.care-card {
+  grid-template-rows: auto auto minmax(0, 1fr);
+  align-self: stretch;
+}
+
+.nami-message-log-card {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border: 1px solid rgba(143, 205, 255, 0.14);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 104, 183, 0.08), transparent 18rem),
+    rgba(255, 255, 255, 0.028);
+  overflow: hidden;
+}
+
+.nami-message-log-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(143, 205, 255, 0.12);
+}
+
+.nami-message-log-header h2 {
+  margin: 0;
+  color: var(--pink-soft);
+  font-size: 0.82rem;
+  font-weight: 950;
+  letter-spacing: 0.02em;
+}
+
+.nami-message-log-header span {
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.nami-message-log {
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+  padding: 9px 12px;
+}
+
+.nami-message-log .muted {
+  margin: 0;
+  font-size: 0.76rem;
+}
+
+.nami-log-message {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 8px;
+  margin: 0 0 7px;
+  color: var(--text-soft);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.nami-log-message:last-child {
+  margin-bottom: 0;
+}
+
+.nami-log-time {
+  color: rgba(130, 149, 164, 0.84);
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.nami-log-text {
+  color: #ffe1f0;
+}
+
+.nami-log-level-up .nami-log-text {
+  color: var(--yellow);
+  font-weight: 900;
+}

@@ -135,10 +135,9 @@
       <main class="panel main-panel">
         <section class="content-section active" id="section-home">
           <div class="section-header">
-  <div>
-    <p class="eyebrow">Home</p>
-    <h1>Nami-chan</h1>
-  </div>
+<div>
+  <p class="eyebrow">Home ♡ Nami-chan</p>
+</div>
 </div>
 
           <div class="home-grid">
@@ -153,48 +152,67 @@
               </p>
             </div>
 
-            <div class="care-card">
-              <h2>Care Status</h2>
-              <div id="care-stats" class="stat-list">
-                <p class="muted">Create the dev player to load care stats.</p>
-              </div>
+<div class="care-card">
+  <div class="care-overview-grid">
+    <section class="nami-care-summary" aria-label="Nami progression and mood">
+      <h2>Nami Status</h2>
 
-             <div class="nami-progression-card">
-  <div>
-    <span>Nami Level</span>
-    <strong id="nami-level">1</strong>
-  </div>
-  <div>
-    <span>Care XP</span>
-    <strong id="nami-xp-label">0 / 120</strong>
-  </div>
-  <div class="bar">
-    <div class="fill xp-fill" id="nami-xp-fill" style="width: 0%"></div>
-  </div>
-</div>
+      <div class="nami-progression-card">
+        <div class="mini-stat-line">
+          <span>Nami Level</span>
+          <strong id="nami-level">1</strong>
+        </div>
 
-<div class="nami-need-card">
-  <p><span>Mood:</span><strong id="nami-mood-label">Okay</strong></p>
-  <p><span>Need:</span><strong id="nami-primary-need">Waiting</strong></p>
-  <p><span>Suggested:</span><strong id="nami-suggested-action">Any care action</strong></p>
-</div>
+        <div class="mini-stat-line">
+          <span>Care XP</span>
+          <strong id="nami-xp-label">0 / 120</strong>
+        </div>
 
-<div class="care-actions compact-care-actions">
-  <button class="care-button" data-care-action="meal">Meal</button>
-  <button class="care-button" data-care-action="snack">Snack</button>
-  <button class="care-button" data-care-action="drink">Drink</button>
-  <button class="care-button" data-care-action="cuddle">Cuddle</button>
-  <button class="care-button" data-care-action="play">Play</button>
-  <button class="care-button" data-care-action="write_together">Write</button>
-  <button class="care-button" data-care-action="read_together">Read</button>
-  <button class="care-button" data-care-action="boop">Boop</button>
-  <button class="care-button" data-care-action="nap">Nap</button>
-  <button class="care-button" data-care-action="bath">Bath</button>
-  <button class="care-button" data-care-action="freshen_up">Freshen</button>
-  <button class="care-button" data-care-action="put_to_bed">Bed</button>
-  <button class="care-button" data-care-action="wake_up">Wake</button>
+        <div class="bar">
+          <div class="fill xp-fill" id="nami-xp-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="nami-need-card">
+        <p><span>Mood</span><strong id="nami-mood-label">Okay</strong></p>
+        <p><span>Need</span><strong id="nami-primary-need">Waiting</strong></p>
+        <p><span>Suggested</span><strong id="nami-suggested-action">Any care action</strong></p>
+      </div>
+    </section>
+
+    <section class="care-status-compact" aria-label="Care status">
+      <h2>Care Status</h2>
+      <div id="care-stats" class="stat-list compact-stat-list">
+        <p class="muted">Create the dev player to load care stats.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="care-actions compact-care-actions">
+    <button class="care-button" data-care-action="meal">Meal</button>
+    <button class="care-button" data-care-action="snack">Snack</button>
+    <button class="care-button" data-care-action="drink">Drink</button>
+    <button class="care-button" data-care-action="cuddle">Cuddle</button>
+    <button class="care-button" data-care-action="play">Play</button>
+    <button class="care-button" data-care-action="write_together">Write</button>
+    <button class="care-button" data-care-action="read_together">Read</button>
+    <button class="care-button" data-care-action="boop">Boop</button>
+    <button class="care-button" data-care-action="nap">Nap</button>
+    <button class="care-button" data-care-action="bath">Bath</button>
+    <button class="care-button" data-care-action="freshen_up">Freshen</button>
+    <button class="care-button" id="sleep-toggle-button" data-care-action="sleep_toggle">Sleep</button>
+  </div>
+  <section class="nami-message-log-card" aria-label="Nami-chan messages">
+  <div class="nami-message-log-header">
+    <h2>Nami Messages</h2>
+    <span>Last 100</span>
+  </div>
+
+  <div id="nami-message-log" class="nami-message-log" aria-live="polite">
+    <p class="muted">Nami-chan messages will appear here.</p>
+  </div>
+</section>
 </div>
-            </div>
           </div>
         </section>
 
