@@ -520,12 +520,12 @@ resConfidence.textContent = Number(status.resources.confidence ?? 0).toLocaleStr
 resReceipts.textContent = Number(status.resources.receipts ?? 0).toLocaleString();
 resPatterns.textContent = Number(status.resources.patterns ?? 0).toLocaleString();
 
-actStreaming.textContent = "1";
-actDoomScrolling.textContent = "1";
-actCleaning.textContent = "1";
-actExercising.textContent = "1";
-actShopping.textContent = "1";
-actDesigning.textContent = "1";
+actStreaming.textContent = activityLevel(status.activities?.streaming);
+actDoomScrolling.textContent = activityLevel(status.activities?.doomScrolling);
+actCleaning.textContent = activityLevel(status.activities?.cleaning);
+actExercising.textContent = activityLevel(status.activities?.exercising);
+actShopping.textContent = activityLevel(status.activities?.shopping);
+actDesigning.textContent = activityLevel(status.activities?.designing);
 
   const xpPercent = percent(player.xpIntoLevel, player.xpToNext);
   playdeckXpLabel.textContent = `XP: ${player.xpIntoLevel.toLocaleString()} / ${player.xpToNext.toLocaleString()}`;
@@ -534,7 +534,11 @@ actDesigning.textContent = "1";
   playdeckHpLabel.textContent = "HP: 100 / 100";
   playdeckHpFill.style.width = "100%";
 
-  currentActionLabel.textContent = `Playdeck + ${tick.activeGatheringName} [x${tick.playdeckStreak.toLocaleString()}]`;
+  const progressActionName = tick.activeGatheringTask === "doom_scrolling"
+  ? "Scrolling"
+  : tick.activeGatheringName;
+
+currentActionLabel.textContent = `Playdeck + ${progressActionName} [x${tick.playdeckStreak.toLocaleString()}]`;
   syncTickProgress(tick);
   scheduleNextPlayerStatusRefresh(tick);
 
@@ -551,6 +555,10 @@ actDesigning.textContent = "1";
   updateGatheringCards(tick.activeGatheringTask);
 
   namiMessage.textContent = "Nami-chan’s tick engine is running. She is now professionally obligated to be productive every five seconds.";
+}
+
+function activityLevel(activity) {
+  return Number(activity?.level ?? 1).toLocaleString();
 }
 
 function renderStat(name, value) {
@@ -1583,10 +1591,15 @@ function tickResultMessage(result) {
     return result.message || "No ticks ready yet.";
   }
 
-  const levelText = result.levelUps > 0 ? `, ${result.levelUps} level-up(s)` : "";
+const levelText = result.levelUps > 0 ? `, ${result.levelUps} Playdeck level-up(s)` : "";
+const activityText = result.activityXpGained > 0
+  ? `, +${Number(result.activityXpGained).toLocaleString()} ${result.activityName} XP`
+  : "";
+const activityLevelText = result.activityLevelUps > 0
+  ? `, ${result.activityLevelUps} ${result.activityName} level-up(s)`
+  : "";
 
-  return `Processed ${result.ticksProcessed} tick(s): +${result.syncXpGained.toLocaleString()} Sync XP, +${formatCredits(result.creditsCentsGained)} Credits, +${Number(result.nibblesGained).toLocaleString()} Nibbles, +${Number(result.resourceAmountGained).toLocaleString()} ${result.resourceName}${levelText}.`;
-}
+return `Processed ${result.ticksProcessed} tick(s): +${result.syncXpGained.toLocaleString()} Sync XP, +${formatCredits(result.creditsCentsGained)} Credits, +${Number(result.nibblesGained).toLocaleString()} Nibbles, +${Number(result.resourceAmountGained).toLocaleString()} ${result.resourceName}${activityText}${levelText}${activityLevelText}.`;}
 
 function getMoodBonus(mood) {
   return Math.round((Number(mood) / 200) * 100);

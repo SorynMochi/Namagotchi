@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	TickSeconds     = 5
-	SyncXPPerTick   = int64(10)
-	MaxOfflineTicks = int64(8640)
+	TickSeconds       = 5
+	SyncXPPerTick     = int64(10)
+	ActivityXPPerTick = int64(10)
+	MaxOfflineTicks   = int64(8640)
 )
 
 type Store struct {
@@ -24,10 +25,11 @@ type Store struct {
 }
 
 type PlayerStatus struct {
-	Player    Player          `json:"player"`
-	Companion CompanionState  `json:"companion"`
-	Resources PlayerResources `json:"resources"`
-	Tick      TickState       `json:"tick"`
+	Player     Player          `json:"player"`
+	Companion  CompanionState  `json:"companion"`
+	Resources  PlayerResources `json:"resources"`
+	Activities ActivitySkills  `json:"activities"`
+	Tick       TickState       `json:"tick"`
 }
 
 type Player struct {
@@ -67,21 +69,42 @@ type PlayerResources struct {
 	GlitchDrops int64 `json:"glitchDrops"`
 }
 
+type ActivitySkill struct {
+	Key         string `json:"key"`
+	Name        string `json:"name"`
+	Level       int    `json:"level"`
+	TotalXP     int64  `json:"totalXp"`
+	XPIntoLevel int64  `json:"xpIntoLevel"`
+	XPToNext    int64  `json:"xpToNext"`
+}
+
+type ActivitySkills struct {
+	Streaming     ActivitySkill `json:"streaming"`
+	DoomScrolling ActivitySkill `json:"doomScrolling"`
+	Cleaning      ActivitySkill `json:"cleaning"`
+	Exercising    ActivitySkill `json:"exercising"`
+	Shopping      ActivitySkill `json:"shopping"`
+	Designing     ActivitySkill `json:"designing"`
+}
+
 type TickState struct {
-	PlaydeckEnabled        bool      `json:"playdeckEnabled"`
-	PlaydeckZoneID         int       `json:"playdeckZoneId"`
-	PlaydeckZoneName       string    `json:"playdeckZoneName"`
-	PlaydeckStreak         int64     `json:"playdeckStreak"`
-	PlaydeckTimeoutTicks   int       `json:"playdeckTimeoutTicks"`
-	ActiveGatheringTask    string    `json:"activeGatheringTask"`
-	ActiveGatheringName    string    `json:"activeGatheringName"`
-	ActiveGatheringOutput  string    `json:"activeGatheringOutput"`
-	GatheringRemainder     float64   `json:"gatheringRemainder"`
-	ResourcePerTick        float64   `json:"resourcePerTick"`
-	ResourcePerTickDisplay int64     `json:"resourcePerTickDisplay"`
-	LastTickAt             time.Time `json:"lastTickAt"`
-	NextTickAt             time.Time `json:"nextTickAt"`
-	SecondsUntilNextTick   int       `json:"secondsUntilNextTick"`
+	PlaydeckEnabled           bool      `json:"playdeckEnabled"`
+	PlaydeckZoneID            int       `json:"playdeckZoneId"`
+	PlaydeckZoneName          string    `json:"playdeckZoneName"`
+	PlaydeckStreak            int64     `json:"playdeckStreak"`
+	PlaydeckTimeoutTicks      int       `json:"playdeckTimeoutTicks"`
+	ActiveGatheringTask       string    `json:"activeGatheringTask"`
+	ActiveGatheringName       string    `json:"activeGatheringName"`
+	ActiveGatheringOutput     string    `json:"activeGatheringOutput"`
+	ActiveActivityLevel       int       `json:"activeActivityLevel"`
+	ActiveActivityXPIntoLevel int64     `json:"activeActivityXpIntoLevel"`
+	ActiveActivityXPToNext    int64     `json:"activeActivityXpToNext"`
+	GatheringRemainder        float64   `json:"gatheringRemainder"`
+	ResourcePerTick           float64   `json:"resourcePerTick"`
+	ResourcePerTickDisplay    int64     `json:"resourcePerTickDisplay"`
+	LastTickAt                time.Time `json:"lastTickAt"`
+	NextTickAt                time.Time `json:"nextTickAt"`
+	SecondsUntilNextTick      int       `json:"secondsUntilNextTick"`
 }
 
 type TickResult struct {
@@ -92,6 +115,12 @@ type TickResult struct {
 	NibblesGained        int64  `json:"nibblesGained"`
 	ResourceName         string `json:"resourceName"`
 	ResourceAmountGained int64  `json:"resourceAmountGained"`
+	ActivityName         string `json:"activityName"`
+	ActivityXPGained     int64  `json:"activityXpGained"`
+	ActivityLevelUps     int    `json:"activityLevelUps"`
+	ActivityCurrentLevel int    `json:"activityCurrentLevel"`
+	ActivityXPIntoLevel  int64  `json:"activityXpIntoLevel"`
+	ActivityXPToNext     int64  `json:"activityXpToNext"`
 	LevelUps             int    `json:"levelUps"`
 	CurrentLevel         int    `json:"currentLevel"`
 	XPIntoLevel          int64  `json:"xpIntoLevel"`
@@ -222,6 +251,17 @@ func (s *Store) SeedDevPlayer(ctx context.Context) error {
 		returning id
 	`).Scan(&playerID); err != nil {
 		return fmt.Errorf("upsert dev player: %w", err)
+	}
+
+	for _, activityKey := range GatheringTaskKeys() {
+		if _, err := tx.Exec(ctx, `
+			insert into player_activity_skills (player_id, activity_key)
+			values ($1, $2)
+			on conflict (player_id, activity_key) do update
+			set updated_at = now()
+		`, playerID, activityKey); err != nil {
+			return fmt.Errorf("upsert activity skill %s: %w", activityKey, err)
+		}
 	}
 
 	if _, err := tx.Exec(ctx, `
@@ -386,13 +426,24 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 		return nil, fmt.Errorf("get dev player status: %w", err)
 	}
 
+	activities, err := s.GetPlayerActivitySkills(ctx, status.Player.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	status.Activities = activities
+	activeActivity := status.Activities.ByKey(status.Tick.ActiveGatheringTask)
+
 	status.Player.CreditsCents = status.Player.CurrencyCents
 	status.Player.XPToNext = XPToNextLevel(status.Player.Level)
 
 	status.Tick.PlaydeckZoneName = ZoneName(status.Tick.PlaydeckZoneID)
 	status.Tick.ActiveGatheringName = GatheringTaskName(status.Tick.ActiveGatheringTask)
 	status.Tick.ActiveGatheringOutput = GatheringResourceName(status.Tick.ActiveGatheringTask)
-	status.Tick.ResourcePerTick = ResourcePerTick(status.Player.Level, status.Companion.MoodScore)
+	status.Tick.ActiveActivityLevel = activeActivity.Level
+	status.Tick.ActiveActivityXPIntoLevel = activeActivity.XPIntoLevel
+	status.Tick.ActiveActivityXPToNext = activeActivity.XPToNext
+	status.Tick.ResourcePerTick = ResourcePerTick(activeActivity.Level, status.Companion.MoodScore)
 	status.Tick.ResourcePerTickDisplay = int64(math.Round(status.Tick.ResourcePerTick))
 	status.Tick.NextTickAt = status.Tick.LastTickAt.Add(TickSeconds * time.Second)
 	status.Tick.SecondsUntilNextTick = SecondsUntil(status.Tick.NextTickAt)
@@ -523,9 +574,39 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 
 	resourceColumn, resourceName := GatheringResourceColumn(activeGatheringTask)
 
+	if _, err := tx.Exec(ctx, `
+	insert into player_activity_skills (player_id, activity_key)
+	values ($1, $2)
+	on conflict (player_id, activity_key) do nothing
+`, playerID, activeGatheringTask); err != nil {
+		return nil, fmt.Errorf("ensure active activity skill: %w", err)
+	}
+
+	var activityLevel int
+	var activityTotalXP int64
+	var activityXPIntoLevel int64
+
+	if err := tx.QueryRow(ctx, `
+	select level,
+		total_xp,
+		xp_into_level
+	from player_activity_skills
+	where player_id = $1
+		and activity_key = $2
+	for update
+`, playerID, activeGatheringTask).Scan(
+		&activityLevel,
+		&activityTotalXP,
+		&activityXPIntoLevel,
+	); err != nil {
+		return nil, fmt.Errorf("load active activity skill: %w", err)
+	}
+
 	result := &TickResult{
-		OK:           true,
-		ResourceName: resourceName,
+		OK:                   true,
+		ResourceName:         resourceName,
+		ActivityName:         GatheringTaskName(activeGatheringTask),
+		ActivityCurrentLevel: activityLevel,
 	}
 
 	for i := int64(0); i < ticksToProcess; i++ {
@@ -552,10 +633,20 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 			}
 		}
 
-		resourceRaw := ResourcePerTick(level, moodScore) + gatheringRemainder
+		resourceRaw := ResourcePerTick(activityLevel, moodScore) + gatheringRemainder
 		resourceWhole := int64(math.Floor(resourceRaw + 0.000000001))
 		gatheringRemainder = resourceRaw - float64(resourceWhole)
 		result.ResourceAmountGained += resourceWhole
+
+		result.ActivityXPGained += ActivityXPPerTick
+		activityTotalXP += ActivityXPPerTick
+		activityXPIntoLevel += ActivityXPPerTick
+
+		for activityXPIntoLevel >= ActivityXPToNextLevel(activityLevel) {
+			activityXPIntoLevel -= ActivityXPToNextLevel(activityLevel)
+			activityLevel++
+			result.ActivityLevelUps++
+		}
 	}
 
 	if _, err := tx.Exec(ctx, `
@@ -581,6 +672,20 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 
 		if _, err := tx.Exec(ctx, resourceSQL, result.ResourceAmountGained, playerID); err != nil {
 			return nil, fmt.Errorf("update gathering resource: %w", err)
+		}
+	}
+
+	if result.TicksProcessed > 0 {
+		if _, err := tx.Exec(ctx, `
+		update player_activity_skills
+		set level = $1,
+			total_xp = $2,
+			xp_into_level = $3,
+			updated_at = now()
+		where player_id = $4
+			and activity_key = $5
+	`, activityLevel, activityTotalXP, activityXPIntoLevel, playerID, activeGatheringTask); err != nil {
+			return nil, fmt.Errorf("update activity skill after ticks: %w", err)
 		}
 	}
 
@@ -618,9 +723,126 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 	result.CurrentLevel = level
 	result.XPIntoLevel = xpIntoLevel
 	result.XPToNext = XPToNextLevel(level)
+	result.ActivityCurrentLevel = activityLevel
+	result.ActivityXPIntoLevel = activityXPIntoLevel
+	result.ActivityXPToNext = ActivityXPToNextLevel(activityLevel)
 	result.Message = fmt.Sprintf("Processed %d tick(s).", result.TicksProcessed)
 
 	return result, nil
+}
+
+func (s *Store) GetPlayerActivitySkills(ctx context.Context, playerID int64) (ActivitySkills, error) {
+	skills := DefaultActivitySkills()
+
+	rows, err := s.Pool.Query(ctx, `
+		select activity_key,
+			level,
+			total_xp,
+			xp_into_level
+		from player_activity_skills
+		where player_id = $1
+	`, playerID)
+	if err != nil {
+		return skills, fmt.Errorf("query player activity skills: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var skill ActivitySkill
+
+		if err := rows.Scan(
+			&skill.Key,
+			&skill.Level,
+			&skill.TotalXP,
+			&skill.XPIntoLevel,
+		); err != nil {
+			return skills, fmt.Errorf("scan player activity skill: %w", err)
+		}
+
+		skill.Name = GatheringTaskName(skill.Key)
+		skill.XPToNext = ActivityXPToNextLevel(skill.Level)
+		skills.Set(skill)
+	}
+
+	if err := rows.Err(); err != nil {
+		return skills, fmt.Errorf("iterate player activity skills: %w", err)
+	}
+
+	return skills, nil
+}
+
+func DefaultActivitySkills() ActivitySkills {
+	return ActivitySkills{
+		Streaming:     NewActivitySkill("streaming"),
+		DoomScrolling: NewActivitySkill("doom_scrolling"),
+		Cleaning:      NewActivitySkill("cleaning"),
+		Exercising:    NewActivitySkill("exercising"),
+		Shopping:      NewActivitySkill("shopping"),
+		Designing:     NewActivitySkill("designing"),
+	}
+}
+
+func NewActivitySkill(key string) ActivitySkill {
+	return ActivitySkill{
+		Key:         key,
+		Name:        GatheringTaskName(key),
+		Level:       1,
+		TotalXP:     0,
+		XPIntoLevel: 0,
+		XPToNext:    ActivityXPToNextLevel(1),
+	}
+}
+
+func (skills *ActivitySkills) Set(skill ActivitySkill) {
+	if skill.Level < 1 {
+		skill.Level = 1
+	}
+
+	skill.Name = GatheringTaskName(skill.Key)
+	skill.XPToNext = ActivityXPToNextLevel(skill.Level)
+
+	switch skill.Key {
+	case "streaming":
+		skills.Streaming = skill
+	case "doom_scrolling":
+		skills.DoomScrolling = skill
+	case "cleaning":
+		skills.Cleaning = skill
+	case "exercising":
+		skills.Exercising = skill
+	case "shopping":
+		skills.Shopping = skill
+	case "designing":
+		skills.Designing = skill
+	}
+}
+
+func (skills ActivitySkills) ByKey(key string) ActivitySkill {
+	switch key {
+	case "streaming":
+		return skills.Streaming
+	case "doom_scrolling":
+		return skills.DoomScrolling
+	case "cleaning":
+		return skills.Cleaning
+	case "exercising":
+		return skills.Exercising
+	case "shopping":
+		return skills.Shopping
+	case "designing":
+		return skills.Designing
+	default:
+		return NewActivitySkill("streaming")
+	}
+}
+
+func ActivityXPToNextLevel(level int) int64 {
+	if level < 1 {
+		level = 1
+	}
+
+	ticksToNext := math.Round(60 + 12*math.Sqrt(float64(level)))
+	return int64(ticksToNext) * ActivityXPPerTick
 }
 
 func XPToNextLevel(level int) int64 {
@@ -687,6 +909,17 @@ func SecondsUntil(next time.Time) int {
 	return seconds
 }
 
+func GatheringTaskKeys() []string {
+	return []string{
+		"streaming",
+		"doom_scrolling",
+		"cleaning",
+		"exercising",
+		"shopping",
+		"designing",
+	}
+}
+
 func ValidGatheringTask(task string) bool {
 	switch task {
 	case "streaming", "doom_scrolling", "cleaning", "exercising", "shopping", "designing":
@@ -701,7 +934,7 @@ func GatheringTaskName(task string) string {
 	case "streaming":
 		return "Streaming"
 	case "doom_scrolling":
-		return "Doom Scrolling"
+		return "Scrolling"
 	case "cleaning":
 		return "Cleaning"
 	case "exercising":
