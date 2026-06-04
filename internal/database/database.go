@@ -637,10 +637,12 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 		resourceWhole := int64(math.Floor(resourceRaw + 0.000000001))
 		gatheringRemainder = resourceRaw - float64(resourceWhole)
 		result.ResourceAmountGained += resourceWhole
+	}
 
-		result.ActivityXPGained += ActivityXPPerTick
-		activityTotalXP += ActivityXPPerTick
-		activityXPIntoLevel += ActivityXPPerTick
+	if result.TicksProcessed > 0 {
+		result.ActivityXPGained = result.TicksProcessed * ActivityXPPerTick
+		activityTotalXP += result.ActivityXPGained
+		activityXPIntoLevel += result.ActivityXPGained
 
 		for activityXPIntoLevel >= ActivityXPToNextLevel(activityLevel) {
 			activityXPIntoLevel -= ActivityXPToNextLevel(activityLevel)
@@ -650,7 +652,7 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 	}
 
 	if _, err := tx.Exec(ctx, `
-		update players
+	update players
 		set level = $1,
 			total_xp = $2,
 			xp_into_level = $3,
