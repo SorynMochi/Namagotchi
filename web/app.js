@@ -1530,7 +1530,7 @@ function setEmojiCategory(categoryKey) {
   localStorage.setItem(EMOJI_CATEGORY_KEY, categoryKey);
   renderEmojiPicker();
   emojiPickerNeedsRender = false;
-  requestAnimationFrame(positionEmojiPicker);
+  requestAnimationFrame(positionEmojiPickerFast);
 }
 
 function getSavedEmojiCategory() {
@@ -1560,7 +1560,7 @@ function initializeEmojiPickerPortal() {
 
 function positionVisibleEmojiPicker() {
   if (!emojiPicker.classList.contains("hidden")) {
-    positionEmojiPicker();
+    positionEmojiPickerFast();
   }
 }
 
@@ -1599,39 +1599,9 @@ function toggleEmojiPicker(event) {
       emojiPickerNeedsRender = false;
     }
 
-    positionEmojiPicker();
+    positionEmojiPickerFast();
     emojiPicker.classList.remove("hidden");
     emojiButton.setAttribute("aria-expanded", "true");
-    return;
-  }
-
-  closeEmojiPicker();
-}
-
-function closeEmojiPicker() {
-  emojiPicker.classList.add("hidden");
-  emojiButton.setAttribute("aria-expanded", "false");
-}
-
-function addEmojiToChat(emoji) {
-  const currentValue = chatInput.value;
-  chatInput.value = Array.from(`${currentValue}${emoji}`).slice(0, 255).join("");
-  chatInput.focus();
-
-emojiUsage[emoji] = (emojiUsage[emoji] ?? 0) + 1;
-saveEmojiUsage();
-closeEmojiPicker();
-scheduleEmojiPickerPreload();
-}
-
-function toggleEmojiPicker() {
-  const shouldOpen = emojiPicker.classList.contains("hidden");
-
-  if (shouldOpen) {
-    renderEmojiPicker();
-    emojiPicker.classList.remove("hidden");
-    emojiButton.setAttribute("aria-expanded", "true");
-    positionEmojiPicker();
     return;
   }
 
@@ -1669,8 +1639,31 @@ function addEmojiToChat(emoji) {
 
   emojiUsage[emoji] = (emojiUsage[emoji] ?? 0) + 1;
   saveEmojiUsage();
-  emojiPickerNeedsRender = true;
   closeEmojiPicker();
+  scheduleEmojiPickerPreload();
+}
+
+function positionEmojiPickerFast() {
+  const buttonRect = emojiButton.getBoundingClientRect();
+  const gap = 8;
+  const pagePadding = 8;
+
+  const pickerWidth = 324;
+  const pickerHeight = 260;
+
+  let left = buttonRect.left;
+  let top = buttonRect.top - pickerHeight - gap;
+
+  left = Math.max(pagePadding, Math.min(left, window.innerWidth - pickerWidth - pagePadding));
+
+  if (top < pagePadding) {
+    top = buttonRect.bottom + gap;
+  }
+
+  top = Math.max(pagePadding, Math.min(top, window.innerHeight - pickerHeight - pagePadding));
+
+  emojiPicker.style.left = `${left}px`;
+  emojiPicker.style.top = `${top}px`;
 }
 
 function initializeChatVisibility() {
