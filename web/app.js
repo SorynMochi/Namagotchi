@@ -568,11 +568,11 @@ async function performCareAction(action) {
 
     const result = await response.json();
 
-    addChatMessage("System", careActionMessage(result), "system");
-addNamiMessage(namiCareMessage(result), {
-  kind: Number(result.levelUps ?? 0) > 0 ? "level-up" : "normal",
-});
-await loadPlayerStatus();
+        addChatMessage("System", careActionMessage(result), "system");
+    addNamiMessage(result.message || namiCareMessage(result), {
+      kind: Number(result.levelUps ?? 0) > 0 ? "level-up" : "normal",
+    });
+    await loadPlayerStatus();
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Care action failed. Nami-chan hid the button under a blanket.", "system");
@@ -743,13 +743,6 @@ function createForceTickButton() {
 }
 
 function initializeNamiMessages() {
-  if (!namiMessages.length) {
-    addNamiMessage("I’m here, Soryn. Feed me attention and maybe snacks.", {
-      save: true,
-      render: false,
-    });
-  }
-
   renderNamiMessages();
 }
 

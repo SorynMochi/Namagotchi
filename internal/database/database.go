@@ -1197,6 +1197,8 @@ func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareAct
 		return nil, fmt.Errorf("load companion for care action: %w", err)
 	}
 
+	beforeCompanion := companion
+
 	xpGained := int64(0)
 
 	if rule.SleepAction {
@@ -1237,6 +1239,11 @@ func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareAct
 	}
 
 	companion.MoodScore = NamiMoodScore(companion)
+	companion.XPToNext = NamiXPToNextLevel(companion.Level)
+	companion.MoodLabel = NamiMoodLabel(companion.MoodScore)
+	companion.PrimaryNeed = NamiPrimaryNeed(companion)
+	companion.Caption = NamiCaption(companion)
+	companion.SuggestedAction = NamiSuggestedAction(companion)
 	companion.LastXPGained = xpGained
 	companion.LastAction = rule.Name
 
@@ -1291,6 +1298,87 @@ func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareAct
 		return nil, fmt.Errorf("insert care action log: %w", err)
 	}
 
+	recentRows, err := tx.Query(ctx, `
+		select
+			id,
+			player_id,
+			trigger_key,
+			mood_key,
+			need_key,
+			severity,
+			message,
+			metadata_json::text,
+			created_at,
+			coalesce(seen_at, '0001-01-01 00:00:00+00'::timestamptz)
+		from nami_messages
+		where player_id = $1
+		order by created_at desc, id desc
+		limit 80
+	`, playerID)
+
+	if err != nil {
+		return nil, fmt.Errorf("load recent nami messages for care action: %w", err)
+	}
+
+	var recentMessages []NamiMessage
+	for recentRows.Next() {
+		var recentMessage NamiMessage
+
+		if err := recentRows.Scan(
+			&recentMessage.ID,
+			&recentMessage.PlayerID,
+			&recentMessage.TriggerKey,
+			&recentMessage.MoodKey,
+			&recentMessage.NeedKey,
+			&recentMessage.Severity,
+			&recentMessage.Message,
+			&recentMessage.MetadataJSON,
+			&recentMessage.CreatedAt,
+			&recentMessage.SeenAt,
+		); err != nil {
+			recentRows.Close()
+			return nil, fmt.Errorf("scan recent nami message for care action: %w", err)
+		}
+
+		recentMessages = append(recentMessages, recentMessage)
+	}
+
+	if err := recentRows.Err(); err != nil {
+		recentRows.Close()
+		return nil, fmt.Errorf("iterate recent nami messages for care action: %w", err)
+	}
+
+	recentRows.Close()
+
+	namiMessageDraft := GenerateNamiCareMessageDraft(rule, beforeCompanion, companion, levelUps, recentMessages)
+	var namiMessageText string
+
+	err = tx.QueryRow(ctx, `
+		insert into nami_messages (
+			player_id,
+			trigger_key,
+			mood_key,
+			need_key,
+			severity,
+			message,
+			metadata_json
+		)
+		values ($1, $2, $3, $4, $5, $6, $7::jsonb)
+		returning message
+	`,
+		playerID,
+		namiMessageDraft.TriggerKey,
+		namiMessageDraft.MoodKey,
+		namiMessageDraft.NeedKey,
+		namiMessageDraft.Severity,
+		namiMessageDraft.Message,
+		namiMessageDraft.MetadataJSON,
+	).Scan(&namiMessageText)
+
+	if err != nil {
+		return nil, fmt.Errorf("insert procedural nami care message: %w", err)
+	}
+
 	if err := tx.Commit(ctx); err != nil {
 		return nil, fmt.Errorf("commit care action: %w", err)
 	}
@@ -1311,7 +1399,7 @@ func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareAct
 		XPIntoLevel:  companion.XPIntoLevel,
 		XPToNext:     companion.XPToNext,
 		Companion:    companion,
-		Message:      fmt.Sprintf("%s complete. Nami-chan gained %d XP.", rule.Name, xpGained),
+		Message:      namiMessageText,
 	}, nil
 }
 
