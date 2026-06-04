@@ -2487,3 +2487,23 @@ body > .emoji-picker-floating .emoji-option:hover {
     grid-template-columns: repeat(2, minmax(210px, 1fr));
   }
 }
+
+/* Performance: keep emoji picker pre-rendered instead of display:none */
+
+body > .emoji-picker-floating {
+  will-change: opacity, visibility;
+}
+
+body > .emoji-picker-floating.hidden {
+  display: block !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body > .emoji-picker-floating:not(.hidden) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}

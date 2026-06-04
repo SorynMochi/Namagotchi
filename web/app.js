@@ -351,6 +351,7 @@ let tickStartMs = 0;
 let tickEndMs = 0;
 let playerStatusRefreshTimer = null;
 let emojiPickerNeedsRender = true;
+let emojiPickerPreloadTimer = null;
 
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -1542,7 +1543,12 @@ function initializeEmojiPickerPortal() {
     document.body.appendChild(emojiPicker);
   }
 
-  emojiPicker.classList.add("emoji-picker-floating");
+  emojiPicker.classList.add("emoji-picker-floating", "hidden");
+  emojiPicker.style.left = "-9999px";
+  emojiPicker.style.top = "-9999px";
+
+  renderEmojiPicker();
+  emojiPickerNeedsRender = false;
 
   emojiPicker.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -1593,10 +1599,9 @@ function toggleEmojiPicker(event) {
       emojiPickerNeedsRender = false;
     }
 
+    positionEmojiPicker();
     emojiPicker.classList.remove("hidden");
     emojiButton.setAttribute("aria-expanded", "true");
-
-    requestAnimationFrame(positionEmojiPicker);
     return;
   }
 
@@ -1615,8 +1620,8 @@ function addEmojiToChat(emoji) {
 
 emojiUsage[emoji] = (emojiUsage[emoji] ?? 0) + 1;
 saveEmojiUsage();
-emojiPickerNeedsRender = true;
 closeEmojiPicker();
+scheduleEmojiPickerPreload();
 }
 
 function toggleEmojiPicker() {
@@ -1636,6 +1641,25 @@ function toggleEmojiPicker() {
 function closeEmojiPicker() {
   emojiPicker.classList.add("hidden");
   emojiButton.setAttribute("aria-expanded", "false");
+}
+
+function scheduleEmojiPickerPreload() {
+  emojiPickerNeedsRender = true;
+
+  if (emojiPickerPreloadTimer) {
+    clearTimeout(emojiPickerPreloadTimer);
+  }
+
+  emojiPickerPreloadTimer = setTimeout(() => {
+    if (!emojiPicker.classList.contains("hidden")) {
+      return;
+    }
+
+    renderEmojiPicker();
+    emojiPickerNeedsRender = false;
+    emojiPicker.style.left = "-9999px";
+    emojiPicker.style.top = "-9999px";
+  }, 40);
 }
 
 function addEmojiToChat(emoji) {
