@@ -159,14 +159,41 @@
                 <p class="muted">Create the dev player to load care stats.</p>
               </div>
 
-              <div class="care-actions">
-                <button class="care-button">Feed</button>
-                <button class="care-button">Drink</button>
-                <button class="care-button">Cuddle</button>
-                <button class="care-button">Play</button>
-                <button class="care-button">Bathe</button>
-                <button class="care-button">Sleep</button>
-              </div>
+             <div class="nami-progression-card">
+  <div>
+    <span>Nami Level</span>
+    <strong id="nami-level">1</strong>
+  </div>
+  <div>
+    <span>Care XP</span>
+    <strong id="nami-xp-label">0 / 120</strong>
+  </div>
+  <div class="bar">
+    <div class="fill xp-fill" id="nami-xp-fill" style="width: 0%"></div>
+  </div>
+</div>
+
+<div class="nami-need-card">
+  <p><span>Mood:</span><strong id="nami-mood-label">Okay</strong></p>
+  <p><span>Need:</span><strong id="nami-primary-need">Waiting</strong></p>
+  <p><span>Suggested:</span><strong id="nami-suggested-action">Any care action</strong></p>
+</div>
+
+<div class="care-actions compact-care-actions">
+  <button class="care-button" data-care-action="meal">Meal</button>
+  <button class="care-button" data-care-action="snack">Snack</button>
+  <button class="care-button" data-care-action="drink">Drink</button>
+  <button class="care-button" data-care-action="cuddle">Cuddle</button>
+  <button class="care-button" data-care-action="play">Play</button>
+  <button class="care-button" data-care-action="write_together">Write</button>
+  <button class="care-button" data-care-action="read_together">Read</button>
+  <button class="care-button" data-care-action="boop">Boop</button>
+  <button class="care-button" data-care-action="nap">Nap</button>
+  <button class="care-button" data-care-action="bath">Bath</button>
+  <button class="care-button" data-care-action="freshen_up">Freshen</button>
+  <button class="care-button" data-care-action="put_to_bed">Bed</button>
+  <button class="care-button" data-care-action="wake_up">Wake</button>
+</div>
             </div>
           </div>
         </section>

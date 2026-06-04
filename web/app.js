@@ -3,6 +3,13 @@ const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
 const namiMessage = document.querySelector("#nami-message");
+const namiLevel = document.querySelector("#nami-level");
+const namiXpLabel = document.querySelector("#nami-xp-label");
+const namiXpFill = document.querySelector("#nami-xp-fill");
+const namiMoodLabel = document.querySelector("#nami-mood-label");
+const namiPrimaryNeed = document.querySelector("#nami-primary-need");
+const namiSuggestedAction = document.querySelector("#nami-suggested-action");
+const careButtons = document.querySelectorAll("[data-care-action]");
 const serverTime = document.querySelector("#server-time");
 const onlineUsers = document.querySelector("#online-users");
 
@@ -404,6 +411,12 @@ document.querySelectorAll(".task-card button").forEach((button) => {
   });
 });
 
+careButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    performCareAction(button.dataset.careAction);
+  });
+});
+
 chatTabs.forEach((button) => {
   button.addEventListener("click", () => {
     switchChatChannel(button.dataset.chatChannel);
@@ -527,9 +540,41 @@ async function setGatheringTask(task) {
   }
 }
 
+async function performCareAction(action) {
+  try {
+    const response = await fetch("/api/player/care", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ action }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Care action failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    addChatMessage("System", careActionMessage(result), "system");
+    await loadPlayerStatus();
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Care action failed. Nami-chan hid the button under a blanket.", "system");
+  }
+}
+
 function renderPlayerStatus(status) {
   const player = status.player;
   const companion = status.companion;
+  const namiXpPercent = percent(companion.xpIntoLevel, companion.xpToNext);
+
+namiLevel.textContent = Number(companion.level ?? 1).toLocaleString();
+namiXpLabel.textContent = `${Number(companion.xpIntoLevel ?? 0).toLocaleString()} / ${Number(companion.xpToNext ?? 120).toLocaleString()}`;
+namiXpFill.style.width = `${namiXpPercent}%`;
+namiMoodLabel.textContent = companion.moodLabel || "Okay";
+namiPrimaryNeed.textContent = companion.primaryNeed || "Waiting";
+namiSuggestedAction.textContent = companion.suggestedAction || "Any care action";
   const tick = status.tick;
   const bonus = getMoodBonus(companion.moodScore);
 
@@ -589,8 +634,7 @@ currentActionLabel.textContent = `Playdeck + ${progressActionName} [x${tick.play
 
   updateGatheringCards(status);
 
-  namiMessage.textContent = "Nami-chan’s tick engine is running. She is now professionally obligated to be productive every five seconds.";
-}
+namiMessage.textContent = companion.caption || "Nami-chan is waiting sweetly.";}
 
 function activityLevel(activity) {
   return Number(activity?.level ?? 1).toLocaleString();
@@ -1789,6 +1833,18 @@ function tickResultMessage(result) {
     : "";
 
   return `Processed ${Number(result.ticksProcessed).toLocaleString()} tick(s): +${syncXPGained.toLocaleString()} Sync XP, +${formatCredits(creditsGained)} Credits, +${nibblesGained.toLocaleString()} Nibbles, +${resourceAmountGained.toLocaleString()} ${resourceName}, +${activityXPGained.toLocaleString()} ${activityName} XP${levelText}${activityLevelText}.`;
+}
+
+function careActionMessage(result) {
+  if (!result || !result.ok) {
+    return "No care result received.";
+  }
+
+  const levelText = Number(result.levelUps ?? 0) > 0
+    ? ` Level up! Nami-chan reached level ${Number(result.currentLevel).toLocaleString()}.`
+    : "";
+
+  return `${result.actionName}: +${Number(result.xpGained ?? 0).toLocaleString()} Nami XP.${levelText}`;
 }
 
 function getMoodBonus(mood) {

@@ -35,6 +35,10 @@ type GatheringRequest struct {
 	Task string `json:"task"`
 }
 
+type CareActionRequest struct {
+	Action string `json:"action"`
+}
+
 func New(store *database.Store, startedAt time.Time) *Server {
 	return &Server{
 		Store:     store,
@@ -52,6 +56,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
 	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
 	mux.HandleFunc("/api/player/gathering", s.HandleGatheringTask)
+	mux.HandleFunc("/api/player/care", s.HandleCareAction)
 
 	mux.Handle("/", http.FileServer(http.Dir("web")))
 
@@ -179,6 +184,29 @@ func (s *Server) HandleGatheringTask(w http.ResponseWriter, r *http.Request) {
 		OK:      true,
 		Message: "Gathering task updated.",
 	})
+}
+
+func (s *Server) HandleCareAction(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	var request CareActionRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid care action request")
+		return
+	}
+
+	request.Action = strings.TrimSpace(strings.ToLower(request.Action))
+	result, err := s.Store.ApplyDevCareAction(r.Context(), request.Action)
+	if err != nil {
+		log.Printf("care action failed: %v", err)
+		writeError(w, http.StatusBadRequest, "invalid care action")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, result)
 }
 
 func (s *Server) databaseStatus() string {

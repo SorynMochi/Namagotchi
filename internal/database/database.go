@@ -1129,6 +1129,136 @@ func (skills ActivitySkills) ByKey(key string) ActivitySkill {
 	}
 }
 
+func NamiXPToNextLevel(level int) int64 {
+	if level < 1 {
+		level = 1
+	}
+
+	nextLevel := level + 1
+	raw := 100 + nextLevel*(10+level)
+
+	return int64(math.Floor(float64(raw)/10) * 10)
+}
+
+func NamiMoodScore(companion CompanionState) float64 {
+	score :=
+		float64(companion.Comfort)*0.25 +
+			float64(companion.Connection)*0.20 +
+			float64(companion.Energy)*0.15 +
+			float64(companion.Satiety)*0.15 +
+			float64(companion.Cleanliness)*0.10 +
+			float64(companion.Playfulness)*0.10 +
+			float64(companion.Inspiration)*0.05
+
+	if score < 0 {
+		return 0
+	}
+
+	if score > 100 {
+		return 100
+	}
+
+	return score
+}
+
+func NamiMoodLabel(score float64) string {
+	switch {
+	case score >= 90:
+		return "Radiant"
+	case score >= 75:
+		return "Cozy"
+	case score >= 60:
+		return "Okay"
+	case score >= 40:
+		return "Pouty"
+	case score >= 20:
+		return "Wilted"
+	default:
+		return "Emergency Blanket Burrito"
+	}
+}
+
+func NamiPrimaryNeed(companion CompanionState) string {
+	if companion.Status == "sleeping" {
+		return "Sleeping"
+	}
+
+	switch {
+	case companion.Cleanliness < 30:
+		return "Needs a Bath"
+	case companion.Satiety < 30:
+		return "Needs Food"
+	case companion.Energy < 25:
+		return "Needs Sleep"
+	case companion.Connection < 30:
+		return "Needs Attention"
+	case companion.Comfort < 30:
+		return "Needs Comfort"
+	case companion.Playfulness < 30:
+		return "Bored"
+	case companion.Inspiration < 30:
+		return "Needs Inspiration"
+	default:
+		return NamiMoodLabel(companion.MoodScore)
+	}
+}
+
+func NamiCaption(companion CompanionState) string {
+	switch companion.PrimaryNeed {
+	case "Sleeping":
+		return "Nami-chan is asleep and recovering energy."
+	case "Needs a Bath":
+		return "Nami-chan is dirty and needs a bath."
+	case "Needs Food":
+		return "Nami-chan needs food, a snack, or a drink."
+	case "Needs Sleep":
+		return "Nami-chan is sleepy and needs rest."
+	case "Needs Attention":
+		return "Nami-chan misses you and needs attention."
+	case "Needs Comfort":
+		return "Nami-chan needs cozy care."
+	case "Bored":
+		return "Nami-chan is bored and needs engagement."
+	case "Needs Inspiration":
+		return "Nami-chan needs creativity, reading, or writing time."
+	case "Radiant":
+		return "Nami-chan is radiant, spoiled, and very pleased."
+	case "Cozy":
+		return "Nami-chan is happy, cozy, and content."
+	case "Okay":
+		return "Nami-chan is okay and waiting sweetly."
+	case "Pouty":
+		return "Nami-chan is pouty and a bit low."
+	case "Wilted":
+		return "Nami-chan is wilted and needs care."
+	default:
+		return "Nami-chan has retreated into emergency blanket mode."
+	}
+}
+
+func NamiSuggestedAction(companion CompanionState) string {
+	switch companion.PrimaryNeed {
+	case "Sleeping":
+		return "Let her sleep or wake her up."
+	case "Needs a Bath":
+		return "Bath or freshen up."
+	case "Needs Food":
+		return "Meal, snack, or drink."
+	case "Needs Sleep":
+		return "Nap or put her to bed."
+	case "Needs Attention":
+		return "Cuddle, read together, or boop."
+	case "Needs Comfort":
+		return "Cuddle, read together, or freshen up."
+	case "Bored":
+		return "Play or boop."
+	case "Needs Inspiration":
+		return "Write together or read together."
+	default:
+		return "Any care action would make her happy."
+	}
+}
+
 func ActivityXPToNextLevel(level int) int64 {
 	if level < 1 {
 		level = 1
