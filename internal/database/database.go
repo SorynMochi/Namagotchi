@@ -406,10 +406,13 @@ func (s *Store) SetDevGatheringTask(ctx context.Context, task string) error {
 		return fmt.Errorf("invalid gathering task: %s", task)
 	}
 
+	if _, err := s.SettleDevTicks(ctx, 0); err != nil {
+		return fmt.Errorf("settle ticks before gathering switch: %w", err)
+	}
+
 	commandTag, err := s.Pool.Exec(ctx, `
 		update player_tick_state
 		set active_gathering_task = $1,
-			gathering_remainder = 0,
 			updated_at = now()
 		where player_id = (
 			select id

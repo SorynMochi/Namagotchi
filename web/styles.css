@@ -2372,3 +2372,11 @@ body > .emoji-picker-floating .emoji-option:hover {
   text-align: center !important;
   width: 100%;
 }
+
+/* Server-synced tick bar */
+
+.tick-fill {
+  animation: none !important;
+  width: 0%;
+  transition: width 90ms linear;
+}

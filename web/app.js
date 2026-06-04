@@ -35,6 +35,7 @@ const actShopping = document.querySelector("#act-shopping");
 const actDesigning = document.querySelector("#act-designing");
 
 const currentActionLabel = document.querySelector("#current-action-label");
+const tickFill = document.querySelector("#tick-fill");
 const playdeckHpLabel = document.querySelector("#playdeck-hp-label");
 const playdeckHpFill = document.querySelector("#playdeck-hp-fill");
 const playdeckXpLabel = document.querySelector("#playdeck-xp-label");
@@ -319,6 +320,9 @@ let isChatHidden = false;
 let previousChatHeight = 190;
 let serverClockOffsetMs = 0;
 let hasServerClock = false;
+let tickStartMs = 0;
+let tickEndMs = 0;
+let playerStatusRefreshTimer = null;
 
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -531,6 +535,8 @@ actDesigning.textContent = "1";
   playdeckHpFill.style.width = "100%";
 
   currentActionLabel.textContent = `Playdeck + ${tick.activeGatheringName} [x${tick.playdeckStreak.toLocaleString()}]`;
+  syncTickProgress(tick);
+  scheduleNextPlayerStatusRefresh(tick);
 
   careStats.innerHTML = `
     ${renderStat("Satiety", companion.satiety)}
@@ -1596,6 +1602,48 @@ function formatWholeCredits(cents) {
   return Math.round(Number(cents) / 100).toLocaleString();
 }
 
+function syncTickProgress(tick) {
+  tickStartMs = Date.parse(tick.lastTickAt);
+  tickEndMs = Date.parse(tick.nextTickAt);
+
+  if (Number.isNaN(tickStartMs) || Number.isNaN(tickEndMs) || tickEndMs <= tickStartMs) {
+    const now = Date.now() + serverClockOffsetMs;
+    tickStartMs = now;
+    tickEndMs = now + 5000;
+  }
+
+  updateTickProgressBar();
+}
+
+function updateTickProgressBar() {
+  if (!tickFill || !tickStartMs || !tickEndMs) {
+    return;
+  }
+
+  const now = Date.now() + serverClockOffsetMs;
+  const duration = Math.max(1, tickEndMs - tickStartMs);
+  const progress = Math.max(0, Math.min(1, (now - tickStartMs) / duration));
+
+  tickFill.style.width = `${progress * 100}%`;
+}
+
+function scheduleNextPlayerStatusRefresh(tick) {
+  if (playerStatusRefreshTimer) {
+    clearTimeout(playerStatusRefreshTimer);
+  }
+
+  const nextTickMs = Date.parse(tick.nextTickAt);
+  if (Number.isNaN(nextTickMs)) {
+    playerStatusRefreshTimer = setTimeout(loadPlayerStatus, 5000);
+    return;
+  }
+
+  const now = Date.now() + serverClockOffsetMs;
+  const delay = Math.max(150, nextTickMs - now + 150);
+
+  playerStatusRefreshTimer = setTimeout(loadPlayerStatus, Math.min(delay, 6000));
+}
+
 function syncServerClock(timestamp) {
   const serverDate = new Date(timestamp);
 
@@ -1730,5 +1778,5 @@ loadStatus();
 loadPlayerStatus();
 
 setInterval(updateLiveServerClock, 1000);
+setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
-setInterval(loadPlayerStatus, 5000);
