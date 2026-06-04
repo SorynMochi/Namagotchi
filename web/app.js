@@ -350,6 +350,7 @@ let hasServerClock = false;
 let tickStartMs = 0;
 let tickEndMs = 0;
 let playerStatusRefreshTimer = null;
+let emojiPickerNeedsRender = true;
 
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -1527,7 +1528,8 @@ function setEmojiCategory(categoryKey) {
   activeEmojiCategory = categoryKey;
   localStorage.setItem(EMOJI_CATEGORY_KEY, categoryKey);
   renderEmojiPicker();
-  positionEmojiPicker();
+  emojiPickerNeedsRender = false;
+  requestAnimationFrame(positionEmojiPicker);
 }
 
 function getSavedEmojiCategory() {
@@ -1586,10 +1588,15 @@ function toggleEmojiPicker(event) {
   const shouldOpen = emojiPicker.classList.contains("hidden");
 
   if (shouldOpen) {
-    renderEmojiPicker();
+    if (emojiPickerNeedsRender || emojiPicker.childElementCount === 0) {
+      renderEmojiPicker();
+      emojiPickerNeedsRender = false;
+    }
+
     emojiPicker.classList.remove("hidden");
     emojiButton.setAttribute("aria-expanded", "true");
-    positionEmojiPicker();
+
+    requestAnimationFrame(positionEmojiPicker);
     return;
   }
 
@@ -1606,10 +1613,10 @@ function addEmojiToChat(emoji) {
   chatInput.value = Array.from(`${currentValue}${emoji}`).slice(0, 255).join("");
   chatInput.focus();
 
-  emojiUsage[emoji] = (emojiUsage[emoji] ?? 0) + 1;
-  saveEmojiUsage();
-  renderEmojiPicker();
-  closeEmojiPicker();
+emojiUsage[emoji] = (emojiUsage[emoji] ?? 0) + 1;
+saveEmojiUsage();
+emojiPickerNeedsRender = true;
+closeEmojiPicker();
 }
 
 function toggleEmojiPicker() {
@@ -1638,7 +1645,7 @@ function addEmojiToChat(emoji) {
 
   emojiUsage[emoji] = (emojiUsage[emoji] ?? 0) + 1;
   saveEmojiUsage();
-  renderEmojiPicker();
+  emojiPickerNeedsRender = true;
   closeEmojiPicker();
 }
 
