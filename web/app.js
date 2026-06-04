@@ -222,7 +222,7 @@ const EMOJI_OPTION_SET = new Set(EMOJI_OPTIONS);
 const EMOJI_INDEX = new Map(EMOJI_OPTIONS.map((emoji, index) => [emoji, index]));
 
 const EMOJI_CATEGORIES = {
-  all: {
+  recent: {
     label: "Recent",
     emojis: null,
   },
