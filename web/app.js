@@ -317,6 +317,8 @@ let activeChatProfileModal = null;
 let isResizingChat = false;
 let isChatHidden = false;
 let previousChatHeight = 190;
+let serverClockOffsetMs = 0;
+let hasServerClock = false;
 
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -408,8 +410,8 @@ async function loadStatus() {
 
     const status = await response.json();
 
-    serverTime.textContent = formatDateTime(status.timestamp);
-    onlineUsers.textContent = status.onlineUsers ?? 1;
+    syncServerClock(status.timestamp);
+onlineUsers.textContent = status.onlineUsers ?? 1;
   } catch (error) {
     console.error(error);
     serverTime.textContent = "Offline";
@@ -1594,6 +1596,26 @@ function formatWholeCredits(cents) {
   return Math.round(Number(cents) / 100).toLocaleString();
 }
 
+function syncServerClock(timestamp) {
+  const serverDate = new Date(timestamp);
+
+  if (Number.isNaN(serverDate.getTime())) {
+    return;
+  }
+
+  serverClockOffsetMs = serverDate.getTime() - Date.now();
+  hasServerClock = true;
+  updateLiveServerClock();
+}
+
+function updateLiveServerClock() {
+  if (!hasServerClock) {
+    return;
+  }
+
+  serverTime.textContent = formatDateTime(Date.now() + serverClockOffsetMs);
+}
+
 function formatDateTime(value) {
   const date = new Date(value);
 
@@ -1707,5 +1729,6 @@ function escapeHTML(value) {
 loadStatus();
 loadPlayerStatus();
 
+setInterval(updateLiveServerClock, 1000);
 setInterval(loadStatus, 10000);
 setInterval(loadPlayerStatus, 5000);

@@ -2030,3 +2030,345 @@ body > .emoji-picker-floating .emoji-option:hover {
   color: var(--cyan);
   font-weight: 950;
 }
+
+/* Compact left rail pass */
+
+.game-shell {
+  grid-template-columns: 190px minmax(760px, 1fr) 190px;
+  gap: 8px;
+  padding: 8px;
+}
+
+.left-rail {
+  gap: 7px;
+}
+
+.left-rail .panel {
+  border-radius: 13px;
+  box-shadow:
+    0 12px 34px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.left-rail .panel::before {
+  opacity: 0.28;
+}
+
+.left-rail .panel-title {
+  min-height: 28px;
+  padding: 6px 10px;
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+  line-height: 1.1;
+}
+
+/* User Info compact */
+.user-card {
+  padding-bottom: 8px !important;
+}
+
+.user-card .player-name {
+  width: calc(100% - 22px);
+  margin: 9px auto 8px;
+  padding: 7px 8px;
+  border-radius: 9px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-soft);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent),
+    rgba(7, 13, 24, 0.62);
+  box-shadow: none;
+}
+
+.user-meter {
+  width: calc(100% - 22px);
+  margin: 6px auto 0;
+}
+
+.meter-track {
+  height: 19px;
+  border-radius: 5px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    inset 0 0 10px rgba(0, 0, 0, 0.22);
+}
+
+.tick-meter .meter-track {
+  height: 19px;
+}
+
+.meter-label {
+  padding: 0 5px;
+  font-size: 0.61rem;
+  line-height: 1.05;
+  font-weight: 850;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.75),
+    0 0 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Left menu compact */
+.nav-panel {
+  max-height: none;
+}
+
+.main-nav {
+  gap: 0;
+  padding: 7px 8px 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  min-height: 23px;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  line-height: 1.05;
+  font-weight: 760;
+  color: rgba(189, 208, 220, 0.78);
+}
+
+.nav-item::before {
+  content: ">";
+  margin-right: 4px;
+  color: rgba(189, 208, 220, 0.66);
+  font-weight: 900;
+}
+
+.nav-item:hover {
+  transform: none;
+}
+
+.nav-item.active {
+  border-color: rgba(73, 199, 255, 0.22);
+  background: rgba(73, 199, 255, 0.12);
+  color: var(--cyan);
+  box-shadow: inset 3px 0 0 var(--pink);
+}
+
+.nav-item.active::before {
+  color: var(--cyan);
+}
+
+.nav-item.premium {
+  color: var(--yellow);
+}
+
+.nav-item.premium::before {
+  content: "★";
+  color: var(--yellow);
+}
+
+/* Orders compact */
+.orders-panel {
+  padding-bottom: 8px !important;
+}
+
+.orders-panel .primary-button.full-width {
+  width: calc(100% - 16px);
+  height: 28px;
+  margin: 8px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 0.66rem;
+  letter-spacing: 0.02em;
+  box-shadow: none;
+}
+
+.order-tracker {
+  margin: 6px 8px 0;
+}
+
+.tracker-label {
+  font-size: 0.63rem;
+  line-height: 1.1;
+}
+
+.order-tracker .bar {
+  height: 18px;
+  margin-top: 4px;
+  border-radius: 5px;
+}
+
+.order-tracker .fill {
+  box-shadow: none;
+}
+
+/* When an order exists later, this makes it feel like the reference contracts block */
+.orders-panel:not(:has(.order-tracker.hidden)) .primary-button.full-width {
+  margin-top: 6px;
+}
+
+/* Keep collapsed panels tiny */
+.left-rail .panel.is-collapsed {
+  padding-bottom: 0 !important;
+}
+
+.left-rail .panel.is-collapsed > .panel-title {
+  border-bottom: 0;
+}
+
+/* Medium desktop fallback */
+@media (max-width: 1380px) {
+  .game-shell {
+    grid-template-columns: 180px minmax(700px, 1fr) 210px;
+    gap: 7px;
+    padding: 7px;
+  }
+
+  .left-rail {
+    gap: 6px;
+  }
+
+  .nav-item {
+    font-size: 0.69rem;
+    min-height: 22px;
+  }
+
+  .meter-label {
+    font-size: 0.58rem;
+  }
+}
+
+/* Compact right rail pass: match left rail density */
+
+.right-rail {
+  gap: 7px;
+}
+
+.right-rail .panel {
+  border-radius: 13px;
+  box-shadow:
+    0 12px 34px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.right-rail .panel::before {
+  opacity: 0.28;
+}
+
+.right-rail .collapse-toggle {
+  min-height: 28px;
+  padding: 6px 10px;
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+  line-height: 1.1;
+  color: var(--cyan);
+  background: rgba(73, 199, 255, 0.055);
+}
+
+.right-rail .collapse-body {
+  gap: 5px;
+  padding: 7px 9px 9px;
+}
+
+.right-rail .info-panel p {
+  margin: 2px 0;
+  gap: 6px;
+  font-size: 0.68rem;
+  line-height: 1.15;
+}
+
+.right-rail .info-panel p span {
+  color: rgba(189, 208, 220, 0.72);
+}
+
+.right-rail .info-panel p strong {
+  color: var(--text);
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-align: right;
+}
+
+.right-rail .server-clock {
+  margin: 0 0 5px !important;
+}
+
+.right-rail .server-clock strong {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: var(--text-soft);
+  text-align: left;
+}
+
+.right-rail .side-link {
+  display: block;
+  width: 100%;
+  padding: 2px 0;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  line-height: 1.15;
+  color: rgba(189, 208, 220, 0.72);
+}
+
+.right-rail .side-link::before {
+  content: ">";
+  margin-right: 4px;
+  color: rgba(189, 208, 220, 0.58);
+  font-weight: 900;
+}
+
+.right-rail .side-link:hover {
+  color: var(--cyan);
+  background: rgba(73, 199, 255, 0.07);
+}
+
+.right-rail .side-link:hover::before {
+  color: var(--cyan);
+}
+
+.right-rail .buff-card {
+  gap: 1px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(143, 205, 255, 0.1);
+}
+
+.right-rail .buff-card strong {
+  font-size: 0.7rem;
+  line-height: 1.1;
+  color: var(--pink-soft);
+}
+
+.right-rail .buff-card span {
+  font-size: 0.66rem;
+  line-height: 1.15;
+  color: rgba(189, 208, 220, 0.72);
+}
+
+.right-rail .buff-card small {
+  font-size: 0.62rem;
+  line-height: 1.15;
+  color: rgba(146, 163, 175, 0.78);
+}
+
+.right-rail .collapse-body.collapsed {
+  display: none;
+}
+
+@media (max-width: 1380px) {
+  .right-rail {
+    gap: 6px;
+  }
+
+  .right-rail .collapse-toggle {
+    font-size: 0.63rem;
+  }
+
+  .right-rail .side-link,
+  .right-rail .info-panel p,
+  .right-rail .buff-card span {
+    font-size: 0.64rem;
+  }
+}
+
+.right-rail .server-clock {
+  text-align: center !important;
+}
+
+.right-rail .server-clock strong {
+  text-align: center !important;
+  width: 100%;
+}
