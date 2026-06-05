@@ -3384,3 +3384,7 @@ body > .emoji-picker-floating .emoji-option {
 .compact-stat-list .stat-bar {
   height: 7px;
 }
+
+.hidden {
+  display: none !important;
+}
