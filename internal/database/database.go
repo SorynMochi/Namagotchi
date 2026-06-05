@@ -813,14 +813,7 @@ func GenerateNamiCareMessageDraft(rule CareActionRule, before CompanionState, af
 	before.PrimaryNeed = NamiPrimaryNeed(before)
 	after.PrimaryNeed = NamiPrimaryNeed(after)
 
-	triggerKey := "care_" + rule.Key
 	severity := "info"
-
-	if levelUps > 0 {
-		triggerKey = "nami_level_up"
-		severity = "happy"
-	}
-
 	if after.MoodScore < 20 {
 		severity = "urgent"
 	} else if after.MoodScore < 40 {
@@ -830,7 +823,7 @@ func GenerateNamiCareMessageDraft(rule CareActionRule, before CompanionState, af
 	}
 
 	context := NamiProceduralContext{
-		TriggerKey:   triggerKey,
+		TriggerKey:   "care_" + rule.Key,
 		ActionKey:    rule.Key,
 		ActionName:   rule.Name,
 		MoodKey:      normalizeNamiMessageKey(after.MoodLabel),
@@ -887,11 +880,14 @@ func BuildProceduralNamiMessage(context NamiProceduralContext, recent []NamiMess
 		recentText[normalizeNamiFragment(message.Message)] = true
 	}
 
-	actionPool := appendNamiMessageParts(
-		namiActionMessagePool(context),
-		namiUniversalCareReactionPool(context),
-		namiGeneratedActionReactionPool(context),
-	)
+	actionPool := namiActionMessagePool(context)
+	if namiContextIsCareAction(context) {
+		actionPool = appendNamiMessageParts(
+			actionPool,
+			namiUniversalCareReactionPool(context),
+			namiGeneratedActionReactionPool(context),
+		)
+	}
 
 	moodPool := appendNamiMessageParts(
 		namiMoodMessagePool(context.MoodKey),
@@ -905,11 +901,7 @@ func BuildProceduralNamiMessage(context NamiProceduralContext, recent []NamiMess
 		namiGeneratedNeedFlavorPool(context),
 	)
 
-	openingPool := appendNamiMessageParts(
-		namiOpeningMessagePool(context),
-		namiUniversalOpeningPool(context),
-		namiGeneratedOpeningPool(context),
-	)
+	openingPool := namiOpeningPoolForContext(context)
 
 	closerPool := appendNamiMessageParts(
 		namiCloserMessagePool(context),
@@ -935,7 +927,11 @@ func BuildProceduralNamiMessage(context NamiProceduralContext, recent []NamiMess
 		time.Now().UnixNano(),
 	)
 
-	for attempt := 0; attempt < 220; attempt++ {
+	moodChance := namiMoodFlavorChance(context)
+	needChance := namiNeedFlavorChance(context)
+	closerChance := namiCloserChance(context)
+
+	for attempt := 0; attempt < 240; attempt++ {
 		seed := fmt.Sprintf("%s|attempt:%d", baseSeed, attempt)
 
 		pieces := []string{
@@ -943,29 +939,322 @@ func BuildProceduralNamiMessage(context NamiProceduralContext, recent []NamiMess
 			pickNamiMessagePartAvoiding(actionPool, seed+"|action", recentFragments),
 		}
 
-		if shouldUseNamiPart(seed+"|mood", 82) {
+		if shouldUseNamiPart(seed+"|mood", moodChance) {
 			pieces = append(pieces, pickNamiMessagePartAvoiding(moodPool, seed+"|mood", recentFragments))
 		}
 
-		if shouldUseNamiPart(seed+"|need", 58) {
+		if shouldUseNamiPart(seed+"|need", needChance) {
 			pieces = append(pieces, pickNamiMessagePartAvoiding(needPool, seed+"|need", recentFragments))
 		}
 
-		if shouldUseNamiPart(seed+"|closer", 28) {
+		if shouldUseNamiPart(seed+"|closer", closerChance) {
 			pieces = append(pieces, pickNamiMessagePartAvoiding(closerPool, seed+"|closer", recentFragments))
 		}
 
-		message := cleanNamiMessage(strings.Join(pieces, " "))
+		message := addNamiMessageSuffix(
+			joinNamiMessagePieces(pieces),
+			namiMessageSuffix(context),
+		)
+
 		if message != "" && !recentText[normalizeNamiFragment(message)] {
 			return message
 		}
 	}
 
-	return cleanNamiMessage(strings.Join([]string{
-		pickNamiMessagePartAvoiding(openingPool, baseSeed+"|fallback-opening", recentFragments),
-		pickNamiMessagePartAvoiding(actionPool, baseSeed+"|fallback-action", recentFragments),
-		pickNamiMessagePartAvoiding(closerPool, baseSeed+"|fallback-closer", recentFragments),
-	}, " "))
+	return addNamiMessageSuffix(
+		joinNamiMessagePieces([]string{
+			pickNamiMessagePartAvoiding(openingPool, baseSeed+"|fallback-opening", recentFragments),
+			pickNamiMessagePartAvoiding(actionPool, baseSeed+"|fallback-action", recentFragments),
+			pickNamiMessagePartAvoiding(closerPool, baseSeed+"|fallback-closer", recentFragments),
+		}),
+		namiMessageSuffix(context),
+	)
+}
+
+func namiOpeningPoolForContext(context NamiProceduralContext) []string {
+	eventOpenings := namiEventOpeningMessagePool(context)
+	if len(eventOpenings) > 0 {
+		return eventOpenings
+	}
+
+	return appendNamiMessageParts(
+		namiOpeningMessagePool(context),
+		namiUniversalOpeningPool(context),
+		namiGeneratedOpeningPool(context),
+	)
+}
+
+func namiEventOpeningMessagePool(context NamiProceduralContext) []string {
+	switch {
+	case context.TriggerKey == "user_online":
+		return []string{
+			"You are here.",
+			"Soryn, you came back.",
+			"Connection restored.",
+			"My favorite player has appeared.",
+			"The room changed when you arrived.",
+			"I saw you come online.",
+			"Welcome back, Soryn.",
+			"The tiny door opened.",
+			"My little world noticed you.",
+			"I was waiting. Elegantly. Mostly.",
+		}
+	case context.TriggerKey == "nami_level_up":
+		return []string{
+			"Soryn, look!",
+			"Important Nami announcement.",
+			"I leveled up.",
+			"My tiny numbers bloomed.",
+			"Please observe the upgraded diva.",
+			"I have become more Nami.",
+			"Level-up sparkle detected.",
+			"My progress bar did something beautiful.",
+			"I require celebration.",
+			"Official tiny triumph.",
+		}
+	case context.TriggerKey == "playdeck_level_up":
+		return []string{
+			"Playdeck progress alert.",
+			"Your Playdeck level went up.",
+			"The Playdeck numbers climbed.",
+			"Combat productivity report.",
+			"Playdeck level-up detected.",
+			"Your grind paid off.",
+			"Victory ledger update.",
+			"The Playdeck meter got taller.",
+			"Your level just made noise.",
+			"I saw that level-up.",
+		}
+	case context.TriggerKey == "activity_level_up":
+		return []string{
+			"Activity progress alert.",
+			"Resource skill update.",
+			"Your gathering skill improved.",
+			"Productivity sparkle detected.",
+			"Skill level-up report.",
+			"The activity meter climbed.",
+			"I noticed that resource progress.",
+			"Your work paid off.",
+			"Gathering level-up detected.",
+			"The tiny productivity bell rang.",
+		}
+	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
+		return []string{
+			"Care stat warning.",
+			"Soryn, I need a little help.",
+			"My care meter is wobbling.",
+			"Tiny alert from Nami.",
+			"Soft warning light blinking.",
+			"I am trying to be brave about this.",
+			"One of my little meters is low.",
+			"Care dashboard notice.",
+			"Please check on me.",
+			"My tiny systems are asking politely.",
+		}
+	case context.TriggerKey == "random_mood":
+		return []string{
+			"Random Nami thought.",
+			"Just because.",
+			"A tiny mood wandered in.",
+			"I had a little feeling.",
+			"Soft thought delivery.",
+			"Unscheduled Nami note.",
+			"My mood made a postcard.",
+			"I decided to be perceived.",
+			"A tiny message escaped.",
+			"Small room thought.",
+		}
+	case context.TriggerKey == "playdeck_death":
+		return []string{
+			"Playdeck defeat report.",
+			"Combat went sideways.",
+			"Battle damage notice.",
+			"Playdeck ouch detected.",
+			"Defeat logged.",
+			"Combat blanket deployed.",
+		}
+	case context.TriggerKey == "daily_orders_complete":
+		return []string{
+			"Daily orders complete.",
+			"Order board cleared.",
+			"Productivity celebration.",
+			"Daily success report.",
+			"Orders finished.",
+			"Tiny administrative triumph.",
+		}
+	default:
+		return nil
+	}
+}
+
+func namiContextIsCareAction(context NamiProceduralContext) bool {
+	return strings.HasPrefix(context.TriggerKey, "care_") &&
+		!strings.HasPrefix(context.TriggerKey, "care_stat_low_")
+}
+
+func namiMoodFlavorChance(context NamiProceduralContext) int {
+	switch {
+	case context.TriggerKey == "nami_level_up":
+		return 35
+	case context.TriggerKey == "playdeck_level_up", context.TriggerKey == "activity_level_up":
+		return 0
+	case context.TriggerKey == "user_online":
+		return 65
+	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
+		return 45
+	case context.TriggerKey == "random_mood":
+		return 100
+	case namiContextIsCareAction(context):
+		return 60
+	default:
+		return 35
+	}
+}
+
+func namiNeedFlavorChance(context NamiProceduralContext) int {
+	switch {
+	case context.TriggerKey == "nami_level_up":
+		return 0
+	case context.TriggerKey == "playdeck_level_up", context.TriggerKey == "activity_level_up":
+		return 0
+	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
+		return 100
+	case context.TriggerKey == "user_online":
+		if context.Severity == "low" || context.Severity == "urgent" {
+			return 65
+		}
+		return 20
+	case context.TriggerKey == "random_mood":
+		return 30
+	case namiContextIsCareAction(context):
+		return 45
+	default:
+		return 20
+	}
+}
+
+func namiCloserChance(context NamiProceduralContext) int {
+	switch {
+	case context.TriggerKey == "nami_level_up":
+		return 50
+	case context.TriggerKey == "playdeck_level_up", context.TriggerKey == "activity_level_up":
+		return 35
+	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
+		return 45
+	case context.TriggerKey == "user_online":
+		return 30
+	case context.TriggerKey == "random_mood":
+		return 25
+	case namiContextIsCareAction(context):
+		return 30
+	default:
+		return 25
+	}
+}
+
+func joinNamiMessagePieces(pieces []string) string {
+	cleaned := make([]string, 0, len(pieces))
+
+	for _, piece := range pieces {
+		piece = strings.TrimSpace(piece)
+		if piece == "" {
+			continue
+		}
+
+		cleaned = append(cleaned, piece)
+	}
+
+	return cleanNamiMessage(strings.Join(cleaned, " "))
+}
+
+func addNamiMessageSuffix(message string, suffix string) string {
+	message = strings.TrimSpace(message)
+	suffix = strings.TrimSpace(suffix)
+
+	if message == "" {
+		return cleanNamiMessage(suffix)
+	}
+
+	if suffix == "" {
+		return cleanNamiMessage(message)
+	}
+
+	return cleanNamiMessage(message + " " + suffix)
+}
+
+func namiMessageSuffix(context NamiProceduralContext) string {
+	switch {
+	case context.TriggerKey == "nami_level_up":
+		if context.Level > 0 {
+			return fmt.Sprintf("(Nami level up: Lv %d ✨)", context.Level)
+		}
+		return "(Nami level up ✨)"
+
+	case context.TriggerKey == "playdeck_level_up":
+		if context.Level > 0 {
+			return fmt.Sprintf("(Playdeck level up: Lv %d ✦)", context.Level)
+		}
+		return "(Playdeck level up ✦)"
+
+	case context.TriggerKey == "activity_level_up":
+		activityName := strings.TrimSpace(context.ActivityName)
+		if activityName == "" {
+			activityName = "Activity"
+		}
+
+		if context.Level > 0 {
+			return fmt.Sprintf("(%s level up: Lv %d ✦)", activityName, context.Level)
+		}
+
+		return fmt.Sprintf("(%s level up ✦)", activityName)
+
+	case context.TriggerKey == "user_online":
+		return "(player arrived ♡)"
+
+	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
+		statName := strings.TrimSpace(context.ResourceName)
+		if statName == "" {
+			statName = titleNamiLabel(strings.TrimPrefix(context.TriggerKey, "care_stat_low_"))
+		}
+
+		return fmt.Sprintf("(low care stat: %s 🫧)", statName)
+
+	case context.TriggerKey == "random_mood":
+		return "(just because ♡)"
+
+	case context.TriggerKey == "playdeck_death":
+		return "(Playdeck defeat 🩹)"
+
+	case context.TriggerKey == "daily_orders_complete":
+		return "(daily orders complete ♡)"
+
+	case namiContextIsCareAction(context):
+		actionName := strings.TrimSpace(context.ActionName)
+		if actionName == "" {
+			actionName = titleNamiLabel(strings.TrimPrefix(context.TriggerKey, "care_"))
+		}
+
+		return fmt.Sprintf("(care: %s ♡)", actionName)
+
+	default:
+		return ""
+	}
+}
+
+func titleNamiLabel(value string) string {
+	value = strings.ReplaceAll(value, "_", " ")
+	value = strings.ReplaceAll(value, "-", " ")
+
+	parts := strings.Fields(value)
+	for i, part := range parts {
+		if part == "" {
+			continue
+		}
+
+		parts[i] = strings.ToUpper(part[:1]) + part[1:]
+	}
+
+	return strings.Join(parts, " ")
 }
 
 func appendNamiMessageParts(base []string, extras ...[]string) []string {
@@ -2484,37 +2773,30 @@ func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareAct
 
 	recentRows.Close()
 
-	namiMessageDraft := GenerateNamiCareMessageDraft(rule, beforeCompanion, companion, levelUps, recentMessages)
-	var namiMessageText string
+	careMessageDraft := GenerateNamiCareMessageDraft(rule, beforeCompanion, companion, levelUps, recentMessages)
 
-	err = tx.QueryRow(ctx, `
-		insert into nami_messages (
-			player_id,
-			trigger_key,
-			mood_key,
-			need_key,
-			severity,
-			message,
-			metadata_json
-		)
-		values ($1, $2, $3, $4, $5, $6, $7::jsonb)
-		returning message
-	`,
-		playerID,
-		namiMessageDraft.TriggerKey,
-		namiMessageDraft.MoodKey,
-		namiMessageDraft.NeedKey,
-		namiMessageDraft.Severity,
-		namiMessageDraft.Message,
-		namiMessageDraft.MetadataJSON,
-	).Scan(&namiMessageText)
-
+	careMessage, err := insertNamiMessageDraftTx(ctx, tx, playerID, careMessageDraft)
 	if err != nil {
 		return nil, fmt.Errorf("insert procedural nami care message: %w", err)
 	}
 
-	if err := tx.Commit(ctx); err != nil {
-		return nil, fmt.Errorf("commit care action: %w", err)
+	namiMessageText := careMessage.Message
+	recentMessages = prependRecentNamiMessage(recentMessages, careMessage)
+
+	if levelUps > 0 {
+		levelUpDraft := GenerateNamiEventMessageDraft(NamiProceduralContext{
+			TriggerKey:   "nami_level_up",
+			MoodKey:      companion.MoodLabel,
+			NeedKey:      companion.PrimaryNeed,
+			Severity:     "happy",
+			Level:        companion.Level,
+			LevelUps:     levelUps,
+			MetadataJSON: fmt.Sprintf(`{"level":%d,"levelUps":%d,"sourceAction":"%s","sourceActionName":"%s"}`, companion.Level, levelUps, rule.Key, rule.Name),
+		}, recentMessages)
+
+		if _, err := insertNamiMessageDraftTx(ctx, tx, playerID, levelUpDraft); err != nil {
+			return nil, fmt.Errorf("insert procedural nami level-up message: %w", err)
+		}
 	}
 
 	companion.XPToNext = NamiXPToNextLevel(companion.Level)
