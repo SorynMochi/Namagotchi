@@ -2799,6 +2799,10 @@ func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareAct
 		}
 	}
 
+	if err := tx.Commit(ctx); err != nil {
+		return nil, fmt.Errorf("commit care action: %w", err)
+	}
+
 	companion.XPToNext = NamiXPToNextLevel(companion.Level)
 	companion.MoodLabel = NamiMoodLabel(companion.MoodScore)
 	companion.PrimaryNeed = NamiPrimaryNeed(companion)
