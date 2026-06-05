@@ -350,7 +350,7 @@ let latestPlayerStatus = null;
 let forceTickButton = null;
 let currentChatChannel = "lobby";
 let chatMessages = createEmptyChatStore();
-let namiMessages = loadNamiMessages();
+let namiMessages = [];
 let unreadChannels = new Set();
 let emojiUsage = loadEmojiUsage();
 let activeEmojiCategory = "recent";
@@ -489,6 +489,7 @@ async function loadPlayerStatus() {
     const status = await response.json();
     latestPlayerStatus = status;
     renderPlayerStatus(status);
+    await loadNamiMessagesFromServer();
   } catch (error) {
     console.error(error);
     careStats.innerHTML = `<p class="muted">Could not load player status.</p>`;
@@ -515,6 +516,7 @@ async function forceTick() {
     const result = await response.json();
     addChatMessage("System", tickResultMessage(result), "system");
     await loadPlayerStatus();
+    await loadNamiMessagesFromServer();
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Force tick failed. The tick goblin dropped its tiny clipboard.", "system");
@@ -568,11 +570,9 @@ async function performCareAction(action) {
 
     const result = await response.json();
 
-        addChatMessage("System", careActionMessage(result), "system");
-    addNamiMessage(result.message || namiCareMessage(result), {
-      kind: Number(result.levelUps ?? 0) > 0 ? "level-up" : "normal",
-    });
+    addChatMessage("System", careActionMessage(result), "system");
     await loadPlayerStatus();
+    await loadNamiMessagesFromServer();
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Care action failed. Nami-chan hid the button under a blanket.", "system");
@@ -743,7 +743,51 @@ function createForceTickButton() {
 }
 
 function initializeNamiMessages() {
-  renderNamiMessages();
+  loadNamiMessagesFromServer();
+}
+
+async function loadNamiMessagesFromServer() {
+  if (!namiMessageLog) {
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/nami/messages");
+
+    if (!response.ok) {
+      throw new Error(`Load Nami messages failed: ${response.status}`);
+    }
+
+    const messages = await response.json();
+
+    namiMessages = Array.isArray(messages)
+      ? messages.slice(-MAX_NAMI_MESSAGES).map((message) => {
+          return {
+            text: normalizeChatText(message.message ?? "", 500),
+            timestamp: formatNamiMessageTimestamp(message.createdAt),
+            kind: message.severity === "happy" ? "level-up" : "normal",
+          };
+        })
+      : [];
+
+    renderNamiMessages();
+  } catch (error) {
+    console.error(error);
+    renderNamiMessages();
+  }
+}
+
+function formatNamiMessageTimestamp(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return getChatTimestamp();
+  }
+
+  return date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function addNamiMessage(text, options = {}) {

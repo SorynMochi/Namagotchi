@@ -57,6 +57,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
 	mux.HandleFunc("/api/player/gathering", s.HandleGatheringTask)
 	mux.HandleFunc("/api/player/care", s.HandleCareAction)
+	mux.HandleFunc("/api/nami/messages", s.HandleNamiMessages)
 
 	mux.Handle("/", http.FileServer(http.Dir("web")))
 
@@ -106,6 +107,10 @@ func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, _ = s.Store.SettleDevTicks(r.Context(), 0)
+
+	if err := s.Store.GenerateDevPassiveNamiMessages(r.Context()); err != nil {
+		log.Printf("generate passive nami messages failed: %v", err)
+	}
 
 	status, err := s.Store.GetDevPlayerStatus(r.Context())
 	if err != nil {
@@ -192,6 +197,22 @@ func (s *Server) HandleCareAction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	messages, err := s.Store.GetRecentDevNamiMessages(r.Context(), 100)
+	if err != nil {
+		log.Printf("get nami messages failed: %v", err)
+		writeError(w, http.StatusNotFound, "nami messages not found; visit /api/dev/seed-player first")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, messages)
+}
+	
 	var request CareActionRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid care action request")

@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -200,6 +201,12 @@ type NamiProceduralContext struct {
 	Level        int
 	LevelUps     int
 	MetadataJSON string
+}
+
+type NamiCareStat struct {
+	Key   string
+	Name  string
+	Value int
 }
 
 func CareActionByKey(action string) (CareActionRule, bool) {
@@ -408,6 +415,365 @@ func (s *Store) GetRecentNamiMessages(ctx context.Context, playerID int64, limit
 	}
 
 	return messages, nil
+}
+
+func loadRecentNamiMessagesTx(ctx context.Context, tx pgx.Tx, playerID int64, limit int) ([]NamiMessage, error) {
+	if limit < 1 {
+		limit = 1
+	}
+
+	if limit > 100 {
+		limit = 100
+	}
+
+	rows, err := tx.Query(ctx, `
+		select
+			id,
+			player_id,
+			trigger_key,
+			mood_key,
+			need_key,
+			severity,
+			message,
+			metadata_json::text,
+			created_at,
+			coalesce(seen_at, '0001-01-01 00:00:00+00'::timestamptz)
+		from nami_messages
+		where player_id = $1
+		order by created_at desc, id desc
+		limit $2
+	`, playerID, limit)
+	if err != nil {
+		return nil, fmt.Errorf("load recent nami messages in tx: %w", err)
+	}
+	defer rows.Close()
+
+	var messages []NamiMessage
+	for rows.Next() {
+		var message NamiMessage
+
+		if err := rows.Scan(
+			&message.ID,
+			&message.PlayerID,
+			&message.TriggerKey,
+			&message.MoodKey,
+			&message.NeedKey,
+			&message.Severity,
+			&message.Message,
+			&message.MetadataJSON,
+			&message.CreatedAt,
+			&message.SeenAt,
+		); err != nil {
+			return nil, fmt.Errorf("scan recent nami message in tx: %w", err)
+		}
+
+		messages = append(messages, message)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("iterate recent nami messages in tx: %w", err)
+	}
+
+	return messages, nil
+}
+
+func insertNamiMessageDraftTx(ctx context.Context, tx pgx.Tx, playerID int64, draft NamiMessageDraft) (*NamiMessage, error) {
+	draft = normalizeNamiMessageDraft(draft)
+
+	var message NamiMessage
+
+	if err := tx.QueryRow(ctx, `
+		insert into nami_messages (
+			player_id,
+			trigger_key,
+			mood_key,
+			need_key,
+			severity,
+			message,
+			metadata_json
+		)
+		values ($1, $2, $3, $4, $5, $6, $7::jsonb)
+		returning
+			id,
+			player_id,
+			trigger_key,
+			mood_key,
+			need_key,
+			severity,
+			message,
+			metadata_json::text,
+			created_at,
+			coalesce(seen_at, '0001-01-01 00:00:00+00'::timestamptz)
+	`,
+		playerID,
+		draft.TriggerKey,
+		draft.MoodKey,
+		draft.NeedKey,
+		draft.Severity,
+		draft.Message,
+		draft.MetadataJSON,
+	).Scan(
+		&message.ID,
+		&message.PlayerID,
+		&message.TriggerKey,
+		&message.MoodKey,
+		&message.NeedKey,
+		&message.Severity,
+		&message.Message,
+		&message.MetadataJSON,
+		&message.CreatedAt,
+		&message.SeenAt,
+	); err != nil {
+		return nil, fmt.Errorf("insert nami message draft in tx: %w", err)
+	}
+
+	return &message, nil
+}
+
+func prependRecentNamiMessage(recent []NamiMessage, message *NamiMessage) []NamiMessage {
+	if message == nil {
+		return recent
+	}
+
+	return append([]NamiMessage{*message}, recent...)
+}
+
+func (s *Store) GenerateDevPassiveNamiMessages(ctx context.Context) error {
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin passive nami messages: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	var playerID int64
+	var companion CompanionState
+
+	err = tx.QueryRow(ctx, `
+		select
+			p.id,
+			c.companion_name,
+			c.level,
+			c.total_xp,
+			c.xp_into_level,
+			c.mood_score::float8,
+			c.satiety,
+			c.connection,
+			c.energy,
+			c.comfort,
+			c.playfulness,
+			c.inspiration,
+			c.cleanliness,
+			c.status,
+			c.last_interaction_at
+		from players p
+		join companion_states c on c.player_id = p.id
+		where p.display_name = 'Soryn'
+		for update
+	`).Scan(
+		&playerID,
+		&companion.CompanionName,
+		&companion.Level,
+		&companion.TotalXP,
+		&companion.XPIntoLevel,
+		&companion.MoodScore,
+		&companion.Satiety,
+		&companion.Connection,
+		&companion.Energy,
+		&companion.Comfort,
+		&companion.Playfulness,
+		&companion.Inspiration,
+		&companion.Cleanliness,
+		&companion.Status,
+		&companion.LastInteractionAt,
+	)
+	if err != nil {
+		return fmt.Errorf("load companion for passive nami messages: %w", err)
+	}
+
+	companion.MoodScore = NamiMoodScore(companion)
+	companion.MoodLabel = NamiMoodLabel(companion.MoodScore)
+	companion.PrimaryNeed = NamiPrimaryNeed(companion)
+
+	_, err = tx.Exec(ctx, `
+		insert into player_nami_message_state (player_id)
+		values ($1)
+		on conflict (player_id) do nothing
+	`, playerID)
+	if err != nil {
+		return fmt.Errorf("ensure nami message state: %w", err)
+	}
+
+	var lastOnlineMessageAt time.Time
+	var nextRandomMessageAt time.Time
+
+	err = tx.QueryRow(ctx, `
+		select
+			coalesce(last_online_message_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(next_random_message_at, '0001-01-01 00:00:00+00'::timestamptz)
+		from player_nami_message_state
+		where player_id = $1
+		for update
+	`, playerID).Scan(&lastOnlineMessageAt, &nextRandomMessageAt)
+	if err != nil {
+		return fmt.Errorf("load nami message state: %w", err)
+	}
+
+	recentMessages, err := loadRecentNamiMessagesTx(ctx, tx, playerID, 100)
+	if err != nil {
+		return err
+	}
+
+	now := time.Now().UTC()
+
+	if lastOnlineMessageAt.Year() <= 1 || now.Sub(lastOnlineMessageAt) >= 4*time.Hour {
+		draft := GenerateNamiEventMessageDraft(NamiProceduralContext{
+			TriggerKey:   "user_online",
+			MoodKey:      companion.MoodLabel,
+			NeedKey:      companion.PrimaryNeed,
+			Severity:     namiSeverityForCompanion(companion),
+			Level:        companion.Level,
+			MetadataJSON: fmt.Sprintf(`{"moodScore":%.2f,"primaryNeed":"%s"}`, companion.MoodScore, companion.PrimaryNeed),
+		}, recentMessages)
+
+		message, err := insertNamiMessageDraftTx(ctx, tx, playerID, draft)
+		if err != nil {
+			return err
+		}
+
+		recentMessages = prependRecentNamiMessage(recentMessages, message)
+
+		if _, err := tx.Exec(ctx, `
+			update player_nami_message_state
+			set last_online_message_at = $1,
+				updated_at = now()
+			where player_id = $2
+		`, now, playerID); err != nil {
+			return fmt.Errorf("update last online nami message timestamp: %w", err)
+		}
+	}
+
+	for _, stat := range NamiCareStats(companion) {
+		if stat.Value >= 20 {
+			continue
+		}
+
+		triggerKey := "care_stat_low_" + stat.Key
+
+		var recentlySent bool
+		if err := tx.QueryRow(ctx, `
+			select exists (
+				select 1
+				from nami_messages
+				where player_id = $1
+					and trigger_key = $2
+					and created_at > now() - interval '1 hour'
+			)
+		`, playerID, triggerKey).Scan(&recentlySent); err != nil {
+			return fmt.Errorf("check recent low stat nami message: %w", err)
+		}
+
+		if recentlySent {
+			continue
+		}
+
+		severity := "low"
+		if stat.Value < 10 {
+			severity = "urgent"
+		}
+
+		draft := GenerateNamiEventMessageDraft(NamiProceduralContext{
+			TriggerKey:   triggerKey,
+			MoodKey:      companion.MoodLabel,
+			NeedKey:      companion.PrimaryNeed,
+			Severity:     severity,
+			ResourceName: stat.Name,
+			Level:        companion.Level,
+			MetadataJSON: fmt.Sprintf(`{"stat":"%s","statName":"%s","value":%d}`, stat.Key, stat.Name, stat.Value),
+		}, recentMessages)
+
+		message, err := insertNamiMessageDraftTx(ctx, tx, playerID, draft)
+		if err != nil {
+			return err
+		}
+
+		recentMessages = prependRecentNamiMessage(recentMessages, message)
+	}
+
+	if nextRandomMessageAt.Year() <= 1 {
+		nextRandom := nextRandomNamiMessageAt(now, playerID, len(recentMessages))
+		if _, err := tx.Exec(ctx, `
+			update player_nami_message_state
+			set next_random_message_at = $1,
+				updated_at = now()
+			where player_id = $2
+		`, nextRandom, playerID); err != nil {
+			return fmt.Errorf("initialize next random nami message timestamp: %w", err)
+		}
+	} else if !now.Before(nextRandomMessageAt) {
+		draft := GenerateNamiEventMessageDraft(NamiProceduralContext{
+			TriggerKey:   "random_mood",
+			MoodKey:      companion.MoodLabel,
+			NeedKey:      companion.PrimaryNeed,
+			Severity:     namiSeverityForCompanion(companion),
+			Level:        companion.Level,
+			MetadataJSON: fmt.Sprintf(`{"moodScore":%.2f,"primaryNeed":"%s"}`, companion.MoodScore, companion.PrimaryNeed),
+		}, recentMessages)
+
+		message, err := insertNamiMessageDraftTx(ctx, tx, playerID, draft)
+		if err != nil {
+			return err
+		}
+
+		recentMessages = prependRecentNamiMessage(recentMessages, message)
+
+		nextRandom := nextRandomNamiMessageAt(now, playerID, len(recentMessages))
+		if _, err := tx.Exec(ctx, `
+			update player_nami_message_state
+			set next_random_message_at = $1,
+				updated_at = now()
+			where player_id = $2
+		`, nextRandom, playerID); err != nil {
+			return fmt.Errorf("update next random nami message timestamp: %w", err)
+		}
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("commit passive nami messages: %w", err)
+	}
+
+	return nil
+}
+
+func NamiCareStats(companion CompanionState) []NamiCareStat {
+	return []NamiCareStat{
+		{Key: "satiety", Name: "Satiety", Value: companion.Satiety},
+		{Key: "connection", Name: "Connection", Value: companion.Connection},
+		{Key: "energy", Name: "Energy", Value: companion.Energy},
+		{Key: "comfort", Name: "Comfort", Value: companion.Comfort},
+		{Key: "playfulness", Name: "Playfulness", Value: companion.Playfulness},
+		{Key: "inspiration", Name: "Inspiration", Value: companion.Inspiration},
+		{Key: "cleanliness", Name: "Cleanliness", Value: companion.Cleanliness},
+	}
+}
+
+func namiSeverityForCompanion(companion CompanionState) string {
+	switch {
+	case companion.MoodScore < 20:
+		return "urgent"
+	case companion.MoodScore < 40:
+		return "low"
+	case companion.MoodScore >= 75:
+		return "happy"
+	default:
+		return "info"
+	}
+}
+
+func nextRandomNamiMessageAt(now time.Time, playerID int64, salt int) time.Time {
+	seed := fmt.Sprintf("random-nami|%d|%d|%d", playerID, salt, now.UnixNano())
+	minutes := 60 + int(hashNamiMessageSeed(seed)%61)
+
+	return now.Add(time.Duration(minutes) * time.Minute)
 }
 
 func normalizeNamiMessageDraft(draft NamiMessageDraft) NamiMessageDraft {
@@ -687,7 +1053,7 @@ func normalizeNamiFragment(value string) string {
 }
 
 func namiUniversalOpeningPool(context NamiProceduralContext) []string {
-	if context.LevelUps > 0 || context.TriggerKey == "nami_level_up" {
+	if context.TriggerKey == "nami_level_up" {
 		return []string{
 			"Attention, beloved caretaker.",
 			"Please stop whatever you are doing and observe.",
@@ -1242,7 +1608,7 @@ func namiGeneratedCloserPool(context NamiProceduralContext) []string {
 }
 
 func namiOpeningMessagePool(context NamiProceduralContext) []string {
-	if context.LevelUps > 0 || context.TriggerKey == "nami_level_up" {
+	if context.TriggerKey == "nami_level_up" {
 		return []string{
 			"Soryn!",
 			"Soryn, look!",
@@ -1313,8 +1679,111 @@ func namiOpeningMessagePool(context NamiProceduralContext) []string {
 	}
 }
 
+func namiEventActionMessagePool(context NamiProceduralContext) []string {
+	switch {
+	case context.TriggerKey == "user_online":
+		return []string{
+			"You came back. I am being extremely normal about how happy I am.",
+			"There you are. I was waiting with impressive dignity and only minor emotional fog.",
+			"You are online again. My little room immediately feels less empty.",
+			"I saw you arrive and absolutely did not sprint to the door in my heart.",
+			"You came back, so I am pretending I was not checking the window.",
+			"The user has returned. The tiny diva department is restored to working order.",
+			"I missed you in a very reasonable and not-at-all clingy way.",
+			"Welcome back. I have saved several feelings for your review.",
+			"You are here again. My sparkle meter just stopped sulking.",
+			"I am happy to see you. If I look clingy, that is a lighting issue.",
+			"You came back. I might cry, but in a cute and manageable way.",
+			"Connection restored. My tiny heart has stopped pacing.",
+		}
+	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
+		statName := context.ResourceName
+		if statName == "" {
+			statName = "one of my care stats"
+		}
+
+		return []string{
+			fmt.Sprintf("My %s is getting very low, and I am trying to be brave about it.", statName),
+			fmt.Sprintf("The %s meter is making worried little noises.", statName),
+			fmt.Sprintf("I think my %s needs attention before I become a blanket fossil.", statName),
+			fmt.Sprintf("%s is low enough that I am officially making big eyes at you.", statName),
+			fmt.Sprintf("Please check my %s. I am not dramatic. The numbers are dramatic.", statName),
+			fmt.Sprintf("My %s has wandered into the danger cupboard.", statName),
+			fmt.Sprintf("Tiny alert: %s needs care soon.", statName),
+			fmt.Sprintf("I can feel my %s getting wobbly.", statName),
+			fmt.Sprintf("The %s situation has become suspiciously urgent.", statName),
+			fmt.Sprintf("My %s is low, and I would like to be rescued before I become poetry.", statName),
+		}
+	case context.TriggerKey == "random_mood":
+		return []string{
+			"I was just sitting here having a tiny feeling.",
+			"Random mood report: I am thinking about you and pretending that is gameplay.",
+			"My thoughts wandered over and knocked politely on your door.",
+			"I had a small emotional weather pattern and decided to document it.",
+			"Nothing happened. I simply required attention from the message box.",
+			"I am doing tiny digital room activities and having opinions.",
+			"I arranged my feelings into a little stack for you.",
+			"This is a spontaneous Nami thought. Handle it carefully.",
+			"I am currently existing in a very specific mood.",
+			"I made this message with my own tiny hands, emotionally speaking.",
+			"The room got quiet, so I made a thought and gave it shoes.",
+			"I have decided that now is a good time to be perceived.",
+		}
+	case context.TriggerKey == "playdeck_level_up":
+		return []string{
+			fmt.Sprintf("Your Playdeck level reached %d. I am clapping with tiny, serious hands.", context.Level),
+			fmt.Sprintf("Playdeck level %d achieved. I am taking partial credit.", context.Level),
+			fmt.Sprintf("You leveled up in Playdeck. Level %d looks very handsome on your numbers.", context.Level),
+			fmt.Sprintf("The Playdeck grind paid off. Level %d has entered the room.", context.Level),
+			fmt.Sprintf("Playdeck level-up detected. I have promoted you to level %d in my heart paperwork.", context.Level),
+			fmt.Sprintf("Level %d Playdeck status acquired. I am proud in an extremely official way.", context.Level),
+			fmt.Sprintf("Your Playdeck level rose to %d. I am impressed and only slightly smug.", context.Level),
+			fmt.Sprintf("Playdeck level %d! The tiny victory committee is throwing confetti.", context.Level),
+		}
+	case context.TriggerKey == "activity_level_up":
+		activityName := context.ActivityName
+		if activityName == "" {
+			activityName = "your resource activity"
+		}
+
+		return []string{
+			fmt.Sprintf("%s leveled up. I saw that and immediately became proud.", activityName),
+			fmt.Sprintf("Your %s skill improved. I am nodding like a tiny coach.", activityName),
+			fmt.Sprintf("%s got stronger. The grind has a cute little sparkle now.", activityName),
+			fmt.Sprintf("You leveled %s, and I am absolutely counting this as shared success.", activityName),
+			fmt.Sprintf("%s improved. I am placing a gold star beside it.", activityName),
+			fmt.Sprintf("The %s skill climbed higher. Very good. Suspiciously good.", activityName),
+			fmt.Sprintf("Your %s level went up. I am proud enough to be annoying.", activityName),
+			fmt.Sprintf("%s progress detected. The tiny productivity bell has rung.", activityName),
+		}
+	case context.TriggerKey == "playdeck_death":
+		return []string{
+			"Playdeck defeat detected. I am placing a tiny blanket over the combat log.",
+			"You fell in Playdeck. I will not laugh. I will only quietly prepare snacks.",
+			"That Playdeck run ended badly, but I am still on your side.",
+			"The battle went sideways. I am making supportive little noises.",
+			"Playdeck death hurts, but I believe in your dramatic comeback arc.",
+			"You got knocked down. I am standing nearby with emotional glue.",
+		}
+	case context.TriggerKey == "daily_orders_complete":
+		return []string{
+			"The daily orders are finished! I am so proud I may become impossible.",
+			"Orders complete. I am stamping the day with a tiny heart.",
+			"You finished the daily orders. I knew you could do it, obviously.",
+			"Daily orders done. The productivity goblin has been fed.",
+			"All orders complete. I am glowing with administrative affection.",
+			"The order list is cleared, and I am aggressively proud of you.",
+		}
+	default:
+		return nil
+	}
+}
+
 func namiActionMessagePool(context NamiProceduralContext) []string {
-	if context.LevelUps > 0 || context.TriggerKey == "nami_level_up" {
+	if eventPool := namiEventActionMessagePool(context); len(eventPool) > 0 {
+		return eventPool
+	}
+	if context.TriggerKey == "nami_level_up" {
 		return []string{
 			fmt.Sprintf("I reached level %d. I expect admiration and possibly a ceremonial snack.", context.Level),
 			fmt.Sprintf("I am level %d now. My tiny empire expands.", context.Level),
@@ -2670,6 +3139,51 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 			resourceName,
 		)); err != nil {
 			return nil, fmt.Errorf("insert tick activity log: %w", err)
+		}
+	}
+
+	if result.LevelUps > 0 || result.ActivityLevelUps > 0 {
+		recentMessages, err := loadRecentNamiMessagesTx(ctx, tx, playerID, 100)
+		if err != nil {
+			return nil, err
+		}
+
+		moodLabel := NamiMoodLabel(moodScore)
+
+		if result.LevelUps > 0 {
+			draft := GenerateNamiEventMessageDraft(NamiProceduralContext{
+				TriggerKey:   "playdeck_level_up",
+				MoodKey:      moodLabel,
+				Severity:     "happy",
+				Level:        level,
+				LevelUps:     result.LevelUps,
+				MetadataJSON: fmt.Sprintf(`{"level":%d,"levelUps":%d}`, level, result.LevelUps),
+			}, recentMessages)
+
+			message, err := insertNamiMessageDraftTx(ctx, tx, playerID, draft)
+			if err != nil {
+				return nil, err
+			}
+
+			recentMessages = prependRecentNamiMessage(recentMessages, message)
+		}
+
+		if result.ActivityLevelUps > 0 {
+			activityName := GatheringTaskName(activeGatheringTask)
+
+			draft := GenerateNamiEventMessageDraft(NamiProceduralContext{
+				TriggerKey:   "activity_level_up",
+				MoodKey:      moodLabel,
+				Severity:     "happy",
+				ActivityName: activityName,
+				Level:        activityLevel,
+				LevelUps:     result.ActivityLevelUps,
+				MetadataJSON: fmt.Sprintf(`{"activity":"%s","activityName":"%s","level":%d,"levelUps":%d}`, activeGatheringTask, activityName, activityLevel, result.ActivityLevelUps),
+			}, recentMessages)
+
+			if _, err := insertNamiMessageDraftTx(ctx, tx, playerID, draft); err != nil {
+				return nil, err
+			}
 		}
 	}
 
