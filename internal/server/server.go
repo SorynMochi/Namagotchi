@@ -197,22 +197,6 @@ func (s *Server) HandleCareAction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
-		return
-	}
-
-	messages, err := s.Store.GetRecentDevNamiMessages(r.Context(), 100)
-	if err != nil {
-		log.Printf("get nami messages failed: %v", err)
-		writeError(w, http.StatusNotFound, "nami messages not found; visit /api/dev/seed-player first")
-		return
-	}
-
-	writeJSON(w, http.StatusOK, messages)
-}
-	
 	var request CareActionRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid care action request")
@@ -228,6 +212,22 @@ func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, result)
+}
+
+func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	messages, err := s.Store.GetRecentDevNamiMessages(r.Context(), 100)
+	if err != nil {
+		log.Printf("get nami messages failed: %v", err)
+		writeError(w, http.StatusNotFound, "nami messages not found; visit /api/dev/seed-player first")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, messages)
 }
 
 func (s *Server) databaseStatus() string {
