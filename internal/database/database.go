@@ -32,6 +32,7 @@ type PlayerStatus struct {
 	Resources  PlayerResources `json:"resources"`
 	Activities ActivitySkills  `json:"activities"`
 	Tick       TickState       `json:"tick"`
+	Care       CareQueueState  `json:"care"`
 }
 
 type Player struct {
@@ -140,6 +141,28 @@ type TickResult struct {
 	Message              string `json:"message"`
 }
 
+type CareQueueState struct {
+	Active CareActionState   `json:"active"`
+	Queued []CareActionState `json:"queued"`
+	Slots  int               `json:"slots"`
+}
+
+type CareActionState struct {
+	ID               int64     `json:"id"`
+	Action           string    `json:"action"`
+	ActionName       string    `json:"actionName"`
+	Status           string    `json:"status"`
+	QueuePosition    int       `json:"queuePosition"`
+	DurationSeconds  int       `json:"durationSeconds"`
+	StartedAt        time.Time `json:"startedAt"`
+	CompletesAt      time.Time `json:"completesAt"`
+	CompletedAt      time.Time `json:"completedAt"`
+	CreatedAt        time.Time `json:"createdAt"`
+	UpdatedAt        time.Time `json:"updatedAt"`
+	SecondsRemaining int       `json:"secondsRemaining"`
+	ProgressPercent  float64   `json:"progressPercent"`
+}
+
 type CareActionResult struct {
 	OK           bool           `json:"ok"`
 	Action       string         `json:"action"`
@@ -240,6 +263,43 @@ func CareActionByKey(action string) (CareActionRule, bool) {
 	default:
 		return CareActionRule{}, false
 	}
+}
+
+func CareActionDurationSeconds(action string) int {
+	switch strings.TrimSpace(strings.ToLower(action)) {
+	case "boop":
+		return 30
+	case "drink":
+		return 2 * 60
+	case "snack":
+		return 5 * 60
+	case "freshen_up":
+		return 10 * 60
+	case "cuddle":
+		return 15 * 60
+	case "meal":
+		return 30 * 60
+	case "play":
+		return 25 * 60
+	case "write_together":
+		return 30 * 60
+	case "read_together":
+		return 30 * 60
+	case "bath":
+		return 30 * 60
+	case "nap":
+		return 60 * 60
+	case "put_to_bed":
+		return 60 * 60
+	case "wake_up":
+		return 5 * 60
+	default:
+		return 0
+	}
+}
+
+func CareQueueSlots() int {
+	return 3
 }
 
 func clampCareStat(value int) int {
@@ -536,6 +596,119 @@ func prependRecentNamiMessage(recent []NamiMessage, message *NamiMessage) []Nami
 	}
 
 	return append([]NamiMessage{*message}, recent...)
+}
+
+func (s *Store) GetDevCareQueueState(ctx context.Context) (CareQueueState, error) {
+	playerID, err := s.DevPlayerID(ctx)
+	if err != nil {
+		return CareQueueState{Slots: CareQueueSlots()}, err
+	}
+
+	return s.GetCareQueueState(ctx, playerID)
+}
+
+func (s *Store) GetCareQueueState(ctx context.Context, playerID int64) (CareQueueState, error) {
+	rows, err := s.Pool.Query(ctx, `
+		select
+			id,
+			action_key,
+			action_name,
+			status,
+			coalesce(queue_position, 0),
+			duration_seconds,
+			coalesce(started_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completes_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completed_at, '0001-01-01 00:00:00+00'::timestamptz),
+			created_at,
+			updated_at
+		from companion_care_actions
+		where player_id = $1
+			and status in ('active', 'queued')
+		order by
+			case when status = 'active' then 0 else 1 end,
+			queue_position nulls last,
+			created_at,
+			id
+	`, playerID)
+	if err != nil {
+		return CareQueueState{Slots: CareQueueSlots()}, fmt.Errorf("get care queue state: %w", err)
+	}
+	defer rows.Close()
+
+	state := CareQueueState{
+		Slots: CareQueueSlots(),
+	}
+
+	for rows.Next() {
+		var action CareActionState
+
+		if err := rows.Scan(
+			&action.ID,
+			&action.Action,
+			&action.ActionName,
+			&action.Status,
+			&action.QueuePosition,
+			&action.DurationSeconds,
+			&action.StartedAt,
+			&action.CompletesAt,
+			&action.CompletedAt,
+			&action.CreatedAt,
+			&action.UpdatedAt,
+		); err != nil {
+			return CareQueueState{Slots: CareQueueSlots()}, fmt.Errorf("scan care queue state: %w", err)
+		}
+
+		action = hydrateCareActionDisplay(action)
+
+		if action.Status == "active" {
+			state.Active = action
+		} else {
+			state.Queued = append(state.Queued, action)
+		}
+	}
+
+	if err := rows.Err(); err != nil {
+		return CareQueueState{Slots: CareQueueSlots()}, fmt.Errorf("iterate care queue state: %w", err)
+	}
+
+	return state, nil
+}
+
+func hydrateCareActionDisplay(action CareActionState) CareActionState {
+	if action.Status != "active" || action.CompletesAt.Year() <= 1 {
+		action.SecondsRemaining = action.DurationSeconds
+		action.ProgressPercent = 0
+		return action
+	}
+
+	remaining := int(math.Ceil(time.Until(action.CompletesAt).Seconds()))
+	if remaining < 0 {
+		remaining = 0
+	}
+
+	action.SecondsRemaining = remaining
+
+	if action.DurationSeconds <= 0 {
+		action.ProgressPercent = 100
+		return action
+	}
+
+	elapsed := action.DurationSeconds - remaining
+	if elapsed < 0 {
+		elapsed = 0
+	}
+
+	progress := (float64(elapsed) / float64(action.DurationSeconds)) * 100
+	if progress < 0 {
+		progress = 0
+	}
+
+	if progress > 100 {
+		progress = 100
+	}
+
+	action.ProgressPercent = progress
+	return action
 }
 
 func (s *Store) GenerateDevPassiveNamiMessages(ctx context.Context) error {
@@ -3147,6 +3320,14 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 	status.Companion.PrimaryNeed = NamiPrimaryNeed(status.Companion)
 	status.Companion.Caption = NamiCaption(status.Companion)
 	status.Companion.SuggestedAction = NamiSuggestedAction(status.Companion)
+
+	careState, err := s.GetCareQueueState(ctx, status.Player.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	status.Care = careState
+
 	status.Tick.PlaydeckZoneName = ZoneName(status.Tick.PlaydeckZoneID)
 	status.Tick.ActiveGatheringName = GatheringTaskName(status.Tick.ActiveGatheringTask)
 	status.Tick.ActiveGatheringOutput = GatheringResourceName(status.Tick.ActiveGatheringTask)
