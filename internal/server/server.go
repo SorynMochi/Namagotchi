@@ -108,6 +108,10 @@ func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 
 	_, _ = s.Store.SettleDevTicks(r.Context(), 0)
 
+	if err := s.Store.SettleDevCareActions(r.Context()); err != nil {
+		log.Printf("settle dev care actions failed: %v", err)
+	}
+
 	if err := s.Store.GenerateDevPassiveNamiMessages(r.Context()); err != nil {
 		log.Printf("generate passive nami messages failed: %v", err)
 	}
@@ -204,7 +208,7 @@ func (s *Server) HandleCareAction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	request.Action = strings.TrimSpace(strings.ToLower(request.Action))
-	result, err := s.Store.ApplyDevCareAction(r.Context(), request.Action)
+	result, err := s.Store.StartOrQueueDevCareAction(r.Context(), request.Action)
 	if err != nil {
 		log.Printf("care action failed: %v", err)
 		writeError(w, http.StatusBadRequest, "invalid care action")

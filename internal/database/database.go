@@ -167,12 +167,14 @@ type CareActionResult struct {
 	OK           bool           `json:"ok"`
 	Action       string         `json:"action"`
 	ActionName   string         `json:"actionName"`
+	Mode         string         `json:"mode"`
 	XPGained     int64          `json:"xpGained"`
 	LevelUps     int            `json:"levelUps"`
 	CurrentLevel int            `json:"currentLevel"`
 	XPIntoLevel  int64          `json:"xpIntoLevel"`
 	XPToNext     int64          `json:"xpToNext"`
 	Companion    CompanionState `json:"companion"`
+	Care         CareQueueState `json:"care"`
 	Message      string         `json:"message"`
 }
 
@@ -674,6 +676,844 @@ func (s *Store) GetCareQueueState(ctx context.Context, playerID int64) (CareQueu
 	return state, nil
 }
 
+func loadCareQueueStateTx(ctx context.Context, tx pgx.Tx, playerID int64) (CareQueueState, error) {
+	rows, err := tx.Query(ctx, `
+		select
+			id,
+			action_key,
+			action_name,
+			status,
+			coalesce(queue_position, 0),
+			duration_seconds,
+			coalesce(started_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completes_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completed_at, '0001-01-01 00:00:00+00'::timestamptz),
+			created_at,
+			updated_at
+		from companion_care_actions
+		where player_id = $1
+			and status in ('active', 'queued')
+		order by
+			case when status = 'active' then 0 else 1 end,
+			queue_position nulls last,
+			created_at,
+			id
+		for update
+	`, playerID)
+	if err != nil {
+		return CareQueueState{Slots: CareQueueSlots()}, fmt.Errorf("load care queue state in tx: %w", err)
+	}
+	defer rows.Close()
+
+	state := CareQueueState{
+		Slots: CareQueueSlots(),
+	}
+
+	for rows.Next() {
+		var action CareActionState
+
+		if err := rows.Scan(
+			&action.ID,
+			&action.Action,
+			&action.ActionName,
+			&action.Status,
+			&action.QueuePosition,
+			&action.DurationSeconds,
+			&action.StartedAt,
+			&action.CompletesAt,
+			&action.CompletedAt,
+			&action.CreatedAt,
+			&action.UpdatedAt,
+		); err != nil {
+			return CareQueueState{Slots: CareQueueSlots()}, fmt.Errorf("scan care queue state in tx: %w", err)
+		}
+
+		action = hydrateCareActionDisplay(action)
+
+		if action.Status == "active" {
+			state.Active = action
+		} else {
+			state.Queued = append(state.Queued, action)
+		}
+	}
+
+	if err := rows.Err(); err != nil {
+		return CareQueueState{Slots: CareQueueSlots()}, fmt.Errorf("iterate care queue state in tx: %w", err)
+	}
+
+	return hydrateCareQueueState(state), nil
+}
+
+func (s *Store) StartOrQueueDevCareAction(ctx context.Context, action string) (*CareActionResult, error) {
+	rule, ok := CareActionByKey(action)
+	if !ok {
+		return nil, fmt.Errorf("invalid care action: %s", action)
+	}
+
+	durationSeconds := CareActionDurationSeconds(rule.Key)
+	if durationSeconds <= 0 {
+		return nil, fmt.Errorf("invalid care action duration: %s", rule.Key)
+	}
+
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("begin start or queue care action: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	playerID, companion, err := loadDevCompanionForUpdateTx(ctx, tx)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := settleCompletedCareActionsTx(ctx, tx, playerID); err != nil {
+		return nil, err
+	}
+
+	state, err := loadCareQueueStateTx(ctx, tx, playerID)
+	if err != nil {
+		return nil, err
+	}
+
+	isSleeping := strings.ToLower(companion.Status) == "sleeping"
+
+	if isSleeping && rule.Key != "wake_up" {
+		return nil, fmt.Errorf("Nami is sleeping; wake her before starting other care actions")
+	}
+
+	if !isSleeping && rule.Key == "wake_up" {
+		return nil, fmt.Errorf("Nami is already awake")
+	}
+
+	if !careActionIsZero(state.Active) && state.Active.Action == "put_to_bed" {
+		return nil, fmt.Errorf("Nami is settling into sleep; no actions can be queued")
+	}
+
+	if queuedAction, ok := findQueuedCareAction(state.Queued, rule.Key); ok {
+		if err := removeQueuedCareActionTx(ctx, tx, queuedAction.ID, playerID); err != nil {
+			return nil, err
+		}
+
+		if err := renumberQueuedCareActionsTx(ctx, tx, playerID); err != nil {
+			return nil, err
+		}
+
+		state, err = loadCareQueueStateTx(ctx, tx, playerID)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := tx.Commit(ctx); err != nil {
+			return nil, fmt.Errorf("commit unqueue care action: %w", err)
+		}
+
+		return &CareActionResult{
+			OK:         true,
+			Action:     rule.Key,
+			ActionName: rule.Name,
+			Mode:       "unqueued",
+			Care:       state,
+			Message:    fmt.Sprintf("%s removed from queue.", rule.Name),
+		}, nil
+	}
+
+	if careQueueHasSleepBarrier(state.Queued) {
+		return nil, fmt.Errorf("sleep is already queued; no actions can be queued after sleep")
+	}
+
+	if !careActionIsZero(state.Active) {
+		if len(state.Queued) >= CareQueueSlots() {
+			return nil, fmt.Errorf("care queue is full")
+		}
+
+		if careActionShouldBlockQueue(state.Active.Action) {
+			return nil, fmt.Errorf("active sleep blocks care queue")
+		}
+
+		position := nextCareQueuePosition(state.Queued)
+		if position == 0 {
+			return nil, fmt.Errorf("care queue is full")
+		}
+
+		_, err = tx.Exec(ctx, `
+			insert into companion_care_actions (
+				player_id,
+				action_key,
+				action_name,
+				status,
+				queue_position,
+				duration_seconds
+			)
+			values ($1, $2, $3, 'queued', $4, $5)
+		`, playerID, rule.Key, rule.Name, position, durationSeconds)
+		if err != nil {
+			return nil, fmt.Errorf("queue care action: %w", err)
+		}
+
+		if err := tx.Commit(ctx); err != nil {
+			return nil, fmt.Errorf("commit queue care action: %w", err)
+		}
+
+		state, err = s.GetCareQueueState(ctx, playerID)
+		if err != nil {
+			return nil, err
+		}
+
+		return &CareActionResult{
+			OK:         true,
+			Action:     rule.Key,
+			ActionName: rule.Name,
+			Mode:       "queued",
+			Care:       state,
+			Message:    fmt.Sprintf("%s queued.", rule.Name),
+		}, nil
+	}
+
+	activeAction, err := startCareActionTx(ctx, tx, playerID, rule)
+	if err != nil {
+		return nil, err
+	}
+
+	if rule.SleepAction {
+		if err := setCompanionSleepingTx(ctx, tx, playerID); err != nil {
+			return nil, err
+		}
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return nil, fmt.Errorf("commit start care action: %w", err)
+	}
+
+	state, err = s.GetCareQueueState(ctx, playerID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &CareActionResult{
+		OK:         true,
+		Action:     rule.Key,
+		ActionName: rule.Name,
+		Mode:       "started",
+		Care:       state,
+		Message:    fmt.Sprintf("%s started.", activeAction.ActionName),
+	}, nil
+}
+
+func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, CompanionState, error) {
+	var playerID int64
+	var companion CompanionState
+
+	err := tx.QueryRow(ctx, `
+		select
+			p.id,
+			c.companion_name,
+			c.level,
+			c.total_xp,
+			c.xp_into_level,
+			c.mood_score::float8,
+			c.satiety,
+			c.connection,
+			c.energy,
+			c.comfort,
+			c.playfulness,
+			c.inspiration,
+			c.cleanliness,
+			c.status,
+			c.last_interaction_at,
+			c.last_xp_gained,
+			c.last_action
+		from players p
+		join companion_states c on c.player_id = p.id
+		where p.display_name = 'Soryn'
+		for update
+	`).Scan(
+		&playerID,
+		&companion.CompanionName,
+		&companion.Level,
+		&companion.TotalXP,
+		&companion.XPIntoLevel,
+		&companion.MoodScore,
+		&companion.Satiety,
+		&companion.Connection,
+		&companion.Energy,
+		&companion.Comfort,
+		&companion.Playfulness,
+		&companion.Inspiration,
+		&companion.Cleanliness,
+		&companion.Status,
+		&companion.LastInteractionAt,
+		&companion.LastXPGained,
+		&companion.LastAction,
+	)
+
+	if err != nil {
+		return 0, CompanionState{}, fmt.Errorf("load dev companion for update: %w", err)
+	}
+
+	companion.MoodScore = NamiMoodScore(companion)
+	companion.XPToNext = NamiXPToNextLevel(companion.Level)
+	companion.MoodLabel = NamiMoodLabel(companion.MoodScore)
+	companion.PrimaryNeed = NamiPrimaryNeed(companion)
+	companion.Caption = NamiCaption(companion)
+	companion.SuggestedAction = NamiSuggestedAction(companion)
+
+	return playerID, companion, nil
+}
+
+func findQueuedCareAction(queued []CareActionState, actionKey string) (CareActionState, bool) {
+	for _, action := range queued {
+		if action.Action == actionKey {
+			return action, true
+		}
+	}
+
+	return CareActionState{}, false
+}
+
+func removeQueuedCareActionTx(ctx context.Context, tx pgx.Tx, actionID int64, playerID int64) error {
+	commandTag, err := tx.Exec(ctx, `
+		update companion_care_actions
+		set status = 'cancelled',
+			queue_position = null,
+			updated_at = now()
+		where id = $1
+			and player_id = $2
+			and status = 'queued'
+	`, actionID, playerID)
+	if err != nil {
+		return fmt.Errorf("remove queued care action: %w", err)
+	}
+
+	if commandTag.RowsAffected() == 0 {
+		return fmt.Errorf("queued care action not found")
+	}
+
+	return nil
+}
+
+func renumberQueuedCareActionsTx(ctx context.Context, tx pgx.Tx, playerID int64) error {
+	rows, err := tx.Query(ctx, `
+		select id
+		from companion_care_actions
+		where player_id = $1
+			and status = 'queued'
+		order by queue_position, created_at, id
+		for update
+	`, playerID)
+	if err != nil {
+		return fmt.Errorf("load queued care actions for renumber: %w", err)
+	}
+	defer rows.Close()
+
+	var ids []int64
+	for rows.Next() {
+		var id int64
+		if err := rows.Scan(&id); err != nil {
+			return fmt.Errorf("scan queued care action for renumber: %w", err)
+		}
+
+		ids = append(ids, id)
+	}
+
+	if err := rows.Err(); err != nil {
+		return fmt.Errorf("iterate queued care actions for renumber: %w", err)
+	}
+
+	for index, id := range ids {
+		_, err := tx.Exec(ctx, `
+			update companion_care_actions
+			set queue_position = $1,
+				updated_at = now()
+			where id = $2
+				and player_id = $3
+				and status = 'queued'
+		`, index+1, id, playerID)
+		if err != nil {
+			return fmt.Errorf("renumber queued care action: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func startCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, rule CareActionRule) (CareActionState, error) {
+	durationSeconds := CareActionDurationSeconds(rule.Key)
+	if durationSeconds <= 0 {
+		return CareActionState{}, fmt.Errorf("invalid care action duration: %s", rule.Key)
+	}
+
+	var action CareActionState
+
+	err := tx.QueryRow(ctx, `
+		insert into companion_care_actions (
+			player_id,
+			action_key,
+			action_name,
+			status,
+			queue_position,
+			duration_seconds,
+			started_at,
+			completes_at
+		)
+		values ($1, $2, $3, 'active', null, $4, now(), now() + make_interval(secs => $4))
+		returning
+			id,
+			action_key,
+			action_name,
+			status,
+			coalesce(queue_position, 0),
+			duration_seconds,
+			coalesce(started_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completes_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completed_at, '0001-01-01 00:00:00+00'::timestamptz),
+			created_at,
+			updated_at
+	`, playerID, rule.Key, rule.Name, durationSeconds).Scan(
+		&action.ID,
+		&action.Action,
+		&action.ActionName,
+		&action.Status,
+		&action.QueuePosition,
+		&action.DurationSeconds,
+		&action.StartedAt,
+		&action.CompletesAt,
+		&action.CompletedAt,
+		&action.CreatedAt,
+		&action.UpdatedAt,
+	)
+
+	if err != nil {
+		return CareActionState{}, fmt.Errorf("start care action: %w", err)
+	}
+
+	return hydrateCareActionDisplay(action), nil
+}
+
+func setCompanionSleepingTx(ctx context.Context, tx pgx.Tx, playerID int64) error {
+	_, err := tx.Exec(ctx, `
+		update companion_states
+		set status = 'sleeping',
+			sleep_started_at = coalesce(sleep_started_at, now()),
+			energy_at_sleep_start = coalesce(energy_at_sleep_start, energy),
+			updated_at = now()
+		where player_id = $1
+	`, playerID)
+	if err != nil {
+		return fmt.Errorf("set companion sleeping: %w", err)
+	}
+
+	return nil
+}
+
+func (s *Store) SettleDevCareActions(ctx context.Context) error {
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin settle dev care actions: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	playerID, _, err := loadDevCompanionForUpdateTx(ctx, tx)
+	if err != nil {
+		return err
+	}
+
+	if err := settleCompletedCareActionsTx(ctx, tx, playerID); err != nil {
+		return err
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("commit settle dev care actions: %w", err)
+	}
+
+	return nil
+}
+
+func settleCompletedCareActionsTx(ctx context.Context, tx pgx.Tx, playerID int64) error {
+	for {
+		active, ok, err := loadDueActiveCareActionTx(ctx, tx, playerID)
+		if err != nil {
+			return err
+		}
+
+		if !ok {
+			return nil
+		}
+
+		if err := applyCompletedCareActionTx(ctx, tx, playerID, active); err != nil {
+			return err
+		}
+
+		if err := completeActiveCareActionTx(ctx, tx, playerID, active.ID); err != nil {
+			return err
+		}
+
+		nextQueued, ok, err := popNextQueuedCareActionTx(ctx, tx, playerID)
+		if err != nil {
+			return err
+		}
+
+		if !ok {
+			return nil
+		}
+
+		rule, ok := CareActionByKey(nextQueued.Action)
+		if !ok {
+			return fmt.Errorf("invalid queued care action: %s", nextQueued.Action)
+		}
+
+		if err := activateQueuedCareActionTx(ctx, tx, playerID, nextQueued.ID); err != nil {
+			return err
+		}
+
+		if rule.SleepAction {
+			if err := setCompanionSleepingTx(ctx, tx, playerID); err != nil {
+				return err
+			}
+
+			return nil
+		}
+	}
+}
+
+func loadDueActiveCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64) (CareActionState, bool, error) {
+	var action CareActionState
+
+	err := tx.QueryRow(ctx, `
+		select
+			id,
+			action_key,
+			action_name,
+			status,
+			coalesce(queue_position, 0),
+			duration_seconds,
+			coalesce(started_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completes_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completed_at, '0001-01-01 00:00:00+00'::timestamptz),
+			created_at,
+			updated_at
+		from companion_care_actions
+		where player_id = $1
+			and status = 'active'
+			and completes_at <= now()
+		order by completes_at, id
+		limit 1
+		for update
+	`, playerID).Scan(
+		&action.ID,
+		&action.Action,
+		&action.ActionName,
+		&action.Status,
+		&action.QueuePosition,
+		&action.DurationSeconds,
+		&action.StartedAt,
+		&action.CompletesAt,
+		&action.CompletedAt,
+		&action.CreatedAt,
+		&action.UpdatedAt,
+	)
+
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return CareActionState{}, false, nil
+		}
+
+		return CareActionState{}, false, fmt.Errorf("load due active care action: %w", err)
+	}
+
+	return hydrateCareActionDisplay(action), true, nil
+}
+
+func completeActiveCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, actionID int64) error {
+	commandTag, err := tx.Exec(ctx, `
+		update companion_care_actions
+		set status = 'completed',
+			completed_at = now(),
+			updated_at = now()
+		where id = $1
+			and player_id = $2
+			and status = 'active'
+	`, actionID, playerID)
+	if err != nil {
+		return fmt.Errorf("complete active care action: %w", err)
+	}
+
+	if commandTag.RowsAffected() == 0 {
+		return fmt.Errorf("active care action not found")
+	}
+
+	return nil
+}
+
+func popNextQueuedCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64) (CareActionState, bool, error) {
+	if err := renumberQueuedCareActionsTx(ctx, tx, playerID); err != nil {
+		return CareActionState{}, false, err
+	}
+
+	var action CareActionState
+
+	err := tx.QueryRow(ctx, `
+		select
+			id,
+			action_key,
+			action_name,
+			status,
+			coalesce(queue_position, 0),
+			duration_seconds,
+			coalesce(started_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completes_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(completed_at, '0001-01-01 00:00:00+00'::timestamptz),
+			created_at,
+			updated_at
+		from companion_care_actions
+		where player_id = $1
+			and status = 'queued'
+			and queue_position = 1
+		limit 1
+		for update
+	`, playerID).Scan(
+		&action.ID,
+		&action.Action,
+		&action.ActionName,
+		&action.Status,
+		&action.QueuePosition,
+		&action.DurationSeconds,
+		&action.StartedAt,
+		&action.CompletesAt,
+		&action.CompletedAt,
+		&action.CreatedAt,
+		&action.UpdatedAt,
+	)
+
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return CareActionState{}, false, nil
+		}
+
+		return CareActionState{}, false, fmt.Errorf("pop next queued care action: %w", err)
+	}
+
+	return hydrateCareActionDisplay(action), true, nil
+}
+
+func activateQueuedCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, actionID int64) error {
+	commandTag, err := tx.Exec(ctx, `
+		update companion_care_actions
+		set status = 'active',
+			queue_position = null,
+			started_at = now(),
+			completes_at = now() + make_interval(secs => duration_seconds),
+			updated_at = now()
+		where id = $1
+			and player_id = $2
+			and status = 'queued'
+	`, actionID, playerID)
+	if err != nil {
+		return fmt.Errorf("activate queued care action: %w", err)
+	}
+
+	if commandTag.RowsAffected() == 0 {
+		return fmt.Errorf("queued care action not found")
+	}
+
+	if err := renumberQueuedCareActionsTx(ctx, tx, playerID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func applyCompletedCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, active CareActionState) error {
+	rule, ok := CareActionByKey(active.Action)
+	if !ok {
+		return fmt.Errorf("invalid completed care action: %s", active.Action)
+	}
+
+	_, beforeCompanion, err := loadDevCompanionForUpdateTx(ctx, tx)
+	if err != nil {
+		return err
+	}
+
+	companion := beforeCompanion
+	xpGained := int64(0)
+
+	if rule.SleepAction {
+		companion.Status = "sleeping"
+	} else if rule.WakeAction {
+		sleepReward := calculateSleepWakeReward(companion, active)
+		rule.Energy += sleepReward.Energy
+		rule.Comfort += sleepReward.Comfort
+		companion.Status = "awake"
+	} else {
+		xpGained += usefulCareXP(companion.Satiety, rule.Satiety)
+		xpGained += usefulCareXP(companion.Connection, rule.Connection)
+		xpGained += usefulCareXP(companion.Energy, rule.Energy)
+		xpGained += usefulCareXP(companion.Comfort, rule.Comfort)
+		xpGained += usefulCareXP(companion.Playfulness, rule.Playfulness)
+		xpGained += usefulCareXP(companion.Inspiration, rule.Inspiration)
+		xpGained += usefulCareXP(companion.Cleanliness, rule.Cleanliness)
+
+		if xpGained < 0 {
+			xpGained = 0
+		}
+	}
+
+	companion.Satiety = clampCareStat(companion.Satiety + rule.Satiety)
+	companion.Connection = clampCareStat(companion.Connection + rule.Connection)
+	companion.Energy = clampCareStat(companion.Energy + rule.Energy)
+	companion.Comfort = clampCareStat(companion.Comfort + rule.Comfort)
+	companion.Playfulness = clampCareStat(companion.Playfulness + rule.Playfulness)
+	companion.Inspiration = clampCareStat(companion.Inspiration + rule.Inspiration)
+	companion.Cleanliness = clampCareStat(companion.Cleanliness + rule.Cleanliness)
+
+	companion.TotalXP += xpGained
+	companion.XPIntoLevel += xpGained
+
+	levelUps := 0
+	for companion.XPIntoLevel >= NamiXPToNextLevel(companion.Level) {
+		companion.XPIntoLevel -= NamiXPToNextLevel(companion.Level)
+		companion.Level++
+		levelUps++
+	}
+
+	companion.MoodScore = NamiMoodScore(companion)
+	companion.XPToNext = NamiXPToNextLevel(companion.Level)
+	companion.MoodLabel = NamiMoodLabel(companion.MoodScore)
+	companion.PrimaryNeed = NamiPrimaryNeed(companion)
+	companion.Caption = NamiCaption(companion)
+	companion.SuggestedAction = NamiSuggestedAction(companion)
+	companion.LastXPGained = xpGained
+	companion.LastAction = rule.Name
+
+	sleepStartedAtUpdate := "sleep_started_at"
+	energyAtSleepStartUpdate := "energy_at_sleep_start"
+
+	if rule.WakeAction {
+		sleepStartedAtUpdate = "null"
+		energyAtSleepStartUpdate = "null"
+	}
+
+	_, err = tx.Exec(ctx, fmt.Sprintf(`
+		update companion_states
+		set
+			level = $1,
+			total_xp = $2,
+			xp_into_level = $3,
+			last_xp_gained = $4,
+			last_action = $5,
+			mood_score = $6,
+			satiety = $7,
+			connection = $8,
+			energy = $9,
+			comfort = $10,
+			playfulness = $11,
+			inspiration = $12,
+			cleanliness = $13,
+			status = $14,
+			last_interaction_at = now(),
+			sleep_started_at = %s,
+			energy_at_sleep_start = %s,
+			updated_at = now()
+		where player_id = $15
+	`, sleepStartedAtUpdate, energyAtSleepStartUpdate),
+		companion.Level,
+		companion.TotalXP,
+		companion.XPIntoLevel,
+		companion.LastXPGained,
+		companion.LastAction,
+		companion.MoodScore,
+		companion.Satiety,
+		companion.Connection,
+		companion.Energy,
+		companion.Comfort,
+		companion.Playfulness,
+		companion.Inspiration,
+		companion.Cleanliness,
+		companion.Status,
+		playerID,
+	)
+
+	if err != nil {
+		return fmt.Errorf("update companion after completed care action: %w", err)
+	}
+
+	_, err = tx.Exec(ctx, `
+		insert into activity_log (player_id, event_type, message)
+		values ($1, 'care_action', $2)
+	`, playerID, fmt.Sprintf("Completed care action: %s (+%d XP).", rule.Name, xpGained))
+	if err != nil {
+		return fmt.Errorf("insert completed care action log: %w", err)
+	}
+
+	recentMessages, err := loadRecentNamiMessagesTx(ctx, tx, playerID, 80)
+	if err != nil {
+		return err
+	}
+
+	careMessageDraft := GenerateNamiCareMessageDraft(rule, beforeCompanion, companion, levelUps, recentMessages)
+	careMessage, err := insertNamiMessageDraftTx(ctx, tx, playerID, careMessageDraft)
+	if err != nil {
+		return fmt.Errorf("insert completed care nami message: %w", err)
+	}
+
+	recentMessages = prependRecentNamiMessage(recentMessages, careMessage)
+
+	if levelUps > 0 {
+		levelUpDraft := GenerateNamiEventMessageDraft(NamiProceduralContext{
+			TriggerKey:   "nami_level_up",
+			MoodKey:      companion.MoodLabel,
+			NeedKey:      companion.PrimaryNeed,
+			Severity:     "happy",
+			Level:        companion.Level,
+			LevelUps:     levelUps,
+			MetadataJSON: fmt.Sprintf(`{"level":%d,"levelUps":%d,"sourceAction":"%s","sourceActionName":"%s"}`, companion.Level, levelUps, rule.Key, rule.Name),
+		}, recentMessages)
+
+		if _, err := insertNamiMessageDraftTx(ctx, tx, playerID, levelUpDraft); err != nil {
+			return fmt.Errorf("insert completed care level-up message: %w", err)
+		}
+	}
+
+	return nil
+}
+
+type SleepWakeReward struct {
+	Energy  int
+	Comfort int
+}
+
+func calculateSleepWakeReward(companion CompanionState, active CareActionState) SleepWakeReward {
+	if companion.LastInteractionAt.IsZero() {
+		return SleepWakeReward{}
+	}
+
+	sleepStartedAt := active.StartedAt
+	if active.StartedAt.Year() <= 1 {
+		sleepStartedAt = time.Now().UTC().Add(-1 * time.Hour)
+	}
+
+	hoursSlept := time.Since(sleepStartedAt).Hours()
+	if hoursSlept < 1 {
+		hoursSlept = 1
+	}
+
+	if hoursSlept > 8 {
+		hoursSlept = 8
+	}
+
+	energy := 15
+	comfort := 5
+
+	if hoursSlept > 1 {
+		energy += int(math.Round(22 * math.Pow(hoursSlept-1, 0.85)))
+		comfort += int(math.Round(7 * math.Pow(hoursSlept-1, 0.75)))
+	}
+
+	return SleepWakeReward{
+		Energy:  energy,
+		Comfort: comfort,
+	}
+}
+
 func hydrateCareActionDisplay(action CareActionState) CareActionState {
 	if action.Status != "active" || action.CompletesAt.Year() <= 1 {
 		action.SecondsRemaining = action.DurationSeconds
@@ -709,6 +1549,84 @@ func hydrateCareActionDisplay(action CareActionState) CareActionState {
 
 	action.ProgressPercent = progress
 	return action
+}
+
+func hydrateCareQueueState(state CareQueueState) CareQueueState {
+	state.Active = hydrateCareActionDisplay(state.Active)
+
+	for i := range state.Queued {
+		state.Queued[i] = hydrateCareActionDisplay(state.Queued[i])
+	}
+
+	if state.Slots == 0 {
+		state.Slots = CareQueueSlots()
+	}
+
+	return state
+}
+
+func careActionFromRow(
+	id int64,
+	actionKey string,
+	actionName string,
+	status string,
+	queuePosition int,
+	durationSeconds int,
+	startedAt time.Time,
+	completesAt time.Time,
+	completedAt time.Time,
+	createdAt time.Time,
+	updatedAt time.Time,
+) CareActionState {
+	return hydrateCareActionDisplay(CareActionState{
+		ID:              id,
+		Action:          actionKey,
+		ActionName:      actionName,
+		Status:          status,
+		QueuePosition:   queuePosition,
+		DurationSeconds: durationSeconds,
+		StartedAt:       startedAt,
+		CompletesAt:     completesAt,
+		CompletedAt:     completedAt,
+		CreatedAt:       createdAt,
+		UpdatedAt:       updatedAt,
+	})
+}
+
+func nextCareQueuePosition(queued []CareActionState) int {
+	used := make(map[int]bool, len(queued))
+
+	for _, action := range queued {
+		if action.QueuePosition > 0 {
+			used[action.QueuePosition] = true
+		}
+	}
+
+	for position := 1; position <= CareQueueSlots(); position++ {
+		if !used[position] {
+			return position
+		}
+	}
+
+	return 0
+}
+
+func careQueueHasSleepBarrier(queued []CareActionState) bool {
+	for _, action := range queued {
+		if action.Action == "put_to_bed" {
+			return true
+		}
+	}
+
+	return false
+}
+
+func careActionIsZero(action CareActionState) bool {
+	return action.ID == 0
+}
+
+func careActionShouldBlockQueue(actionKey string) bool {
+	return actionKey == "put_to_bed"
 }
 
 func (s *Store) GenerateDevPassiveNamiMessages(ctx context.Context) error {
