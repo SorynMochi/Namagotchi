@@ -955,7 +955,10 @@ function getCareActionRemainingSeconds(action) {
   const completesAtMs = Date.parse(action.completesAt);
   if (!Number.isNaN(completesAtMs)) {
     const now = Date.now() + serverClockOffsetMs;
-    return Math.max(0, Math.ceil((completesAtMs - now) / 1000));
+    const durationSeconds = getCareDurationSeconds(action);
+    const remainingSeconds = Math.floor((completesAtMs - now) / 1000);
+
+    return Math.max(0, Math.min(durationSeconds, remainingSeconds));
   }
 
   return Math.max(0, Number(action.secondsRemaining ?? 0));
@@ -2373,8 +2376,12 @@ function careActionMessage(result) {
   const actionName = result.actionName || "Care";
 
   switch (result.mode) {
-    case "started":
-      return `${actionName} started.`;
+    case "started": {
+  const xpGained = Number(result.xpGained ?? 0);
+  return xpGained > 0
+    ? `${actionName} started. Nami gained ${xpGained.toLocaleString()} care XP.`
+    : `${actionName} started.`;
+}
     case "queued":
       return `${actionName} queued.`;
     case "unqueued":

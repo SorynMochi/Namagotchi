@@ -49,27 +49,29 @@ type Player struct {
 }
 
 type CompanionState struct {
-	CompanionName     string    `json:"name"`
-	MoodScore         float64   `json:"moodScore"`
-	Satiety           int       `json:"satiety"`
-	Connection        int       `json:"connection"`
-	Energy            int       `json:"energy"`
-	Comfort           int       `json:"comfort"`
-	Playfulness       int       `json:"playfulness"`
-	Inspiration       int       `json:"inspiration"`
-	Cleanliness       int       `json:"cleanliness"`
-	Status            string    `json:"status"`
-	LastInteractionAt time.Time `json:"lastInteractionAt"`
-	Level             int       `json:"level"`
-	TotalXP           int64     `json:"totalXp"`
-	XPIntoLevel       int64     `json:"xpIntoLevel"`
-	XPToNext          int64     `json:"xpToNext"`
-	LastXPGained      int64     `json:"lastXpGained"`
-	LastAction        string    `json:"lastAction"`
-	MoodLabel         string    `json:"moodLabel"`
-	PrimaryNeed       string    `json:"primaryNeed"`
-	Caption           string    `json:"caption"`
-	SuggestedAction   string    `json:"suggestedAction"`
+	CompanionName      string    `json:"name"`
+	MoodScore          float64   `json:"moodScore"`
+	Satiety            int       `json:"satiety"`
+	Connection         int       `json:"connection"`
+	Energy             int       `json:"energy"`
+	Comfort            int       `json:"comfort"`
+	Playfulness        int       `json:"playfulness"`
+	Inspiration        int       `json:"inspiration"`
+	Cleanliness        int       `json:"cleanliness"`
+	Status             string    `json:"status"`
+	LastInteractionAt  time.Time `json:"lastInteractionAt"`
+	Level              int       `json:"level"`
+	TotalXP            int64     `json:"totalXp"`
+	XPIntoLevel        int64     `json:"xpIntoLevel"`
+	XPToNext           int64     `json:"xpToNext"`
+	LastXPGained       int64     `json:"lastXpGained"`
+	LastAction         string    `json:"lastAction"`
+	SleepStartedAt     time.Time `json:"sleepStartedAt"`
+	EnergyAtSleepStart int       `json:"energyAtSleepStart"`
+	MoodLabel          string    `json:"moodLabel"`
+	PrimaryNeed        string    `json:"primaryNeed"`
+	Caption            string    `json:"caption"`
+	SuggestedAction    string    `json:"suggestedAction"`
 }
 
 type PlayerResources struct {
@@ -874,10 +876,27 @@ func (s *Store) StartOrQueueDevCareAction(ctx context.Context, action string) (*
 		return nil, err
 	}
 
+	resultCompanion := companion
+	xpGained := int64(0)
+
 	if rule.SleepAction {
 		if err := setCompanionSleepingTx(ctx, tx, playerID); err != nil {
 			return nil, err
 		}
+
+		resultCompanion.Status = "sleeping"
+	} else if careActionRewardsOnStart(rule) {
+		if err := applyCompletedCareActionTx(ctx, tx, playerID, activeAction); err != nil {
+			return nil, fmt.Errorf("apply started care action rewards: %w", err)
+		}
+
+		_, refreshedCompanion, err := loadDevCompanionForUpdateTx(ctx, tx)
+		if err != nil {
+			return nil, err
+		}
+
+		resultCompanion = refreshedCompanion
+		xpGained = refreshedCompanion.LastXPGained
 	}
 
 	if err := tx.Commit(ctx); err != nil {
@@ -890,12 +909,17 @@ func (s *Store) StartOrQueueDevCareAction(ctx context.Context, action string) (*
 	}
 
 	return &CareActionResult{
-		OK:         true,
-		Action:     rule.Key,
-		ActionName: rule.Name,
-		Mode:       "started",
-		Care:       state,
-		Message:    fmt.Sprintf("%s started.", activeAction.ActionName),
+		OK:           true,
+		Action:       rule.Key,
+		ActionName:   rule.Name,
+		Mode:         "started",
+		XPGained:     xpGained,
+		CurrentLevel: resultCompanion.Level,
+		XPIntoLevel:  resultCompanion.XPIntoLevel,
+		XPToNext:     resultCompanion.XPToNext,
+		Companion:    resultCompanion,
+		Care:         state,
+		Message:      fmt.Sprintf("%s started.", activeAction.ActionName),
 	}, nil
 }
 
@@ -921,7 +945,9 @@ func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, Compani
 			c.status,
 			c.last_interaction_at,
 			c.last_xp_gained,
-			c.last_action
+			c.last_action,
+			coalesce(c.sleep_started_at, '0001-01-01 00:00:00+00'::timestamptz),
+			coalesce(c.energy_at_sleep_start, 0)
 		from players p
 		join companion_states c on c.player_id = p.id
 		where p.display_name = 'Soryn'
@@ -944,6 +970,8 @@ func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, Compani
 		&companion.LastInteractionAt,
 		&companion.LastXPGained,
 		&companion.LastAction,
+		&companion.SleepStartedAt,
+		&companion.EnergyAtSleepStart,
 	)
 
 	if err != nil {
@@ -1139,8 +1167,15 @@ func settleCompletedCareActionsTx(ctx context.Context, tx pgx.Tx, playerID int64
 			return nil
 		}
 
-		if err := applyCompletedCareActionTx(ctx, tx, playerID, active); err != nil {
-			return err
+		activeRule, ok := CareActionByKey(active.Action)
+		if !ok {
+			return fmt.Errorf("invalid active care action: %s", active.Action)
+		}
+
+		if careActionRewardsOnCompletion(activeRule) {
+			if err := applyCompletedCareActionTx(ctx, tx, playerID, active); err != nil {
+				return err
+			}
 		}
 
 		if err := completeActiveCareActionTx(ctx, tx, playerID, active.ID); err != nil {
@@ -1171,6 +1206,12 @@ func settleCompletedCareActionsTx(ctx context.Context, tx pgx.Tx, playerID int64
 			}
 
 			return nil
+		}
+
+		if careActionRewardsOnStart(rule) {
+			if err := applyCompletedCareActionTx(ctx, tx, playerID, nextQueued); err != nil {
+				return fmt.Errorf("apply queued care action rewards: %w", err)
+			}
 		}
 	}
 }
@@ -1482,12 +1523,13 @@ type SleepWakeReward struct {
 }
 
 func calculateSleepWakeReward(companion CompanionState, active CareActionState) SleepWakeReward {
-	if companion.LastInteractionAt.IsZero() {
-		return SleepWakeReward{}
+	sleepStartedAt := companion.SleepStartedAt
+
+	if sleepStartedAt.Year() <= 1 {
+		sleepStartedAt = active.StartedAt
 	}
 
-	sleepStartedAt := active.StartedAt
-	if active.StartedAt.Year() <= 1 {
+	if sleepStartedAt.Year() <= 1 {
 		sleepStartedAt = time.Now().UTC().Add(-1 * time.Hour)
 	}
 
@@ -1521,9 +1563,13 @@ func hydrateCareActionDisplay(action CareActionState) CareActionState {
 		return action
 	}
 
-	remaining := int(math.Ceil(time.Until(action.CompletesAt).Seconds()))
+	remaining := int(math.Floor(time.Until(action.CompletesAt).Seconds()))
 	if remaining < 0 {
 		remaining = 0
+	}
+
+	if action.DurationSeconds > 0 && remaining > action.DurationSeconds {
+		remaining = action.DurationSeconds
 	}
 
 	action.SecondsRemaining = remaining
@@ -1627,6 +1673,14 @@ func careActionIsZero(action CareActionState) bool {
 
 func careActionShouldBlockQueue(actionKey string) bool {
 	return actionKey == "put_to_bed"
+}
+
+func careActionRewardsOnStart(rule CareActionRule) bool {
+	return !rule.SleepAction && !rule.WakeAction
+}
+
+func careActionRewardsOnCompletion(rule CareActionRule) bool {
+	return rule.WakeAction
 }
 
 func (s *Store) GenerateDevPassiveNamiMessages(ctx context.Context) error {
