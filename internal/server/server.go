@@ -112,6 +112,10 @@ func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 		log.Printf("settle dev care actions failed: %v", err)
 	}
 
+	if err := s.Store.SettleDevCareDecay(r.Context()); err != nil {
+		log.Printf("settle dev care decay failed: %v", err)
+	}
+
 	if err := s.Store.GenerateDevPassiveNamiMessages(r.Context()); err != nil {
 		log.Printf("generate passive nami messages failed: %v", err)
 	}

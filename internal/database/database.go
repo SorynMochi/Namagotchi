@@ -20,6 +20,18 @@ const (
 	SyncXPPerTick     = int64(10)
 	ActivityXPPerTick = int64(10)
 	MaxOfflineTicks   = int64(8640)
+
+	CareDecayMinimumSeconds      = 5 * 60
+	SleepEnergyRecoveryPerHour   = 10.0
+	SleepRecoveryCapHours        = 8.0
+	SleepingSatietyDecayPerHour  = 1.0
+	AwakeSatietyDecayPerHour     = 3.0
+	AwakeConnectionDecayPerHour  = 2.0
+	AwakeEnergyDecayPerHour      = 4.0
+	AwakeComfortDecayPerHour     = 1.0
+	AwakePlayfulnessDecayPerHour = 1.5
+	AwakeInspirationDecayPerHour = 1.5
+	AwakeCleanlinessDecayPerHour = 1.25
 )
 
 type Store struct {
@@ -68,6 +80,7 @@ type CompanionState struct {
 	LastAction         string    `json:"lastAction"`
 	SleepStartedAt     time.Time `json:"sleepStartedAt"`
 	EnergyAtSleepStart int       `json:"energyAtSleepStart"`
+	LastDecayAt        time.Time `json:"lastDecayAt"`
 	MoodLabel          string    `json:"moodLabel"`
 	PrimaryNeed        string    `json:"primaryNeed"`
 	Caption            string    `json:"caption"`
@@ -772,6 +785,16 @@ func (s *Store) StartOrQueueDevCareAction(ctx context.Context, action string) (*
 		return nil, err
 	}
 
+	_, companion, err = loadDevCompanionForUpdateTx(ctx, tx)
+	if err != nil {
+		return nil, err
+	}
+
+	companion, err = settleCareDecayTx(ctx, tx, playerID, companion)
+	if err != nil {
+		return nil, err
+	}
+
 	state, err := loadCareQueueStateTx(ctx, tx, playerID)
 	if err != nil {
 		return nil, err
@@ -948,6 +971,7 @@ func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, Compani
 			c.last_action,
 			coalesce(c.sleep_started_at, '0001-01-01 00:00:00+00'::timestamptz),
 			coalesce(c.energy_at_sleep_start, 0)
+			c.last_decay_at
 		from players p
 		join companion_states c on c.player_id = p.id
 		where p.display_name = 'Soryn'
@@ -972,6 +996,7 @@ func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, Compani
 		&companion.LastAction,
 		&companion.SleepStartedAt,
 		&companion.EnergyAtSleepStart,
+		&companion.LastDecayAt,
 	)
 
 	if err != nil {
@@ -1121,9 +1146,9 @@ func setCompanionSleepingTx(ctx context.Context, tx pgx.Tx, playerID int64) erro
 	_, err := tx.Exec(ctx, `
 		update companion_states
 		set status = 'sleeping',
-			sleep_started_at = coalesce(sleep_started_at, now()),
-			energy_at_sleep_start = coalesce(energy_at_sleep_start, energy),
-			updated_at = now()
+energy_at_sleep_start = coalesce(energy_at_sleep_start, energy),
+last_decay_at = now(),
+updated_at = now()
 		where player_id = $1
 	`, playerID)
 	if err != nil {
@@ -1380,9 +1405,6 @@ func applyCompletedCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, 
 	if rule.SleepAction {
 		companion.Status = "sleeping"
 	} else if rule.WakeAction {
-		sleepReward := calculateSleepWakeReward(companion, active)
-		rule.Energy += sleepReward.Energy
-		rule.Comfort += sleepReward.Comfort
 		companion.Status = "awake"
 	} else {
 		xpGained += usefulCareXP(companion.Satiety, rule.Satiety)
@@ -1517,45 +1539,6 @@ func applyCompletedCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, 
 	return nil
 }
 
-type SleepWakeReward struct {
-	Energy  int
-	Comfort int
-}
-
-func calculateSleepWakeReward(companion CompanionState, active CareActionState) SleepWakeReward {
-	sleepStartedAt := companion.SleepStartedAt
-
-	if sleepStartedAt.Year() <= 1 {
-		sleepStartedAt = active.StartedAt
-	}
-
-	if sleepStartedAt.Year() <= 1 {
-		sleepStartedAt = time.Now().UTC().Add(-1 * time.Hour)
-	}
-
-	hoursSlept := time.Since(sleepStartedAt).Hours()
-	if hoursSlept < 1 {
-		hoursSlept = 1
-	}
-
-	if hoursSlept > 8 {
-		hoursSlept = 8
-	}
-
-	energy := 15
-	comfort := 5
-
-	if hoursSlept > 1 {
-		energy += int(math.Round(22 * math.Pow(hoursSlept-1, 0.85)))
-		comfort += int(math.Round(7 * math.Pow(hoursSlept-1, 0.75)))
-	}
-
-	return SleepWakeReward{
-		Energy:  energy,
-		Comfort: comfort,
-	}
-}
-
 func hydrateCareActionDisplay(action CareActionState) CareActionState {
 	if action.Status != "active" || action.CompletesAt.Year() <= 1 {
 		action.SecondsRemaining = action.DurationSeconds
@@ -1681,6 +1664,206 @@ func careActionRewardsOnStart(rule CareActionRule) bool {
 
 func careActionRewardsOnCompletion(rule CareActionRule) bool {
 	return rule.WakeAction
+}
+
+func (s *Store) SettleDevCareDecay(ctx context.Context) error {
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin settle dev care decay: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	playerID, companion, err := loadDevCompanionForUpdateTx(ctx, tx)
+	if err != nil {
+		return err
+	}
+
+	if _, err := settleCareDecayTx(ctx, tx, playerID, companion); err != nil {
+		return err
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("commit settle dev care decay: %w", err)
+	}
+
+	return nil
+}
+
+func settleCareDecayTx(ctx context.Context, tx pgx.Tx, playerID int64, companion CompanionState) (CompanionState, error) {
+	now := time.Now().UTC()
+	lastDecayAt := companion.LastDecayAt
+
+	if lastDecayAt.Year() <= 1 {
+		if companion.LastInteractionAt.Year() > 1 {
+			lastDecayAt = companion.LastInteractionAt
+		} else {
+			lastDecayAt = now
+		}
+	}
+
+	if now.Before(lastDecayAt) {
+		lastDecayAt = now
+	}
+
+	elapsed := now.Sub(lastDecayAt)
+	if elapsed < time.Duration(CareDecayMinimumSeconds)*time.Second {
+		return companion, nil
+	}
+
+	hours := elapsed.Hours()
+	decayed := companion
+
+	if strings.ToLower(companion.Status) == "sleeping" {
+		decayed = applySleepingCareDecay(companion, hours, lastDecayAt, now)
+	} else {
+		decayed = applyAwakeCareDecay(companion, hours)
+	}
+
+	decayed.MoodScore = NamiMoodScore(decayed)
+	decayed.MoodLabel = NamiMoodLabel(decayed.MoodScore)
+	decayed.PrimaryNeed = NamiPrimaryNeed(decayed)
+	decayed.Caption = NamiCaption(decayed)
+	decayed.SuggestedAction = NamiSuggestedAction(decayed)
+	decayed.LastDecayAt = now
+
+	_, err := tx.Exec(ctx, `
+		update companion_states
+		set
+			mood_score = $1,
+			satiety = $2,
+			connection = $3,
+			energy = $4,
+			comfort = $5,
+			playfulness = $6,
+			inspiration = $7,
+			cleanliness = $8,
+			last_decay_at = $9,
+			updated_at = now()
+		where player_id = $10
+	`,
+		decayed.MoodScore,
+		decayed.Satiety,
+		decayed.Connection,
+		decayed.Energy,
+		decayed.Comfort,
+		decayed.Playfulness,
+		decayed.Inspiration,
+		decayed.Cleanliness,
+		decayed.LastDecayAt,
+		playerID,
+	)
+	if err != nil {
+		return CompanionState{}, fmt.Errorf("update care decay: %w", err)
+	}
+
+	return decayed, nil
+}
+
+func applyAwakeCareDecay(companion CompanionState, hours float64) CompanionState {
+	decayed := companion
+
+	satietyLoss := AwakeSatietyDecayPerHour * hours
+	connectionLoss := AwakeConnectionDecayPerHour * hours
+	energyLoss := AwakeEnergyDecayPerHour * hours
+	comfortLoss := AwakeComfortDecayPerHour * hours
+	playfulnessLoss := AwakePlayfulnessDecayPerHour * hours
+	inspirationLoss := AwakeInspirationDecayPerHour * hours
+	cleanlinessLoss := AwakeCleanlinessDecayPerHour * hours
+
+	if companion.Satiety < 40 {
+		comfortLoss += 1.0 * hours
+	}
+
+	if companion.Satiety < 30 {
+		comfortLoss += 1.0 * hours
+	}
+
+	if companion.Connection < 40 {
+		comfortLoss += 1.5 * hours
+	}
+
+	if companion.Connection < 30 {
+		comfortLoss += 1.0 * hours
+	}
+
+	if companion.Cleanliness < 50 {
+		comfortLoss += 1.0 * hours
+	}
+
+	if companion.Cleanliness < 30 {
+		comfortLoss += 1.0 * hours
+	}
+
+	if companion.Energy < 30 {
+		playfulnessLoss += 1.0 * hours
+	}
+
+	if companion.Comfort < 40 {
+		inspirationLoss += 1.0 * hours
+	}
+
+	if companion.Cleanliness < 40 {
+		inspirationLoss += 0.5 * hours
+	}
+
+	if companion.Satiety < 25 {
+		energyLoss += 0.75 * hours
+	}
+
+	if companion.Cleanliness < 25 {
+		connectionLoss += 0.5 * hours
+	}
+
+	decayed.Satiety = decayCareStat(companion.Satiety, satietyLoss)
+	decayed.Connection = decayCareStat(companion.Connection, connectionLoss)
+	decayed.Energy = decayCareStat(companion.Energy, energyLoss)
+	decayed.Comfort = decayCareStat(companion.Comfort, comfortLoss)
+	decayed.Playfulness = decayCareStat(companion.Playfulness, playfulnessLoss)
+	decayed.Inspiration = decayCareStat(companion.Inspiration, inspirationLoss)
+	decayed.Cleanliness = decayCareStat(companion.Cleanliness, cleanlinessLoss)
+
+	return decayed
+}
+
+func applySleepingCareDecay(companion CompanionState, hours float64, lastDecayAt time.Time, now time.Time) CompanionState {
+	decayed := companion
+
+	decayed.Satiety = decayCareStat(companion.Satiety, SleepingSatietyDecayPerHour*hours)
+
+	sleepStartedAt := companion.SleepStartedAt
+	if sleepStartedAt.Year() <= 1 {
+		sleepStartedAt = lastDecayAt
+	}
+
+	alreadyRecoveredHours := lastDecayAt.Sub(sleepStartedAt).Hours()
+	if alreadyRecoveredHours < 0 {
+		alreadyRecoveredHours = 0
+	}
+
+	totalRecoverableHoursRemaining := SleepRecoveryCapHours - alreadyRecoveredHours
+	if totalRecoverableHoursRemaining < 0 {
+		totalRecoverableHoursRemaining = 0
+	}
+
+	recoveryHours := math.Min(hours, totalRecoverableHoursRemaining)
+	if recoveryHours < 0 {
+		recoveryHours = 0
+	}
+
+	energyGain := SleepEnergyRecoveryPerHour * recoveryHours
+	decayed.Energy = gainCareStat(companion.Energy, energyGain)
+
+	_ = now
+
+	return decayed
+}
+
+func decayCareStat(value int, loss float64) int {
+	return clampCareStat(int(math.Round(float64(value) - loss)))
+}
+
+func gainCareStat(value int, gain float64) int {
+	return clampCareStat(int(math.Round(float64(value) + gain)))
 }
 
 func (s *Store) GenerateDevPassiveNamiMessages(ctx context.Context) error {
