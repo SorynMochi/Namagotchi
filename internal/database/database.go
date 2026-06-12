@@ -1055,7 +1055,7 @@ func startCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, rule Care
 			started_at,
 			completes_at
 		)
-		values ($1, $2, $3, 'active', null, $4, now(), now() + make_interval(secs => $4))
+		values ($1, $2, $3, 'active', null, $4, now(), now() + ($4::int * interval '1 second'))
 		returning
 			id,
 			action_key,
@@ -1301,7 +1301,7 @@ func activateQueuedCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, 
 		set status = 'active',
 			queue_position = null,
 			started_at = now(),
-			completes_at = now() + make_interval(secs => duration_seconds),
+			completes_at = now() + (duration_seconds::int * interval '1 second'),
 			updated_at = now()
 		where id = $1
 			and player_id = $2
