@@ -970,7 +970,7 @@ func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, Compani
 			c.last_xp_gained,
 			c.last_action,
 			coalesce(c.sleep_started_at, '0001-01-01 00:00:00+00'::timestamptz),
-			coalesce(c.energy_at_sleep_start, 0)
+			coalesce(c.energy_at_sleep_start, 0),
 			c.last_decay_at
 		from players p
 		join companion_states c on c.player_id = p.id
