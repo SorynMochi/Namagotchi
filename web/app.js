@@ -108,6 +108,61 @@ const GATHERING_TASK_CONFIG = {
   },
 };
 
+const CARE_ACTION_CONFIG = {
+  meal: {
+    label: "Meal",
+    durationSeconds: 30 * 60,
+  },
+  snack: {
+    label: "Snack",
+    durationSeconds: 5 * 60,
+  },
+  drink: {
+    label: "Drink",
+    durationSeconds: 2 * 60,
+  },
+  cuddle: {
+    label: "Cuddle",
+    durationSeconds: 15 * 60,
+  },
+  play: {
+    label: "Play",
+    durationSeconds: 25 * 60,
+  },
+  write_together: {
+    label: "Write",
+    durationSeconds: 30 * 60,
+  },
+  read_together: {
+    label: "Read",
+    durationSeconds: 30 * 60,
+  },
+  boop: {
+    label: "Boop",
+    durationSeconds: 30,
+  },
+  nap: {
+    label: "Nap",
+    durationSeconds: 60 * 60,
+  },
+  bath: {
+    label: "Bath",
+    durationSeconds: 30 * 60,
+  },
+  freshen_up: {
+    label: "Freshen",
+    durationSeconds: 10 * 60,
+  },
+  put_to_bed: {
+    label: "Sleep",
+    durationSeconds: 60 * 60,
+  },
+  wake_up: {
+    label: "Wake",
+    durationSeconds: 5 * 60,
+  },
+};
+
 const DEV_PLAYER_DIRECTORY = {
   soryn: {
     displayName: "Soryn",
@@ -366,6 +421,8 @@ let hasServerClock = false;
 let tickStartMs = 0;
 let tickEndMs = 0;
 let playerStatusRefreshTimer = null;
+let careCountdownTimer = null;
+let careCompletionRefreshInFlight = false;
 let emojiPickerNeedsRender = true;
 let emojiPickerPreloadTimer = null;
 
@@ -447,6 +504,7 @@ initializeEmojiPickerPortal();
 initializeChat();
 initializeChatResize();
 initializeNamiMessages();
+initializeCareButtonTimer();
 
 function showSection(sectionName) {
   document.querySelectorAll(".nav-item").forEach((button) => {
@@ -549,11 +607,12 @@ async function setGatheringTask(task) {
 }
 
 async function performCareAction(action) {
-  const resolvedAction = action === "sleep_toggle"
-    ? String(latestPlayerStatus?.companion?.status || "").toLowerCase() === "sleeping"
-      ? "wake_up"
-      : "put_to_bed"
-    : action;
+  const resolvedAction = resolveCareActionForRequest(action, latestPlayerStatus);
+
+  if (!resolvedAction) {
+    addChatMessage("System", "That care action is not available right now.", "system");
+    return;
+  }
 
   try {
     const response = await fetch("/api/player/care", {
@@ -565,7 +624,16 @@ async function performCareAction(action) {
     });
 
     if (!response.ok) {
-      throw new Error(`Care action failed: ${response.status}`);
+      let message = `Care action failed: ${response.status}`;
+
+      try {
+        const errorBody = await response.json();
+        message = errorBody.message || message;
+      } catch {
+        // Keep the default message.
+      }
+
+      throw new Error(message);
     }
 
     const result = await response.json();
@@ -575,7 +643,7 @@ async function performCareAction(action) {
     await loadNamiMessagesFromServer();
   } catch (error) {
     console.error(error);
-    addChatMessage("System", "Care action failed. Nami-chan hid the button under a blanket.", "system");
+    addChatMessage("System", error.message || "Care action failed. Nami-chan hid the button under a blanket.", "system");
   }
 }
 
@@ -590,11 +658,7 @@ namiXpFill.style.width = `${namiXpPercent}%`;
 namiMoodLabel.textContent = companion.moodLabel || "Okay";
 namiPrimaryNeed.textContent = companion.primaryNeed || "Waiting";
 namiSuggestedAction.textContent = companion.suggestedAction || "Any care action";
-if (sleepToggleButton) {
-  const isSleeping = String(companion.status || "").toLowerCase() === "sleeping";
-  sleepToggleButton.textContent = isSleeping ? "Wake" : "Sleep";
-  sleepToggleButton.title = isSleeping ? "Wake Nami-chan up" : "Put Nami-chan to bed";
-}
+
   const tick = status.tick;
   const bonus = getMoodBonus(companion.moodScore);
 
@@ -653,8 +717,10 @@ currentActionLabel.textContent = `Playdeck + ${progressActionName} [x${tick.play
   `;
 
   updateGatheringCards(status);
+  renderCareButtons(status);
 
-namiMessage.textContent = companion.caption || "Nami-chan is waiting sweetly.";}
+  namiMessage.textContent = companion.caption || "Nami-chan is waiting sweetly.";
+}
 
 function activityLevel(activity) {
   return Number(activity?.level ?? 1).toLocaleString();
@@ -670,6 +736,280 @@ function renderStat(name, value) {
       <strong>${value}</strong>
     </div>
   `;
+}
+
+function initializeCareButtonTimer() {
+  if (careCountdownTimer) {
+    return;
+  }
+
+  careCountdownTimer = setInterval(() => {
+    if (!latestPlayerStatus) {
+      return;
+    }
+
+    renderCareButtons(latestPlayerStatus);
+    refreshCareStatusWhenComplete(latestPlayerStatus);
+  }, 1000);
+}
+
+function renderCareButtons(status) {
+  careButtons.forEach((button) => {
+    ensureCareButtonContents(button);
+
+    const buttonAction = button.dataset.careAction;
+    const resolvedAction = resolveCareActionForDisplay(buttonAction, status);
+    const config = CARE_ACTION_CONFIG[resolvedAction];
+
+    if (!config) {
+      setCareButtonLabel(button, "Unknown");
+      button.disabled = true;
+      return;
+    }
+
+    const activeAction = getActiveCareAction(status);
+    const queuedAction = getQueuedCareAction(status, resolvedAction);
+
+    const isActive = activeAction?.action === resolvedAction;
+    const isQueued = Boolean(queuedAction);
+    const canClick = canClickCareButton(resolvedAction, status, isActive, isQueued);
+
+    button.classList.toggle("care-button-active", isActive);
+    button.classList.toggle("care-button-queued", isQueued);
+    button.classList.toggle("care-button-blocked", !canClick && !isActive && !isQueued);
+    button.disabled = !canClick;
+
+    button.dataset.resolvedCareAction = resolvedAction;
+
+    if (isActive) {
+      const remainingSeconds = getCareActionRemainingSeconds(activeAction);
+      const progressPercent = getCareActionProgressPercent(activeAction);
+
+      setCareButtonLabel(button, `${config.label} (${formatCareDuration(remainingSeconds)})`);
+      setCareButtonProgress(button, progressPercent);
+      button.title = `${config.label} is active. ${formatCareDuration(remainingSeconds)} remaining.`;
+      return;
+    }
+
+    if (isQueued) {
+      setCareButtonLabel(button, `${config.label} (${formatCareDuration(getCareDurationSeconds(queuedAction))} Queue ${queuedAction.queuePosition})`);
+      setCareButtonProgress(button, 0);
+      button.title = `${config.label} is queued in slot ${queuedAction.queuePosition}. Click to remove it from the queue.`;
+      return;
+    }
+
+    setCareButtonLabel(button, `${config.label} (${formatCareDuration(config.durationSeconds)})`);
+    setCareButtonProgress(button, 0);
+    button.title = canClick
+      ? `${config.label} takes ${formatCareDuration(config.durationSeconds)}.`
+      : `${config.label} is not available right now.`;
+  });
+}
+
+function ensureCareButtonContents(button) {
+  if (button.querySelector(".care-button-label")) {
+    return;
+  }
+
+  const existingText = button.textContent.trim();
+
+  const fill = document.createElement("span");
+  fill.className = "care-button-progress-fill";
+  fill.setAttribute("aria-hidden", "true");
+
+  const label = document.createElement("span");
+  label.className = "care-button-label";
+  label.textContent = existingText;
+
+  button.replaceChildren(fill, label);
+}
+
+function setCareButtonLabel(button, text) {
+  const label = button.querySelector(".care-button-label");
+
+  if (label) {
+    label.textContent = text;
+  } else {
+    button.textContent = text;
+  }
+}
+
+function setCareButtonProgress(button, percentValue) {
+  const safePercent = Math.max(0, Math.min(100, Number(percentValue) || 0));
+  button.style.setProperty("--care-action-progress", `${safePercent}%`);
+}
+
+function resolveCareActionForRequest(buttonAction, status) {
+  if (buttonAction !== "sleep_toggle") {
+    return buttonAction;
+  }
+
+  return resolveCareActionForDisplay(buttonAction, status);
+}
+
+function resolveCareActionForDisplay(buttonAction, status) {
+  if (buttonAction !== "sleep_toggle") {
+    return buttonAction;
+  }
+
+  const activeAction = getActiveCareAction(status);
+  const queuedSleep = getQueuedCareAction(status, "put_to_bed");
+
+  if (activeAction?.action === "put_to_bed") {
+    return "put_to_bed";
+  }
+
+  if (activeAction?.action === "wake_up") {
+    return "wake_up";
+  }
+
+  if (queuedSleep) {
+    return "put_to_bed";
+  }
+
+  const isSleeping = String(status?.companion?.status || "").toLowerCase() === "sleeping";
+  return isSleeping ? "wake_up" : "put_to_bed";
+}
+
+function getActiveCareAction(status) {
+  const active = status?.care?.active;
+
+  if (!active || !Number(active.id)) {
+    return null;
+  }
+
+  return normalizeCareActionState(active);
+}
+
+function getQueuedCareActions(status) {
+  return Array.isArray(status?.care?.queued)
+    ? status.care.queued.map(normalizeCareActionState)
+    : [];
+}
+
+function getQueuedCareAction(status, actionKey) {
+  return getQueuedCareActions(status).find((action) => action.action === actionKey) || null;
+}
+
+function normalizeCareActionState(action) {
+  return {
+    ...action,
+    id: Number(action.id ?? 0),
+    queuePosition: Number(action.queuePosition ?? 0),
+    durationSeconds: Number(action.durationSeconds ?? 0),
+    secondsRemaining: Number(action.secondsRemaining ?? 0),
+    progressPercent: Number(action.progressPercent ?? 0),
+  };
+}
+
+function canClickCareButton(actionKey, status, isActive, isQueued) {
+  if (isActive) {
+    return false;
+  }
+
+  if (isQueued) {
+    return true;
+  }
+
+  const activeAction = getActiveCareAction(status);
+  const queuedActions = getQueuedCareActions(status);
+  const slots = Number(status?.care?.slots ?? 3);
+  const isSleeping = String(status?.companion?.status || "").toLowerCase() === "sleeping";
+
+  if (activeAction?.action === "put_to_bed") {
+    return false;
+  }
+
+  if (isSleeping && actionKey !== "wake_up") {
+    return false;
+  }
+
+  if (!isSleeping && actionKey === "wake_up") {
+    return false;
+  }
+
+  if (careQueueHasSleepBarrier(status)) {
+    return false;
+  }
+
+  if (activeAction && queuedActions.length >= slots) {
+    return false;
+  }
+
+  return true;
+}
+
+function careQueueHasSleepBarrier(status) {
+  return getQueuedCareActions(status).some((action) => action.action === "put_to_bed");
+}
+
+function getCareDurationSeconds(action) {
+  return Number(action?.durationSeconds ?? CARE_ACTION_CONFIG[action?.action]?.durationSeconds ?? 0);
+}
+
+function getCareActionRemainingSeconds(action) {
+  if (!action) {
+    return 0;
+  }
+
+  const completesAtMs = Date.parse(action.completesAt);
+  if (!Number.isNaN(completesAtMs)) {
+    const now = Date.now() + serverClockOffsetMs;
+    return Math.max(0, Math.ceil((completesAtMs - now) / 1000));
+  }
+
+  return Math.max(0, Number(action.secondsRemaining ?? 0));
+}
+
+function getCareActionProgressPercent(action) {
+  if (!action) {
+    return 0;
+  }
+
+  const durationSeconds = Math.max(1, getCareDurationSeconds(action));
+  const remainingSeconds = getCareActionRemainingSeconds(action);
+  const elapsedSeconds = Math.max(0, durationSeconds - remainingSeconds);
+
+  return Math.max(0, Math.min(100, (elapsedSeconds / durationSeconds) * 100));
+}
+
+function refreshCareStatusWhenComplete(status) {
+  const activeAction = getActiveCareAction(status);
+
+  if (!activeAction || careCompletionRefreshInFlight) {
+    return;
+  }
+
+  if (getCareActionRemainingSeconds(activeAction) > 0) {
+    return;
+  }
+
+  careCompletionRefreshInFlight = true;
+
+  loadPlayerStatus()
+    .finally(() => {
+      careCompletionRefreshInFlight = false;
+    });
+}
+
+function formatCareDuration(totalSeconds) {
+  let seconds = Math.max(0, Math.ceil(Number(totalSeconds) || 0));
+
+  const hours = Math.floor(seconds / 3600);
+  seconds -= hours * 3600;
+
+  const minutes = Math.floor(seconds / 60);
+  seconds -= minutes * 60;
+
+  if (hours > 0) {
+    return `${hours}h${minutes}m${seconds}s`;
+  }
+
+  if (minutes > 0) {
+    return `${minutes}m${seconds}s`;
+  }
+
+  return `${seconds}s`;
 }
 
 function updateGatheringCards(status) {
@@ -2030,11 +2370,20 @@ function careActionMessage(result) {
     return "No care result received.";
   }
 
-  const levelText = Number(result.levelUps ?? 0) > 0
-    ? ` Level up! Nami-chan reached level ${Number(result.currentLevel).toLocaleString()}.`
-    : "";
+  const actionName = result.actionName || "Care";
 
-  return `${result.actionName}: +${Number(result.xpGained ?? 0).toLocaleString()} Nami XP.${levelText}`;
+  switch (result.mode) {
+    case "started":
+      return `${actionName} started.`;
+    case "queued":
+      return `${actionName} queued.`;
+    case "unqueued":
+      return `${actionName} removed from the queue.`;
+    case "completed":
+      return `${actionName} complete.`;
+    default:
+      return result.message || `${actionName} updated.`;
+  }
 }
 
 function getMoodBonus(mood) {

@@ -3388,3 +3388,87 @@ body > .emoji-picker-floating .emoji-option {
 .hidden {
   display: none !important;
 }
+
+/* Care action queue/progress buttons */
+
+.compact-care-actions .care-button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: rgba(255, 104, 183, 0.52);
+  background:
+    linear-gradient(180deg, rgba(255, 104, 183, 0.18), rgba(124, 70, 153, 0.12)),
+    rgba(255, 255, 255, 0.035);
+  color: #ffe1f0;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease,
+    transform 120ms ease;
+}
+
+.compact-care-actions .care-button .care-button-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: -1;
+  width: var(--care-action-progress, 0%);
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(73, 199, 255, 0.5), rgba(255, 104, 183, 0.58));
+  opacity: 0.74;
+  transition: width 180ms linear;
+}
+
+.compact-care-actions .care-button .care-button-label {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.72),
+    0 0 5px rgba(0, 0, 0, 0.44);
+}
+
+.compact-care-actions .care-button.care-button-active {
+  border-color: rgba(73, 199, 255, 0.88);
+  color: #eaf8ff;
+  box-shadow:
+    0 0 0 1px rgba(73, 199, 255, 0.16),
+    0 0 16px rgba(73, 199, 255, 0.22),
+    inset 0 0 16px rgba(73, 199, 255, 0.12);
+}
+
+.compact-care-actions .care-button.care-button-active .care-button-progress-fill {
+  opacity: 0.95;
+}
+
+.compact-care-actions .care-button.care-button-queued {
+  border-color: rgba(168, 224, 95, 0.62);
+  color: #f3ffd7;
+  box-shadow:
+    inset 0 0 12px rgba(168, 224, 95, 0.08),
+    0 0 10px rgba(168, 224, 95, 0.08);
+}
+
+.compact-care-actions .care-button.care-button-queued .care-button-progress-fill {
+  width: 0%;
+  background: linear-gradient(90deg, rgba(168, 224, 95, 0.32), rgba(255, 220, 112, 0.26));
+}
+
+.compact-care-actions .care-button.care-button-blocked {
+  opacity: 0.45;
+}
+
+.compact-care-actions .care-button:disabled {
+  cursor: default;
+}
+
+.compact-care-actions .care-button.care-button-active:disabled {
+  opacity: 1;
+}
