@@ -18,11 +18,10 @@ const onlineUsers = document.querySelector("#online-users");
 const wealthCredits = document.querySelector("#wealth-credits");
 const wealthNibbles = document.querySelector("#wealth-nibbles");
 const wealthNamiCoin = document.querySelector("#wealth-namicoin");
-const wealthInventory = document.querySelector("#wealth-inventory");
+const topWardrobe = document.querySelector("#top-wardrobe");
 
 const topMood = document.querySelector("#top-mood");
 const topNamiStatus = document.querySelector("#top-nami-status");
-const topMoodBonus = document.querySelector("#top-mood-bonus");
 const personalMoodBonus = document.querySelector("#personal-mood-bonus");
 
 const playdeckTopLevel = document.querySelector("#playdeck-top-level");
@@ -665,11 +664,10 @@ namiSuggestedAction.textContent = companion.suggestedAction || "Any care action"
 wealthCredits.textContent = formatWholeCredits(player.creditsCents ?? player.currencyCents);
 wealthNibbles.textContent = formatCompactNumber(player.nibbles ?? 0);
 wealthNamiCoin.textContent = formatCompactNumber(player.namiCoin ?? 0);
-wealthInventory.textContent = "0 / 100";
+topWardrobe.textContent = "0 / 100";
 
 topMood.textContent = Math.round(Number(companion.moodScore));
 topNamiStatus.textContent = capitalize(companion.status);
-topMoodBonus.textContent = `+${bonus}%`;
 personalMoodBonus.textContent = `+${bonus}% Resource Gain`;
 
 playdeckTopLevel.textContent = Number(player.level).toLocaleString();
