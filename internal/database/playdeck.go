@@ -213,7 +213,7 @@ func (s *Store) GetPlaydeckStatus(ctx context.Context, playerID int64) (Playdeck
 		return PlaydeckStatus{}, err
 	}
 
-	status.InventoryPreview, err = loadWardrobePreviewTx(ctx, tx, playerID, 8)
+	status.InventoryPreview, err = loadWardrobePreviewTx(ctx, tx, playerID, WardrobeCapacity)
 	if err != nil {
 		return PlaydeckStatus{}, err
 	}
@@ -404,7 +404,21 @@ func loadWardrobePreviewTx(ctx context.Context, tx pgx.Tx, playerID int64, limit
 		join item_definitions d on d.id = i.item_definition_id
 		where i.player_id = $1
 			and i.container = 'wardrobe'
-		order by i.acquired_at desc, i.id desc
+		order by
+			case lower(d.rarity)
+				when 'devastating' then 7
+				when 'iconic' then 6
+				when 'glam' then 5
+				when 'trendy' then 4
+				when 'chic' then 3
+				when 'cute' then 2
+				when 'basic' then 1
+				else 0
+			end desc,
+			case when i.equipped_slot is not null then 1 else 0 end desc,
+			d.name asc,
+			i.acquired_at desc,
+			i.id desc
 		limit $2
 	`, playerID, limit)
 	if err != nil {

@@ -4444,6 +4444,359 @@ h3 {
   font-weight: 950;
 }
 
+.wardrobe-header-meta {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
+.wardrobe-capacity-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 190, 226, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.wardrobe-capacity-chip strong {
+  color: var(--pink-soft);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+}
+
+.wardrobe-capacity-subtext {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.wardrobe-studio-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) 240px minmax(0, 1.15fr);
+  gap: 16px;
+  min-height: 0;
+}
+
+.wardrobe-panel {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(143, 205, 255, 0.14);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 62%),
+    rgba(7, 13, 24, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 40px rgba(0, 0, 0, 0.2);
+}
+
+.wardrobe-panel-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.wardrobe-panel-titlebar h2 {
+  margin: 0;
+}
+
+.wardrobe-equipment-panel,
+.wardrobe-inventory-panel,
+.wardrobe-bonuses-panel {
+  min-height: 0;
+}
+
+.equipment-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.equipment-card,
+.inventory-item-card {
+  position: relative;
+  min-width: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(201, 167, 255, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 70%),
+    rgba(43, 22, 61, 0.8);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 0 1px rgba(255, 140, 204, 0.04);
+}
+
+.equipment-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 10px;
+  min-height: 148px;
+  padding: 14px;
+}
+
+.equipment-card.is-empty {
+  border-style: dashed;
+  opacity: 0.78;
+}
+
+.equipment-card-topline,
+.inventory-item-topline {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.equipment-slot-label {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.equipment-card-main {
+  display: grid;
+  align-content: center;
+  gap: 6px;
+}
+
+.equipment-item-name,
+.inventory-item-name {
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 950;
+  line-height: 1.15;
+}
+
+.equipment-slot-subtype,
+.inventory-item-subtype {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.equipment-card-footer {
+  display: grid;
+  gap: 8px;
+}
+
+.equipment-power-tag,
+.inventory-quantity-pill {
+  justify-self: start;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(152, 221, 255, 0.12);
+  border: 1px solid rgba(152, 221, 255, 0.2);
+  color: var(--cyan-soft);
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.equipment-stat-tags,
+.inventory-stat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.gear-stat-chip {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-soft);
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
+.muted-chip {
+  color: var(--muted);
+}
+
+.wardrobe-bonus-list {
+  display: grid;
+  gap: 8px;
+}
+
+.wardrobe-bonus-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 190, 226, 0.13);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.wardrobe-bonus-row strong {
+  color: var(--pink-soft);
+  font-weight: 950;
+}
+
+.inventory-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+  max-height: 72vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.inventory-item-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  min-height: 154px;
+}
+
+.inventory-item-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.rarity-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.rarity-empty {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+}
+
+.rarity-basic {
+  border-color: rgba(170, 185, 210, 0.34);
+  box-shadow: 0 0 18px rgba(170, 185, 210, 0.08);
+}
+.rarity-basic .rarity-pill,
+.rarity-pill.rarity-basic {
+  background: rgba(170, 185, 210, 0.14);
+  border: 1px solid rgba(170, 185, 210, 0.34);
+  color: #dbe7ff;
+}
+
+.rarity-cute {
+  border-color: rgba(255, 170, 214, 0.36);
+  box-shadow: 0 0 20px rgba(255, 140, 204, 0.1);
+}
+.rarity-cute .rarity-pill,
+.rarity-pill.rarity-cute {
+  background: rgba(255, 170, 214, 0.14);
+  border: 1px solid rgba(255, 170, 214, 0.36);
+  color: #ffe0f1;
+}
+
+.rarity-chic {
+  border-color: rgba(210, 179, 255, 0.38);
+  box-shadow: 0 0 20px rgba(201, 167, 255, 0.1);
+}
+.rarity-chic .rarity-pill,
+.rarity-pill.rarity-chic {
+  background: rgba(210, 179, 255, 0.14);
+  border: 1px solid rgba(210, 179, 255, 0.38);
+  color: #efe3ff;
+}
+
+.rarity-trendy {
+  border-color: rgba(132, 225, 255, 0.42);
+  box-shadow: 0 0 22px rgba(132, 225, 255, 0.12);
+}
+.rarity-trendy .rarity-pill,
+.rarity-pill.rarity-trendy {
+  background: rgba(132, 225, 255, 0.14);
+  border: 1px solid rgba(132, 225, 255, 0.42);
+  color: #dcf8ff;
+}
+
+.rarity-glam {
+  border-color: rgba(255, 226, 150, 0.44);
+  box-shadow: 0 0 24px rgba(255, 226, 150, 0.12);
+}
+.rarity-glam .rarity-pill,
+.rarity-pill.rarity-glam {
+  background: rgba(255, 226, 150, 0.15);
+  border: 1px solid rgba(255, 226, 150, 0.44);
+  color: #fff4c7;
+}
+
+.rarity-iconic {
+  border-color: rgba(255, 179, 124, 0.48);
+  box-shadow: 0 0 26px rgba(255, 179, 124, 0.13);
+}
+.rarity-iconic .rarity-pill,
+.rarity-pill.rarity-iconic {
+  background: rgba(255, 179, 124, 0.15);
+  border: 1px solid rgba(255, 179, 124, 0.48);
+  color: #ffe5cf;
+}
+
+.rarity-devastating {
+  border-color: rgba(255, 111, 146, 0.54);
+  box-shadow: 0 0 30px rgba(255, 111, 146, 0.18);
+}
+.rarity-devastating .rarity-pill,
+.rarity-pill.rarity-devastating {
+  background: rgba(255, 111, 146, 0.17);
+  border: 1px solid rgba(255, 111, 146, 0.54);
+  color: #ffd7e1;
+}
+
+@media (max-width: 1400px) {
+  .wardrobe-studio-layout {
+    grid-template-columns: minmax(0, 1fr) 220px minmax(0, 1fr);
+  }
+
+  .equipment-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .wardrobe-studio-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .inventory-card-grid {
+    max-height: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .wardrobe-header-meta {
+    justify-items: start;
+    margin-top: 8px;
+  }
+
+  .equipment-card-grid,
+  .inventory-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .equipment-slot-list,
 .inventory-preview-list {
   display: grid;
