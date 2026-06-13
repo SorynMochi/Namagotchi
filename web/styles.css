@@ -5418,3 +5418,402 @@ body.is-resizing-chat * {
     min-height: 0;
   }
 }
+
+/* Wardrobe compact pass:
+   Closer to compact equipment/inventory panels from the reference layout.
+*/
+
+#section-inventory .section-header {
+  margin-bottom: 12px;
+}
+
+#section-inventory h1 {
+  font-size: clamp(1.55rem, 2.25vw, 2.05rem);
+}
+
+#section-inventory .wardrobe-header-meta {
+  align-self: start;
+}
+
+#section-inventory .wardrobe-capacity-chip {
+  padding: 6px 10px;
+  font-size: 0.74rem;
+}
+
+#section-inventory .wardrobe-capacity-chip strong {
+  font-size: 0.84rem;
+}
+
+#section-inventory .wardrobe-capacity-subtext {
+  font-size: 0.68rem;
+}
+
+#section-inventory .wardrobe-studio-layout {
+  grid-template-columns:
+    minmax(420px, 1.25fr)
+    minmax(190px, 0.34fr)
+    minmax(420px, 1.12fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+#section-inventory .wardrobe-panel {
+  padding: 10px;
+  border-radius: 14px;
+}
+
+#section-inventory .wardrobe-panel-titlebar {
+  min-height: 20px;
+  margin-bottom: 8px;
+}
+
+#section-inventory .wardrobe-panel-titlebar h2 {
+  color: var(--cyan);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Left equipped slots */
+
+#section-inventory .equipment-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 92px;
+  gap: 8px;
+}
+
+#section-inventory .equipment-card {
+  display: grid;
+  grid-template-rows: 18px 1fr 18px;
+  min-height: 0;
+  height: 92px;
+  padding: 8px 9px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#section-inventory .equipment-card.is-empty {
+  border: 1px solid rgba(110, 188, 255, 0.58);
+  background:
+    linear-gradient(180deg, rgba(110, 188, 255, 0.085), transparent 65%),
+    rgba(21, 42, 66, 0.64);
+  box-shadow:
+    0 0 0 1px rgba(110, 188, 255, 0.22),
+    inset 0 0 0 1px rgba(110, 188, 255, 0.16),
+    0 0 22px rgba(110, 188, 255, 0.08);
+  opacity: 1;
+}
+
+#section-inventory .gear-card-topline,
+#section-inventory .gear-card-bottomline {
+  min-height: 16px;
+  line-height: 1;
+}
+
+#section-inventory .equipment-slot-label {
+  max-width: 70%;
+  overflow: hidden;
+  color: rgba(244, 212, 230, 0.66);
+  font-size: 0.58rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#section-inventory .gear-level-tag,
+#section-inventory .gear-tailoring-tag {
+  min-height: 16px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(5, 10, 18, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--pink-soft);
+  font-size: 0.56rem;
+  font-weight: 950;
+}
+
+#section-inventory .gear-card-name-wrap {
+  min-height: 0;
+  padding: 2px 6px;
+}
+
+#section-inventory .equipment-card .gear-card-name {
+  display: -webkit-box;
+  overflow: hidden;
+  color: rgba(255, 246, 251, 0.76);
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1.12;
+  text-align: center;
+  text-wrap: balance;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+#section-inventory .equipment-card .gear-card-empty-name {
+  color: rgba(225, 239, 255, 0.38);
+  font-size: 0.82rem;
+  font-style: italic;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  -webkit-line-clamp: 1;
+}
+
+/* Middle bonuses */
+
+#section-inventory .wardrobe-bonuses-panel {
+  align-self: stretch;
+}
+
+#section-inventory .wardrobe-bonus-list {
+  gap: 5px;
+}
+
+#section-inventory .wardrobe-bonus-row {
+  min-height: 24px;
+  padding: 4px 6px;
+  border-radius: 7px;
+  font-size: 0.62rem;
+  line-height: 1.1;
+}
+
+#section-inventory .wardrobe-bonus-row strong {
+  color: var(--pink);
+  font-size: 0.62rem;
+}
+
+/* Right inventory categories */
+
+#section-inventory .wardrobe-inventory-panel {
+  min-height: 0;
+}
+
+#section-inventory .inventory-card-grid {
+  display: grid;
+  gap: 6px;
+  max-height: min(62vh, 560px);
+  overflow-y: auto;
+  padding: 0 3px 0 0;
+  scrollbar-gutter: stable;
+}
+
+#section-inventory .inventory-group-section {
+  display: grid;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(143, 205, 255, 0.18);
+  border-radius: 6px;
+  background: rgba(3, 9, 16, 0.48);
+}
+
+#section-inventory .inventory-group-header {
+  min-height: 18px;
+  padding: 0 4px;
+  border-bottom: 1px solid rgba(143, 205, 255, 0.14);
+  color: var(--cyan);
+  font-size: 0.58rem;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  line-height: 18px;
+  text-transform: uppercase;
+}
+
+#section-inventory .inventory-group-header strong {
+  color: rgba(244, 212, 230, 0.62);
+  font-size: 0.56rem;
+}
+
+#section-inventory .inventory-group-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: stretch;
+  min-height: 38px;
+}
+
+#section-inventory .inventory-empty-row {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 32px;
+  border: 0;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.012);
+  color: rgba(244, 212, 230, 0.44);
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 850;
+}
+
+#section-inventory .inventory-item-card {
+  display: grid;
+  grid-template-rows: 14px 1fr 14px;
+  flex: 0 0 92px;
+  width: 92px;
+  min-height: 80px;
+  height: 80px;
+  padding: 6px;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+#section-inventory .inventory-item-card .gear-level-tag,
+#section-inventory .inventory-item-card .gear-tailoring-tag {
+  min-height: 14px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 0.5rem;
+}
+
+#section-inventory .inventory-item-card .gear-card-name-wrap {
+  padding: 1px 3px;
+}
+
+#section-inventory .inventory-item-card .gear-card-name {
+  display: -webkit-box;
+  overflow: hidden;
+  color: rgba(255, 246, 251, 0.72);
+  font-size: 0.58rem;
+  font-weight: 850;
+  line-height: 1.08;
+  text-align: center;
+  text-wrap: balance;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Let rarity tints stay visible, but quieter in compact mode. */
+
+#section-inventory .inventory-item-card.rarity-basic,
+#section-inventory .equipment-card.rarity-basic {
+  box-shadow: 0 0 12px rgba(170, 185, 210, 0.07);
+}
+
+#section-inventory .inventory-item-card.rarity-cute,
+#section-inventory .equipment-card.rarity-cute {
+  box-shadow: 0 0 14px rgba(255, 140, 204, 0.09);
+}
+
+#section-inventory .inventory-item-card.rarity-chic,
+#section-inventory .equipment-card.rarity-chic {
+  box-shadow: 0 0 14px rgba(201, 167, 255, 0.1);
+}
+
+#section-inventory .inventory-item-card.rarity-trendy,
+#section-inventory .equipment-card.rarity-trendy {
+  box-shadow: 0 0 16px rgba(132, 225, 255, 0.11);
+}
+
+#section-inventory .inventory-item-card.rarity-glam,
+#section-inventory .equipment-card.rarity-glam {
+  box-shadow: 0 0 18px rgba(255, 226, 150, 0.11);
+}
+
+#section-inventory .inventory-item-card.rarity-iconic,
+#section-inventory .equipment-card.rarity-iconic {
+  box-shadow: 0 0 20px rgba(255, 179, 124, 0.13);
+}
+
+#section-inventory .inventory-item-card.rarity-devastating,
+#section-inventory .equipment-card.rarity-devastating {
+  box-shadow: 0 0 22px rgba(255, 111, 146, 0.16);
+}
+
+/* Medium screens: keep the reference shape as long as possible. */
+
+@media (max-width: 1320px) {
+  #section-inventory .wardrobe-studio-layout {
+    grid-template-columns:
+      minmax(360px, 1fr)
+      minmax(170px, 0.34fr)
+      minmax(360px, 1fr);
+  }
+
+  #section-inventory .equipment-card-grid {
+    grid-auto-rows: 86px;
+    gap: 7px;
+  }
+
+  #section-inventory .equipment-card {
+    height: 86px;
+  }
+
+  #section-inventory .inventory-item-card {
+    flex-basis: 86px;
+    width: 86px;
+    height: 76px;
+  }
+}
+
+/* Tablet: stack panels, but keep compact cards. */
+
+@media (max-width: 980px) {
+  #section-inventory .section-header {
+    display: grid;
+    gap: 8px;
+  }
+
+  #section-inventory .wardrobe-header-meta {
+    justify-items: start;
+  }
+
+  #section-inventory .wardrobe-studio-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #section-inventory .equipment-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 88px;
+  }
+
+  #section-inventory .equipment-card {
+    height: 88px;
+  }
+
+  #section-inventory .inventory-card-grid {
+    max-height: none;
+    overflow: visible;
+  }
+
+  #section-inventory .inventory-item-card {
+    flex-basis: 92px;
+    width: 92px;
+  }
+}
+
+/* Phone: one column for equipped cards, horizontal wrapping stays for inventory items. */
+
+@media (max-width: 560px) {
+  #section-inventory h1 {
+    font-size: 1.45rem;
+  }
+
+  #section-inventory .equipment-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #section-inventory .equipment-card {
+    height: 82px;
+  }
+
+  #section-inventory .inventory-group-grid {
+    gap: 5px;
+  }
+
+  #section-inventory .inventory-item-card {
+    flex-basis: calc(50% - 3px);
+    width: calc(50% - 3px);
+    height: 76px;
+  }
+}
+
+@media (max-width: 360px) {
+  #section-inventory .inventory-item-card {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}

@@ -136,13 +136,14 @@ const WARDROBE_EQUIP_SLOT_ORDER = [
 ];
 
 const WARDROBE_INVENTORY_GROUPS = [
-  { key: "top", label: "Top" },
-  { key: "bottom", label: "Bottom" },
-  { key: "dress", label: "Dress / Outfit" },
-  { key: "footwear", label: "Footwear" },
-  { key: "outerwear", label: "Outerwear" },
-  { key: "necklace", label: "Necklace" },
-  { key: "accessory", label: "Accessories" },
+  { key: "top", label: "Top", family: "top" },
+  { key: "bottom", label: "Bottom", family: "bottom" },
+  { key: "dress", label: "Dress / Outfit", family: "dress" },
+  { key: "footwear", label: "Footwear", family: "footwear" },
+  { key: "outerwear", label: "Outerwear", family: "outerwear" },
+  { key: "necklace", label: "Necklace", family: "necklace" },
+  { key: "accessory_1", label: "Accessory 1", family: "accessory" },
+  { key: "accessory_2", label: "Accessory 2", family: "accessory" },
 ];
 
 const CARE_ACTION_CONFIG = {
@@ -1025,10 +1026,21 @@ function groupWardrobeInventoryItems(items) {
   });
 
   items.forEach((item) => {
-    const key = normalizeWardrobeInventoryGroupKey(item.equipmentSlot || item.itemType || "");
+    const family = normalizeWardrobeInventoryGroupKey(item.equipmentSlot || item.itemType || "");
+    const equippedSlot = String(item.equippedSlot || "").trim().toLowerCase();
 
-    if (groups[key]) {
-      groups[key].push(item);
+    let targetKey = "";
+
+    if (equippedSlot && groups[equippedSlot]) {
+      targetKey = equippedSlot;
+    } else if (family === "accessory") {
+      targetKey = "accessory_1";
+    } else {
+      targetKey = family;
+    }
+
+    if (groups[targetKey]) {
+      groups[targetKey].push(item);
     }
   });
 
