@@ -1405,7 +1405,7 @@ function pushChatMessage(channel, username, text, optionsOrMarkUnread = {}) {
     username: normalizeChatText(username, 40),
     text: normalizeChatText(text),
     timestamp: getChatTimestamp(),
-    kind: options.kind || "normal",
+    kind: options.kind || (username === "System" ? "system" : "normal"),
     target: options.target || "",
     whisperTo: options.whisperTo || "",
     whisperFrom: options.whisperFrom || "",
@@ -1453,27 +1453,58 @@ function renderChatChannel() {
         appendFormattedChatText(emote, message.text);
 
         row.append(emote);
-      } else {
-        const nameButton = createPlayerNameButton(message.username);
-        row.append(nameButton);
+      } else if (message.kind === "whisper") {
+  appendWhisperChatContent(row, message);
+} else {
+  const nameButton = createPlayerNameButton(message.username);
+  row.append(nameButton, ":");
 
-        if (message.kind !== "system") {
-          row.append(": ");
-        } else {
-          row.append(" ");
-        }
-
-        const text = document.createElement("span");
-        text.className = "chat-text";
-        appendFormattedChatText(text, message.text);
-        row.append(text);
-      }
+  const spacer = document.createTextNode(" ");
+  const text = document.createElement("span");
+  text.className = "chat-text";
+  appendFormattedChatText(text, message.text);
+  row.append(spacer, text);
+}
 
       chatLog.appendChild(row);
     });
 
   chatLog.scrollTop = chatLog.scrollHeight;
   updateChatUnreadTabs();
+}
+
+function appendWhisperChatContent(row, message) {
+  const whisperFrom = message.whisperFrom || message.username || "";
+  const whisperTo = message.whisperTo || extractLegacyWhisperTarget(message.text) || "";
+  const sentByCurrentPlayer = normalizePlayerName(whisperFrom) === normalizePlayerName(CURRENT_PLAYER_NAME);
+
+  const direction = sentByCurrentPlayer ? "to" : "from";
+  const otherPlayerName = sentByCurrentPlayer
+    ? whisperTo || "Unknown"
+    : whisperFrom || "Unknown";
+
+  const directionLabel = document.createElement("span");
+  directionLabel.className = "chat-whisper-direction";
+  directionLabel.textContent = `${direction} `;
+
+  const nameButton = createPlayerNameButton(otherPlayerName);
+
+  const spacer = document.createTextNode(" ");
+  const text = document.createElement("span");
+  text.className = "chat-text";
+
+  appendFormattedChatText(text, stripLegacyWhisperPrefix(message.text));
+
+  row.append(directionLabel, nameButton, ":", spacer, text);
+}
+
+function extractLegacyWhisperTarget(text) {
+  const match = String(text || "").match(/^to\s+([^:]{1,40}):\s*/i);
+  return match ? match[1].trim() : "";
+}
+
+function stripLegacyWhisperPrefix(text) {
+  return String(text || "").replace(/^(to|from)\s+[^:]{1,40}:\s*/i, "");
 }
 
 function updateChatUnreadTabs() {
@@ -1571,11 +1602,11 @@ function handleWhisperCommand(rest) {
 
   setLastWhisperName(player.displayName);
 
-  addChatMessage(CURRENT_PLAYER_NAME, `to ${player.displayName}: ${message}`, "whispers", {
-    kind: "whisper",
-    whisperTo: player.displayName,
-    whisperFrom: CURRENT_PLAYER_NAME,
-  });
+  addChatMessage(CURRENT_PLAYER_NAME, message, "whispers", {
+  kind: "whisper",
+  whisperTo: player.displayName,
+  whisperFrom: CURRENT_PLAYER_NAME,
+});
 
   if (!player.online) {
     queueOfflineWhisper(player.displayName, message);

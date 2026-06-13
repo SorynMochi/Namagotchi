@@ -3932,3 +3932,38 @@ h3 {
     inset 0 0 12px rgba(255, 226, 150, 0.07),
     0 0 10px rgba(255, 226, 150, 0.08);
 }
+
+/* Chat name + whisper formatting cleanup */
+
+.chat-name {
+  margin-right: 0;
+}
+
+.chat-player-name {
+  display: inline;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--pink-soft);
+  font: inherit;
+  font-weight: 950;
+  line-height: inherit;
+  box-shadow: none;
+  vertical-align: baseline;
+}
+
+.chat-player-name:hover {
+  color: var(--cream);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.system-name {
+  color: var(--pink-soft);
+  font-weight: 950;
+}
+
+.chat-whisper-direction {
+  color: var(--muted);
+}
