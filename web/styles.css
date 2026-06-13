@@ -75,7 +75,7 @@
   --shell-padding: 12px;
   --left-rail-width: 220px;
   --right-rail-width: 230px;
-  --top-stats-height: 124px;
+  --top-stats-height: 148px;
   --chat-height-default: 220px;
 }
 
@@ -4627,10 +4627,14 @@ h3 {
 
   .left-rail,
   .right-rail,
-  .main-panel,
   .chat-panel {
     overflow: hidden;
   }
+
+  .main-panel {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
   .center-column {
     height: calc(100vh - var(--shell-padding) * 2);
@@ -4676,4 +4680,20 @@ body.is-resizing-chat {
 
 body.is-resizing-chat * {
   cursor: ns-resize !important;
+}
+
+/* Desktop chat resize: main panel should shrink and scroll, not clip. */
+
+@media (min-width: 981px) {
+  .main-panel {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
+  .content-section.active {
+    min-height: 0;
+  }
 }
