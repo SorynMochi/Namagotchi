@@ -1379,7 +1379,7 @@ function switchChatChannel(channel) {
 }
 
 function addChatMessage(username, text, channel = currentChatChannel, options = {}) {
-  const destination = username === "System" && channel === currentChatChannel ? "system" : channel;
+  const destination = username === "System" && channel === currentChatChannel ? "system": channel;
 
   pushChatMessage(destination, username, text, options);
 

@@ -1,40 +1,8 @@
 :root {
   color-scheme: dark;
 
-  --bg-0: #050812;
-  --bg-1: #0b1220;
-  --bg-2: #111a2b;
-
-  --panel: rgba(17, 26, 43, 0.92);
-  --panel-soft: rgba(23, 35, 56, 0.82);
-  --panel-deep: rgba(8, 14, 25, 0.88);
-
-  --line: rgba(143, 205, 255, 0.16);
-  --line-bright: rgba(143, 205, 255, 0.32);
-
-  --text: #ecf7ff;
-  --text-soft: #bdd0dc;
-  --muted: #8295a4;
-
-  --cyan: #49c7ff;
-  --cyan-deep: #129ad8;
-  --pink: #ff68b7;
-  --pink-soft: #ffd4eb;
-  --violet: #a889ff;
-  --green: #a8e05f;
-  --yellow: #ffd166;
-  --orange: #ff8a4c;
-  --danger: #ff526f;
-
-  --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
-  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --radius-sm: 10px;
-
-  font-family:
-    Inter,
+  --font-ui:
+    "Nunito",
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -42,6 +10,64 @@
     "Segoe UI",
     sans-serif;
 
+  --font-display:
+    "M PLUS Rounded 1c",
+    "Nunito",
+    ui-rounded,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  --font-chat:
+    "Atkinson Hyperlegible Mono",
+    "Space Mono",
+    "Cascadia Mono",
+    "Consolas",
+    ui-monospace,
+    monospace;
+
+  --bg-0: #15081d;
+  --bg-1: #23102f;
+  --bg-2: #351844;
+
+  --panel: rgba(45, 22, 58, 0.9);
+  --panel-soft: rgba(65, 32, 78, 0.78);
+  --panel-deep: rgba(24, 10, 34, 0.88);
+
+  --line: rgba(255, 176, 220, 0.2);
+  --line-bright: rgba(255, 207, 234, 0.42);
+
+  --text: #fff6fb;
+  --text-soft: #f4d4e6;
+  --muted: #caa1bb;
+
+  --cyan: #98ddff;
+  --cyan-deep: #55b9e8;
+  --cyan-soft: #d9f4ff;
+  --pink: #ff8ccc;
+  --pink-soft: #ffd9ef;
+  --violet: #c9a7ff;
+  --violet-soft: #eadcff;
+  --green: #bdf2c8;
+  --yellow: #ffe296;
+  --orange: #ffb37c;
+  --danger: #ff6f92;
+
+  --cream: #fff3cf;
+  --rose-shadow: rgba(255, 140, 204, 0.18);
+  --blue-shadow: rgba(152, 221, 255, 0.14);
+
+  --shadow:
+    0 20px 54px rgba(15, 5, 24, 0.42),
+    0 0 28px rgba(255, 140, 204, 0.055);
+
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  --radius-lg: 24px;
+  --radius-md: 17px;
+  --radius-sm: 12px;
+
+  font-family: var(--font-ui);
   background: var(--bg-0);
   color: var(--text);
 }
@@ -3471,4 +3497,438 @@ body > .emoji-picker-floating .emoji-option {
 
 .compact-care-actions .care-button.care-button-active:disabled {
   opacity: 1;
+}
+
+/* Nami cute UI theme pass */
+
+body,
+button,
+input {
+  font-family: var(--font-ui);
+}
+
+body {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(255, 140, 204, 0.28), transparent 28rem),
+    radial-gradient(circle at 90% 10%, rgba(152, 221, 255, 0.18), transparent 34rem),
+    radial-gradient(circle at 50% 100%, rgba(201, 167, 255, 0.2), transparent 36rem),
+    linear-gradient(180deg, #24102f 0%, #15081d 55%, #0e0716 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255, 217, 239, 0.16) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(152, 221, 255, 0.12) 0 1px, transparent 1.5px);
+  background-position:
+    0 0,
+    18px 22px;
+  background-size:
+    44px 44px,
+    58px 58px;
+  opacity: 0.32;
+}
+
+.panel,
+.nami-card,
+.care-card,
+.zone-list,
+.combat-panel,
+.task-card,
+.placeholder-copy,
+.nami-message-log-card {
+  border-color: rgba(255, 190, 226, 0.24);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.065), transparent 70%),
+    radial-gradient(circle at top left, rgba(255, 140, 204, 0.115), transparent 16rem),
+    rgba(42, 20, 56, 0.84);
+  box-shadow:
+    var(--shadow),
+    var(--inner-glow),
+    inset 0 0 34px rgba(255, 140, 204, 0.035);
+}
+
+.panel::before {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(255, 190, 226, 0.55),
+      transparent 26%,
+      transparent 70%,
+      rgba(152, 221, 255, 0.35)
+    );
+  opacity: 0.48;
+}
+
+.panel-title,
+.collapse-toggle,
+.nav-item,
+.primary-button,
+.secondary-button,
+.care-button,
+.task-card button,
+.eyebrow,
+.player-name,
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+.panel-title,
+.collapse-toggle {
+  color: var(--pink-soft);
+  background:
+    linear-gradient(90deg, rgba(255, 140, 204, 0.16), rgba(201, 167, 255, 0.08)),
+    rgba(255, 255, 255, 0.025);
+  border-bottom-color: rgba(255, 190, 226, 0.18);
+  letter-spacing: 0.045em;
+  text-shadow: 0 0 12px rgba(255, 140, 204, 0.22);
+}
+
+.top-panel-toggle {
+  background:
+    linear-gradient(90deg, rgba(255, 140, 204, 0.18), rgba(152, 221, 255, 0.07)) !important;
+}
+
+.player-name {
+  border-color: rgba(255, 217, 239, 0.38);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 217, 239, 0.22), transparent 7rem),
+    linear-gradient(180deg, rgba(255, 140, 204, 0.12), rgba(201, 167, 255, 0.07));
+  color: var(--cream);
+  text-shadow:
+    0 0 10px rgba(255, 140, 204, 0.32),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    inset 0 0 24px rgba(255, 140, 204, 0.08),
+    0 0 18px rgba(255, 140, 204, 0.08);
+}
+
+.nav-item {
+  border-radius: 12px;
+  color: var(--text-soft);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.nav-item::before {
+  content: "♡";
+  margin-right: 5px;
+  color: rgba(255, 217, 239, 0.55);
+}
+
+.nav-item:hover {
+  border-color: rgba(255, 190, 226, 0.35);
+  background: rgba(255, 140, 204, 0.105);
+  color: var(--pink-soft);
+}
+
+.nav-item.active {
+  border-color: rgba(255, 217, 239, 0.52);
+  background:
+    linear-gradient(90deg, rgba(255, 140, 204, 0.28), rgba(201, 167, 255, 0.14)),
+    rgba(255, 255, 255, 0.035);
+  color: #fff8fd;
+  box-shadow:
+    inset 3px 0 0 var(--pink),
+    0 0 18px rgba(255, 140, 204, 0.16);
+}
+
+.nav-item.active::before {
+  color: var(--cream);
+}
+
+.primary-button,
+.secondary-button,
+.care-button,
+.task-card button {
+  border-color: rgba(255, 190, 226, 0.36);
+  background:
+    linear-gradient(180deg, #ffd9ef 0%, #ff8ccc 52%, #d874bd 100%);
+  color: #301127;
+  letter-spacing: 0.035em;
+  box-shadow:
+    0 9px 18px rgba(255, 140, 204, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.care-button:hover,
+.task-card button:hover {
+  filter: brightness(1.06) saturate(1.06);
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  background:
+    linear-gradient(180deg, rgba(255, 217, 239, 0.16), rgba(201, 167, 255, 0.12));
+  color: var(--pink-soft);
+  border-color: rgba(255, 190, 226, 0.34);
+}
+
+.bar,
+.meter-track,
+.stat-bar {
+  border-color: rgba(255, 217, 239, 0.12);
+  background: rgba(19, 8, 30, 0.68);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    inset 0 0 16px rgba(0, 0, 0, 0.24);
+}
+
+.fill,
+.meter-fill,
+.tick-fill,
+.mood-fill,
+.stat-fill {
+  box-shadow:
+    0 0 14px rgba(255, 140, 204, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.tick-fill,
+.mood-fill,
+.stat-fill,
+.task-xp-fill {
+  background: linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
+}
+
+.xp-fill {
+  background: linear-gradient(90deg, var(--cream), var(--pink), var(--orange));
+}
+
+.hp-fill {
+  background: linear-gradient(90deg, var(--green), var(--cyan));
+}
+
+.order-fill {
+  background: linear-gradient(90deg, var(--yellow), var(--pink));
+}
+
+.stat-group,
+.nami-care-summary,
+.care-status-compact,
+.nami-progression-card,
+.nami-need-card {
+  border-color: rgba(255, 190, 226, 0.17);
+  background:
+    radial-gradient(circle at top right, rgba(255, 140, 204, 0.09), transparent 9rem),
+    rgba(255, 255, 255, 0.028);
+}
+
+.stat-group h2,
+.nami-care-summary h2,
+.care-status-compact h2 {
+  color: var(--pink-soft);
+  border-bottom-color: rgba(255, 190, 226, 0.18);
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+}
+
+.stat-group p,
+.info-panel p,
+.mini-stat-line,
+.nami-need-card p,
+.compact-stat-list .stat-row,
+.task-meta p {
+  color: var(--text-soft);
+}
+
+.stat-group strong,
+.info-panel strong,
+.mini-stat-line strong,
+.nami-need-card strong,
+.compact-stat-list .stat-row strong,
+.task-meta strong {
+  color: #fff8fd;
+}
+
+.eyebrow {
+  color: var(--pink);
+  letter-spacing: 0.12em;
+}
+
+h1 {
+  color: #fff8fd;
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  text-shadow:
+    0 0 16px rgba(255, 140, 204, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.36);
+}
+
+h2,
+h3 {
+  color: var(--pink-soft);
+}
+
+.nami-placeholder {
+  border-color: rgba(255, 190, 226, 0.28);
+  background:
+    radial-gradient(circle at 50% 24%, rgba(255, 217, 239, 0.24), transparent 9rem),
+    radial-gradient(circle at 50% 74%, rgba(152, 221, 255, 0.14), transparent 14rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent),
+    rgba(255, 255, 255, 0.03);
+  box-shadow:
+    inset 0 0 28px rgba(255, 140, 204, 0.055),
+    0 0 22px rgba(255, 140, 204, 0.07);
+}
+
+.nami-sparkle {
+  border-color: rgba(255, 217, 239, 0.34);
+  background:
+    radial-gradient(circle, rgba(255, 217, 239, 0.24), rgba(255, 140, 204, 0.08));
+  color: var(--cream);
+  box-shadow:
+    0 0 36px rgba(255, 140, 204, 0.22),
+    inset 0 0 24px rgba(255, 255, 255, 0.08);
+}
+
+.nami-message,
+.nami-message-log-card {
+  border-color: rgba(255, 190, 226, 0.2);
+  background:
+    radial-gradient(circle at top left, rgba(255, 140, 204, 0.12), transparent 14rem),
+    rgba(255, 255, 255, 0.035);
+  color: #ffe8f5;
+}
+
+.nami-log-text {
+  color: #ffe8f5;
+}
+
+.nami-log-level-up .nami-log-text {
+  color: var(--cream);
+}
+
+/* Chat keeps the cozy terminal feel */
+
+.chat-panel,
+.chat-tabs,
+.chat-tab,
+.chat-log,
+.chat-message,
+.chat-time,
+.chat-name,
+.chat-text,
+.chat-form,
+.chat-form input,
+.chat-form button,
+.chat-toggle-button {
+  font-family: var(--font-chat);
+}
+
+.chat-panel {
+  border-color: rgba(152, 221, 255, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 70%),
+    rgba(15, 10, 28, 0.88);
+}
+
+.chat-tabs,
+.chat-form {
+  background: rgba(19, 8, 30, 0.7);
+  border-color: rgba(255, 190, 226, 0.13);
+}
+
+.chat-tab {
+  border-color: rgba(255, 190, 226, 0.16);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--muted);
+}
+
+.chat-tab.active {
+  background: linear-gradient(90deg, var(--pink), var(--violet));
+  color: #2b1025;
+}
+
+.chat-log {
+  background:
+    radial-gradient(circle at top left, rgba(255, 140, 204, 0.055), transparent 16rem),
+    rgba(15, 8, 25, 0.58);
+  color: var(--text-soft);
+}
+
+.chat-time {
+  color: rgba(202, 161, 187, 0.76);
+}
+
+.chat-name {
+  color: var(--pink-soft);
+}
+
+.chat-text {
+  color: #f6ddeb;
+}
+
+.chat-form input {
+  border-color: rgba(255, 190, 226, 0.18);
+  background: rgba(19, 8, 30, 0.78);
+  color: #fff8fd;
+}
+
+.chat-form button,
+.chat-toggle-button,
+.chat-emoji-button {
+  border-color: rgba(255, 190, 226, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 217, 239, 0.18), rgba(255, 140, 204, 0.11));
+  color: var(--pink-soft);
+  box-shadow: none;
+}
+
+.chat-form button[type="submit"] {
+  background: linear-gradient(180deg, var(--cyan), var(--violet));
+  color: #211128;
+}
+
+.emoji-picker {
+  border-color: rgba(255, 190, 226, 0.28);
+  background:
+    radial-gradient(circle at top left, rgba(255, 140, 204, 0.13), transparent 10rem),
+    rgba(20, 10, 30, 0.98);
+}
+
+.emoji-option:hover {
+  border-color: rgba(255, 190, 226, 0.42);
+  background: rgba(255, 140, 204, 0.12);
+}
+
+/* Keep compact home layout intact while making the care buttons sweeter */
+
+.compact-care-actions .care-button {
+  border-color: rgba(255, 190, 226, 0.42);
+  background:
+    linear-gradient(180deg, rgba(255, 217, 239, 0.16), rgba(255, 140, 204, 0.12)),
+    rgba(255, 255, 255, 0.035);
+  color: #ffe8f5;
+}
+
+.compact-care-actions .care-button .care-button-progress-fill {
+  background: linear-gradient(90deg, rgba(255, 140, 204, 0.62), rgba(201, 167, 255, 0.56), rgba(152, 221, 255, 0.45));
+}
+
+.compact-care-actions .care-button.care-button-active {
+  border-color: rgba(255, 217, 239, 0.72);
+  color: #fff8fd;
+  box-shadow:
+    0 0 0 1px rgba(255, 217, 239, 0.12),
+    0 0 18px rgba(255, 140, 204, 0.18),
+    inset 0 0 18px rgba(255, 140, 204, 0.1);
+}
+
+.compact-care-actions .care-button.care-button-queued {
+  border-color: rgba(255, 226, 150, 0.55);
+  color: #fff3cf;
+  box-shadow:
+    inset 0 0 12px rgba(255, 226, 150, 0.07),
+    0 0 10px rgba(255, 226, 150, 0.08);
 }
