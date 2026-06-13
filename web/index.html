@@ -309,9 +309,35 @@
 
             <div class="combat-panel">
               <h2>Combat Status</h2>
-              <div class="combat-success">
-                <strong>&gt; PLAYDECK READY</strong>
-                <p>Nami-chan is standing by for one complete battle per 5-second tick.</p>
+
+              <div class="combat-success" id="combat-status-card">
+                <strong id="combat-status-title">&gt; PLAYDECK READY</strong>
+                <p id="combat-status-copy">Nami-chan is standing by for one complete battle per 5-second tick.</p>
+              </div>
+
+              <div class="combat-enemy-card">
+                <div class="combat-enemy-header">
+                  <div>
+                    <span class="mini-label">Current Enemy</span>
+                    <strong id="combat-enemy-name">Tutorial Pop-Up Gremlin</strong>
+                  </div>
+                  <span id="combat-enemy-level">Lv1</span>
+                </div>
+
+                <div class="mini-stat-line">
+                  <span>Enemy HP</span>
+                  <strong id="combat-enemy-hp-label">0 / 0</strong>
+                </div>
+                <div class="bar">
+                  <div class="fill hp-fill" id="combat-enemy-hp-fill" style="width: 0%"></div>
+                </div>
+
+                <div class="combat-stat-grid">
+                  <p><span>Your HP</span><strong id="combat-player-hp-label">100 / 100</strong></p>
+                  <p><span>Attack</span><strong id="combat-player-attack">0</strong></p>
+                  <p><span>Defense</span><strong id="combat-player-defense">0</strong></p>
+                  <p><span>Wins</span><strong id="combat-win-loss">0 / 0</strong></p>
+                </div>
               </div>
 
               <div class="combat-log">
@@ -319,10 +345,8 @@
                   <h2>Combat Log</h2>
                   <label><input type="checkbox" checked /> Detailed Logs</label>
                 </div>
-                <div class="log-list">
-                  <p><span>[000]</span> [LOG] 🎯🛡️ Tutorial Pop-Up Gremlin Lv1 <em>(0r)</em> +0 Sync XP +0 Credits [+0 Nibbles]</p>
-                  <p><span>[000]</span> [LOG] 🧠✨ Cozy Cache Sprite Lv1 <em>(0r)</em> +0 Sync XP +0 Credits [+0 Nibbles]</p>
-                  <p><span>[000]</span> [LOG] 🐾💾 Idle Snack Daemon Lv1 <em>(0r)</em> +0 Sync XP +0 Credits [+0 Nibbles]</p>
+                <div class="log-list" id="combat-log-list">
+                  <p><span>[000]</span> [LOG] No combat logs yet.</p>
                 </div>
               </div>
             </div>
@@ -446,7 +470,36 @@
           <div class="placeholder-copy">Gear crafting, clothing crafting, cooking, and future creative systems will live here.</div>
         </section>
 
-        <section class="content-section" id="section-inventory"><div class="placeholder-copy">Outfits shell. Items, ingredients, gear, food, and unlockables will live here.</div></section>
+                <section class="content-section" id="section-inventory">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Wardrobe</p>
+              <h1>Nami-Chan Wardrobe</h1>
+            </div>
+          </div>
+
+          <div class="wardrobe-layout">
+            <section class="wardrobe-panel">
+              <h2>Capacity</h2>
+              <p class="wardrobe-capacity-big" id="wardrobe-capacity-label">0 / 100</p>
+              <p class="muted">Gear and cosmetics live here. Materials and ingredients can use separate storage later.</p>
+            </section>
+
+            <section class="wardrobe-panel">
+              <h2>Equipment</h2>
+              <div class="equipment-slot-list" id="equipment-slot-list">
+                <p class="muted">Equipment slots will appear after the dev player is loaded.</p>
+              </div>
+            </section>
+
+            <section class="wardrobe-panel wardrobe-panel-wide">
+              <h2>Recent Wardrobe Items</h2>
+              <div class="inventory-preview-list" id="inventory-preview-list">
+                <p class="muted">No wardrobe items yet. The loot goblin has not coughed anything up.</p>
+              </div>
+            </section>
+          </div>
+        </section>
         <section class="content-section" id="section-market"><div class="placeholder-copy">Player-controlled Market shell. Buy and sell everything here.</div></section>
         <section class="content-section" id="section-home-shop"><div class="placeholder-copy">House upgrades shell. Spend Nibbles on upgrades, comforts, and useful little home improvements.</div></section>
         <section class="content-section" id="section-club"><div class="placeholder-copy">Club shell. This will be the guild/social section.</div></section>

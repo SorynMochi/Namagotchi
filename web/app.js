@@ -28,6 +28,21 @@ const playdeckTopLevel = document.querySelector("#playdeck-top-level");
 const playdeckEquipLevel = document.querySelector("#playdeck-equip-level");
 const playdeckIngredients = document.querySelector("#playdeck-ingredients");
 
+const combatStatusTitle = document.querySelector("#combat-status-title");
+const combatStatusCopy = document.querySelector("#combat-status-copy");
+const combatEnemyName = document.querySelector("#combat-enemy-name");
+const combatEnemyLevel = document.querySelector("#combat-enemy-level");
+const combatEnemyHpLabel = document.querySelector("#combat-enemy-hp-label");
+const combatEnemyHpFill = document.querySelector("#combat-enemy-hp-fill");
+const combatPlayerHpLabel = document.querySelector("#combat-player-hp-label");
+const combatPlayerAttack = document.querySelector("#combat-player-attack");
+const combatPlayerDefense = document.querySelector("#combat-player-defense");
+const combatWinLoss = document.querySelector("#combat-win-loss");
+const combatLogList = document.querySelector("#combat-log-list");
+const wardrobeCapacityLabel = document.querySelector("#wardrobe-capacity-label");
+const equipmentSlotList = document.querySelector("#equipment-slot-list");
+const inventoryPreviewList = document.querySelector("#inventory-preview-list");
+
 const resFans = document.querySelector("#res-fans");
 const resMemes = document.querySelector("#res-memes");
 const resLostItems = document.querySelector("#res-lost-items");
@@ -666,14 +681,15 @@ namiSuggestedAction.textContent = companion.suggestedAction || "Any care action"
 wealthCredits.textContent = formatWholeCredits(player.creditsCents ?? player.currencyCents);
 wealthNibbles.textContent = formatCompactNumber(player.nibbles ?? 0);
 wealthNamiCoin.textContent = formatCompactNumber(player.namiCoin ?? 0);
-topWardrobe.textContent = "0 / 100";
+const wardrobe = status.wardrobe || { used: 0, capacity: 100 };
+topWardrobe.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
 
 topMood.textContent = Math.round(Number(companion.moodScore));
 topNamiStatus.textContent = capitalize(companion.status);
 personalMoodBonus.textContent = `+${bonus}% Resource Gain`;
 
 playdeckTopLevel.textContent = Number(player.level).toLocaleString();
-playdeckEquipLevel.textContent = "—";
+playdeckEquipLevel.textContent = formatCompactNumber(status.playdeck?.equipmentPower ?? 0);
 playdeckIngredients.textContent = formatCompactNumber(0);
 playdeckIngredients.title = "Ingredients are not implemented yet.";
 
@@ -718,6 +734,8 @@ currentActionLabel.textContent = `Playdeck + ${progressActionName} [x${tick.play
 
   updateGatheringCards(status);
   renderCareButtons(status);
+  renderPlaydeckStatus(status);
+  renderWardrobeStatus(status);
 
   namiMessage.textContent = companion.caption || "Nami-chan is waiting sweetly.";
 }
@@ -736,6 +754,174 @@ function renderStat(name, value) {
       <strong>${value}</strong>
     </div>
   `;
+}
+
+function renderPlaydeckStatus(status) {
+  const playdeck = status.playdeck || {};
+  const enemy = playdeck.enemy || {};
+
+  const playerHp = Number(playdeck.playerHp ?? 100);
+  const playerMaxHp = Number(playdeck.playerMaxHp ?? 100);
+  const enemyHp = Number(enemy.hp ?? 0);
+  const enemyMaxHp = Number(enemy.maxHp ?? 0);
+  const timeoutTicks = Number(playdeck.timeoutTicks ?? 0);
+
+  if (combatStatusTitle) {
+    combatStatusTitle.textContent = timeoutTicks > 0
+      ? `> PLAYDECK RECOVERING`
+      : `> ${String(playdeck.lastOutcome || "ready").toUpperCase()}`;
+  }
+
+  if (combatStatusCopy) {
+    combatStatusCopy.textContent = timeoutTicks > 0
+      ? `Recovering for ${timeoutTicks.toLocaleString()} tick(s). Nami-chan has applied a tiny digital bandage.`
+      : `${playdeck.zone?.name || "Starter Deck"} is ready. Combat state is now backend-backed.`;
+  }
+
+  if (combatEnemyName) {
+    combatEnemyName.textContent = enemy.name || "No enemy loaded";
+  }
+
+  if (combatEnemyLevel) {
+    combatEnemyLevel.textContent = `Lv${Number(enemy.level ?? 1).toLocaleString()}`;
+  }
+
+  if (combatEnemyHpLabel) {
+    combatEnemyHpLabel.textContent = `${enemyHp.toLocaleString()} / ${enemyMaxHp.toLocaleString()}`;
+  }
+
+  if (combatEnemyHpFill) {
+    combatEnemyHpFill.style.width = `${percent(enemyHp, enemyMaxHp)}%`;
+  }
+
+  if (combatPlayerHpLabel) {
+    combatPlayerHpLabel.textContent = `${playerHp.toLocaleString()} / ${playerMaxHp.toLocaleString()}`;
+  }
+
+  if (combatPlayerAttack) {
+    combatPlayerAttack.textContent = Number(playdeck.attack ?? 0).toLocaleString();
+  }
+
+  if (combatPlayerDefense) {
+    combatPlayerDefense.textContent = Number(playdeck.defense ?? 0).toLocaleString();
+  }
+
+  if (combatWinLoss) {
+    combatWinLoss.textContent = `${Number(playdeck.wins ?? 0).toLocaleString()} / ${Number(playdeck.losses ?? 0).toLocaleString()}`;
+  }
+
+  renderCombatLog(playdeck.combatLog || []);
+}
+
+function renderCombatLog(logs) {
+  if (!combatLogList) {
+    return;
+  }
+
+  combatLogList.replaceChildren();
+
+  if (!Array.isArray(logs) || logs.length === 0) {
+    const empty = document.createElement("p");
+    empty.innerHTML = `<span>[000]</span> [LOG] No combat logs yet.`;
+    combatLogList.appendChild(empty);
+    return;
+  }
+
+  logs.forEach((entry, index) => {
+    const row = document.createElement("p");
+    const tag = String(index + 1).padStart(3, "0");
+    const itemText = entry.itemName
+      ? ` [${entry.itemName}${Number(entry.itemQuantity ?? 0) > 1 ? ` x${Number(entry.itemQuantity).toLocaleString()}` : ""}]`
+      : "";
+
+    row.innerHTML = `
+      <span>[${tag}]</span>
+      [${formatOutcome(entry.outcome)}]
+      ${escapeHTML(entry.enemyName || "Enemy")} Lv${Number(entry.enemyLevel ?? 1).toLocaleString()}
+      <em>-${Number(entry.playerDamage ?? 0).toLocaleString()} / -${Number(entry.enemyDamage ?? 0).toLocaleString()}</em>
+      +${Number(entry.xpGained ?? 0).toLocaleString()} XP
+      +${formatCredits(entry.creditsCentsGained ?? 0)} Credits
+      [+${Number(entry.nibblesGained ?? 0).toLocaleString()} Nibbles]${escapeHTML(itemText)}
+    `;
+
+    combatLogList.appendChild(row);
+  });
+}
+
+function renderWardrobeStatus(status) {
+  const wardrobe = status.wardrobe || { used: 0, capacity: 100 };
+  const playdeck = status.playdeck || {};
+
+  if (wardrobeCapacityLabel) {
+    wardrobeCapacityLabel.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
+  }
+
+  if (equipmentSlotList) {
+    equipmentSlotList.replaceChildren();
+
+    const slots = Array.isArray(playdeck.equipment) ? playdeck.equipment : [];
+    if (slots.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = "No equipment slots loaded yet.";
+      equipmentSlotList.appendChild(empty);
+    } else {
+      slots.forEach((slot) => {
+        const row = document.createElement("div");
+        row.className = "equipment-slot-row";
+
+        const itemName = slot.itemName || "Empty";
+        const rarity = slot.rarity ? ` · ${capitalize(slot.rarity)}` : "";
+
+        row.innerHTML = `
+          <span>${escapeHTML(slot.displayName || slot.slotKey)}</span>
+          <strong>${escapeHTML(itemName)}${escapeHTML(rarity)}</strong>
+        `;
+
+        equipmentSlotList.appendChild(row);
+      });
+    }
+  }
+
+  if (inventoryPreviewList) {
+    inventoryPreviewList.replaceChildren();
+
+    const items = Array.isArray(playdeck.inventoryPreview) ? playdeck.inventoryPreview : [];
+    if (items.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "muted";
+      empty.textContent = "No wardrobe items yet. The loot goblin remains suspiciously quiet.";
+      inventoryPreviewList.appendChild(empty);
+    } else {
+      items.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "inventory-preview-row";
+
+        row.innerHTML = `
+          <div>
+            <strong>${escapeHTML(item.name || "Unknown Item")}</strong>
+            <span>${escapeHTML(capitalize(item.rarity || "common"))} · ${escapeHTML(capitalize(item.equipmentSlot || item.itemType || "item"))}</span>
+          </div>
+          <small>Lv ${Number(item.powerLevel ?? 1).toLocaleString()}</small>
+        `;
+
+        inventoryPreviewList.appendChild(row);
+      });
+    }
+  }
+}
+
+function formatOutcome(outcome) {
+  switch (String(outcome || "").toLowerCase()) {
+    case "win":
+      return "WIN";
+    case "loss":
+      return "LOSS";
+    case "hit":
+      return "HIT";
+    default:
+      return "LOG";
+  }
 }
 
 function initializeCareButtonTimer() {

@@ -4347,6 +4347,160 @@ h3 {
   }
 }
 
+.combat-enemy-card {
+  margin: 14px 0;
+  padding: 14px;
+  border: 1px solid rgba(255, 190, 226, 0.16);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 140, 204, 0.12), transparent 10rem),
+    rgba(255, 255, 255, 0.035);
+}
+
+.combat-enemy-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.combat-enemy-header strong {
+  display: block;
+  color: var(--pink-soft);
+  font-size: 1rem;
+  font-weight: 950;
+}
+
+.combat-enemy-header > span {
+  padding: 4px 9px;
+  border: 1px solid rgba(152, 221, 255, 0.22);
+  border-radius: 999px;
+  color: var(--cyan);
+  font-size: 0.72rem;
+  font-weight: 950;
+}
+
+.mini-label {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.combat-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.combat-stat-grid p {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(152, 221, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.combat-stat-grid strong {
+  color: var(--text);
+}
+
+.wardrobe-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(280px, 1.1fr);
+  gap: 16px;
+}
+
+.wardrobe-panel {
+  padding: 16px;
+  border: 1px solid rgba(143, 205, 255, 0.14);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 65%),
+    rgba(7, 13, 24, 0.68);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.wardrobe-panel-wide {
+  grid-column: 1 / -1;
+}
+
+.wardrobe-capacity-big {
+  margin: 0 0 8px;
+  color: var(--pink-soft);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 950;
+}
+
+.equipment-slot-list,
+.inventory-preview-list {
+  display: grid;
+  gap: 8px;
+}
+
+.equipment-slot-row,
+.inventory-preview-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 190, 226, 0.13);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.026);
+}
+
+.equipment-slot-row span,
+.inventory-preview-row span {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.equipment-slot-row strong,
+.inventory-preview-row strong {
+  color: var(--text);
+  font-weight: 950;
+}
+
+.inventory-preview-row div {
+  display: grid;
+  gap: 2px;
+}
+
+.inventory-preview-row small {
+  color: var(--cyan);
+  font-weight: 950;
+}
+
+@media (max-width: 980px) {
+  .wardrobe-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wardrobe-panel-wide {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .combat-stat-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 700px) {
   :root {
     --shell-gap: 8px;

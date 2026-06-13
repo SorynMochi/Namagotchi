@@ -45,6 +45,8 @@ type PlayerStatus struct {
 	Activities ActivitySkills  `json:"activities"`
 	Tick       TickState       `json:"tick"`
 	Care       CareQueueState  `json:"care"`
+	Playdeck   PlaydeckStatus  `json:"playdeck"`
+	Wardrobe   WardrobeStatus  `json:"wardrobe"`
 }
 
 type Player struct {
@@ -4508,6 +4510,10 @@ func (s *Store) SeedDevPlayer(ctx context.Context) error {
 		return fmt.Errorf("upsert player tick state: %w", err)
 	}
 
+	if err := ensurePlaydeckStateTx(ctx, tx, playerID); err != nil {
+		return fmt.Errorf("ensure playdeck state: %w", err)
+	}
+
 	if _, err := tx.Exec(ctx, `
 		insert into activity_log (player_id, event_type, message)
 		values ($1, 'dev_seed', 'Dev player Soryn and Nami-chan were seeded.')
@@ -4638,6 +4644,20 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 	}
 
 	status.Care = careState
+
+	wardrobeStatus, err := s.GetWardrobeStatus(ctx, status.Player.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	status.Wardrobe = wardrobeStatus
+
+	playdeckStatus, err := s.GetPlaydeckStatus(ctx, status.Player.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	status.Playdeck = playdeckStatus
 
 	status.Tick.PlaydeckZoneName = ZoneName(status.Tick.PlaydeckZoneID)
 	status.Tick.ActiveGatheringName = GatheringTaskName(status.Tick.ActiveGatheringTask)
