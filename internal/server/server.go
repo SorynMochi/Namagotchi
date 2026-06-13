@@ -53,6 +53,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/health", s.HandleStatus)
 	mux.HandleFunc("/api/dev/seed-player", s.HandleSeedDevPlayer)
 	mux.HandleFunc("/api/dev/force-tick", s.HandleForceTick)
+	mux.HandleFunc("/api/dev/rewind-care-decay", s.HandleRewindCareDecay)
 	mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
 	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
 	mux.HandleFunc("/api/player/gathering", s.HandleGatheringTask)
@@ -172,6 +173,47 @@ func (s *Server) HandleForceTick(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, result)
+}
+
+func (s *Server) HandleRewindCareDecay(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet && r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	rawHours := strings.TrimSpace(r.URL.Query().Get("hours"))
+	if rawHours == "" {
+		rawHours = "2"
+	}
+
+	hours, err := strconv.ParseFloat(rawHours, 64)
+	if err != nil || hours <= 0 {
+		writeError(w, http.StatusBadRequest, "hours must be a positive number")
+		return
+	}
+
+	duration := time.Duration(hours * float64(time.Hour))
+
+	if err := s.Store.RewindDevCareDecay(r.Context(), duration); err != nil {
+		log.Printf("rewind care decay failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "rewind care decay failed")
+		return
+	}
+
+	if err := s.Store.SettleDevCareDecay(r.Context()); err != nil {
+		log.Printf("settle dev care decay failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "settle dev care decay failed")
+		return
+	}
+
+	status, err := s.Store.GetDevPlayerStatus(r.Context())
+	if err != nil {
+		log.Printf("get player status after care decay rewind failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "player status failed")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, status)
 }
 
 func (s *Server) HandleGatheringTask(w http.ResponseWriter, r *http.Request) {

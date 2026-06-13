@@ -359,6 +359,33 @@ func (s *Store) DevPlayerID(ctx context.Context) (int64, error) {
 	return playerID, nil
 }
 
+func (s *Store) RewindDevCareDecay(ctx context.Context, duration time.Duration) error {
+	if duration <= 0 {
+		return fmt.Errorf("rewind duration must be positive")
+	}
+
+	if duration > 30*24*time.Hour {
+		duration = 30 * 24 * time.Hour
+	}
+
+	playerID, err := s.DevPlayerID(ctx)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.Pool.Exec(ctx, `
+		update companion_states
+		set last_decay_at = now() - ($2::double precision * interval '1 second'),
+			updated_at = now()
+		where player_id = $1
+	`, playerID, duration.Seconds())
+	if err != nil {
+		return fmt.Errorf("rewind dev care decay: %w", err)
+	}
+
+	return nil
+}
+
 func (s *Store) CreateDevNamiMessage(ctx context.Context, draft NamiMessageDraft) (*NamiMessage, error) {
 	playerID, err := s.DevPlayerID(ctx)
 	if err != nil {
@@ -1719,6 +1746,10 @@ func settleCareDecayTx(ctx context.Context, tx pgx.Tx, playerID int64, companion
 		decayed = applyAwakeCareDecay(companion, hours)
 	}
 
+	if !careStatsChanged(companion, decayed) {
+		return companion, nil
+	}
+
 	decayed.MoodScore = NamiMoodScore(decayed)
 	decayed.MoodLabel = NamiMoodLabel(decayed.MoodScore)
 	decayed.PrimaryNeed = NamiPrimaryNeed(decayed)
@@ -1864,6 +1895,16 @@ func decayCareStat(value int, loss float64) int {
 
 func gainCareStat(value int, gain float64) int {
 	return clampCareStat(int(math.Round(float64(value) + gain)))
+}
+
+func careStatsChanged(before CompanionState, after CompanionState) bool {
+	return before.Satiety != after.Satiety ||
+		before.Connection != after.Connection ||
+		before.Energy != after.Energy ||
+		before.Comfort != after.Comfort ||
+		before.Playfulness != after.Playfulness ||
+		before.Inspiration != after.Inspiration ||
+		before.Cleanliness != after.Cleanliness
 }
 
 func (s *Store) GenerateDevPassiveNamiMessages(ctx context.Context) error {
