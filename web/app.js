@@ -40,7 +40,9 @@ const combatPlayerDefense = document.querySelector("#combat-player-defense");
 const combatWinLoss = document.querySelector("#combat-win-loss");
 const combatLogList = document.querySelector("#combat-log-list");
 const wardrobeCapacityLabel = document.querySelector("#wardrobe-capacity-label");
+const inventoryCountLabel = document.querySelector("#inventory-count-label");
 const equipmentSlotList = document.querySelector("#equipment-slot-list");
+const wardrobeBonusesList = document.querySelector("#wardrobe-bonuses-list");
 const inventoryPreviewList = document.querySelector("#inventory-preview-list");
 
 const resFans = document.querySelector("#res-fans");
