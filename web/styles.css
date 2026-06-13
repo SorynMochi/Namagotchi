@@ -4848,6 +4848,220 @@ h3 {
   }
 }
 
+.wardrobe-studio-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) 270px minmax(0, 1.2fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.wardrobe-equipment-panel,
+.wardrobe-bonuses-panel,
+.wardrobe-inventory-panel {
+  min-height: 0;
+}
+
+.equipment-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.equipment-card,
+.inventory-item-card {
+  position: relative;
+  min-width: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(201, 167, 255, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 68%),
+    rgba(32, 17, 48, 0.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 0 0 1px rgba(255, 140, 204, 0.04);
+}
+
+.equipment-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 126px;
+  padding: 12px 14px;
+}
+
+.equipment-card.is-empty {
+  border-color: rgba(110, 188, 255, 0.5);
+  background:
+    linear-gradient(180deg, rgba(110, 188, 255, 0.08), transparent 60%),
+    rgba(26, 43, 66, 0.72);
+  box-shadow:
+    0 0 0 2px rgba(110, 188, 255, 0.22),
+    inset 0 0 0 1px rgba(110, 188, 255, 0.14);
+}
+
+.gear-card-topline,
+.gear-card-bottomline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 18px;
+}
+
+.gear-card-name-wrap {
+  display: grid;
+  place-items: center;
+  min-height: 54px;
+  text-align: center;
+}
+
+.equipment-slot-label {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gear-level-tag,
+.gear-tailoring-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-soft);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.gear-level-tag.is-hidden,
+.gear-tailoring-tag.is-hidden {
+  visibility: hidden;
+}
+
+.gear-card-filler {
+  width: 1px;
+  height: 1px;
+}
+
+.gear-card-name {
+  color: var(--text);
+  font-size: 0.98rem;
+  font-weight: 950;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.gear-card-empty-name {
+  color: rgba(225, 239, 255, 0.35);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.wardrobe-bonus-list {
+  display: grid;
+  gap: 8px;
+}
+
+.wardrobe-bonus-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 190, 226, 0.13);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.wardrobe-bonus-row strong {
+  color: var(--pink-soft);
+  font-weight: 950;
+}
+
+.inventory-card-grid {
+  display: grid;
+  gap: 12px;
+  max-height: 72vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.inventory-group-section {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.inventory-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 2px;
+  color: var(--cyan-soft);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.inventory-group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 10px;
+}
+
+.inventory-item-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 108px;
+  padding: 10px 12px;
+}
+
+.inventory-empty-row {
+  display: grid;
+  place-items: center;
+  min-height: 58px;
+  border: 1px dashed rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+@media (max-width: 1400px) {
+  .wardrobe-studio-layout {
+    grid-template-columns: minmax(0, 1.35fr) 240px minmax(0, 1.1fr);
+  }
+}
+
+@media (max-width: 1180px) {
+  .wardrobe-studio-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .inventory-card-grid {
+    max-height: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .equipment-card-grid,
+  .inventory-group-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 700px) {
   .combat-stat-grid {
     grid-template-columns: minmax(0, 1fr);

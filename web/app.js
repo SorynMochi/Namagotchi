@@ -124,6 +124,27 @@ const GATHERING_TASK_CONFIG = {
   },
 };
 
+const WARDROBE_EQUIP_SLOT_ORDER = [
+  { slotKey: "top", label: "Top", family: "top" },
+  { slotKey: "bottom", label: "Bottom", family: "bottom" },
+  { slotKey: "dress", label: "Dress / Outfit", family: "dress" },
+  { slotKey: "footwear", label: "Footwear", family: "footwear" },
+  { slotKey: "outerwear", label: "Outerwear", family: "outerwear" },
+  { slotKey: "necklace", label: "Necklace", family: "necklace" },
+  { slotKey: "accessory_1", label: "Accessory 1", family: "accessory" },
+  { slotKey: "accessory_2", label: "Accessory 2", family: "accessory" },
+];
+
+const WARDROBE_INVENTORY_GROUPS = [
+  { key: "top", label: "Top" },
+  { key: "bottom", label: "Bottom" },
+  { key: "dress", label: "Dress / Outfit" },
+  { key: "footwear", label: "Footwear" },
+  { key: "outerwear", label: "Outerwear" },
+  { key: "necklace", label: "Necklace" },
+  { key: "accessory", label: "Accessories" },
+];
+
 const CARE_ACTION_CONFIG = {
   meal: {
     label: "Meal",
@@ -852,12 +873,22 @@ function renderCombatLog(logs) {
 
 function renderWardrobeStatus(status) {
   const wardrobe = status.wardrobe || { used: 0, capacity: 100 };
-  topWardrobe.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
   const playdeck = status.playdeck || {};
   const equipment = Array.isArray(playdeck.equipment) ? playdeck.equipment : [];
   const items = Array.isArray(playdeck.inventoryPreview) ? playdeck.inventoryPreview : [];
 
-  const filledSlots = equipment.filter((slot) => Number(slot.itemId ?? 0) > 0).length;
+  const equipmentByKey = new Map(
+    equipment.map((slot) => [String(slot.slotKey || "").toLowerCase(), slot])
+  );
+
+  const filledSlots = WARDROBE_EQUIP_SLOT_ORDER.filter((definition) => {
+    const slot = equipmentByKey.get(definition.slotKey);
+    return Number(slot?.itemId ?? 0) > 0;
+  }).length;
+
+  if (topWardrobe) {
+    topWardrobe.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
+  }
 
   if (wardrobeCapacityLabel) {
     wardrobeCapacityLabel.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
@@ -870,55 +901,42 @@ function renderWardrobeStatus(status) {
   if (equipmentSlotList) {
     equipmentSlotList.replaceChildren();
 
-    if (!equipment.length) {
-      const empty = document.createElement("p");
-      empty.className = "muted";
-      empty.textContent = "No equipment slots loaded yet.";
-      equipmentSlotList.appendChild(empty);
-    } else {
-      equipment.forEach((slot) => {
-        const card = document.createElement("article");
-        const rarity = normalizeWardrobeRarity(slot.rarity || "basic");
-        const hasItem = Number(slot.itemId ?? 0) > 0;
+    WARDROBE_EQUIP_SLOT_ORDER.forEach((definition) => {
+      const slot = equipmentByKey.get(definition.slotKey) || {
+        slotKey: definition.slotKey,
+        displayName: definition.label,
+        acceptsSlot: definition.family,
+        itemId: 0,
+        itemName: "",
+        rarity: "basic",
+        powerLevel: 0,
+      };
 
-        card.className = `equipment-card ${hasItem ? wardrobeRarityClass(rarity) : "is-empty"}`;
+      const hasItem = Number(slot.itemId ?? 0) > 0;
+      const rarity = normalizeWardrobeRarity(slot.rarity || "basic");
 
-        const stats = [];
+      const card = document.createElement("article");
+      card.className = `equipment-card ${hasItem ? wardrobeRarityClass(rarity) : "is-empty"}`;
 
-        if (Number(slot.attackBonus ?? 0) > 0) {
-          stats.push(`+${Number(slot.attackBonus).toLocaleString()} ATK`);
-        }
+      card.innerHTML = `
+        <div class="gear-card-topline">
+          <span class="equipment-slot-label">${escapeHTML(definition.label)}</span>
+          ${hasItem ? `<span class="gear-level-tag">${Number(slot.powerLevel ?? 0).toLocaleString()}</span>` : `<span class="gear-level-tag is-hidden"></span>`}
+        </div>
 
-        if (Number(slot.defenseBonus ?? 0) > 0) {
-          stats.push(`+${Number(slot.defenseBonus).toLocaleString()} DEF`);
-        }
+        <div class="gear-card-name-wrap">
+          <strong class="gear-card-name ${hasItem ? "" : "gear-card-empty-name"}">
+            ${hasItem ? escapeHTML(slot.itemName || "Unknown Item") : "EMPTY"}
+          </strong>
+        </div>
 
-        if (Number(slot.maxHpBonus ?? 0) > 0) {
-          stats.push(`+${Number(slot.maxHpBonus).toLocaleString()} HP`);
-        }
+        <div class="gear-card-bottomline">
+          ${hasItem ? `<span class="gear-tailoring-tag">T: ${formatTailoringPoints(slot)}</span>` : `<span class="gear-tailoring-tag is-hidden"></span>`}
+        </div>
+      `;
 
-        card.innerHTML = `
-          <div class="equipment-card-topline">
-            <span class="equipment-slot-label">${escapeHTML(slot.displayName || "Slot")}</span>
-            <span class="rarity-pill ${hasItem ? wardrobeRarityClass(rarity) : "rarity-empty"}">
-              ${hasItem ? escapeHTML(formatWardrobeRarity(rarity)) : "Empty"}
-            </span>
-          </div>
-          <div class="equipment-card-main">
-            <strong class="equipment-item-name">${escapeHTML(hasItem ? (slot.itemName || "Unknown Item") : `No ${slot.displayName || "Item"} Equipped`)}</strong>
-            <span class="equipment-slot-subtype">${escapeHTML(formatWardrobeSlot(slot.acceptsSlot || slot.slotKey || "item"))}</span>
-          </div>
-          <div class="equipment-card-footer">
-            <span class="equipment-power-tag">Lv ${Number(slot.powerLevel ?? 0).toLocaleString()}</span>
-            <div class="equipment-stat-tags">
-              ${stats.length ? stats.map((value) => `<span class="gear-stat-chip">${escapeHTML(value)}</span>`).join("") : `<span class="gear-stat-chip muted-chip">No bonuses</span>`}
-            </div>
-          </div>
-        `;
-
-        equipmentSlotList.appendChild(card);
-      });
-    }
+      equipmentSlotList.appendChild(card);
+    });
   }
 
   if (wardrobeBonusesList) {
@@ -930,7 +948,7 @@ function renderWardrobeStatus(status) {
       { label: "Defense", value: Number(playdeck.defense ?? 0).toLocaleString() },
       { label: "Max HP", value: Number(playdeck.playerMaxHp ?? 0).toLocaleString() },
       { label: "Current HP", value: Number(playdeck.playerHp ?? 0).toLocaleString() },
-      { label: "Slots Filled", value: `${filledSlots.toLocaleString()} / ${equipment.length.toLocaleString()}` },
+      { label: "Slots Filled", value: `${filledSlots.toLocaleString()} / ${WARDROBE_EQUIP_SLOT_ORDER.length.toLocaleString()}` },
     ];
 
     rows.forEach((row) => {
@@ -947,62 +965,148 @@ function renderWardrobeStatus(status) {
   if (inventoryPreviewList) {
     inventoryPreviewList.replaceChildren();
 
-    if (!items.length) {
-      const empty = document.createElement("p");
-      empty.className = "muted";
-      empty.textContent = "No wardrobe items yet. The loot goblin remains suspiciously quiet.";
-      inventoryPreviewList.appendChild(empty);
-    } else {
-      items.forEach((item) => {
-        const rarity = normalizeWardrobeRarity(item.rarity || "basic");
-        const card = document.createElement("article");
-        card.className = `inventory-item-card ${wardrobeRarityClass(rarity)}`;
+    const groupedItems = groupWardrobeInventoryItems(items);
 
-        const statTags = [];
+    WARDROBE_INVENTORY_GROUPS.forEach((group) => {
+      const section = document.createElement("section");
+      section.className = "inventory-group-section";
 
-        if (Number(item.attackBonus ?? 0) > 0) {
-          statTags.push(`+${Number(item.attackBonus).toLocaleString()} ATK`);
-        }
+      const header = document.createElement("div");
+      header.className = "inventory-group-header";
+      header.innerHTML = `
+        <span>${escapeHTML(group.label)}</span>
+        <strong>(${groupedItems[group.key].length.toLocaleString()})</strong>
+      `;
 
-        if (Number(item.defenseBonus ?? 0) > 0) {
-          statTags.push(`+${Number(item.defenseBonus).toLocaleString()} DEF`);
-        }
+      const grid = document.createElement("div");
+      grid.className = "inventory-group-grid";
 
-        if (Number(item.maxHpBonus ?? 0) > 0) {
-          statTags.push(`+${Number(item.maxHpBonus).toLocaleString()} HP`);
-        }
+      if (!groupedItems[group.key].length) {
+        const empty = document.createElement("div");
+        empty.className = "inventory-empty-row";
+        empty.textContent = "Empty";
+        grid.appendChild(empty);
+      } else {
+        groupedItems[group.key].forEach((item) => {
+          const rarity = normalizeWardrobeRarity(item.rarity || "basic");
+          const card = document.createElement("article");
+          card.className = `inventory-item-card ${wardrobeRarityClass(rarity)}`;
 
-        const quantityText = Number(item.quantity ?? 1) > 1
-          ? `x${Number(item.quantity).toLocaleString()}`
-          : "";
+          card.innerHTML = `
+            <div class="gear-card-topline">
+              <span class="gear-card-filler"></span>
+              <span class="gear-level-tag">${Number(item.powerLevel ?? 1).toLocaleString()}</span>
+            </div>
 
-        const equippedText = item.equippedSlot
-          ? `Equipped: ${formatWardrobeSlot(item.equippedSlot)}`
-          : "Not equipped";
+            <div class="gear-card-name-wrap">
+              <strong class="gear-card-name">${escapeHTML(item.name || "Unknown Item")}</strong>
+            </div>
 
-        card.innerHTML = `
-          <div class="inventory-item-topline">
-            <span class="rarity-pill ${wardrobeRarityClass(rarity)}">${escapeHTML(formatWardrobeRarity(rarity))}</span>
-            ${quantityText ? `<span class="inventory-quantity-pill">${escapeHTML(quantityText)}</span>` : ""}
-          </div>
+            <div class="gear-card-bottomline">
+              <span class="gear-tailoring-tag">T: ${formatTailoringPoints(item)}</span>
+            </div>
+          `;
 
-          <strong class="inventory-item-name">${escapeHTML(item.name || "Unknown Item")}</strong>
-          <span class="inventory-item-subtype">${escapeHTML(formatWardrobeSlot(item.equipmentSlot || item.itemType || "item"))}</span>
+          grid.appendChild(card);
+        });
+      }
 
-          <div class="inventory-stat-tags">
-            ${statTags.length ? statTags.map((value) => `<span class="gear-stat-chip">${escapeHTML(value)}</span>`).join("") : `<span class="gear-stat-chip muted-chip">No bonuses</span>`}
-          </div>
-
-          <div class="inventory-item-footer">
-            <span>Lv ${Number(item.powerLevel ?? 1).toLocaleString()}</span>
-            <span>${escapeHTML(equippedText)}</span>
-          </div>
-        `;
-
-        inventoryPreviewList.appendChild(card);
-      });
-    }
+      section.append(header, grid);
+      inventoryPreviewList.appendChild(section);
+    });
   }
+}
+
+function groupWardrobeInventoryItems(items) {
+  const groups = {};
+
+  WARDROBE_INVENTORY_GROUPS.forEach((group) => {
+    groups[group.key] = [];
+  });
+
+  items.forEach((item) => {
+    const key = normalizeWardrobeInventoryGroupKey(item.equipmentSlot || item.itemType || "");
+
+    if (groups[key]) {
+      groups[key].push(item);
+    }
+  });
+
+  Object.keys(groups).forEach((key) => {
+    groups[key].sort((a, b) => {
+      const rarityDelta = wardrobeRarityWeight(b.rarity) - wardrobeRarityWeight(a.rarity);
+      if (rarityDelta !== 0) {
+        return rarityDelta;
+      }
+
+      const powerDelta = Number(b.powerLevel ?? 0) - Number(a.powerLevel ?? 0);
+      if (powerDelta !== 0) {
+        return powerDelta;
+      }
+
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+  });
+
+  return groups;
+}
+
+function normalizeWardrobeInventoryGroupKey(value) {
+  const key = String(value || "").trim().toLowerCase();
+
+  switch (key) {
+    case "top":
+    case "bottom":
+    case "dress":
+    case "footwear":
+    case "outerwear":
+    case "necklace":
+      return key;
+    case "accessory":
+    case "accessory_1":
+    case "accessory_2":
+      return "accessory";
+    default:
+      return "";
+  }
+}
+
+function wardrobeRarityWeight(rarity) {
+  switch (normalizeWardrobeRarity(rarity)) {
+    case "devastating":
+      return 7;
+    case "iconic":
+      return 6;
+    case "glam":
+      return 5;
+    case "trendy":
+      return 4;
+    case "chic":
+      return 3;
+    case "cute":
+      return 2;
+    case "basic":
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+function formatTailoringPoints(source) {
+  const current = Number(
+    source?.tailoringCurrent ??
+    source?.tailoringPointsCurrent ??
+    source?.tailoringPoints ??
+    0
+  );
+
+  const max = Number(
+    source?.tailoringMax ??
+    source?.tailoringPointsMax ??
+    0
+  );
+
+  return `${current.toLocaleString()}/${max.toLocaleString()}`;
 }
 
 function normalizeWardrobeRarity(value) {
