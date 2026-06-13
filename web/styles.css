@@ -5817,3 +5817,367 @@ body.is-resizing-chat * {
     width: 100%;
   }
 }
+
+/* Wardrobe layout correction:
+   Inventory categories stack vertically.
+   Items inside each category wrap horizontally.
+   Capacity moves into the Wardrobe eyebrow.
+*/
+
+#section-inventory .section-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+#section-inventory .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#wardrobe-inline-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 18px;
+  padding: 2px 7px;
+  border: 1px solid rgba(255, 190, 226, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--pink-soft);
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.03em;
+}
+
+#section-inventory .wardrobe-header-meta,
+#section-inventory .wardrobe-capacity-chip,
+#section-inventory .wardrobe-capacity-subtext {
+  display: none;
+}
+
+/* Match the reference layout: left equipment, thin bonuses, right inventory. */
+
+#section-inventory .wardrobe-studio-layout {
+  grid-template-columns:
+    minmax(430px, 1.08fr)
+    minmax(170px, 0.34fr)
+    minmax(460px, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+#section-inventory .wardrobe-panel {
+  padding: 10px;
+  border-radius: 14px;
+}
+
+#section-inventory .wardrobe-panel-titlebar {
+  margin-bottom: 7px;
+}
+
+#section-inventory .wardrobe-panel-titlebar h2 {
+  color: var(--cyan);
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Left equipment cards stay 2x4 and compact. */
+
+#section-inventory .equipment-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 82px;
+  gap: 7px;
+}
+
+#section-inventory .equipment-card {
+  display: grid;
+  grid-template-rows: 16px 1fr 15px;
+  height: 82px;
+  min-height: 0;
+  padding: 7px 8px;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+#section-inventory .equipment-card.is-empty {
+  border: 1px solid rgba(110, 188, 255, 0.62);
+  background:
+    linear-gradient(180deg, rgba(110, 188, 255, 0.08), transparent 66%),
+    rgba(21, 42, 66, 0.64);
+  box-shadow:
+    0 0 0 1px rgba(110, 188, 255, 0.24),
+    inset 0 0 0 1px rgba(110, 188, 255, 0.15),
+    0 0 18px rgba(110, 188, 255, 0.07);
+  opacity: 1;
+}
+
+#section-inventory .equipment-slot-label {
+  max-width: 70%;
+  overflow: hidden;
+  color: rgba(244, 212, 230, 0.68);
+  font-size: 0.55rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#section-inventory .gear-card-topline,
+#section-inventory .gear-card-bottomline {
+  min-height: 14px;
+  line-height: 1;
+}
+
+#section-inventory .gear-level-tag,
+#section-inventory .gear-tailoring-tag {
+  min-height: 14px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(5, 10, 18, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--pink-soft);
+  font-size: 0.52rem;
+  font-weight: 950;
+}
+
+#section-inventory .gear-card-name-wrap {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 1px 5px;
+  text-align: center;
+}
+
+#section-inventory .equipment-card .gear-card-name {
+  display: -webkit-box;
+  overflow: hidden;
+  color: rgba(255, 246, 251, 0.76);
+  font-size: 0.66rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-align: center;
+  text-wrap: balance;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+#section-inventory .equipment-card .gear-card-empty-name {
+  color: rgba(225, 239, 255, 0.38);
+  font-size: 0.76rem;
+  font-style: italic;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  -webkit-line-clamp: 1;
+}
+
+/* Bonuses stay narrow and list-like. */
+
+#section-inventory .wardrobe-bonus-list {
+  gap: 5px;
+}
+
+#section-inventory .wardrobe-bonus-row {
+  min-height: 23px;
+  padding: 4px 6px;
+  border-radius: 7px;
+  font-size: 0.6rem;
+  line-height: 1.1;
+}
+
+#section-inventory .wardrobe-bonus-row strong {
+  color: var(--pink);
+  font-size: 0.6rem;
+}
+
+/* Critical fix: the category sections stack vertically. */
+
+#section-inventory .inventory-card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: min(62vh, 560px);
+  overflow-y: auto;
+  padding: 0 4px 0 0;
+  scrollbar-gutter: stable;
+}
+
+/* Each category is full-width, screenshot-style. */
+
+#section-inventory .inventory-group-section {
+  display: block;
+  width: 100%;
+  padding: 3px;
+  border: 1px solid rgba(143, 205, 255, 0.18);
+  border-radius: 5px;
+  background: rgba(3, 9, 16, 0.48);
+}
+
+#section-inventory .inventory-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 17px;
+  padding: 0 5px;
+  border-bottom: 1px solid rgba(143, 205, 255, 0.14);
+  color: var(--cyan);
+  font-size: 0.56rem;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  line-height: 17px;
+  text-transform: uppercase;
+}
+
+#section-inventory .inventory-group-header strong {
+  color: rgba(244, 212, 230, 0.62);
+  font-size: 0.54rem;
+}
+
+/* Only gear cards inside a category wrap horizontally. */
+
+#section-inventory .inventory-group-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 5px;
+  min-height: 32px;
+  padding: 4px;
+}
+
+#section-inventory .inventory-empty-row {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 28px;
+  border: 0;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.012);
+  color: rgba(244, 212, 230, 0.44);
+  font-size: 0.58rem;
+  font-style: normal;
+  font-weight: 850;
+}
+
+/* Very small inventory gear cards. */
+
+#section-inventory .inventory-item-card {
+  display: grid;
+  grid-template-rows: 13px 1fr 13px;
+  flex: 0 0 78px;
+  width: 78px;
+  height: 68px;
+  min-height: 0;
+  padding: 5px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#section-inventory .inventory-item-card .gear-level-tag,
+#section-inventory .inventory-item-card .gear-tailoring-tag {
+  min-height: 13px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 0.48rem;
+}
+
+#section-inventory .inventory-item-card .gear-card-name-wrap {
+  padding: 1px 2px;
+}
+
+#section-inventory .inventory-item-card .gear-card-name {
+  display: -webkit-box;
+  overflow: hidden;
+  color: rgba(255, 246, 251, 0.72);
+  font-size: 0.53rem;
+  font-weight: 850;
+  line-height: 1.05;
+  text-align: center;
+  text-wrap: balance;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Desktop width trims. */
+
+@media (max-width: 1320px) {
+  #section-inventory .wardrobe-studio-layout {
+    grid-template-columns:
+      minmax(380px, 1fr)
+      minmax(160px, 0.34fr)
+      minmax(380px, 1fr);
+  }
+
+  #section-inventory .equipment-card-grid {
+    grid-auto-rows: 78px;
+  }
+
+  #section-inventory .equipment-card {
+    height: 78px;
+  }
+
+  #section-inventory .inventory-item-card {
+    flex-basis: 74px;
+    width: 74px;
+    height: 66px;
+  }
+}
+
+/* Tablet and mobile stack panels, but preserve the category structure. */
+
+@media (max-width: 980px) {
+  #section-inventory .section-header {
+    display: block;
+  }
+
+  #section-inventory .wardrobe-studio-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #section-inventory .equipment-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 82px;
+  }
+
+  #section-inventory .equipment-card {
+    height: 82px;
+  }
+
+  #section-inventory .inventory-card-grid {
+    max-height: none;
+    overflow: visible;
+  }
+
+  #section-inventory .inventory-item-card {
+    flex-basis: 84px;
+    width: 84px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 560px) {
+  #section-inventory .equipment-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #section-inventory .equipment-card {
+    height: 76px;
+  }
+
+  #section-inventory .inventory-item-card {
+    flex-basis: calc(50% - 3px);
+    width: calc(50% - 3px);
+    height: 72px;
+  }
+}
+
+@media (max-width: 360px) {
+  #section-inventory .inventory-item-card {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}

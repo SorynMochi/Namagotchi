@@ -40,6 +40,7 @@ const combatPlayerDefense = document.querySelector("#combat-player-defense");
 const combatWinLoss = document.querySelector("#combat-win-loss");
 const combatLogList = document.querySelector("#combat-log-list");
 const wardrobeCapacityLabel = document.querySelector("#wardrobe-capacity-label");
+const wardrobeInlineCount = document.querySelector("#wardrobe-inline-count");
 const inventoryCountLabel = document.querySelector("#inventory-count-label");
 const equipmentSlotList = document.querySelector("#equipment-slot-list");
 const wardrobeBonusesList = document.querySelector("#wardrobe-bonuses-list");
@@ -142,8 +143,7 @@ const WARDROBE_INVENTORY_GROUPS = [
   { key: "footwear", label: "Footwear", family: "footwear" },
   { key: "outerwear", label: "Outerwear", family: "outerwear" },
   { key: "necklace", label: "Necklace", family: "necklace" },
-  { key: "accessory_1", label: "Accessory 1", family: "accessory" },
-  { key: "accessory_2", label: "Accessory 2", family: "accessory" },
+  { key: "accessory", label: "Accessory", family: "accessory" },
 ];
 
 const CARE_ACTION_CONFIG = {
@@ -891,13 +891,19 @@ function renderWardrobeStatus(status) {
     topWardrobe.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
   }
 
-  if (wardrobeCapacityLabel) {
-    wardrobeCapacityLabel.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
-  }
+const wardrobeCountText = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
 
-  if (inventoryCountLabel) {
-    inventoryCountLabel.textContent = `${items.length.toLocaleString()} shown, ${Number(wardrobe.used ?? 0).toLocaleString()} total`;
-  }
+if (wardrobeInlineCount) {
+  wardrobeInlineCount.textContent = wardrobeCountText;
+}
+
+if (wardrobeCapacityLabel) {
+  wardrobeCapacityLabel.textContent = wardrobeCountText;
+}
+
+if (inventoryCountLabel) {
+  inventoryCountLabel.textContent = `${items.length.toLocaleString()} shown, ${Number(wardrobe.used ?? 0).toLocaleString()} total`;
+}
 
   if (equipmentSlotList) {
     equipmentSlotList.replaceChildren();
@@ -1026,21 +1032,10 @@ function groupWardrobeInventoryItems(items) {
   });
 
   items.forEach((item) => {
-    const family = normalizeWardrobeInventoryGroupKey(item.equipmentSlot || item.itemType || "");
-    const equippedSlot = String(item.equippedSlot || "").trim().toLowerCase();
+    const key = normalizeWardrobeInventoryGroupKey(item.equipmentSlot || item.itemType || "");
 
-    let targetKey = "";
-
-    if (equippedSlot && groups[equippedSlot]) {
-      targetKey = equippedSlot;
-    } else if (family === "accessory") {
-      targetKey = "accessory_1";
-    } else {
-      targetKey = family;
-    }
-
-    if (groups[targetKey]) {
-      groups[targetKey].push(item);
+    if (groups[key]) {
+      groups[key].push(item);
     }
   });
 
