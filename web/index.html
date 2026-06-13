@@ -6,6 +6,7 @@
 <title>Namigotchi Idle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-50..200&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600;700&family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -41,23 +42,82 @@
 
       <section class="panel nav-panel">
         <div class="panel-title">[-] MENU</div>
-        <nav id="main-nav" class="main-nav" aria-label="Main menu">
-          <button class="nav-item active" data-section="home">🏠 Home</button>
-          <button class="nav-item" data-section="playdeck">🎮 Playdeck</button>
-          <button class="nav-item" data-section="gathering">👩‍🔧 Work</button>
-          <button class="nav-item" data-section="inventory">🧳 Wardrobe</button>
-          <button class="nav-item" data-section="home-shop">🏡 House</button>
-          <button class="nav-item" data-section="studio">✂️ Studio</button>
-          <button class="nav-item" data-section="market">🛒 Market</button>
-          <button class="nav-item" data-section="club">♣️ Club</button>
-          <button class="nav-item" data-section="events">📣 Events</button>
-          <button class="nav-item" data-section="achievements">🏵️ Badges</button>
-          <button class="nav-item" data-section="mail">📪 Mail</button>
-          <button class="nav-item" data-section="friends">👥 Friends</button>
-          <button class="nav-item" data-section="help">❓ Help</button>
-          <button class="nav-item" data-section="settings">⚙️ Settings</button>
-          <button class="nav-item" data-section="premium">👑 Premium</button>
-        </nav>
+<nav id="main-nav" class="main-nav menu-grid" aria-label="Main menu">
+  <button class="nav-item active" data-section="home">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">home</span>
+    <span class="nav-label">Home</span>
+  </button>
+
+  <button class="nav-item" data-section="playdeck">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">videogame_asset</span>
+    <span class="nav-label">Playdeck</span>
+  </button>
+
+  <button class="nav-item" data-section="gathering">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">handyman</span>
+    <span class="nav-label">Work</span>
+  </button>
+
+  <button class="nav-item" data-section="inventory">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">checkroom</span>
+    <span class="nav-label">Wardrobe</span>
+  </button>
+
+  <button class="nav-item" data-section="home-shop">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">other_houses</span>
+    <span class="nav-label">House</span>
+  </button>
+
+  <button class="nav-item" data-section="studio">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">design_services</span>
+    <span class="nav-label">Studio</span>
+  </button>
+
+  <button class="nav-item" data-section="market">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">storefront</span>
+    <span class="nav-label">Market</span>
+  </button>
+
+  <button class="nav-item" data-section="club">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">groups</span>
+    <span class="nav-label">Club</span>
+  </button>
+
+  <button class="nav-item" data-section="events">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">campaign</span>
+    <span class="nav-label">Events</span>
+  </button>
+
+  <button class="nav-item" data-section="achievements">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">workspace_premium</span>
+    <span class="nav-label">Badges</span>
+  </button>
+
+  <button class="nav-item" data-section="mail">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">mark_email_unread</span>
+    <span class="nav-label">Mail</span>
+  </button>
+
+  <button class="nav-item" data-section="friends">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">diversity_3</span>
+    <span class="nav-label">Friends</span>
+  </button>
+
+  <button class="nav-item" data-section="help">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">help</span>
+    <span class="nav-label">Help</span>
+  </button>
+
+  <button class="nav-item" data-section="settings">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">settings</span>
+    <span class="nav-label">Settings</span>
+  </button>
+
+  <button class="nav-item" data-section="premium">
+    <span class="material-symbols-rounded nav-icon" aria-hidden="true">diamond</span>
+    <span class="nav-label">Premium</span>
+  </button>
+</nav>
       </section>
 
       <section class="panel orders-panel">
