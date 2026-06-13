@@ -33,6 +33,6 @@ func main() {
 
 	app := server.New(store, time.Now())
 
-	log.Printf("Namagotchi Phase 2 server running at http://localhost%s", listenAddress)
+	log.Printf("Namigotchi Idle Phase 2 server running at http://localhost%s", listenAddress)
 	log.Fatal(http.ListenAndServe(listenAddress, app.Routes()))
 }

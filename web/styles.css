@@ -1053,7 +1053,6 @@ h2 {
   display: block;
   color: var(--text);
   font-size: 0.98rem;
-  letter-spacing: 0.02em;
 }
 
 /* Right panel list links tighter */

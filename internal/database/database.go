@@ -61,30 +61,38 @@ type Player struct {
 }
 
 type CompanionState struct {
-	CompanionName      string    `json:"name"`
-	MoodScore          float64   `json:"moodScore"`
-	Satiety            int       `json:"satiety"`
-	Connection         int       `json:"connection"`
-	Energy             int       `json:"energy"`
-	Comfort            int       `json:"comfort"`
-	Playfulness        int       `json:"playfulness"`
-	Inspiration        int       `json:"inspiration"`
-	Cleanliness        int       `json:"cleanliness"`
-	Status             string    `json:"status"`
-	LastInteractionAt  time.Time `json:"lastInteractionAt"`
-	Level              int       `json:"level"`
-	TotalXP            int64     `json:"totalXp"`
-	XPIntoLevel        int64     `json:"xpIntoLevel"`
-	XPToNext           int64     `json:"xpToNext"`
-	LastXPGained       int64     `json:"lastXpGained"`
-	LastAction         string    `json:"lastAction"`
-	SleepStartedAt     time.Time `json:"sleepStartedAt"`
-	EnergyAtSleepStart int       `json:"energyAtSleepStart"`
-	LastDecayAt        time.Time `json:"lastDecayAt"`
-	MoodLabel          string    `json:"moodLabel"`
-	PrimaryNeed        string    `json:"primaryNeed"`
-	Caption            string    `json:"caption"`
-	SuggestedAction    string    `json:"suggestedAction"`
+	CompanionName                string    `json:"name"`
+	MoodScore                    float64   `json:"moodScore"`
+	Satiety                      int       `json:"satiety"`
+	Connection                   int       `json:"connection"`
+	Energy                       int       `json:"energy"`
+	Comfort                      int       `json:"comfort"`
+	Playfulness                  int       `json:"playfulness"`
+	Inspiration                  int       `json:"inspiration"`
+	Cleanliness                  int       `json:"cleanliness"`
+	Status                       string    `json:"status"`
+	LastInteractionAt            time.Time `json:"lastInteractionAt"`
+	Level                        int       `json:"level"`
+	TotalXP                      int64     `json:"totalXp"`
+	XPIntoLevel                  int64     `json:"xpIntoLevel"`
+	XPToNext                     int64     `json:"xpToNext"`
+	LastXPGained                 int64     `json:"lastXpGained"`
+	LastAction                   string    `json:"lastAction"`
+	SleepStartedAt               time.Time `json:"sleepStartedAt"`
+	EnergyAtSleepStart           int       `json:"energyAtSleepStart"`
+	LastDecayAt                  time.Time `json:"lastDecayAt"`
+	SatietyDecayRemainder        float64   `json:"-"`
+	ConnectionDecayRemainder     float64   `json:"-"`
+	EnergyDecayRemainder         float64   `json:"-"`
+	ComfortDecayRemainder        float64   `json:"-"`
+	PlayfulnessDecayRemainder    float64   `json:"-"`
+	InspirationDecayRemainder    float64   `json:"-"`
+	CleanlinessDecayRemainder    float64   `json:"-"`
+	SleepEnergyRecoveryRemainder float64   `json:"-"`
+	MoodLabel                    string    `json:"moodLabel"`
+	PrimaryNeed                  string    `json:"primaryNeed"`
+	Caption                      string    `json:"caption"`
+	SuggestedAction              string    `json:"suggestedAction"`
 }
 
 type PlayerResources struct {
@@ -997,8 +1005,16 @@ func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, Compani
 			c.last_xp_gained,
 			c.last_action,
 			coalesce(c.sleep_started_at, '0001-01-01 00:00:00+00'::timestamptz),
-			coalesce(c.energy_at_sleep_start, 0),
-			c.last_decay_at
+coalesce(c.energy_at_sleep_start, 0),
+c.last_decay_at,
+coalesce(c.satiety_decay_remainder, 0)::float8,
+coalesce(c.connection_decay_remainder, 0)::float8,
+coalesce(c.energy_decay_remainder, 0)::float8,
+coalesce(c.comfort_decay_remainder, 0)::float8,
+coalesce(c.playfulness_decay_remainder, 0)::float8,
+coalesce(c.inspiration_decay_remainder, 0)::float8,
+coalesce(c.cleanliness_decay_remainder, 0)::float8,
+coalesce(c.sleep_energy_recovery_remainder, 0)::float8
 		from players p
 		join companion_states c on c.player_id = p.id
 		where p.display_name = 'Soryn'
@@ -1024,6 +1040,14 @@ func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, Compani
 		&companion.SleepStartedAt,
 		&companion.EnergyAtSleepStart,
 		&companion.LastDecayAt,
+		&companion.SatietyDecayRemainder,
+		&companion.ConnectionDecayRemainder,
+		&companion.EnergyDecayRemainder,
+		&companion.ComfortDecayRemainder,
+		&companion.PlayfulnessDecayRemainder,
+		&companion.InspirationDecayRemainder,
+		&companion.CleanlinessDecayRemainder,
+		&companion.SleepEnergyRecoveryRemainder,
 	)
 
 	if err != nil {
@@ -1171,13 +1195,15 @@ func startCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, rule Care
 
 func setCompanionSleepingTx(ctx context.Context, tx pgx.Tx, playerID int64) error {
 	_, err := tx.Exec(ctx, `
-		update companion_states
-		set status = 'sleeping',
-energy_at_sleep_start = coalesce(energy_at_sleep_start, energy),
-last_decay_at = now(),
-updated_at = now()
-		where player_id = $1
-	`, playerID)
+	update companion_states
+	set status = 'sleeping',
+		sleep_started_at = coalesce(sleep_started_at, now()),
+		energy_at_sleep_start = coalesce(energy_at_sleep_start, energy),
+		last_decay_at = now(),
+		sleep_energy_recovery_remainder = 0,
+		updated_at = now()
+	where player_id = $1
+`, playerID)
 	if err != nil {
 		return fmt.Errorf("set companion sleeping: %w", err)
 	}
@@ -1476,10 +1502,12 @@ func applyCompletedCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, 
 
 	sleepStartedAtUpdate := "sleep_started_at"
 	energyAtSleepStartUpdate := "energy_at_sleep_start"
+	sleepEnergyRecoveryRemainderUpdate := "sleep_energy_recovery_remainder"
 
 	if rule.WakeAction {
 		sleepStartedAtUpdate = "null"
 		energyAtSleepStartUpdate = "null"
+		sleepEnergyRecoveryRemainderUpdate = "0"
 	}
 
 	_, err = tx.Exec(ctx, fmt.Sprintf(`
@@ -1502,9 +1530,10 @@ func applyCompletedCareActionTx(ctx context.Context, tx pgx.Tx, playerID int64, 
 			last_interaction_at = now(),
 			sleep_started_at = %s,
 			energy_at_sleep_start = %s,
+			sleep_energy_recovery_remainder = %s,
 			updated_at = now()
 		where player_id = $15
-	`, sleepStartedAtUpdate, energyAtSleepStartUpdate),
+	`, sleepStartedAtUpdate, energyAtSleepStartUpdate, sleepEnergyRecoveryRemainderUpdate),
 		companion.Level,
 		companion.TotalXP,
 		companion.XPIntoLevel,
@@ -1746,10 +1775,6 @@ func settleCareDecayTx(ctx context.Context, tx pgx.Tx, playerID int64, companion
 		decayed = applyAwakeCareDecay(companion, hours)
 	}
 
-	if !careStatsChanged(companion, decayed) {
-		return companion, nil
-	}
-
 	decayed.MoodScore = NamiMoodScore(decayed)
 	decayed.MoodLabel = NamiMoodLabel(decayed.MoodScore)
 	decayed.PrimaryNeed = NamiPrimaryNeed(decayed)
@@ -1769,8 +1794,16 @@ func settleCareDecayTx(ctx context.Context, tx pgx.Tx, playerID int64, companion
 			inspiration = $7,
 			cleanliness = $8,
 			last_decay_at = $9,
+			satiety_decay_remainder = $10,
+			connection_decay_remainder = $11,
+			energy_decay_remainder = $12,
+			comfort_decay_remainder = $13,
+			playfulness_decay_remainder = $14,
+			inspiration_decay_remainder = $15,
+			cleanliness_decay_remainder = $16,
+			sleep_energy_recovery_remainder = $17,
 			updated_at = now()
-		where player_id = $10
+		where player_id = $18
 	`,
 		decayed.MoodScore,
 		decayed.Satiety,
@@ -1781,6 +1814,14 @@ func settleCareDecayTx(ctx context.Context, tx pgx.Tx, playerID int64, companion
 		decayed.Inspiration,
 		decayed.Cleanliness,
 		decayed.LastDecayAt,
+		decayed.SatietyDecayRemainder,
+		decayed.ConnectionDecayRemainder,
+		decayed.EnergyDecayRemainder,
+		decayed.ComfortDecayRemainder,
+		decayed.PlayfulnessDecayRemainder,
+		decayed.InspirationDecayRemainder,
+		decayed.CleanlinessDecayRemainder,
+		decayed.SleepEnergyRecoveryRemainder,
 		playerID,
 	)
 	if err != nil {
@@ -1845,13 +1886,47 @@ func applyAwakeCareDecay(companion CompanionState, hours float64) CompanionState
 		connectionLoss += 0.5 * hours
 	}
 
-	decayed.Satiety = decayCareStat(companion.Satiety, satietyLoss)
-	decayed.Connection = decayCareStat(companion.Connection, connectionLoss)
-	decayed.Energy = decayCareStat(companion.Energy, energyLoss)
-	decayed.Comfort = decayCareStat(companion.Comfort, comfortLoss)
-	decayed.Playfulness = decayCareStat(companion.Playfulness, playfulnessLoss)
-	decayed.Inspiration = decayCareStat(companion.Inspiration, inspirationLoss)
-	decayed.Cleanliness = decayCareStat(companion.Cleanliness, cleanlinessLoss)
+	decayed.Satiety, decayed.SatietyDecayRemainder = applyCareStatLoss(
+		companion.Satiety,
+		satietyLoss,
+		companion.SatietyDecayRemainder,
+	)
+
+	decayed.Connection, decayed.ConnectionDecayRemainder = applyCareStatLoss(
+		companion.Connection,
+		connectionLoss,
+		companion.ConnectionDecayRemainder,
+	)
+
+	decayed.Energy, decayed.EnergyDecayRemainder = applyCareStatLoss(
+		companion.Energy,
+		energyLoss,
+		companion.EnergyDecayRemainder,
+	)
+
+	decayed.Comfort, decayed.ComfortDecayRemainder = applyCareStatLoss(
+		companion.Comfort,
+		comfortLoss,
+		companion.ComfortDecayRemainder,
+	)
+
+	decayed.Playfulness, decayed.PlayfulnessDecayRemainder = applyCareStatLoss(
+		companion.Playfulness,
+		playfulnessLoss,
+		companion.PlayfulnessDecayRemainder,
+	)
+
+	decayed.Inspiration, decayed.InspirationDecayRemainder = applyCareStatLoss(
+		companion.Inspiration,
+		inspirationLoss,
+		companion.InspirationDecayRemainder,
+	)
+
+	decayed.Cleanliness, decayed.CleanlinessDecayRemainder = applyCareStatLoss(
+		companion.Cleanliness,
+		cleanlinessLoss,
+		companion.CleanlinessDecayRemainder,
+	)
 
 	return decayed
 }
@@ -1859,7 +1934,11 @@ func applyAwakeCareDecay(companion CompanionState, hours float64) CompanionState
 func applySleepingCareDecay(companion CompanionState, hours float64, lastDecayAt time.Time, now time.Time) CompanionState {
 	decayed := companion
 
-	decayed.Satiety = decayCareStat(companion.Satiety, SleepingSatietyDecayPerHour*hours)
+	decayed.Satiety, decayed.SatietyDecayRemainder = applyCareStatLoss(
+		companion.Satiety,
+		SleepingSatietyDecayPerHour*hours,
+		companion.SatietyDecayRemainder,
+	)
 
 	sleepStartedAt := companion.SleepStartedAt
 	if sleepStartedAt.Year() <= 1 {
@@ -1882,29 +1961,65 @@ func applySleepingCareDecay(companion CompanionState, hours float64, lastDecayAt
 	}
 
 	energyGain := SleepEnergyRecoveryPerHour * recoveryHours
-	decayed.Energy = gainCareStat(companion.Energy, energyGain)
+	decayed.Energy, decayed.SleepEnergyRecoveryRemainder = applyCareStatGain(
+		companion.Energy,
+		energyGain,
+		companion.SleepEnergyRecoveryRemainder,
+	)
 
 	_ = now
 
 	return decayed
 }
 
-func decayCareStat(value int, loss float64) int {
-	return clampCareStat(int(math.Round(float64(value) - loss)))
+func applyCareStatLoss(value int, loss float64, remainder float64) (int, float64) {
+	if value <= 0 {
+		return 0, 0
+	}
+
+	totalLoss := loss + remainder
+	if totalLoss < 0 {
+		totalLoss = 0
+	}
+
+	wholeLoss := int(math.Floor(totalLoss))
+	nextRemainder := totalLoss - float64(wholeLoss)
+
+	if wholeLoss <= 0 {
+		return value, nextRemainder
+	}
+
+	nextValue := clampCareStat(value - wholeLoss)
+	if nextValue <= 0 {
+		nextRemainder = 0
+	}
+
+	return nextValue, nextRemainder
 }
 
-func gainCareStat(value int, gain float64) int {
-	return clampCareStat(int(math.Round(float64(value) + gain)))
-}
+func applyCareStatGain(value int, gain float64, remainder float64) (int, float64) {
+	if value >= 100 {
+		return 100, 0
+	}
 
-func careStatsChanged(before CompanionState, after CompanionState) bool {
-	return before.Satiety != after.Satiety ||
-		before.Connection != after.Connection ||
-		before.Energy != after.Energy ||
-		before.Comfort != after.Comfort ||
-		before.Playfulness != after.Playfulness ||
-		before.Inspiration != after.Inspiration ||
-		before.Cleanliness != after.Cleanliness
+	totalGain := gain + remainder
+	if totalGain < 0 {
+		totalGain = 0
+	}
+
+	wholeGain := int(math.Floor(totalGain))
+	nextRemainder := totalGain - float64(wholeGain)
+
+	if wholeGain <= 0 {
+		return value, nextRemainder
+	}
+
+	nextValue := clampCareStat(value + wholeGain)
+	if nextValue >= 100 {
+		nextRemainder = 0
+	}
+
+	return nextValue, nextRemainder
 }
 
 func (s *Store) GenerateDevPassiveNamiMessages(ctx context.Context) error {

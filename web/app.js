@@ -67,17 +67,17 @@ const collapseToggles = document.querySelectorAll(".collapse-toggle");
 
 const MAX_CHAT_MESSAGES = 100;
 const MAX_NAMI_MESSAGES = 100;
-const NAMI_MESSAGE_STORAGE_KEY = "namagotchi_nami_messages_v1";
-const CHAT_STORAGE_KEY = "namagotchi_chat_store_v1";
-const CHAT_CHANNEL_KEY = "namagotchi_chat_active_channel_v1";
-const CHAT_HIDDEN_KEY = "namagotchi_chat_hidden_v1";
-const CHAT_PREVIOUS_HEIGHT_KEY = "namagotchi_chat_previous_height_v1";
-const EMOJI_USAGE_KEY = "namagotchi_emoji_usage_v1";
-const EMOJI_CATEGORY_KEY = "namagotchi_emoji_category_v1";
+const NAMI_MESSAGE_STORAGE_KEY = "namigotchi_nami_messages_v1";
+const CHAT_STORAGE_KEY = "namigotchi_chat_store_v1";
+const CHAT_CHANNEL_KEY = "namigotchi_chat_active_channel_v1";
+const CHAT_HIDDEN_KEY = "namigotchi_chat_hidden_v1";
+const CHAT_PREVIOUS_HEIGHT_KEY = "namigotchi_chat_previous_height_v1";
+const EMOJI_USAGE_KEY = "namigotchi_emoji_usage_v1";
+const EMOJI_CATEGORY_KEY = "namigotchi_emoji_category_v1";
 const RECENT_EMOJI_LIMIT = 70;
-const CHAT_IGNORE_KEY = "namagotchi_chat_ignore_list_v1";
-const CHAT_LAST_WHISPER_KEY = "namagotchi_chat_last_whisper_v1";
-const CHAT_OFFLINE_WHISPERS_KEY = "namagotchi_offline_whispers_v1";
+const CHAT_IGNORE_KEY = "namigotchi_chat_ignore_list_v1";
+const CHAT_LAST_WHISPER_KEY = "namigotchi_chat_last_whisper_v1";
+const CHAT_OFFLINE_WHISPERS_KEY = "namigotchi_offline_whispers_v1";
 
 const CURRENT_PLAYER_NAME = "Soryn";
 
@@ -1269,7 +1269,7 @@ function initializeChat() {
   const hasStoredMessages = CHAT_CHANNELS.some((channel) => chatMessages[channel].length > 0);
 
   if (!hasStoredMessages) {
-    pushChatMessage("system", "System", "Welcome to Namagotchi Phase 3B.", false);
+    pushChatMessage("system", "System", "Welcome to Namigotchi Idle Phase 3B.", false);
     pushChatMessage("lobby", "Nami-chan", "Lobby chat is online. I am absolutely not testing the buttons with my tiny chaos paws.", false);
     pushChatMessage("help", "System", "Help chat will be used for player questions once multiplayer chat is wired in.", false);
     saveChatStore();
@@ -1282,7 +1282,7 @@ function initializeChat() {
 }
 
 function initializeChatResize() {
-  const savedHeight = Number(localStorage.getItem("namagotchi_chat_height"));
+  const savedHeight = Number(localStorage.getItem("namigotchi_chat_height"));
   if (savedHeight) {
     setChatHeight(savedHeight);
   }
@@ -1320,7 +1320,7 @@ function initializeChatResize() {
 
     const chatHeight = Math.round(chatPanel.getBoundingClientRect().height);
     previousChatHeight = chatHeight;
-    localStorage.setItem("namagotchi_chat_height", String(chatHeight));
+    localStorage.setItem("namigotchi_chat_height", String(chatHeight));
     localStorage.setItem(CHAT_PREVIOUS_HEIGHT_KEY, String(chatHeight));
   });
 }
@@ -2341,7 +2341,7 @@ function positionEmojiPickerInstant() {
 function initializeChatVisibility() {
   previousChatHeight =
     Number(localStorage.getItem(CHAT_PREVIOUS_HEIGHT_KEY)) ||
-    Number(localStorage.getItem("namagotchi_chat_height")) ||
+    Number(localStorage.getItem("namigotchi_chat_height")) ||
     190;
 
   setChatHidden(localStorage.getItem(CHAT_HIDDEN_KEY) === "true", false);
@@ -2497,7 +2497,7 @@ function updateLiveServerClock() {
     return;
   }
 
-  serverTime.textContent = formatDateTime(Date.now() + serverClockOffsetMs);
+  serverTime.textContent = "Server Time: " + formatDateTime(Date.now() + serverClockOffsetMs);
 }
 
 function formatDateTime(value) {
