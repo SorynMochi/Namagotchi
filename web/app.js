@@ -662,10 +662,10 @@ namiSuggestedAction.textContent = companion.suggestedAction || "Any care action"
   const tick = status.tick;
   const bonus = getMoodBonus(companion.moodScore);
 
-  wealthCredits.textContent = formatWholeCredits(player.creditsCents ?? player.currencyCents);
-wealthNibbles.textContent = Number(player.nibbles ?? 0).toLocaleString();
-wealthNamiCoin.textContent = Number(player.namiCoin ?? 0).toLocaleString();
-wealthInventory.textContent = "0 / 40";
+wealthCredits.textContent = formatWholeCredits(player.creditsCents ?? player.currencyCents);
+wealthNibbles.textContent = formatCompactNumber(player.nibbles ?? 0);
+wealthNamiCoin.textContent = formatCompactNumber(player.namiCoin ?? 0);
+wealthInventory.textContent = "0 / 100";
 
 topMood.textContent = Math.round(Number(companion.moodScore));
 topNamiStatus.textContent = capitalize(companion.status);
@@ -674,15 +674,15 @@ personalMoodBonus.textContent = `+${bonus}% Resource Gain`;
 
 playdeckTopLevel.textContent = Number(player.level).toLocaleString();
 playdeckEquipLevel.textContent = "—";
-playdeckIngredients.textContent = "0";
+playdeckIngredients.textContent = formatCompactNumber(0);
 playdeckIngredients.title = "Ingredients are not implemented yet.";
 
-resFans.textContent = Number(status.resources.fans ?? 0).toLocaleString();
-resMemes.textContent = Number(status.resources.memes ?? 0).toLocaleString();
-resLostItems.textContent = Number(status.resources.lostItems ?? 0).toLocaleString();
-resConfidence.textContent = Number(status.resources.confidence ?? 0).toLocaleString();
-resReceipts.textContent = Number(status.resources.receipts ?? 0).toLocaleString();
-resPatterns.textContent = Number(status.resources.patterns ?? 0).toLocaleString();
+resFans.textContent = formatCompactNumber(status.resources.fans ?? 0);
+resMemes.textContent = formatCompactNumber(status.resources.memes ?? 0);
+resLostItems.textContent = formatCompactNumber(status.resources.lostItems ?? 0);
+resConfidence.textContent = formatCompactNumber(status.resources.confidence ?? 0);
+resReceipts.textContent = formatCompactNumber(status.resources.receipts ?? 0);
+resPatterns.textContent = formatCompactNumber(status.resources.patterns ?? 0);
 
 actStreaming.textContent = activityLevel(status.activities?.streaming);
 actDoomScrolling.textContent = activityLevel(status.activities?.doomScrolling);
@@ -2435,7 +2435,73 @@ function formatCredits(cents) {
 }
 
 function formatWholeCredits(cents) {
-  return Math.round(Number(cents) / 100).toLocaleString();
+  return formatCompactNumber(Math.round(Number(cents ?? 0) / 100));
+}
+
+function formatCompactNumber(value) {
+  const number = Number(value ?? 0);
+
+  if (!Number.isFinite(number)) {
+    return "0";
+  }
+
+  const sign = number < 0 ? "-" : "";
+  const absolute = Math.abs(number);
+
+  if (absolute < 1_000_000) {
+    return `${sign}${Math.round(absolute).toLocaleString()}`;
+  }
+
+  const suffixes = [
+    "",
+    "K",
+    "M",
+    "B",
+    "T",
+    "Qa",
+    "Qi",
+    "Sx",
+    "Sp",
+    "Oc",
+    "No",
+    "Dc",
+    "Ud",
+    "Dd",
+    "Td",
+    "Qad",
+    "Qid",
+    "Sxd",
+    "Spd",
+    "Ocd",
+    "Nod",
+  ];
+
+  let tier = Math.floor(Math.log10(absolute) / 3);
+
+  if (tier >= suffixes.length) {
+    tier = suffixes.length - 1;
+  }
+
+  if (tier < 2) {
+    return `${sign}${Math.round(absolute).toLocaleString()}`;
+  }
+
+  const scaled = absolute / Math.pow(1000, tier);
+  const suffix = suffixes[tier];
+
+  return `${sign}${trimCompactDecimals(scaled)}${suffix}`;
+}
+
+function trimCompactDecimals(value) {
+  if (value >= 100) {
+    return value.toFixed(0);
+  }
+
+  if (value >= 10) {
+    return value.toFixed(2).replace(/\.?0+$/, "");
+  }
+
+  return value.toFixed(2).replace(/\.?0+$/, "");
 }
 
 function syncTickProgress(tick) {
