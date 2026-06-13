@@ -413,6 +413,8 @@ let lastWhisperName = localStorage.getItem(CHAT_LAST_WHISPER_KEY) || "";
 let activeChatUserMenu = null;
 let activeChatProfileModal = null;
 let isResizingChat = false;
+let chatResizeStartY = 0;
+let chatResizeStartHeight = 0;
 let isChatHidden = false;
 let previousChatHeight = 190;
 let serverClockOffsetMs = 0;
@@ -1286,29 +1288,32 @@ function initializeChatResize() {
   }
 
   chatResizeHandle.addEventListener("pointerdown", (event) => {
-  if (isChatHidden) {
-    return;
-  }
+    if (isChatHidden) {
+      return;
+    }
 
-  event.preventDefault();
-  isResizingChat = true;
-  document.body.classList.add("is-resizing-chat");
-  chatResizeHandle.setPointerCapture(event.pointerId);
-});
+    event.preventDefault();
+    isResizingChat = true;
+    chatResizeStartY = event.clientY;
+    chatResizeStartHeight = Math.round(chatPanel.getBoundingClientRect().height);
+    document.body.classList.add("is-resizing-chat");
+    chatResizeHandle.setPointerCapture(event.pointerId);
+  });
 
   window.addEventListener("pointermove", (event) => {
     if (!isResizingChat) {
       return;
     }
 
-    const centerColumn = document.querySelector(".center-column");
-    const rect = centerColumn.getBoundingClientRect();
-    const newHeight = rect.bottom - event.clientY;
+    event.preventDefault();
+
+    const dragDelta = chatResizeStartY - event.clientY;
+    const newHeight = chatResizeStartHeight + dragDelta;
 
     setChatHeight(newHeight);
   });
 
-  window.addEventListener("pointerup", () => {
+  const finishResize = () => {
     if (!isResizingChat) {
       return;
     }
@@ -1320,12 +1325,31 @@ function initializeChatResize() {
     previousChatHeight = chatHeight;
     localStorage.setItem("namigotchi_chat_height", String(chatHeight));
     localStorage.setItem(CHAT_PREVIOUS_HEIGHT_KEY, String(chatHeight));
-  });
+  };
+
+  window.addEventListener("pointerup", finishResize);
+  window.addEventListener("pointercancel", finishResize);
 }
 
 function setChatHeight(height) {
-  const clampedHeight = Math.max(120, Math.min(430, Number(height)));
+  const clampedHeight = clampChatHeight(Number(height));
   document.documentElement.style.setProperty("--chat-height", `${clampedHeight}px`);
+}
+
+function clampChatHeight(height) {
+  const viewportHeight = window.visualViewport?.height || window.innerHeight || 720;
+  const isMobileLayout = window.matchMedia("(max-width: 980px)").matches;
+
+  const minHeight = isMobileLayout ? 180 : 120;
+  const maxHeight = isMobileLayout
+    ? Math.max(260, Math.min(620, viewportHeight * 0.7))
+    : Math.max(260, Math.min(520, viewportHeight - 260));
+
+  if (!Number.isFinite(height)) {
+    return minHeight;
+  }
+
+  return Math.round(Math.max(minHeight, Math.min(maxHeight, height)));
 }
 
 function submitChatMessage(event) {
