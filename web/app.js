@@ -1969,36 +1969,6 @@ function updateNamiMessageElement(row, entry) {
   setTextIfChanged(row.querySelector(".nami-log-text"), message.text);
 }
 
-  namiMessageLog.replaceChildren();
-
-  if (!namiMessages.length) {
-    const empty = document.createElement("p");
-    empty.className = "muted";
-    empty.textContent = "Nami-chan messages will appear here.";
-    namiMessageLog.appendChild(empty);
-    return;
-  }
-
-  namiMessages.forEach((message) => {
-    const row = document.createElement("p");
-    row.className = "nami-log-message";
-    row.classList.toggle("nami-log-level-up", message.kind === "level-up");
-
-    const time = document.createElement("span");
-    time.className = "nami-log-time";
-    time.textContent = `[${message.timestamp}]`;
-
-    const text = document.createElement("span");
-    text.className = "nami-log-text";
-    text.textContent = message.text;
-
-    row.append(time, " ", text);
-    namiMessageLog.appendChild(row);
-  });
-
-  namiMessageLog.scrollTop = namiMessageLog.scrollHeight;
-}
-
 function loadNamiMessages() {
   try {
     const parsed = JSON.parse(localStorage.getItem(NAMI_MESSAGE_STORAGE_KEY));
