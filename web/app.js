@@ -455,6 +455,7 @@ let forceTickButton = null;
 let currentChatChannel = "lobby";
 let chatMessages = createEmptyChatStore();
 let namiMessages = [];
+let namiMessageBottomScrollPending = false;
 let unreadChannels = new Set();
 let emojiUsage = loadEmojiUsage();
 let activeEmojiCategory = "recent";
@@ -700,6 +701,10 @@ function showSection(sectionName, options = {}) {
   sections.forEach((section) => {
     section.classList.toggle("active", section.id === `section-${safeSectionName}`);
   });
+
+  if (safeSectionName === "home" && namiMessageBottomScrollPending) {
+    scrollNamiMessagesToBottomWhenVisible();
+  }
 
   if (options.save ?? true) {
     localStorage.setItem(ACTIVE_SECTION_KEY, safeSectionName);
@@ -1920,6 +1925,27 @@ function addNamiMessage(text, options = {}) {
   }
 }
 
+function scrollNamiMessagesToBottomWhenVisible() {
+  if (!namiMessageLog) {
+    return;
+  }
+
+  if (!isHomeSectionActive()) {
+    namiMessageBottomScrollPending = true;
+    return;
+  }
+
+  namiMessageBottomScrollPending = false;
+
+  requestAnimationFrame(() => {
+    namiMessageLog.scrollTop = namiMessageLog.scrollHeight;
+  });
+}
+
+function isHomeSectionActive() {
+  return document.querySelector("#section-home")?.classList.contains("active") ?? false;
+}
+
 function renderNamiMessages(options = {}) {
   if (!namiMessageLog) {
     return;
@@ -1932,11 +1958,11 @@ function renderNamiMessages(options = {}) {
 
   syncKeyedChildren(namiMessageLog, entries, createNamiMessageElement, updateNamiMessageElement);
 
-  if (options.scrollToBottom) {
-    namiMessageLog.scrollTop = namiMessageLog.scrollHeight;
-  } else {
-    namiMessageLog.scrollTop = previousScrollTop;
-  }
+if (options.scrollToBottom) {
+  scrollNamiMessagesToBottomWhenVisible();
+} else {
+  namiMessageLog.scrollTop = previousScrollTop;
+}
 }
 
 function namiMessageKey(message) {
