@@ -312,7 +312,6 @@ input:focus-visible {
     linear-gradient(180deg, rgba(73, 199, 255, 0.95), rgba(18, 154, 216, 0.9));
   color: #03111c;
   font-weight: 950;
-  text-transform: uppercase;
   box-shadow: 0 8px 22px rgba(73, 199, 255, 0.14);
 }
 

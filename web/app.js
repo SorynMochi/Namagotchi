@@ -89,6 +89,7 @@ const CHAT_STORAGE_KEY = "namigotchi_chat_store_v1";
 const CHAT_CHANNEL_KEY = "namigotchi_chat_active_channel_v1";
 const CHAT_HIDDEN_KEY = "namigotchi_chat_hidden_v1";
 const CHAT_PREVIOUS_HEIGHT_KEY = "namigotchi_chat_previous_height_v1";
+const ACTIVE_SECTION_KEY = "namigotchi_active_section_v1";
 const EMOJI_USAGE_KEY = "namigotchi_emoji_usage_v1";
 const EMOJI_CATEGORY_KEY = "namigotchi_emoji_category_v1";
 const RECENT_EMOJI_LIMIT = 70;
@@ -688,15 +689,24 @@ initializeChatResize();
 initializeNamiMessages();
 initializeCareButtonTimer();
 
-function showSection(sectionName) {
+function showSection(sectionName, options = {}) {
+  const targetSection = document.querySelector(`#section-${sectionName}`);
+  const safeSectionName = targetSection ? sectionName : "home";
+
   document.querySelectorAll(".nav-item").forEach((button) => {
-    button.classList.toggle("active", button.dataset.section === sectionName);
+    button.classList.toggle("active", button.dataset.section === safeSectionName);
   });
 
   sections.forEach((section) => {
-    section.classList.toggle("active", section.id === `section-${sectionName}`);
+    section.classList.toggle("active", section.id === `section-${safeSectionName}`);
   });
+
+  if (options.save ?? true) {
+    localStorage.setItem(ACTIVE_SECTION_KEY, safeSectionName);
+  }
 }
+
+showSection(localStorage.getItem(ACTIVE_SECTION_KEY) || "home", { save: false });
 
 async function loadStatus() {
   try {
@@ -1841,10 +1851,10 @@ function createForceTickButton() {
 }
 
 function initializeNamiMessages() {
-  loadNamiMessagesFromServer();
+  loadNamiMessagesFromServer({ scrollToBottom: true });
 }
 
-async function loadNamiMessagesFromServer() {
+async function loadNamiMessagesFromServer(options = {}) {
   if (!namiMessageLog) {
     return;
   }
@@ -1868,10 +1878,10 @@ async function loadNamiMessagesFromServer() {
         })
       : [];
 
-    renderNamiMessages();
+    renderNamiMessages(options);
   } catch (error) {
     console.error(error);
-    renderNamiMessages();
+    renderNamiMessages(options);
   }
 }
 
@@ -1910,7 +1920,7 @@ function addNamiMessage(text, options = {}) {
   }
 }
 
-function renderNamiMessages() {
+function renderNamiMessages(options = {}) {
   if (!namiMessageLog) {
     return;
   }
@@ -1922,7 +1932,11 @@ function renderNamiMessages() {
 
   syncKeyedChildren(namiMessageLog, entries, createNamiMessageElement, updateNamiMessageElement);
 
-  namiMessageLog.scrollTop = previousScrollTop;
+  if (options.scrollToBottom) {
+    namiMessageLog.scrollTop = namiMessageLog.scrollHeight;
+  } else {
+    namiMessageLog.scrollTop = previousScrollTop;
+  }
 }
 
 function namiMessageKey(message) {
