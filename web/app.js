@@ -1833,7 +1833,7 @@ function updateGatheringCards(status) {
     const button = card.querySelector("button");
 
     if (button) {
-      setTextIfChanged(button, isActive ? `Capturing ${config.resource}...` : `Start ${config.name}`);
+      setTextIfChanged(button, isActive ? `Gathering ${config.resource}...` : `Start ${config.name}`);
       button.disabled = isActive;
     }
   });
