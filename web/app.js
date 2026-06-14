@@ -146,6 +146,16 @@ const WARDROBE_INVENTORY_GROUPS = [
   { key: "accessory", label: "Accessory", family: "accessory" },
 ];
 
+const CARE_STAT_DEFINITIONS = [
+  { key: "satiety", label: "Satiety" },
+  { key: "connection", label: "Connection" },
+  { key: "energy", label: "Energy" },
+  { key: "comfort", label: "Comfort" },
+  { key: "playfulness", label: "Playfulness" },
+  { key: "inspiration", label: "Inspiration" },
+  { key: "cleanliness", label: "Cleanliness" },
+];
+
 const CARE_ACTION_CONFIG = {
   meal: {
     label: "Meal",
@@ -466,6 +476,138 @@ let careCompletionRefreshInFlight = false;
 let emojiPickerNeedsRender = true;
 let emojiPickerPreloadTimer = null;
 
+function setTextIfChanged(element, value) {
+  if (!element) {
+    return;
+  }
+
+  const nextValue = String(value ?? "");
+
+  if (element.textContent !== nextValue) {
+    element.textContent = nextValue;
+  }
+}
+
+function setTitleIfChanged(element, value) {
+  if (!element) {
+    return;
+  }
+
+  const nextValue = String(value ?? "");
+
+  if (element.title !== nextValue) {
+    element.title = nextValue;
+  }
+}
+
+function setAttributeIfChanged(element, attribute, value) {
+  if (!element) {
+    return;
+  }
+
+  const nextValue = String(value ?? "");
+
+  if (element.getAttribute(attribute) !== nextValue) {
+    element.setAttribute(attribute, nextValue);
+  }
+}
+
+function setWidthIfChanged(element, value) {
+  if (!element) {
+    return;
+  }
+
+  const nextValue = String(value ?? "");
+
+  if (element.style.width !== nextValue) {
+    element.style.width = nextValue;
+  }
+}
+
+function setClassNameIfChanged(element, value) {
+  if (!element) {
+    return;
+  }
+
+  const nextValue = String(value ?? "");
+
+  if (element.className !== nextValue) {
+    element.className = nextValue;
+  }
+}
+
+function toggleClassIfChanged(element, className, enabled) {
+  if (!element) {
+    return;
+  }
+
+  if (element.classList.contains(className) !== enabled) {
+    element.classList.toggle(className, enabled);
+  }
+}
+
+function withUniqueRenderKeys(items, getBaseKey) {
+  const seen = new Map();
+
+  return items.map((item, index) => {
+    const baseKey = String(getBaseKey(item, index));
+    const count = seen.get(baseKey) || 0;
+
+    seen.set(baseKey, count + 1);
+
+    return {
+      key: `${baseKey}\u001f${count}`,
+      item,
+      index,
+    };
+  });
+}
+
+function syncKeyedChildren(container, entries, createElement, updateElement) {
+  if (!container) {
+    return;
+  }
+
+  const wantedKeys = new Set(entries.map((entry) => String(entry.key)));
+  const existingByKey = new Map();
+
+  Array.from(container.children).forEach((child) => {
+    const key = child.dataset.renderKey;
+
+    if (key && wantedKeys.has(key) && !existingByKey.has(key)) {
+      existingByKey.set(key, child);
+    }
+  });
+
+  let cursor = container.firstElementChild;
+
+  entries.forEach((entry) => {
+    const key = String(entry.key);
+    let element = existingByKey.get(key);
+
+    if (element) {
+      existingByKey.delete(key);
+    } else {
+      element = createElement(entry);
+      element.dataset.renderKey = key;
+    }
+
+    updateElement(element, entry);
+
+    if (element === cursor) {
+      cursor = cursor.nextElementSibling;
+    } else {
+      container.insertBefore(element, cursor);
+    }
+  });
+
+  Array.from(container.children).forEach((child) => {
+    if (!wantedKeys.has(child.dataset.renderKey)) {
+      child.remove();
+    }
+  });
+}
+
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const section = button.dataset.section || button.dataset.sectionLink;
@@ -690,94 +832,156 @@ async function performCareAction(action) {
 function renderPlayerStatus(status) {
   const player = status.player;
   const companion = status.companion;
-  const namiXpPercent = percent(companion.xpIntoLevel, companion.xpToNext);
-
-namiLevel.textContent = Number(companion.level ?? 1).toLocaleString();
-namiXpLabel.textContent = `${Number(companion.xpIntoLevel ?? 0).toLocaleString()} / ${Number(companion.xpToNext ?? 120).toLocaleString()}`;
-namiXpFill.style.width = `${namiXpPercent}%`;
-namiMoodLabel.textContent = companion.moodLabel || "Okay";
-namiPrimaryNeed.textContent = companion.primaryNeed || "Waiting";
-namiSuggestedAction.textContent = companion.suggestedAction || "Any care action";
-
   const tick = status.tick;
   const bonus = getMoodBonus(companion.moodScore);
+  const namiXpPercent = percent(companion.xpIntoLevel, companion.xpToNext);
 
-wealthCredits.textContent = formatWholeCredits(player.creditsCents ?? player.currencyCents);
-wealthNibbles.textContent = formatCompactNumber(player.nibbles ?? 0);
-wealthNamiCoin.textContent = formatCompactNumber(player.namiCoin ?? 0);
-const wardrobe = status.wardrobe || { used: 0, capacity: 100 };
-topWardrobe.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
+  setTextIfChanged(namiLevel, Number(companion.level ?? 1).toLocaleString());
+  setTextIfChanged(
+    namiXpLabel,
+    `${Number(companion.xpIntoLevel ?? 0).toLocaleString()} / ${Number(companion.xpToNext ?? 120).toLocaleString()}`
+  );
+  setWidthIfChanged(namiXpFill, `${namiXpPercent}%`);
+  setTextIfChanged(namiMoodLabel, companion.moodLabel || "Okay");
+  setTextIfChanged(namiPrimaryNeed, companion.primaryNeed || "Waiting");
+  setTextIfChanged(namiSuggestedAction, companion.suggestedAction || "Any care action");
 
-topMood.textContent = Math.round(Number(companion.moodScore));
-topNamiStatus.textContent = capitalize(companion.status);
-personalMoodBonus.textContent = `+${bonus}% Resource Gain`;
+  setTextIfChanged(wealthCredits, formatWholeCredits(player.creditsCents ?? player.currencyCents));
+  setTextIfChanged(wealthNibbles, formatCompactNumber(player.nibbles ?? 0));
+  setTextIfChanged(wealthNamiCoin, formatCompactNumber(player.namiCoin ?? 0));
 
-playdeckTopLevel.textContent = Number(player.level).toLocaleString();
-playdeckEquipLevel.textContent = formatCompactNumber(status.playdeck?.equipmentPower ?? 0);
-playdeckIngredients.textContent = formatCompactNumber(0);
-playdeckIngredients.title = "Ingredients are not implemented yet.";
+  const wardrobe = status.wardrobe || { used: 0, capacity: 100 };
+  const wardrobeCountText = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
 
-resFans.textContent = formatCompactNumber(status.resources.fans ?? 0);
-resMemes.textContent = formatCompactNumber(status.resources.memes ?? 0);
-resLostItems.textContent = formatCompactNumber(status.resources.lostItems ?? 0);
-resConfidence.textContent = formatCompactNumber(status.resources.confidence ?? 0);
-resReceipts.textContent = formatCompactNumber(status.resources.receipts ?? 0);
-resPatterns.textContent = formatCompactNumber(status.resources.patterns ?? 0);
+  setTextIfChanged(topWardrobe, wardrobeCountText);
+  setTextIfChanged(topMood, Math.round(Number(companion.moodScore ?? 0)));
+  setTextIfChanged(topNamiStatus, capitalize(companion.status));
+  setTextIfChanged(personalMoodBonus, `+${bonus}% Resource Gain`);
 
-actStreaming.textContent = activityLevel(status.activities?.streaming);
-actDoomScrolling.textContent = activityLevel(status.activities?.doomScrolling);
-actCleaning.textContent = activityLevel(status.activities?.cleaning);
-actExercising.textContent = activityLevel(status.activities?.exercising);
-actShopping.textContent = activityLevel(status.activities?.shopping);
-actDesigning.textContent = activityLevel(status.activities?.designing);
+  setTextIfChanged(playdeckTopLevel, Number(player.level ?? 1).toLocaleString());
+  setTextIfChanged(playdeckEquipLevel, formatCompactNumber(status.playdeck?.equipmentPower ?? 0));
+  setTextIfChanged(playdeckIngredients, formatCompactNumber(0));
+  setTitleIfChanged(playdeckIngredients, "Ingredients are not implemented yet.");
+
+  setTextIfChanged(resFans, formatCompactNumber(status.resources?.fans ?? 0));
+  setTextIfChanged(resMemes, formatCompactNumber(status.resources?.memes ?? 0));
+  setTextIfChanged(resLostItems, formatCompactNumber(status.resources?.lostItems ?? 0));
+  setTextIfChanged(resConfidence, formatCompactNumber(status.resources?.confidence ?? 0));
+  setTextIfChanged(resReceipts, formatCompactNumber(status.resources?.receipts ?? 0));
+  setTextIfChanged(resPatterns, formatCompactNumber(status.resources?.patterns ?? 0));
+
+  setTextIfChanged(actStreaming, activityLevel(status.activities?.streaming));
+  setTextIfChanged(actDoomScrolling, activityLevel(status.activities?.doomScrolling));
+  setTextIfChanged(actCleaning, activityLevel(status.activities?.cleaning));
+  setTextIfChanged(actExercising, activityLevel(status.activities?.exercising));
+  setTextIfChanged(actShopping, activityLevel(status.activities?.shopping));
+  setTextIfChanged(actDesigning, activityLevel(status.activities?.designing));
 
   const xpPercent = percent(player.xpIntoLevel, player.xpToNext);
-  playdeckXpLabel.textContent = `XP: ${player.xpIntoLevel.toLocaleString()} / ${player.xpToNext.toLocaleString()}`;
-  playdeckXpFill.style.width = `${xpPercent}%`;
 
-  playdeckHpLabel.textContent = "HP: 100 / 100";
-  playdeckHpFill.style.width = "100%";
+  setTextIfChanged(
+    playdeckXpLabel,
+    `XP: ${Number(player.xpIntoLevel ?? 0).toLocaleString()} / ${Number(player.xpToNext ?? 720).toLocaleString()}`
+  );
+  setWidthIfChanged(playdeckXpFill, `${xpPercent}%`);
+
+  setTextIfChanged(playdeckHpLabel, "HP: 100 / 100");
+  setWidthIfChanged(playdeckHpFill, "100%");
 
   const progressActionName = tick.activeGatheringTask === "doom_scrolling"
-  ? "Scrolling"
-  : tick.activeGatheringName;
+    ? "Scrolling"
+    : tick.activeGatheringName;
 
-currentActionLabel.textContent = `Playdeck + ${progressActionName} [x${tick.playdeckStreak.toLocaleString()}]`;
+  setTextIfChanged(
+    currentActionLabel,
+    `Playdeck + ${progressActionName} [x${Number(tick.playdeckStreak ?? 0).toLocaleString()}]`
+  );
+
   syncTickProgress(tick);
   scheduleNextPlayerStatusRefresh(tick);
 
-  careStats.innerHTML = `
-    ${renderStat("Satiety", companion.satiety)}
-    ${renderStat("Connection", companion.connection)}
-    ${renderStat("Energy", companion.energy)}
-    ${renderStat("Comfort", companion.comfort)}
-    ${renderStat("Playfulness", companion.playfulness)}
-    ${renderStat("Inspiration", companion.inspiration)}
-    ${renderStat("Cleanliness", companion.cleanliness)}
-  `;
-
+  renderCareStats(companion);
   updateGatheringCards(status);
   renderCareButtons(status);
   renderPlaydeckStatus(status);
   renderWardrobeStatus(status);
 
-  namiMessage.textContent = companion.caption || "Nami-chan is waiting sweetly.";
+  setTextIfChanged(namiMessage, companion.caption || "Nami-chan is waiting sweetly.");
 }
 
 function activityLevel(activity) {
   return Number(activity?.level ?? 1).toLocaleString();
 }
 
-function renderStat(name, value) {
-  return `
-    <div class="stat-row">
-      <span>${escapeHTML(name)}</span>
-      <div class="bar stat-bar" aria-label="${escapeHTML(name)}: ${value}/100">
-        <div class="fill stat-fill" style="width: ${value}%"></div>
-      </div>
-      <strong>${value}</strong>
-    </div>
-  `;
+function normalizeCareStatValue(value) {
+  const numberValue = Number(value ?? 0);
+
+  if (!Number.isFinite(numberValue)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(100, numberValue));
+}
+
+function formatCareStatValue(value) {
+  const normalized = normalizeCareStatValue(value);
+
+  return Number.isInteger(normalized)
+    ? normalized.toLocaleString()
+    : normalized.toFixed(1);
+}
+
+function renderCareStats(companion) {
+  if (!careStats) {
+    return;
+  }
+
+  const entries = CARE_STAT_DEFINITIONS.map((definition) => {
+    const value = normalizeCareStatValue(companion?.[definition.key]);
+
+    return {
+      key: definition.key,
+      label: definition.label,
+      value,
+      displayValue: formatCareStatValue(value),
+    };
+  });
+
+  syncKeyedChildren(careStats, entries, createCareStatRow, updateCareStatRow);
+}
+
+function createCareStatRow() {
+  const row = document.createElement("div");
+  row.className = "stat-row";
+
+  const label = document.createElement("span");
+  label.className = "care-stat-name";
+
+  const bar = document.createElement("div");
+  bar.className = "bar stat-bar";
+
+  const fill = document.createElement("div");
+  fill.className = "fill stat-fill";
+
+  const value = document.createElement("strong");
+  value.className = "care-stat-value";
+
+  bar.appendChild(fill);
+  row.append(label, bar, value);
+
+  return row;
+}
+
+function updateCareStatRow(row, entry) {
+  const label = row.querySelector(".care-stat-name");
+  const bar = row.querySelector(".stat-bar");
+  const fill = row.querySelector(".stat-fill");
+  const value = row.querySelector(".care-stat-value");
+
+  setTextIfChanged(label, entry.label);
+  setAttributeIfChanged(bar, "aria-label", `${entry.label}: ${entry.displayValue}/100`);
+  setWidthIfChanged(fill, `${entry.value}%`);
+  setTextIfChanged(value, entry.displayValue);
 }
 
 function renderPlaydeckStatus(status) {
@@ -842,34 +1046,101 @@ function renderCombatLog(logs) {
     return;
   }
 
-  combatLogList.replaceChildren();
+  const entries = Array.isArray(logs) && logs.length
+    ? withUniqueRenderKeys(logs, combatLogEntryKey)
+    : [{ key: "__empty__", empty: true }];
 
-  if (!Array.isArray(logs) || logs.length === 0) {
-    const empty = document.createElement("p");
-    empty.innerHTML = `<span>[000]</span> [LOG] No combat logs yet.`;
-    combatLogList.appendChild(empty);
+  syncKeyedChildren(combatLogList, entries, createCombatLogRow, updateCombatLogRow);
+}
+
+function combatLogEntryKey(entry) {
+  return [
+    entry.outcome,
+    entry.enemyName,
+    entry.enemyLevel,
+    entry.playerDamage,
+    entry.enemyDamage,
+    entry.xpGained,
+    entry.creditsCentsGained,
+    entry.nibblesGained,
+    entry.itemName,
+    entry.itemQuantity,
+  ].join("\u001f");
+}
+
+function createCombatLogRow(entry) {
+  const row = document.createElement("p");
+
+  if (entry.empty) {
+    const tag = document.createElement("span");
+    tag.className = "combat-log-tag";
+
+    const text = document.createElement("span");
+    text.className = "combat-log-empty";
+
+    row.append(tag, " ", text);
+    return row;
+  }
+
+  row.className = "combat-log-row";
+
+  const tag = document.createElement("span");
+  tag.className = "combat-log-tag";
+
+  const outcome = document.createElement("span");
+  outcome.className = "combat-log-outcome";
+
+  const enemy = document.createElement("span");
+  enemy.className = "combat-log-enemy";
+
+  const damage = document.createElement("em");
+  damage.className = "combat-log-damage";
+
+  const xp = document.createElement("span");
+  xp.className = "combat-log-xp";
+
+  const credits = document.createElement("span");
+  credits.className = "combat-log-credits";
+
+  const nibbles = document.createElement("span");
+  nibbles.className = "combat-log-nibbles";
+
+  row.append(tag, " ", outcome, " ", enemy, " ", damage, " ", xp, " ", credits, " ", nibbles);
+
+  return row;
+}
+
+function updateCombatLogRow(row, entry) {
+  if (entry.empty) {
+    setClassNameIfChanged(row, "");
+    setTextIfChanged(row.querySelector(".combat-log-tag"), "[000]");
+    setTextIfChanged(row.querySelector(".combat-log-empty"), "[LOG] No combat logs yet.");
     return;
   }
 
-  logs.forEach((entry, index) => {
-    const row = document.createElement("p");
-    const tag = String(index + 1).padStart(3, "0");
-    const itemText = entry.itemName
-      ? ` [${entry.itemName}${Number(entry.itemQuantity ?? 0) > 1 ? ` x${Number(entry.itemQuantity).toLocaleString()}` : ""}]`
-      : "";
+  const log = entry.item;
+  const tag = String(entry.index + 1).padStart(3, "0");
+  const itemText = log.itemName
+    ? ` [${log.itemName}${Number(log.itemQuantity ?? 0) > 1 ? ` x${Number(log.itemQuantity).toLocaleString()}` : ""}]`
+    : "";
 
-    row.innerHTML = `
-      <span>[${tag}]</span>
-      [${formatOutcome(entry.outcome)}]
-      ${escapeHTML(entry.enemyName || "Enemy")} Lv${Number(entry.enemyLevel ?? 1).toLocaleString()}
-      <em>-${Number(entry.playerDamage ?? 0).toLocaleString()} / -${Number(entry.enemyDamage ?? 0).toLocaleString()}</em>
-      +${Number(entry.xpGained ?? 0).toLocaleString()} XP
-      +${formatCredits(entry.creditsCentsGained ?? 0)} Credits
-      [+${Number(entry.nibblesGained ?? 0).toLocaleString()} Nibbles]${escapeHTML(itemText)}
-    `;
-
-    combatLogList.appendChild(row);
-  });
+  setClassNameIfChanged(row, "combat-log-row");
+  setTextIfChanged(row.querySelector(".combat-log-tag"), `[${tag}]`);
+  setTextIfChanged(row.querySelector(".combat-log-outcome"), `[${formatOutcome(log.outcome)}]`);
+  setTextIfChanged(
+    row.querySelector(".combat-log-enemy"),
+    `${log.enemyName || "Enemy"} Lv${Number(log.enemyLevel ?? 1).toLocaleString()}`
+  );
+  setTextIfChanged(
+    row.querySelector(".combat-log-damage"),
+    `-${Number(log.playerDamage ?? 0).toLocaleString()} / -${Number(log.enemyDamage ?? 0).toLocaleString()}`
+  );
+  setTextIfChanged(row.querySelector(".combat-log-xp"), `+${Number(log.xpGained ?? 0).toLocaleString()} XP`);
+  setTextIfChanged(row.querySelector(".combat-log-credits"), `+${formatCredits(log.creditsCentsGained ?? 0)} Credits`);
+  setTextIfChanged(
+    row.querySelector(".combat-log-nibbles"),
+    `[+${Number(log.nibblesGained ?? 0).toLocaleString()} Nibbles]${itemText}`
+  );
 }
 
 function renderWardrobeStatus(status) {
@@ -887,28 +1158,15 @@ function renderWardrobeStatus(status) {
     return Number(slot?.itemId ?? 0) > 0;
   }).length;
 
-  if (topWardrobe) {
-    topWardrobe.textContent = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
-  }
+  const wardrobeCountText = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
 
-const wardrobeCountText = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
-
-if (wardrobeInlineCount) {
-  wardrobeInlineCount.textContent = wardrobeCountText;
-}
-
-if (wardrobeCapacityLabel) {
-  wardrobeCapacityLabel.textContent = wardrobeCountText;
-}
-
-if (inventoryCountLabel) {
-  inventoryCountLabel.textContent = `${items.length.toLocaleString()} shown, ${Number(wardrobe.used ?? 0).toLocaleString()} total`;
-}
+  setTextIfChanged(topWardrobe, wardrobeCountText);
+  setTextIfChanged(wardrobeInlineCount, wardrobeCountText);
+  setTextIfChanged(wardrobeCapacityLabel, wardrobeCountText);
+  setTextIfChanged(inventoryCountLabel, `${items.length.toLocaleString()} shown, ${Number(wardrobe.used ?? 0).toLocaleString()} total`);
 
   if (equipmentSlotList) {
-    equipmentSlotList.replaceChildren();
-
-    WARDROBE_EQUIP_SLOT_ORDER.forEach((definition) => {
+    const slotEntries = WARDROBE_EQUIP_SLOT_ORDER.map((definition) => {
       const slot = equipmentByKey.get(definition.slotKey) || {
         slotKey: definition.slotKey,
         displayName: definition.label,
@@ -919,109 +1177,195 @@ if (inventoryCountLabel) {
         powerLevel: 0,
       };
 
-      const hasItem = Number(slot.itemId ?? 0) > 0;
-      const rarity = normalizeWardrobeRarity(slot.rarity || "basic");
-
-      const card = document.createElement("article");
-      card.className = `equipment-card ${hasItem ? wardrobeRarityClass(rarity) : "is-empty"}`;
-
-      card.innerHTML = `
-        <div class="gear-card-topline">
-          <span class="equipment-slot-label">${escapeHTML(definition.label)}</span>
-          ${hasItem ? `<span class="gear-level-tag">${Number(slot.powerLevel ?? 0).toLocaleString()}</span>` : `<span class="gear-level-tag is-hidden"></span>`}
-        </div>
-
-        <div class="gear-card-name-wrap">
-          <strong class="gear-card-name ${hasItem ? "" : "gear-card-empty-name"}">
-            ${hasItem ? escapeHTML(slot.itemName || "Unknown Item") : "EMPTY"}
-          </strong>
-        </div>
-
-        <div class="gear-card-bottomline">
-          ${hasItem ? `<span class="gear-tailoring-tag">T: ${formatTailoringPoints(slot)}</span>` : `<span class="gear-tailoring-tag is-hidden"></span>`}
-        </div>
-      `;
-
-      equipmentSlotList.appendChild(card);
+      return {
+        key: definition.slotKey,
+        definition,
+        slot,
+      };
     });
+
+    syncKeyedChildren(equipmentSlotList, slotEntries, createEquipmentSlotCard, updateEquipmentSlotCard);
   }
 
   if (wardrobeBonusesList) {
-    wardrobeBonusesList.replaceChildren();
-
-    const rows = [
-      { label: "Equipment Power", value: Number(playdeck.equipmentPower ?? 0).toLocaleString() },
-      { label: "Attack", value: Number(playdeck.attack ?? 0).toLocaleString() },
-      { label: "Defense", value: Number(playdeck.defense ?? 0).toLocaleString() },
-      { label: "Max HP", value: Number(playdeck.playerMaxHp ?? 0).toLocaleString() },
-      { label: "Current HP", value: Number(playdeck.playerHp ?? 0).toLocaleString() },
-      { label: "Slots Filled", value: `${filledSlots.toLocaleString()} / ${WARDROBE_EQUIP_SLOT_ORDER.length.toLocaleString()}` },
+    const bonusRows = [
+      { key: "equipment-power", label: "Equipment Power", value: Number(playdeck.equipmentPower ?? 0).toLocaleString() },
+      { key: "attack", label: "Attack", value: Number(playdeck.attack ?? 0).toLocaleString() },
+      { key: "defense", label: "Defense", value: Number(playdeck.defense ?? 0).toLocaleString() },
+      { key: "max-hp", label: "Max HP", value: Number(playdeck.playerMaxHp ?? 0).toLocaleString() },
+      { key: "current-hp", label: "Current HP", value: Number(playdeck.playerHp ?? 0).toLocaleString() },
+      { key: "slots-filled", label: "Slots Filled", value: `${filledSlots.toLocaleString()} / ${WARDROBE_EQUIP_SLOT_ORDER.length.toLocaleString()}` },
     ];
 
-    rows.forEach((row) => {
-      const element = document.createElement("div");
-      element.className = "wardrobe-bonus-row";
-      element.innerHTML = `
-        <span>${escapeHTML(row.label)}</span>
-        <strong>${escapeHTML(String(row.value))}</strong>
-      `;
-      wardrobeBonusesList.appendChild(element);
-    });
+    syncKeyedChildren(wardrobeBonusesList, bonusRows, createWardrobeBonusRow, updateWardrobeBonusRow);
   }
 
   if (inventoryPreviewList) {
-    inventoryPreviewList.replaceChildren();
-
     const groupedItems = groupWardrobeInventoryItems(items);
+    const groupEntries = WARDROBE_INVENTORY_GROUPS.map((group) => ({
+      key: group.key,
+      group,
+      items: groupedItems[group.key] || [],
+    }));
 
-    WARDROBE_INVENTORY_GROUPS.forEach((group) => {
-      const section = document.createElement("section");
-      section.className = "inventory-group-section";
-
-      const header = document.createElement("div");
-      header.className = "inventory-group-header";
-      header.innerHTML = `
-        <span>${escapeHTML(group.label)}</span>
-        <strong>(${groupedItems[group.key].length.toLocaleString()})</strong>
-      `;
-
-      const grid = document.createElement("div");
-      grid.className = "inventory-group-grid";
-
-      if (!groupedItems[group.key].length) {
-        const empty = document.createElement("div");
-        empty.className = "inventory-empty-row";
-        empty.textContent = "Empty";
-        grid.appendChild(empty);
-      } else {
-        groupedItems[group.key].forEach((item) => {
-          const rarity = normalizeWardrobeRarity(item.rarity || "basic");
-          const card = document.createElement("article");
-          card.className = `inventory-item-card ${wardrobeRarityClass(rarity)}`;
-
-          card.innerHTML = `
-            <div class="gear-card-topline">
-              <span class="gear-card-filler"></span>
-              <span class="gear-level-tag">${Number(item.powerLevel ?? 1).toLocaleString()}</span>
-            </div>
-
-            <div class="gear-card-name-wrap">
-              <strong class="gear-card-name">${escapeHTML(item.name || "Unknown Item")}</strong>
-            </div>
-
-            <div class="gear-card-bottomline">
-              <span class="gear-tailoring-tag">T: ${formatTailoringPoints(item)}</span>
-            </div>
-          `;
-
-          grid.appendChild(card);
-        });
-      }
-
-      section.append(header, grid);
-      inventoryPreviewList.appendChild(section);
-    });
+    syncKeyedChildren(inventoryPreviewList, groupEntries, createInventoryGroupSection, updateInventoryGroupSection);
   }
+}
+
+function createEquipmentSlotCard() {
+  const card = document.createElement("article");
+
+  card.innerHTML = `
+    <div class="gear-card-topline">
+      <span class="equipment-slot-label"></span>
+      <span class="gear-level-tag"></span>
+    </div>
+
+    <div class="gear-card-name-wrap">
+      <strong class="gear-card-name"></strong>
+    </div>
+
+    <div class="gear-card-bottomline">
+      <span class="gear-tailoring-tag"></span>
+    </div>
+  `;
+
+  return card;
+}
+
+function updateEquipmentSlotCard(card, entry) {
+  const { definition, slot } = entry;
+  const hasItem = Number(slot.itemId ?? 0) > 0;
+  const rarity = normalizeWardrobeRarity(slot.rarity || "basic");
+
+  setClassNameIfChanged(card, `equipment-card ${hasItem ? wardrobeRarityClass(rarity) : "is-empty"}`);
+  setTextIfChanged(card.querySelector(".equipment-slot-label"), definition.label);
+
+  const levelTag = card.querySelector(".gear-level-tag");
+  setTextIfChanged(levelTag, hasItem ? Number(slot.powerLevel ?? 0).toLocaleString() : "");
+  toggleClassIfChanged(levelTag, "is-hidden", !hasItem);
+
+  const name = card.querySelector(".gear-card-name");
+  setClassNameIfChanged(name, hasItem ? "gear-card-name" : "gear-card-name gear-card-empty-name");
+  setTextIfChanged(name, hasItem ? slot.itemName || "Unknown Item" : "EMPTY");
+
+  const tailoring = card.querySelector(".gear-tailoring-tag");
+  setTextIfChanged(tailoring, hasItem ? `T: ${formatTailoringPoints(slot)}` : "");
+  toggleClassIfChanged(tailoring, "is-hidden", !hasItem);
+}
+
+function createWardrobeBonusRow() {
+  const row = document.createElement("div");
+  row.className = "wardrobe-bonus-row";
+
+  const label = document.createElement("span");
+  label.className = "wardrobe-bonus-label";
+
+  const value = document.createElement("strong");
+  value.className = "wardrobe-bonus-value";
+
+  row.append(label, value);
+
+  return row;
+}
+
+function updateWardrobeBonusRow(row, entry) {
+  setTextIfChanged(row.querySelector(".wardrobe-bonus-label"), entry.label);
+  setTextIfChanged(row.querySelector(".wardrobe-bonus-value"), entry.value);
+}
+
+function createInventoryGroupSection() {
+  const section = document.createElement("section");
+  section.className = "inventory-group-section";
+
+  const header = document.createElement("div");
+  header.className = "inventory-group-header";
+
+  const label = document.createElement("span");
+  label.className = "inventory-group-label";
+
+  const count = document.createElement("strong");
+  count.className = "inventory-group-count";
+
+  const grid = document.createElement("div");
+  grid.className = "inventory-group-grid";
+
+  header.append(label, count);
+  section.append(header, grid);
+
+  return section;
+}
+
+function updateInventoryGroupSection(section, entry) {
+  const grid = section.querySelector(".inventory-group-grid");
+
+  setTextIfChanged(section.querySelector(".inventory-group-label"), entry.group.label);
+  setTextIfChanged(section.querySelector(".inventory-group-count"), `(${entry.items.length.toLocaleString()})`);
+
+  const itemEntries = entry.items.length
+    ? withUniqueRenderKeys(entry.items, wardrobeInventoryItemKey)
+    : [{ key: "__empty__", empty: true }];
+
+  syncKeyedChildren(grid, itemEntries, createInventoryItemElement, updateInventoryItemElement);
+}
+
+function wardrobeInventoryItemKey(item) {
+  const id = Number(item.id ?? item.itemId ?? item.inventoryId ?? 0);
+
+  if (id > 0) {
+    return `item:${id}`;
+  }
+
+  return [
+    item.name,
+    item.equipmentSlot,
+    item.itemType,
+    item.rarity,
+    item.powerLevel,
+  ].join("\u001f");
+}
+
+function createInventoryItemElement(entry) {
+  if (entry.empty) {
+    const empty = document.createElement("div");
+    empty.className = "inventory-empty-row";
+    return empty;
+  }
+
+  const card = document.createElement("article");
+
+  card.innerHTML = `
+    <div class="gear-card-topline">
+      <span class="gear-card-filler"></span>
+      <span class="gear-level-tag"></span>
+    </div>
+
+    <div class="gear-card-name-wrap">
+      <strong class="gear-card-name"></strong>
+    </div>
+
+    <div class="gear-card-bottomline">
+      <span class="gear-tailoring-tag"></span>
+    </div>
+  `;
+
+  return card;
+}
+
+function updateInventoryItemElement(element, entry) {
+  if (entry.empty) {
+    setClassNameIfChanged(element, "inventory-empty-row");
+    setTextIfChanged(element, "Empty");
+    return;
+  }
+
+  const item = entry.item;
+  const rarity = normalizeWardrobeRarity(item.rarity || "basic");
+
+  setClassNameIfChanged(element, `inventory-item-card ${wardrobeRarityClass(rarity)}`);
+  setTextIfChanged(element.querySelector(".gear-level-tag"), Number(item.powerLevel ?? 1).toLocaleString());
+  setTextIfChanged(element.querySelector(".gear-card-name"), item.name || "Unknown Item");
+  setTextIfChanged(element.querySelector(".gear-tailoring-tag"), `T: ${formatTailoringPoints(item)}`);
 }
 
 function groupWardrobeInventoryItems(items) {
@@ -1461,44 +1805,20 @@ function updateGatheringCards(status) {
     const xpToNext = Number(activity?.xpToNext ?? 720);
     const generatedPerTick = resourcePerTickForActivity(level, moodScore);
     const isActive = task === activeGatheringTask;
-    const wardrobeBonusesList = document.querySelector("#wardrobe-bonuses-list");
-    const inventoryCountLabel = document.querySelector("#inventory-count-label");
 
-    card.classList.toggle("active", isActive);
+    toggleClassIfChanged(card, "active", isActive);
 
-    const title = card.querySelector("h2");
-    if (title) {
-      title.textContent = config.name;
-    }
-
-    const statusBadge = card.querySelector(".task-status");
-    if (statusBadge) {
-      statusBadge.textContent = isActive ? "Active" : "Idle";
-    }
-
-    const levelElement = card.querySelector(".task-level");
-    if (levelElement) {
-      levelElement.textContent = level.toLocaleString();
-    }
-
-    const xpElement = card.querySelector(".task-xp");
-    if (xpElement) {
-      xpElement.textContent = `${xpIntoLevel.toLocaleString()} / ${xpToNext.toLocaleString()}`;
-    }
-
-    const generatesElement = card.querySelector(".task-generates");
-    if (generatesElement) {
-      generatesElement.textContent = `${generatedPerTick.toLocaleString()} ${config.resource}/tick`;
-    }
-
-    const fill = card.querySelector(".task-xp-fill");
-    if (fill) {
-      fill.style.width = `${percent(xpIntoLevel, xpToNext)}%`;
-    }
+    setTextIfChanged(card.querySelector("h2"), config.name);
+    setTextIfChanged(card.querySelector(".task-status"), isActive ? "Active" : "Idle");
+    setTextIfChanged(card.querySelector(".task-level"), level.toLocaleString());
+    setTextIfChanged(card.querySelector(".task-xp"), `${xpIntoLevel.toLocaleString()} / ${xpToNext.toLocaleString()}`);
+    setTextIfChanged(card.querySelector(".task-generates"), `${generatedPerTick.toLocaleString()} ${config.resource}/tick`);
+    setWidthIfChanged(card.querySelector(".task-xp-fill"), `${percent(xpIntoLevel, xpToNext)}%`);
 
     const button = card.querySelector("button");
+
     if (button) {
-      button.textContent = isActive ? `Capturing ${config.resource}...` : `Start ${config.name}`;
+      setTextIfChanged(button, isActive ? `Capturing ${config.resource}...` : `Start ${config.name}`);
       button.disabled = isActive;
     }
   });
@@ -1594,6 +1914,60 @@ function renderNamiMessages() {
   if (!namiMessageLog) {
     return;
   }
+
+  const previousScrollTop = namiMessageLog.scrollTop;
+  const entries = namiMessages.length
+    ? withUniqueRenderKeys(namiMessages, namiMessageKey)
+    : [{ key: "__empty__", empty: true }];
+
+  syncKeyedChildren(namiMessageLog, entries, createNamiMessageElement, updateNamiMessageElement);
+
+  namiMessageLog.scrollTop = previousScrollTop;
+}
+
+function namiMessageKey(message) {
+  return [
+    message.timestamp,
+    message.kind,
+    message.text,
+  ].join("\u001f");
+}
+
+function createNamiMessageElement(entry) {
+  const row = document.createElement("p");
+
+  if (entry.empty) {
+    row.className = "muted";
+    return row;
+  }
+
+  row.className = "nami-log-message";
+
+  const time = document.createElement("span");
+  time.className = "nami-log-time";
+
+  const text = document.createElement("span");
+  text.className = "nami-log-text";
+
+  row.append(time, " ", text);
+
+  return row;
+}
+
+function updateNamiMessageElement(row, entry) {
+  if (entry.empty) {
+    setClassNameIfChanged(row, "muted");
+    setTextIfChanged(row, "Nami-chan messages will appear here.");
+    return;
+  }
+
+  const message = entry.item;
+
+  setClassNameIfChanged(row, "nami-log-message");
+  toggleClassIfChanged(row, "nami-log-level-up", message.kind === "level-up");
+  setTextIfChanged(row.querySelector(".nami-log-time"), `[${message.timestamp}]`);
+  setTextIfChanged(row.querySelector(".nami-log-text"), message.text);
+}
 
   namiMessageLog.replaceChildren();
 
