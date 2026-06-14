@@ -128,7 +128,7 @@ const GATHERING_TASK_CONFIG = {
 const WARDROBE_EQUIP_SLOT_ORDER = [
   { slotKey: "top", label: "Top", family: "top" },
   { slotKey: "bottom", label: "Bottom", family: "bottom" },
-  { slotKey: "dress", label: "Dress / Outfit", family: "dress" },
+  { slotKey: "dress", label: "Dress", family: "dress" },
   { slotKey: "footwear", label: "Footwear", family: "footwear" },
   { slotKey: "outerwear", label: "Outerwear", family: "outerwear" },
   { slotKey: "necklace", label: "Necklace", family: "necklace" },
@@ -139,7 +139,7 @@ const WARDROBE_EQUIP_SLOT_ORDER = [
 const WARDROBE_INVENTORY_GROUPS = [
   { key: "top", label: "Top", family: "top" },
   { key: "bottom", label: "Bottom", family: "bottom" },
-  { key: "dress", label: "Dress / Outfit", family: "dress" },
+  { key: "dress", label: "Dress", family: "dress" },
   { key: "footwear", label: "Footwear", family: "footwear" },
   { key: "outerwear", label: "Outerwear", family: "outerwear" },
   { key: "necklace", label: "Necklace", family: "necklace" },
@@ -1138,7 +1138,7 @@ function formatWardrobeSlot(value) {
     case "bottom":
       return "Bottom";
     case "dress":
-      return "Dress / Outfit";
+      return "Dress";
     case "footwear":
       return "Footwear";
     case "outerwear":
