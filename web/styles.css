@@ -7518,3 +7518,72 @@ body.is-resizing-chat * {
     display: none !important;
   }
 }
+
+/* Rail header alignment: left, top, and right headers share one height */
+
+:root {
+  --rail-header-height: 34px;
+}
+
+@media (min-width: 981px) {
+  .left-rail,
+  .right-rail,
+  .top-stats-panel {
+    align-self: stretch !important;
+    margin-top: 0 !important;
+  }
+
+  .left-rail .panel,
+  .right-rail .panel,
+  .top-stats-panel {
+    margin-top: 0 !important;
+  }
+
+  .left-rail .rail-toggle,
+  .right-rail .rail-toggle,
+  .top-panel-toggle {
+    height: var(--rail-header-height) !important;
+    min-height: var(--rail-header-height) !important;
+    max-height: var(--rail-header-height) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .left-rail .rail-toggle,
+  .right-rail .rail-toggle {
+    padding-inline: 10px !important;
+  }
+
+  .top-panel-toggle {
+    padding-inline: 12px !important;
+  }
+
+  .left-rail .rail-toggle .collapse-glyph,
+  .right-rail .rail-toggle .collapse-glyph,
+  .top-panel-toggle .collapse-glyph {
+    margin: 0 !important;
+    line-height: 1 !important;
+  }
+
+  .left-rail .rail-toggle .collapse-label,
+  .right-rail .rail-toggle .collapse-label,
+  .top-panel-toggle .collapse-label {
+    line-height: 1 !important;
+  }
+
+  .right-buffs-panel {
+    grid-template-rows: var(--rail-header-height) minmax(0, 1fr) !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .rail-toggle,
+  .game-shell.is-right-rail-collapsed .right-rail .rail-toggle {
+    height: var(--rail-header-height) !important;
+    min-height: var(--rail-header-height) !important;
+    max-height: var(--rail-header-height) !important;
+    display: grid !important;
+    place-items: center !important;
+    padding-inline: 0 !important;
+  }
+}
