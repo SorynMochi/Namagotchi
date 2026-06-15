@@ -6512,3 +6512,196 @@ body.is-resizing-chat * {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+/* Rail polish pass: viewport-safe center, compact user info, side-by-side buffs */
+
+@media (min-width: 981px) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .game-shell {
+    height: 100vh !important;
+    min-height: 0 !important;
+    grid-template-columns: var(--left-rail-width) minmax(0, 1fr) !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    align-items: stretch !important;
+    overflow: hidden;
+  }
+
+  .top-stats-panel {
+    min-height: 0;
+  }
+
+  .left-rail,
+  .center-column {
+    min-height: 0 !important;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .left-rail {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: max-content;
+    align-content: start;
+    gap: 8px;
+  }
+
+  .left-rail .nav-panel {
+    grid-column: 1 / -1;
+  }
+
+  .left-rail .info-panel {
+    min-width: 0;
+  }
+
+  .center-column {
+    grid-template-rows: minmax(0, 1fr) var(--chat-height, 190px) !important;
+  }
+
+  .main-panel,
+  .chat-panel {
+    min-height: 0 !important;
+    max-height: 100%;
+  }
+
+  .main-panel {
+    overflow: auto !important;
+  }
+
+  .chat-panel {
+    overflow: hidden !important;
+  }
+}
+
+/* Top User Info compact stat style */
+
+.top-user-info {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 6px;
+}
+
+.top-player-name-button {
+  width: 100%;
+  min-height: 22px;
+  border: 1px solid rgba(255, 217, 239, 0.38);
+  border-radius: 8px;
+  padding: 4px 7px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 217, 239, 0.22), transparent 7rem),
+    linear-gradient(180deg, rgba(255, 140, 204, 0.12), rgba(201, 167, 255, 0.07));
+  color: var(--cream);
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 950;
+  line-height: 1.1;
+  text-align: center;
+  text-shadow:
+    0 0 10px rgba(255, 140, 204, 0.32),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    inset 0 0 24px rgba(255, 140, 204, 0.08),
+    0 0 18px rgba(255, 140, 204, 0.08);
+}
+
+.top-user-meter-list {
+  display: grid;
+  gap: 5px;
+  align-content: start;
+}
+
+.top-user-info .user-meter {
+  width: 100% !important;
+  margin: 0 !important;
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+}
+
+.top-user-info .meter-label {
+  position: static;
+  inset: auto;
+  display: block;
+  min-width: 0;
+  padding: 0;
+  color: var(--text-soft);
+  font-size: 0.62rem;
+  font-weight: 850;
+  line-height: 1.05;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: none;
+  pointer-events: auto;
+}
+
+.top-user-info .meter-track,
+.top-user-info .tick-meter .meter-track {
+  height: 7px !important;
+  margin: 0;
+  border-radius: 999px;
+  align-self: center;
+}
+
+.top-user-info .meter-fill {
+  min-width: 0;
+}
+
+/* Game Info: server time inside section, vertical buttons */
+
+.top-panel-toggle .server-clock {
+  display: none !important;
+}
+
+.top-game-info .server-clock {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.66rem;
+  font-weight: 850;
+  line-height: 0.66rem;
+  text-align: left !important;
+}
+
+.top-game-info-actions {
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.top-game-info .side-link {
+  min-height: 18px;
+  text-align: center;
+}
+
+/* Buff panels side by side in the widened left rail */
+
+.left-rail .info-panel .collapse-body {
+  min-height: 112px;
+}
+
+.left-rail .buff-card strong {
+  font-size: 0.68rem;
+}
+
+.left-rail .buff-card span {
+  font-size: 0.63rem;
+}
+
+.left-rail .buff-card small {
+  font-size: 0.58rem;
+}
+
+/* Keep the 4x4 menu in the wider left rail */
+
+.main-nav.menu-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.main-nav.menu-grid .nav-item {
+  min-height: 56px;
+}
