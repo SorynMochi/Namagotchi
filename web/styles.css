@@ -7615,3 +7615,27 @@ body.is-resizing-chat * {
 .game-shell.is-left-rail-collapsed .left-rail .menu-logo-wrap {
   display: none !important;
 }
+
+/* Home stage sleep mode */
+
+.nami-room-stage.is-sleep-stage .nami-video-frame {
+  inset: 0;
+  left: 0;
+  bottom: auto;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: none;
+}
+
+.nami-room-stage.is-sleep-stage .nami-idle-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform: translateY(15%);
+}
+
+.nami-room-stage.is-idle-stage .nami-idle-video {
+  transform: none;
+}

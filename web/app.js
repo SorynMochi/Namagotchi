@@ -4,6 +4,7 @@ const sections = document.querySelectorAll(".content-section");
 const careStats = document.querySelector("#care-stats");
 const namiMessage = document.querySelector("#nami-message");
 const namiMessageLog = document.querySelector("#nami-message-log");
+const namiRoomStage = document.querySelector("#nami-room-stage");
 const namiRoomBackground = document.querySelector("#nami-room-background");
 const namiIdleVideo = document.querySelector("#nami-idle-video");
 const namiLevel = document.querySelector("#nami-level");
@@ -109,6 +110,18 @@ const NAMI_ROOM_BACKGROUND_PATHS = [
   "/images/backgrounds/Living_Room_04.webp",
   "/images/backgrounds/Living_Room_05.webp",
 ];
+
+const NAMI_BEDROOM_BACKGROUND_PATHS = [
+  "/images/backgrounds/Bedroom_00.webp",
+  "/images/backgrounds/Bedroom_01.webp",
+  "/images/backgrounds/Bedroom_02.webp",
+  "/images/backgrounds/Bedroom_03.webp",
+  "/images/backgrounds/Bedroom_04.webp",
+  "/images/backgrounds/Bedroom_05.webp",
+];
+
+const NAMI_IDLE_VIDEO_SRC = "/images/animations/Nami_Idle_01.webm";
+const NAMI_SLEEP_VIDEO_SRC = "/images/animations/Nami_Sleep_01.webm";
 
 const CURRENT_PLAYER_NAME = "Soryn";
 
@@ -491,6 +504,7 @@ let careCompletionRefreshInFlight = false;
 let emojiPickerNeedsRender = true;
 let emojiPickerPreloadTimer = null;
 let namiRoomBackgroundTimer = null;
+let namiHomeStageMode = "";
 
 function setTextIfChanged(element, value) {
   if (!element) {
@@ -714,23 +728,78 @@ initializeCareButtonTimer();
 initializeHomeStage();
 
 function initializeHomeStage() {
-  updateHomeRoomBackground();
+  updateHomeStage(latestPlayerStatus);
   scheduleNextHomeRoomBackgroundUpdate();
   initializeNamiIdleVideo();
 }
 
-function updateHomeRoomBackground() {
+function updateHomeStage(status = latestPlayerStatus) {
+  updateHomeRoomBackground(status);
+  updateHomeVideo(status);
+}
+
+function updateHomeRoomBackground(status = latestPlayerStatus) {
   if (!namiRoomBackground) {
     return;
   }
 
   const backgroundIndex = getLivingRoomBackgroundIndex();
-  const nextSrc = NAMI_ROOM_BACKGROUND_PATHS[backgroundIndex] || NAMI_ROOM_BACKGROUND_PATHS[5];
+  const backgroundPaths = shouldUseNamiSleepStage(status)
+    ? NAMI_BEDROOM_BACKGROUND_PATHS
+    : NAMI_ROOM_BACKGROUND_PATHS;
+
+  const nextSrc = backgroundPaths[backgroundIndex] || backgroundPaths[5];
   const currentPath = new URL(namiRoomBackground.getAttribute("src") || "", window.location.href).pathname;
 
   if (currentPath !== nextSrc) {
     namiRoomBackground.src = nextSrc;
   }
+}
+
+function updateHomeVideo(status = latestPlayerStatus) {
+  if (!namiIdleVideo) {
+    return;
+  }
+
+  const isSleepStage = shouldUseNamiSleepStage(status);
+  const nextMode = isSleepStage ? "sleep" : "idle";
+  const nextSrc = isSleepStage ? NAMI_SLEEP_VIDEO_SRC : NAMI_IDLE_VIDEO_SRC;
+  const currentPath = new URL(namiIdleVideo.getAttribute("src") || "", window.location.href).pathname;
+
+  namiRoomStage?.classList.toggle("is-sleep-stage", isSleepStage);
+  namiRoomStage?.classList.toggle("is-idle-stage", !isSleepStage);
+
+  if (namiHomeStageMode === nextMode && currentPath === nextSrc) {
+    return;
+  }
+
+  namiHomeStageMode = nextMode;
+
+  if (currentPath !== nextSrc) {
+    namiIdleVideo.src = nextSrc;
+    namiIdleVideo.load();
+  }
+
+  namiIdleVideo.play().catch(() => {
+    // Muted autoplay should work in modern browsers, but this keeps failures quiet.
+  });
+}
+
+function shouldUseNamiSleepStage(status = latestPlayerStatus) {
+  const companionStatus = String(status?.companion?.status || "").toLowerCase();
+  const activeAction = getActiveCareAction(status);
+  const activeActionKey = activeAction?.action;
+  const activeRemainingSeconds = getCareActionRemainingSeconds(activeAction);
+
+  if (companionStatus === "sleeping") {
+    return true;
+  }
+
+  return activeRemainingSeconds > 0 && (
+    activeActionKey === "nap" ||
+    activeActionKey === "put_to_bed" ||
+    activeActionKey === "wake_up"
+  );
 }
 
 function getLivingRoomBackgroundIndex(date = new Date()) {
@@ -772,7 +841,7 @@ function scheduleNextHomeRoomBackgroundUpdate() {
   const delay = Math.max(1000, nextBoundary.getTime() - now.getTime() + 250);
 
   namiRoomBackgroundTimer = setTimeout(() => {
-    updateHomeRoomBackground();
+    updateHomeStage(latestPlayerStatus);
     scheduleNextHomeRoomBackgroundUpdate();
   }, delay);
 }
@@ -1051,6 +1120,7 @@ function renderPlayerStatus(status) {
   renderCareButtons(status);
   renderPlaydeckStatus(status);
   renderWardrobeStatus(status);
+  updateHomeStage(status);
 
   setTextIfChanged(namiMessage, companion.caption || "Nami-chan is waiting sweetly.");
 }
