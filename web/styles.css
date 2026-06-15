@@ -70,13 +70,28 @@
   font-family: var(--font-ui);
   background: var(--bg-0);
   color: var(--text);
-
   --shell-gap: 12px;
   --shell-padding: 12px;
-  --left-rail-width: 220px;
-  --right-rail-width: 230px;
   --top-stats-height: 148px;
   --chat-height-default: 220px;
+
+  --left-menu-button-width: 65px;
+  --left-menu-button-gap: 4px;
+  --left-menu-inner-pad: 4px;
+  --left-menu-column-count: 3;
+  --left-menu-content-width: calc(
+    (var(--left-menu-button-width) * var(--left-menu-column-count)) +
+    (var(--left-menu-button-gap) * (var(--left-menu-column-count) - 1)) +
+    (var(--left-menu-inner-pad) * 2)
+  );
+  --left-rail-width: calc(var(--left-menu-content-width) + 2px);
+  --right-rail-width: 166px;
+  --rail-collapsed-width: 38px;
+  --rail-header-height: 34px;
+
+  --work-card-height: 158px;
+  --work-card-gap: 10px;
+  --work-video-height: calc((var(--work-card-height) * 2) + var(--work-card-gap));
 }
 
 * {
