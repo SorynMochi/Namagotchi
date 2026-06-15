@@ -199,49 +199,46 @@
           <span class="nav-label">Premium</span>
         </button>
       </nav>
-    </section>
 
-    <section class="panel info-panel">
-      <button class="collapse-toggle" type="button" data-collapse="global-buffs" data-label="GLOBAL BUFFS">
-        <span class="material-symbols-rounded collapse-glyph" aria-hidden="true">expand_less</span>
-        <span class="collapse-label">GLOBAL BUFFS</span>
-      </button>
+      <div class="menu-buff-grid" aria-label="Active buffs">
+        <section class="menu-buff-card">
+          <h3>Global Buffs</h3>
 
-      <div id="global-buffs" class="collapse-body">
-        <div class="buff-card">
-          <strong>Launch Sparkle</strong>
-          <span>+10% Work Resources</span>
-          <small>23:59:59 remaining</small>
-        </div>
+          <div id="global-buffs" class="menu-buff-body">
+            <div class="buff-card">
+              <strong>Launch Sparkle</strong>
+              <span>+10% Work Resources</span>
+              <small>23:59:59 remaining</small>
+            </div>
 
-        <div class="buff-card">
-          <strong>Cozy Server Blessing</strong>
-          <span>+5% Playdeck XP</span>
-          <small>12:00:00 remaining</small>
-        </div>
+            <div class="buff-card">
+              <strong>Cozy Server Blessing</strong>
+              <span>+5% Playdeck XP</span>
+              <small>12:00:00 remaining</small>
+            </div>
+          </div>
+        </section>
+<br>
+        <section class="menu-buff-card">
+          <h3>Personal Buffs</h3>
+
+          <div id="personal-buffs" class="menu-buff-body">
+            <div class="buff-card">
+              <strong>Nami Mood Bonus</strong>
+              <span id="personal-mood-bonus">+40% Resource Gain</span>
+              <small>Updates live from Nami-chan’s mood.</small>
+            </div>
+
+            <div class="buff-card muted-card">
+              <strong>Food Buffs</strong>
+              <span>No active food buffs.</span>
+              <small>Cooking effects will appear here.</small>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
 
-    <section class="panel info-panel">
-      <button class="collapse-toggle" type="button" data-collapse="personal-buffs" data-label="PERSONAL BUFFS">
-        <span class="material-symbols-rounded collapse-glyph" aria-hidden="true">expand_less</span>
-        <span class="collapse-label">PERSONAL BUFFS</span>
-      </button>
-
-      <div id="personal-buffs" class="collapse-body">
-        <div class="buff-card">
-          <strong>Nami Mood Bonus</strong>
-          <span id="personal-mood-bonus">+40% Resource Gain</span>
-          <small>Updates live from Nami-chan’s mood.</small>
-        </div>
-
-        <div class="buff-card muted-card">
-          <strong>Food Buffs</strong>
-          <span>No active food buffs.</span>
-          <small>Cooking effects will appear here.</small>
-        </div>
-      </div>
-    </section>
   </aside>
 
   <div class="center-column">

@@ -6705,3 +6705,128 @@ body.is-resizing-chat * {
 .main-nav.menu-grid .nav-item {
   min-height: 56px;
 }
+
+/* Top User Info: make labels readable and bars less greedy */
+
+@media (min-width: 1701px) {
+  .top-stats-compact {
+    grid-template-columns: minmax(330px, 1.25fr) repeat(6, minmax(0, 1fr)) !important;
+  }
+}
+
+.top-user-info .user-meter {
+  grid-template-columns: minmax(178px, 1fr) 112px !important;
+  gap: 10px !important;
+}
+
+.top-user-info .meter-label {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  font-size: 0.6rem !important;
+}
+
+.top-user-info .meter-track,
+.top-user-info .tick-meter .meter-track {
+  width: 112px !important;
+  justify-self: end;
+}
+
+/* Menu panel: narrower 4x4 buttons and embedded buff cards */
+
+.nav-panel {
+  display: grid;
+  align-content: start;
+}
+
+.main-nav.menu-grid {
+  width: fit-content !important;
+  grid-template-columns: repeat(4, 65px) !important;
+  justify-content: center !important;
+  justify-self: center;
+  gap: 4px !important;
+  padding: 4px 4px 4px !important;
+}
+
+.main-nav.menu-grid .nav-item {
+  width: 65px !important;
+  min-height: 65px !important;
+  padding: 6px 4px !important;
+}
+
+.main-nav.menu-grid .nav-icon {
+  font-size: 1.65rem !important;
+}
+
+.main-nav.menu-grid .nav-label {
+  font-size: 0.58rem !important;
+}
+
+.menu-buff-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 0 4px 4px;
+}
+
+.menu-buff-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 190, 226, 0.24);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 70%),
+    radial-gradient(circle at top left, rgba(255, 140, 204, 0.12), transparent 10rem),
+    rgba(42, 20, 56, 0.78);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 10px 24px rgba(15, 5, 24, 0.18);
+}
+
+.menu-buff-card h3 {
+  margin: 0;
+  padding: 4px 4px;
+  border-bottom: 1px solid rgba(255, 190, 226, 0.18);
+  color: var(--pink-soft);
+  font-family: var(--font-display);
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.menu-buff-body {
+  display: grid;
+  gap: 4px;
+  padding: 4px;
+}
+
+.menu-buff-card .buff-card {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 190, 226, 0.14);
+}
+
+.menu-buff-card .buff-card:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.menu-buff-card .buff-card strong {
+  color: var(--pink-soft);
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.menu-buff-card .buff-card span {
+  color: rgba(244, 212, 230, 0.78);
+  font-size: 0.66rem;
+  line-height: 1;
+}
+
+.menu-buff-card .buff-card small {
+  color: rgba(202, 161, 187, 0.82);
+  font-size: 0.6rem;
+  line-height: 1;
+}
