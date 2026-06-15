@@ -57,6 +57,23 @@
   --rose-shadow: rgba(255, 140, 204, 0.18);
   --blue-shadow: rgba(152, 221, 255, 0.14);
 
+  /* Theme foundation tokens */
+  --theme-page-glow-pink: rgba(255, 104, 183, 0.22);
+  --theme-page-glow-cyan: rgba(73, 199, 255, 0.18);
+  --theme-page-glow-violet: rgba(168, 137, 255, 0.13);
+  --theme-page-gradient-top: #09111f;
+  --theme-page-gradient-bottom: #050812;
+
+  --theme-panel-overlay: rgba(255, 255, 255, 0.035);
+  --theme-panel-border-sheen-pink: rgba(255, 104, 183, 0.18);
+  --theme-panel-border-sheen-cyan: rgba(73, 199, 255, 0.16);
+  --theme-panel-title-bg: rgba(73, 199, 255, 0.055);
+
+  --theme-card-border-cyan: rgba(143, 205, 255, 0.14);
+  --theme-card-bg-overlay: rgba(255, 255, 255, 0.04);
+  --theme-card-bg-deep: rgba(7, 13, 24, 0.68);
+  --theme-card-inner-highlight: rgba(255, 255, 255, 0.04);
+
   --shadow:
     0 20px 54px rgba(15, 5, 24, 0.42),
     0 0 28px rgba(255, 140, 204, 0.055);
@@ -207,7 +224,7 @@ input:focus-visible {
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: rgba(73, 199, 255, 0.055);
+  background: var(--theme-panel-title-bg);
 }
 
 .player-name {
@@ -815,7 +832,7 @@ h2 {
   width: 100%;
   border: 0;
   padding: 10px 13px;
-  background: rgba(73, 199, 255, 0.055);
+  background: var(--theme-panel-title-bg);
   color: var(--cyan);
   font-size: 0.76rem;
   font-weight: 950;
@@ -1108,7 +1125,7 @@ h2 {
   display: block;
   width: 100%;
   border: 0;
-  background: rgba(73, 199, 255, 0.055);
+  background: var(--theme-panel-title-bg);
   text-align: left;
   cursor: pointer;
 }
@@ -2282,7 +2299,7 @@ body > .emoji-picker-floating .emoji-option:hover {
   letter-spacing: 0.07em;
   line-height: 1.1;
   color: var(--cyan);
-  background: rgba(73, 199, 255, 0.055);
+  background: var(--theme-panel-title-bg);
 }
 
 .right-rail .collapse-body {
