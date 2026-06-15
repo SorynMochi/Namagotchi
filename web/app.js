@@ -102,12 +102,12 @@ const CHAT_LAST_WHISPER_KEY = "namigotchi_chat_last_whisper_v1";
 const CHAT_OFFLINE_WHISPERS_KEY = "namigotchi_offline_whispers_v1";
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
-  "/images/backgrounds/Living_Room_00.png",
-  "/images/backgrounds/Living_Room_01.png",
-  "/images/backgrounds/Living_Room_02.png",
-  "/images/backgrounds/Living_Room_03.png",
-  "/images/backgrounds/Living_Room_04.png",
-  "/images/backgrounds/Living_Room_05.png",
+  "/images/backgrounds/Living_Room_00.webp",
+  "/images/backgrounds/Living_Room_01.webp",
+  "/images/backgrounds/Living_Room_02.webp",
+  "/images/backgrounds/Living_Room_03.webp",
+  "/images/backgrounds/Living_Room_04.webp",
+  "/images/backgrounds/Living_Room_05.webp",
 ];
 
 const CURRENT_PLAYER_NAME = "Soryn";
