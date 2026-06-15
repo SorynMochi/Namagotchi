@@ -7693,3 +7693,121 @@ body.is-resizing-chat * {
     min-height: 300px;
   }
 }
+
+/* Work screen compact pass: cards define height, video matches two rows */
+
+:root {
+  --work-card-height: 158px;
+  --work-card-gap: 10px;
+  --work-video-height: calc((var(--work-card-height) * 2) + var(--work-card-gap));
+}
+
+.work-stage-layout {
+  grid-template-columns: minmax(0, 3fr) minmax(220px, 0.82fr) !important;
+  align-items: start !important;
+  gap: 12px !important;
+}
+
+#section-gathering .gathering-grid {
+  gap: var(--work-card-gap) !important;
+  grid-auto-rows: var(--work-card-height) !important;
+  align-items: stretch !important;
+}
+
+#section-gathering .task-card {
+  height: var(--work-card-height) !important;
+  min-height: 0 !important;
+  box-sizing: border-box;
+  gap: 6px !important;
+  padding: 12px !important;
+  align-content: start;
+}
+
+#section-gathering .task-card-header {
+  min-height: 20px;
+}
+
+#section-gathering .task-card h2 {
+  font-size: 0.92rem !important;
+  line-height: 1.05 !important;
+}
+
+#section-gathering .task-meta {
+  display: grid;
+  gap: 2px !important;
+}
+
+#section-gathering .task-card p {
+  line-height: 1.05 !important;
+}
+
+#section-gathering .task-card span {
+  font-size: 0.62rem !important;
+  line-height: 1.05 !important;
+}
+
+#section-gathering .task-card strong {
+  font-size: 0.72rem !important;
+  line-height: 1.05 !important;
+}
+
+#section-gathering .task-xp-bar {
+  height: 9px !important;
+  margin: 3px 0 2px !important;
+}
+
+#section-gathering .task-card button {
+  width: 100%;
+  min-height: 28px !important;
+  height: 28px !important;
+  margin-top: 2px !important;
+  padding: 4px 10px !important;
+  align-self: end;
+  justify-self: stretch !important;
+  font-size: 0.7rem !important;
+  line-height: 1 !important;
+}
+
+.work-nami-stage {
+  height: var(--work-video-height) !important;
+  min-height: 0 !important;
+  max-height: var(--work-video-height) !important;
+  align-self: start !important;
+}
+
+.work-nami-video {
+  height: 125% !important;
+  max-height: 125% !important;
+  top: -20% !important;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+@media (max-width: 1450px) {
+  .work-nami-stage {
+    height: 300px !important;
+    max-height: 300px !important;
+  }
+}
+
+/* Work screen: remove the box around Nami */
+
+.work-nami-stage {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+.work-nami-video {
+  display: block;
+  width: 125%;
+  height: 125% !important;
+  margin-top: -45px !important;
+  margin-left: -40px !important;
+  background: transparent !important;
+  object-fit: contain;
+  object-position: center bottom;
+}
