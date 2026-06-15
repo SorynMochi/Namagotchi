@@ -6729,65 +6729,6 @@ body.is-resizing-chat * {
   box-sizing: border-box !important;
 }
 
-/* Collapsed rails: turn them into clean 38px handles */
-
-@media (min-width: 981px) {
-  .game-shell.is-left-rail-collapsed .left-rail,
-  .game-shell.is-right-rail-collapsed .right-rail {
-    width: var(--rail-collapsed-width) !important;
-    min-width: var(--rail-collapsed-width) !important;
-    max-width: var(--rail-collapsed-width) !important;
-    overflow: visible !important;
-  }
-
-  .game-shell.is-left-rail-collapsed .left-rail .panel,
-  .game-shell.is-right-rail-collapsed .right-rail .panel {
-    width: var(--rail-collapsed-width) !important;
-    min-width: var(--rail-collapsed-width) !important;
-    max-width: var(--rail-collapsed-width) !important;
-    height: 34px !important;
-    min-height: 34px !important;
-    max-height: 34px !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    border-radius: 10px !important;
-    box-sizing: border-box !important;
-  }
-
-  .game-shell.is-left-rail-collapsed .left-rail .panel::before,
-  .game-shell.is-right-rail-collapsed .right-rail .panel::before {
-    display: none !important;
-  }
-
-  .game-shell.is-left-rail-collapsed .left-rail .rail-toggle,
-  .game-shell.is-right-rail-collapsed .right-rail .rail-toggle {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    display: grid !important;
-    place-items: center !important;
-    border-radius: inherit !important;
-  }
-
-  .game-shell.is-left-rail-collapsed .left-rail .collapse-glyph,
-  .game-shell.is-right-rail-collapsed .right-rail .collapse-glyph {
-    width: auto !important;
-    margin: 0 !important;
-    font-size: 1rem !important;
-    line-height: 1 !important;
-  }
-
-  .game-shell.is-left-rail-collapsed .left-rail .collapse-label,
-  .game-shell.is-right-rail-collapsed .right-rail .collapse-label,
-  .game-shell.is-left-rail-collapsed .left-rail .menu-status-card,
-  .game-shell.is-left-rail-collapsed .left-rail .main-nav,
-  .game-shell.is-right-rail-collapsed .right-rail .right-buffs-body {
-    display: none !important;
-  }
-}
-
 /* Collapsed rails: keep one continuous matching rail surface */
 
 @media (min-width: 981px) {
@@ -6972,61 +6913,7 @@ body.is-resizing-chat * {
   transform: none;
 }
 
-/* Work screen: 2x3 task grid with Nami work animation */
-
-.work-stage-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(220px, 0.85fr);
-  align-items: stretch;
-  gap: 14px;
-}
-
-#section-gathering .gathering-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: minmax(0, 1fr);
-  align-items: stretch;
-}
-
-#section-gathering .task-card {
-  min-height: 0;
-}
-
-.work-nami-stage {
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  border: 1px solid rgba(255, 190, 226, 0.22);
-  border-radius: 20px;
-  background:
-    radial-gradient(circle at 50% 12%, rgba(255, 140, 204, 0.14), transparent 11rem),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 70%),
-    rgba(42, 20, 56, 0.72);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 16px 36px rgba(0, 0, 0, 0.18);
-}
-
-.work-nami-video {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-  object-position: center bottom;
-  user-select: none;
-  pointer-events: none;
-}
-
-@media (max-width: 1450px) {
-  .work-stage-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .work-nami-stage {
-    min-height: 300px;
-  }
-}
-
-/* Work screen compact pass: cards define height, video matches two rows */
+/* Work screen: compact task grid with Nami work animation */
 
 :root {
   --work-card-height: 158px;
@@ -7035,15 +6922,17 @@ body.is-resizing-chat * {
 }
 
 .work-stage-layout {
+  display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(220px, 0.82fr) !important;
   align-items: start !important;
   gap: 12px !important;
 }
 
 #section-gathering .gathering-grid {
-  gap: var(--work-card-gap) !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: var(--work-card-height) !important;
   align-items: stretch !important;
+  gap: var(--work-card-gap) !important;
 }
 
 #section-gathering .task-card {
@@ -7101,35 +6990,16 @@ body.is-resizing-chat * {
 }
 
 .work-nami-stage {
-  height: var(--work-video-height) !important;
+  min-width: 0;
   min-height: 0 !important;
+  height: var(--work-video-height) !important;
   max-height: var(--work-video-height) !important;
   align-self: start !important;
-}
-
-.work-nami-video {
-  height: 125% !important;
-  max-height: 125% !important;
-  top: -20% !important;
-  object-fit: contain;
-  object-position: center bottom;
-}
-
-@media (max-width: 1450px) {
-  .work-nami-stage {
-    height: 300px !important;
-    max-height: 300px !important;
-  }
-}
-
-/* Work screen: remove the box around Nami */
-
-.work-nami-stage {
+  overflow: visible !important;
   border: 0 !important;
+  border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  border-radius: 0 !important;
-  overflow: visible !important;
   padding: 0 !important;
 }
 
@@ -7137,13 +7007,26 @@ body.is-resizing-chat * {
   display: block;
   width: 125%;
   height: 125% !important;
+  max-height: 125% !important;
   margin-top: -45px !important;
   margin-left: -40px !important;
   background: transparent !important;
   object-fit: contain;
   object-position: center bottom;
+  user-select: none;
+  pointer-events: none;
 }
 
+@media (max-width: 1450px) {
+  .work-stage-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .work-nami-stage {
+    height: 300px !important;
+    max-height: 300px !important;
+  }
+}
 /* Main panel scrollbar: remove boxed gutter look */
 
 .main-panel {
