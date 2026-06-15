@@ -4,6 +4,8 @@ const sections = document.querySelectorAll(".content-section");
 const careStats = document.querySelector("#care-stats");
 const namiMessage = document.querySelector("#nami-message");
 const namiMessageLog = document.querySelector("#nami-message-log");
+const namiRoomBackground = document.querySelector("#nami-room-background");
+const namiIdleSprite = document.querySelector("#nami-idle-sprite");
 const namiLevel = document.querySelector("#nami-level");
 const namiXpLabel = document.querySelector("#nami-xp-label");
 const namiXpFill = document.querySelector("#nami-xp-fill");
@@ -96,6 +98,20 @@ const RECENT_EMOJI_LIMIT = 70;
 const CHAT_IGNORE_KEY = "namigotchi_chat_ignore_list_v1";
 const CHAT_LAST_WHISPER_KEY = "namigotchi_chat_last_whisper_v1";
 const CHAT_OFFLINE_WHISPERS_KEY = "namigotchi_offline_whispers_v1";
+
+const NAMI_ROOM_BACKGROUND_PATHS = [
+  "/images/backgrounds/Living_Room_00.png",
+  "/images/backgrounds/Living_Room_01.png",
+  "/images/backgrounds/Living_Room_02.png",
+  "/images/backgrounds/Living_Room_03.png",
+  "/images/backgrounds/Living_Room_04.png",
+  "/images/backgrounds/Living_Room_05.png",
+];
+
+const NAMI_IDLE_FRAME_COUNT = 12;
+const NAMI_IDLE_FRAME_COLUMNS = 6;
+const NAMI_IDLE_FRAME_ROWS = 2;
+const NAMI_IDLE_FRAME_MS = 500;
 
 const CURRENT_PLAYER_NAME = "Soryn";
 
@@ -477,6 +493,9 @@ let careCountdownTimer = null;
 let careCompletionRefreshInFlight = false;
 let emojiPickerNeedsRender = true;
 let emojiPickerPreloadTimer = null;
+let namiIdleFrameIndex = 0;
+let namiIdleAnimationTimer = null;
+let namiRoomBackgroundTimer = null;
 
 function setTextIfChanged(element, value) {
   if (!element) {
@@ -689,6 +708,127 @@ initializeChat();
 initializeChatResize();
 initializeNamiMessages();
 initializeCareButtonTimer();
+initializeHomeStage();
+
+function initializeHomeStage() {
+  updateHomeRoomBackground();
+  scheduleNextHomeRoomBackgroundUpdate();
+  startNamiIdleAnimation();
+}
+
+function updateHomeRoomBackground() {
+  if (!namiRoomBackground) {
+    return;
+  }
+
+  const backgroundIndex = getLivingRoomBackgroundIndex();
+  const nextSrc = NAMI_ROOM_BACKGROUND_PATHS[backgroundIndex] || NAMI_ROOM_BACKGROUND_PATHS[5];
+  const currentPath = new URL(namiRoomBackground.getAttribute("src") || "", window.location.href).pathname;
+
+  if (currentPath !== nextSrc) {
+    namiRoomBackground.src = nextSrc;
+  }
+}
+
+function getLivingRoomBackgroundIndex(date = new Date()) {
+  const seconds =
+    date.getHours() * 60 * 60 +
+    date.getMinutes() * 60 +
+    date.getSeconds();
+
+  if (seconds >= 5 * 60 * 60 + 30 * 60 && seconds < 9 * 60 * 60) {
+    return 0;
+  }
+
+  if (seconds >= 9 * 60 * 60 && seconds < 12 * 60 * 60) {
+    return 1;
+  }
+
+  if (seconds >= 12 * 60 * 60 && seconds < 15 * 60 * 60) {
+    return 2;
+  }
+
+  if (seconds >= 15 * 60 * 60 && seconds < 18 * 60 * 60) {
+    return 3;
+  }
+
+  if (seconds >= 18 * 60 * 60 && seconds < 21 * 60 * 60) {
+    return 4;
+  }
+
+  return 5;
+}
+
+function scheduleNextHomeRoomBackgroundUpdate() {
+  if (namiRoomBackgroundTimer) {
+    clearTimeout(namiRoomBackgroundTimer);
+  }
+
+  const now = new Date();
+  const nextBoundary = getNextLivingRoomBoundary(now);
+  const delay = Math.max(1000, nextBoundary.getTime() - now.getTime() + 250);
+
+  namiRoomBackgroundTimer = setTimeout(() => {
+    updateHomeRoomBackground();
+    scheduleNextHomeRoomBackgroundUpdate();
+  }, delay);
+}
+
+function getNextLivingRoomBoundary(date = new Date()) {
+  const boundarySeconds = [
+    5 * 60 * 60 + 30 * 60,
+    9 * 60 * 60,
+    12 * 60 * 60,
+    15 * 60 * 60,
+    18 * 60 * 60,
+    21 * 60 * 60,
+  ];
+
+  const seconds =
+    date.getHours() * 60 * 60 +
+    date.getMinutes() * 60 +
+    date.getSeconds();
+
+  const nextSecond = boundarySeconds.find((boundary) => boundary > seconds);
+  const nextDate = new Date(date);
+
+  nextDate.setHours(0, 0, 0, 0);
+
+  if (nextSecond === undefined) {
+    nextDate.setDate(nextDate.getDate() + 1);
+    nextDate.setSeconds(boundarySeconds[0]);
+    return nextDate;
+  }
+
+  nextDate.setSeconds(nextSecond);
+  return nextDate;
+}
+
+function startNamiIdleAnimation() {
+  if (!namiIdleSprite || namiIdleAnimationTimer) {
+    return;
+  }
+
+  renderNamiIdleFrame(0);
+
+  namiIdleAnimationTimer = setInterval(() => {
+    namiIdleFrameIndex = (namiIdleFrameIndex + 1) % NAMI_IDLE_FRAME_COUNT;
+    renderNamiIdleFrame(namiIdleFrameIndex);
+  }, NAMI_IDLE_FRAME_MS);
+}
+
+function renderNamiIdleFrame(frameIndex) {
+  if (!namiIdleSprite) {
+    return;
+  }
+
+  const safeFrame = Math.max(0, Math.min(NAMI_IDLE_FRAME_COUNT - 1, Number(frameIndex) || 0));
+  const column = safeFrame % NAMI_IDLE_FRAME_COLUMNS;
+  const row = Math.floor(safeFrame / NAMI_IDLE_FRAME_COLUMNS);
+
+  namiIdleSprite.style.setProperty("--nami-sprite-x", `${-(column * (100 / NAMI_IDLE_FRAME_COLUMNS))}%`);
+  namiIdleSprite.style.setProperty("--nami-sprite-y", `${-(row * (100 / NAMI_IDLE_FRAME_ROWS))}%`);
+}
 
 function showSection(sectionName, options = {}) {
   const targetSection = document.querySelector(`#section-${sectionName}`);

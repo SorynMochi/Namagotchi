@@ -564,6 +564,55 @@ h2 {
   object-position: center bottom;
 }
 
+.nami-room-stage {
+  aspect-ratio: 3 / 2;
+  width: min(100%, 640px);
+  max-width: 100%;
+  background: #07111f;
+  isolation: isolate;
+}
+
+.nami-room-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  object-fit: cover;
+  object-position: center center;
+  user-select: none;
+  pointer-events: none;
+}
+
+.nami-sprite-frame {
+  position: absolute;
+  left: 50%;
+  bottom: 15%;
+  z-index: 1;
+  height: 70%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.nami-idle-sprite {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 15%;
+  width: 600%;
+  height: 200%;
+  max-width: none;
+  display: block;
+  transform: translate(var(--nami-sprite-x, 0%), var(--nami-sprite-y, 0%));
+  user-select: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
 .nami-message {
   margin: 0;
   padding: 14px 15px;
