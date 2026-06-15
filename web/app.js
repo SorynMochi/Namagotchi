@@ -83,6 +83,8 @@ const emojiButton = document.querySelector("#emoji-button");
 const emojiPicker = document.querySelector("#emoji-picker");
 const chatToggleButton = document.querySelector("#chat-toggle-button");
 const collapseToggles = document.querySelectorAll(".collapse-toggle");
+const railToggleButtons = document.querySelectorAll("[data-rail-toggle]");
+const gameShell = document.querySelector(".game-shell");
 
 const MAX_CHAT_MESSAGES = 100;
 const MAX_NAMI_MESSAGES = 100;
@@ -645,7 +647,15 @@ collapseToggles.forEach((button) => {
   updateCollapseButton(button, false);
 });
 
-document.querySelectorAll(".left-rail .panel > .panel-title:not(.user-info-title)").forEach((title) => {
+railToggleButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    toggleRail(button.dataset.railToggle);
+  });
+
+  updateRailToggleButton(button, false);
+});
+
+document.querySelectorAll(".left-rail .panel > .panel-title:not(.user-info-title):not(.rail-toggle)").forEach((title) => {
   title.dataset.label = cleanCollapseLabel(title.textContent);
   title.setAttribute("role", "button");
   title.setAttribute("tabindex", "0");
@@ -3608,6 +3618,35 @@ function toggleLeftPanel(title) {
 
   panel.classList.toggle("is-collapsed");
   updateLeftPanelTitle(title, panel.classList.contains("is-collapsed"));
+}
+
+function toggleRail(railName) {
+  if (!gameShell || !railName) {
+    return;
+  }
+
+  const className = `is-${railName}-rail-collapsed`;
+  const isCollapsed = gameShell.classList.toggle(className);
+  const button = document.querySelector(`[data-rail-toggle="${railName}"]`);
+
+  updateRailToggleButton(button, isCollapsed);
+}
+
+function updateRailToggleButton(button, isCollapsed) {
+  if (!button) {
+    return;
+  }
+
+  const railName = button.dataset.railToggle;
+  const icon = button.querySelector(".collapse-glyph");
+
+  if (railName === "left") {
+    setTextIfChanged(icon, isCollapsed ? "left_panel_open" : "left_panel_close");
+  } else if (railName === "right") {
+    setTextIfChanged(icon, isCollapsed ? "right_panel_open" : "right_panel_close");
+  }
+
+  button.setAttribute("aria-expanded", String(!isCollapsed));
 }
 
 function taskFromButtonText(text) {

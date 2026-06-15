@@ -99,29 +99,28 @@
           <p><span>Designing:</span><strong id="act-designing" title="Activity levels are not implemented yet.">1</strong></p>
         </div>
       </section>
-
-      <section class="stat-group compact top-game-info">
-        <h2>Game Info</h2>
-<div class="stat-lines game-info-lines">
-  <p>
-    <span>Server Time:</span>
-    <strong class="server-clock" id="server-time">Checking...</strong>
-  </p>
-  <p><span>Online Users:</span><strong id="online-users">1</strong></p>
-</div>
-  <div class="top-game-info-actions">
-    <button class="side-link" type="button">Game Updates</button>
-    <button class="side-link" type="button">Leaderboards</button>
-  </div>
-      </section>
     </div>
   </section>
 
   <aside class="left-rail">
-    <section class="panel nav-panel">
-      <div class="panel-title">Menu</div>
+<section class="panel nav-panel">
+  <button class="panel-title rail-toggle" type="button" data-rail-toggle="left" aria-expanded="true">
+    <span class="material-symbols-rounded collapse-glyph" aria-hidden="true">left_panel_close</span>
+    <span class="collapse-label">Menu</span>
+  </button>
 
-      <nav id="main-nav" class="main-nav menu-grid" aria-label="Main menu">
+  <div class="menu-status-card" aria-label="Server status">
+    <p>
+      <span>Server Time:</span>
+      <strong class="server-clock" id="server-time">Checking...</strong>
+    </p>
+    <p>
+      <span>Online Users:</span>
+      <strong id="online-users">1</strong>
+    </p>
+  </div>
+
+  <nav id="main-nav" class="main-nav menu-grid" aria-label="Main menu">
         <button class="nav-item active" data-section="home">
           <span class="material-symbols-rounded nav-icon" aria-hidden="true">home</span>
           <span class="nav-label">Home</span>
@@ -187,6 +186,11 @@
           <span class="nav-label">Friends</span>
         </button>
 
+        <button class="nav-item" data-section="rankings">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">leaderboard</span>
+          <span class="nav-label">Rankings</span>
+        </button>
+
         <button class="nav-item" data-section="help">
           <span class="material-symbols-rounded nav-icon" aria-hidden="true">help</span>
           <span class="nav-label">Help</span>
@@ -197,48 +201,16 @@
           <span class="nav-label">Settings</span>
         </button>
 
+        <button class="nav-item" data-section="updates">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">new_releases</span>
+          <span class="nav-label">Updates</span>
+        </button>
+
         <button class="nav-item premium" data-section="premium">
           <span class="material-symbols-rounded nav-icon" aria-hidden="true">diamond</span>
           <span class="nav-label">Premium</span>
         </button>
       </nav>
-
-      <div class="menu-buff-grid" aria-label="Active buffs">
-        <section class="menu-buff-card">
-          <h3>Global Buffs</h3>
-
-          <div id="global-buffs" class="menu-buff-body">
-            <div class="buff-card">
-              <strong>Launch Sparkle</strong>
-              <span>+10% Work Resources</span>
-              <small>23:59:59 remaining</small>
-            </div>
-
-            <div class="buff-card">
-              <strong>Cozy Server Blessing</strong>
-              <span>+5% Playdeck XP</span>
-              <small>12:00:00 remaining</small>
-            </div>
-          </div>
-        </section>
-        <section class="menu-buff-card">
-          <h3>Personal Buffs</h3>
-
-          <div id="personal-buffs" class="menu-buff-body">
-            <div class="buff-card">
-              <strong>Nami Mood Bonus</strong>
-              <span id="personal-mood-bonus">+40% Resource Gain</span>
-              <small>Updates live from Nami-chan’s mood.</small>
-            </div>
-
-            <div class="buff-card muted-card">
-              <strong>Food Buffs</strong>
-              <span>No active food buffs.</span>
-              <small>Cooking effects will appear here.</small>
-            </div>
-          </div>
-        </section>
-      </div>
     </section>
 
   </aside>
@@ -585,6 +557,8 @@
         <section class="content-section" id="section-events"><div class="placeholder-copy">Events shell. We can rename this later once the system identity is clearer.</div></section>
         <section class="content-section" id="section-achievements"><div class="placeholder-copy">Achievements shell. Milestones, unlocks, wardrobe rewards, and bragging rights will live here.</div></section>
         <section class="content-section" id="section-help"><div class="placeholder-copy">Help shell. This will explain how to play, formulas, resources, care, Playdeck, Orders, and more.</div></section>
+        <section class="content-section" id="section-rankings"><div class="placeholder-copy">Rankings shell. Player standings, Playdeck ladders, seasonal boards, and other competitive sparkle charts will live here.</div></section>
+        <section class="content-section" id="section-updates"><div class="placeholder-copy">Updates shell. Patch notes, change logs, announcements, and tiny dev dispatches will live here.</div></section>
         <section class="content-section" id="section-settings"><div class="placeholder-copy">Settings shell. Account, accessibility, UI preferences, notifications, and display options.</div></section>
         <section class="content-section" id="section-premium"><div class="placeholder-copy">Premium shell. We’ll figure this out later without making the game gross. Tiny monetization goblin stays leashed.</div></section>
       </main>
@@ -616,7 +590,52 @@
 </form>
 </section>
     </div>
+<aside class="right-rail">
+  <section class="panel info-panel right-buffs-panel">
+    <button class="panel-title rail-toggle" type="button" data-rail-toggle="right" aria-expanded="true">
+      <span class="material-symbols-rounded collapse-glyph" aria-hidden="true">right_panel_close</span>
+      <span class="collapse-label">Buffs</span>
+    </button>
 
+    <div class="right-buffs-body">
+      <section class="right-buff-group">
+        <h3>Global Buffs</h3>
+
+        <div id="global-buffs" class="right-buff-list">
+          <div class="buff-card">
+            <strong>Launch Sparkle</strong>
+            <span>+10% Work Resources</span>
+            <small>23:59:59 remaining</small>
+          </div>
+
+          <div class="buff-card">
+            <strong>Cozy Server Blessing</strong>
+            <span>+5% Playdeck XP</span>
+            <small>12:00:00 remaining</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="right-buff-group">
+        <h3>Personal Buffs</h3>
+
+        <div id="personal-buffs" class="right-buff-list">
+          <div class="buff-card">
+            <strong>Nami Mood Bonus</strong>
+            <span id="personal-mood-bonus">+40% Resource Gain</span>
+            <small>Updates live from Nami-chan’s mood.</small>
+          </div>
+
+          <div class="buff-card muted-card">
+            <strong>Food Buffs</strong>
+            <span>No active food buffs.</span>
+            <small>Cooking effects will appear here.</small>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</aside>
   </div>
 
   <script src="/app.js"></script>

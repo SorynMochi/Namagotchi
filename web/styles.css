@@ -6837,12 +6837,15 @@ body.is-resizing-chat * {
   --left-menu-button-width: 65px;
   --left-menu-button-gap: 4px;
   --left-menu-inner-pad: 4px;
-  --left-menu-content-width: calc(
-    (var(--left-menu-button-width) * 4) +
-    (var(--left-menu-button-gap) * 3) +
-    (var(--left-menu-inner-pad) * 2)
+  --left-menu-column-count: 3;
+  --left-rail-width: calc(
+    (var(--left-menu-button-width) * var(--left-menu-column-count)) +
+    (var(--left-menu-button-gap) * (var(--left-menu-column-count) - 1)) +
+    (var(--left-menu-inner-pad) * 2) +
+    2px
   );
-  --left-rail-width: calc(var(--left-menu-content-width) + 2px);
+  --right-rail-width: 220px;
+  --rail-collapsed-width: 38px;
 }
 
 @media (max-width: 1380px) {
@@ -6966,4 +6969,340 @@ body.is-resizing-chat * {
 .top-user-info .meter-track,
 .top-user-info .tick-meter .meter-track {
   align-self: center !important;
+}
+
+/* Three-zone dashboard reset: left menu, center content, right buffs */
+
+:root {
+  --left-menu-button-width: 65px;
+  --left-menu-button-gap: 4px;
+  --left-menu-inner-pad: 4px;
+  --left-rail-width: calc((var(--left-menu-button-width) * 6) + (var(--left-menu-button-gap) * 5) + (var(--left-menu-inner-pad) * 2) + 2px);
+  --right-rail-width: 180px;
+  --rail-collapsed-width: 38px;
+}
+
+@media (min-width: 981px) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .game-shell {
+    height: 100vh !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--right-rail-width) !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    gap: var(--shell-gap);
+    overflow: hidden;
+  }
+
+  @supports (height: 100dvh) {
+    .game-shell {
+      height: 100dvh !important;
+    }
+  }
+
+  .left-rail {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    width: var(--left-rail-width) !important;
+    max-height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .top-stats-panel {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .center-column {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: 100%;
+    grid-template-rows: minmax(0, 1fr) var(--chat-height, var(--chat-height-default)) !important;
+    overflow: hidden;
+  }
+
+  .right-rail {
+    display: grid !important;
+    grid-column: 3;
+    grid-row: 1 / -1;
+    width: var(--right-rail-width);
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .game-shell.is-left-rail-collapsed {
+    grid-template-columns: var(--rail-collapsed-width) minmax(0, 1fr) var(--right-rail-width) !important;
+  }
+
+  .game-shell.is-right-rail-collapsed {
+    grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--rail-collapsed-width) !important;
+  }
+
+  .game-shell.is-left-rail-collapsed.is-right-rail-collapsed {
+    grid-template-columns: var(--rail-collapsed-width) minmax(0, 1fr) var(--rail-collapsed-width) !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail {
+    width: var(--rail-collapsed-width) !important;
+  }
+
+  .game-shell.is-right-rail-collapsed .right-rail {
+    width: var(--rail-collapsed-width);
+  }
+
+  .main-panel,
+  .chat-panel {
+    min-height: 0 !important;
+    max-height: 100%;
+  }
+
+  .main-panel {
+    overflow: auto !important;
+  }
+
+  .chat-panel {
+    overflow: hidden !important;
+  }
+}
+
+/* Left rail menu */
+
+.left-rail .nav-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: grid;
+  align-content: start;
+}
+
+.rail-toggle {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 30px;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.menu-status-card {
+  display: grid;
+  gap: 4px;
+  padding: 8px var(--left-menu-inner-pad) 6px;
+  width: calc(
+    (var(--left-menu-button-width) * var(--left-menu-column-count)) +
+    (var(--left-menu-button-gap) * (var(--left-menu-column-count) - 1)) +
+    (var(--left-menu-inner-pad) * 2)
+  );
+  box-sizing: border-box;
+  justify-self: center;
+}
+
+.menu-status-card p {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
+.menu-status-card strong {
+  color: #fff8fd;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.main-nav.menu-grid {
+  width: calc(
+    (var(--left-menu-button-width) * var(--left-menu-column-count)) +
+    (var(--left-menu-button-gap) * (var(--left-menu-column-count) - 1)) +
+    (var(--left-menu-inner-pad) * 2)
+  ) !important;
+  box-sizing: border-box;
+  grid-template-columns: repeat(var(--left-menu-column-count), var(--left-menu-button-width)) !important;
+  justify-content: start !important;
+  justify-self: center !important;
+  gap: var(--left-menu-button-gap) !important;
+  padding: var(--left-menu-inner-pad) !important;
+}
+
+.main-nav.menu-grid .nav-item {
+  width: var(--left-menu-button-width) !important;
+  min-width: var(--left-menu-button-width) !important;
+  max-width: var(--left-menu-button-width) !important;
+  min-height: 65px !important;
+}
+
+.game-shell.is-left-rail-collapsed .left-rail .collapse-label,
+.game-shell.is-left-rail-collapsed .left-rail .menu-status-card,
+.game-shell.is-left-rail-collapsed .left-rail .main-nav {
+  display: none !important;
+}
+
+.game-shell.is-left-rail-collapsed .left-rail .rail-toggle {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.game-shell.is-left-rail-collapsed .left-rail .collapse-glyph {
+  margin: 0;
+}
+
+/* Top rail no longer has Game Info */
+
+.top-game-info {
+  display: none !important;
+}
+
+.top-stats-compact {
+  grid-template-columns: minmax(320px, 1.25fr) repeat(5, minmax(0, 1fr)) !important;
+}
+
+/* Right buffs rail */
+
+.right-buffs-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+}
+
+.right-buffs-body {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px;
+  scrollbar-gutter: stable;
+}
+
+.right-buff-group {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 190, 226, 0.2);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 70%),
+    rgba(42, 20, 56, 0.78);
+}
+
+.right-buff-group h3 {
+  margin: 0;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 190, 226, 0.16);
+  color: var(--pink-soft);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.right-buff-list {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.right-buff-list .buff-card {
+  display: grid;
+  gap: 3px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 190, 226, 0.12);
+}
+
+.right-buff-list .buff-card:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.right-buff-list .buff-card strong {
+  color: var(--pink-soft);
+  font-size: 0.72rem;
+  line-height: 1.1;
+}
+
+.right-buff-list .buff-card span {
+  color: rgba(244, 212, 230, 0.78);
+  font-size: 0.66rem;
+  line-height: 1.15;
+}
+
+.right-buff-list .buff-card small {
+  color: rgba(202, 161, 187, 0.82);
+  font-size: 0.6rem;
+  line-height: 1.15;
+}
+
+.game-shell.is-right-rail-collapsed .right-rail .collapse-label,
+.game-shell.is-right-rail-collapsed .right-rail .right-buffs-body {
+  display: none !important;
+}
+
+.game-shell.is-right-rail-collapsed .right-rail .rail-toggle {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.game-shell.is-right-rail-collapsed .right-rail .collapse-glyph {
+  margin: 0;
+}
+
+@media (max-width: 1500px) and (min-width: 981px) {
+  :root {
+    --left-menu-button-width: 58px;
+    --right-rail-width: 200px;
+  }
+
+  .main-nav.menu-grid .nav-icon {
+    font-size: 1.45rem !important;
+  }
+
+  .main-nav.menu-grid .nav-label {
+    font-size: 0.52rem !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .game-shell {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto !important;
+  }
+
+  .left-rail,
+  .top-stats-panel,
+  .center-column,
+  .right-rail {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    width: 100% !important;
+  }
+
+  .main-nav.menu-grid {
+    width: 100% !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .main-nav.menu-grid .nav-item {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
 }
