@@ -6765,6 +6765,7 @@ body.is-resizing-chat * {
 }
 
 #section-gathering .gathering-grid {
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: var(--work-card-height) !important;
   align-items: stretch !important;
@@ -6772,6 +6773,7 @@ body.is-resizing-chat * {
 }
 
 #section-gathering .task-card {
+  display: grid;
   height: var(--work-card-height) !important;
   min-height: 0 !important;
   box-sizing: border-box;
@@ -6780,11 +6782,13 @@ body.is-resizing-chat * {
   align-content: start;
 }
 
-#section-gathering .task-card-header {
-  min-height: 20px;
+#section-gathering .task-card h2,
+#section-gathering .task-card p {
+  margin: 0;
 }
 
 #section-gathering .task-card h2 {
+  color: var(--pink-soft);
   font-size: 0.92rem !important;
   line-height: 1.05 !important;
 }
@@ -6795,17 +6799,33 @@ body.is-resizing-chat * {
 }
 
 #section-gathering .task-card p {
+  color: var(--text-soft);
   line-height: 1.05 !important;
 }
 
 #section-gathering .task-card span {
+  color: var(--muted);
   font-size: 0.62rem !important;
+  font-weight: 900;
+  letter-spacing: 0.08em;
   line-height: 1.05 !important;
+  text-transform: uppercase;
 }
 
 #section-gathering .task-card strong {
   font-size: 0.72rem !important;
   line-height: 1.05 !important;
+}
+
+#section-gathering .task-card.active {
+  border-color: rgba(168, 224, 95, 0.4);
+  background:
+    radial-gradient(circle at top right, rgba(168, 224, 95, 0.13), transparent 10rem),
+    rgba(7, 13, 24, 0.7);
+}
+
+#section-gathering .task-card-header {
+  min-height: 20px;
 }
 
 #section-gathering .task-xp-bar {
