@@ -74,6 +74,12 @@
   --theme-card-bg-deep: rgba(7, 13, 24, 0.68);
   --theme-card-inner-highlight: rgba(255, 255, 255, 0.04);
 
+  --theme-work-active-border: rgba(255, 140, 204, 0.48);
+  --theme-work-active-glow: rgba(255, 140, 204, 0.16);
+  --theme-work-active-bg: rgba(40, 18, 52, 0.74);
+  --theme-work-active-pill-bg: linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
+  --theme-work-active-pill-text: #241022;
+
   --shadow:
     0 20px 54px rgba(15, 5, 24, 0.42),
     0 0 28px rgba(255, 140, 204, 0.055);
@@ -6730,10 +6736,18 @@ body.is-resizing-chat * {
 }
 
 #section-gathering .task-card.active {
-  border-color: rgba(168, 224, 95, 0.4);
+  border-color: var(--theme-work-active-border);
   background:
-    radial-gradient(circle at top right, rgba(168, 224, 95, 0.13), transparent 10rem),
-    rgba(7, 13, 24, 0.7);
+    radial-gradient(circle at top right, var(--theme-work-active-glow), transparent 10rem),
+    var(--theme-work-active-bg);
+}
+
+#section-gathering .task-card.active .task-status {
+  background: var(--theme-work-active-pill-bg);
+  color: var(--theme-work-active-pill-text);
+  box-shadow:
+    0 0 14px rgba(255, 140, 204, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 #section-gathering .task-card-header {
