@@ -7396,3 +7396,125 @@ body.is-resizing-chat * {
   width: 100% !important;
   box-sizing: border-box !important;
 }
+
+/* Collapsed rails: turn them into clean 38px handles */
+
+@media (min-width: 981px) {
+  .game-shell.is-left-rail-collapsed .left-rail,
+  .game-shell.is-right-rail-collapsed .right-rail {
+    width: var(--rail-collapsed-width) !important;
+    min-width: var(--rail-collapsed-width) !important;
+    max-width: var(--rail-collapsed-width) !important;
+    overflow: visible !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .panel,
+  .game-shell.is-right-rail-collapsed .right-rail .panel {
+    width: var(--rail-collapsed-width) !important;
+    min-width: var(--rail-collapsed-width) !important;
+    max-width: var(--rail-collapsed-width) !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .panel::before,
+  .game-shell.is-right-rail-collapsed .right-rail .panel::before {
+    display: none !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .rail-toggle,
+  .game-shell.is-right-rail-collapsed .right-rail .rail-toggle {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: inherit !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .collapse-glyph,
+  .game-shell.is-right-rail-collapsed .right-rail .collapse-glyph {
+    width: auto !important;
+    margin: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1 !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .collapse-label,
+  .game-shell.is-right-rail-collapsed .right-rail .collapse-label,
+  .game-shell.is-left-rail-collapsed .left-rail .menu-status-card,
+  .game-shell.is-left-rail-collapsed .left-rail .main-nav,
+  .game-shell.is-right-rail-collapsed .right-rail .right-buffs-body {
+    display: none !important;
+  }
+}
+
+/* Collapsed rails: keep one continuous matching rail surface */
+
+@media (min-width: 981px) {
+  .game-shell.is-left-rail-collapsed .left-rail,
+  .game-shell.is-right-rail-collapsed .right-rail {
+    width: var(--rail-collapsed-width) !important;
+    min-width: var(--rail-collapsed-width) !important;
+    max-width: var(--rail-collapsed-width) !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .panel,
+  .game-shell.is-right-rail-collapsed .right-rail .panel {
+    width: var(--rail-collapsed-width) !important;
+    min-width: var(--rail-collapsed-width) !important;
+    max-width: var(--rail-collapsed-width) !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .panel::before,
+  .game-shell.is-right-rail-collapsed .right-rail .panel::before {
+    display: block !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .rail-toggle,
+  .game-shell.is-right-rail-collapsed .right-rail .rail-toggle {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid rgba(255, 190, 226, 0.16) !important;
+    background: transparent !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .collapse-glyph,
+  .game-shell.is-right-rail-collapsed .right-rail .collapse-glyph {
+    width: auto !important;
+    margin: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1 !important;
+  }
+
+  .game-shell.is-left-rail-collapsed .left-rail .collapse-label,
+  .game-shell.is-right-rail-collapsed .right-rail .collapse-label,
+  .game-shell.is-left-rail-collapsed .left-rail .menu-status-card,
+  .game-shell.is-left-rail-collapsed .left-rail .main-nav,
+  .game-shell.is-right-rail-collapsed .right-rail .right-buffs-body {
+    display: none !important;
+  }
+}
