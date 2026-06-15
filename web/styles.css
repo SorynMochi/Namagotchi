@@ -7811,3 +7811,33 @@ body.is-resizing-chat * {
   object-fit: contain;
   object-position: center bottom;
 }
+
+/* Main panel scrollbar: remove boxed gutter look */
+
+.main-panel {
+  scrollbar-gutter: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(73, 199, 255, 0.75) transparent;
+}
+
+.main-panel::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.main-panel::-webkit-scrollbar-track {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-panel::-webkit-scrollbar-thumb {
+  border: 0 !important;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--cyan), var(--pink));
+  box-shadow: none !important;
+}
+
+.main-panel::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
