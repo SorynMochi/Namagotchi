@@ -13,9 +13,9 @@
 <body>
   <div class="game-shell">
   <section class="panel top-stats-panel">
-    <button class="panel-title collapse-toggle top-panel-toggle" data-collapse="top-stats-body" data-label="OPERATOR STATS" type="button">
+    <button class="panel-title collapse-toggle top-panel-toggle" data-collapse="top-stats-body" data-label="KEY INFORMATION" type="button">
       <span class="material-symbols-rounded collapse-glyph" aria-hidden="true">expand_less</span>
-      <span class="collapse-label">OPERATOR STATS</span>
+      <span class="collapse-label">KEY INFORMATION</span>
     </button>
 
     <div class="collapse-body top-stats-compact" id="top-stats-body">
@@ -102,10 +102,13 @@
 
       <section class="stat-group compact top-game-info">
         <h2>Game Info</h2>
-        <div class="stat-lines">
-          <p class="server-clock" id="server-time">Checking...</p>
-          <p><span>Online Users</span><strong id="online-users">1</strong></p>
-        </div>
+<div class="stat-lines game-info-lines">
+  <p>
+    <span>Server Time:</span>
+    <strong class="server-clock" id="server-time">Checking...</strong>
+  </p>
+  <p><span>Online Users:</span><strong id="online-users">1</strong></p>
+</div>
   <div class="top-game-info-actions">
     <button class="side-link" type="button">Game Updates</button>
     <button class="side-link" type="button">Leaderboards</button>

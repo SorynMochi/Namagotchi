@@ -6895,3 +6895,75 @@ body.is-resizing-chat * {
   max-width: 100%;
   box-sizing: border-box;
 }
+
+/* Game Info compact rows: match Activities rhythm */
+
+.top-game-info .game-info-lines {
+  display: grid;
+  gap: 4px;
+}
+
+.top-game-info .game-info-lines p {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.top-game-info .game-info-lines span {
+  overflow: hidden;
+  color: var(--text-soft);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.top-game-info .game-info-lines strong {
+  color: #fff8fd;
+  font-size: 0.74rem;
+  line-height: 1.2;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.top-game-info .server-clock {
+  display: inline !important;
+  margin: 0 !important;
+  color: #fff8fd !important;
+  font-size: 0.74rem !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  text-align: right !important;
+}
+
+.top-game-info .server-clock::before {
+  content: none !important;
+}
+
+.top-game-info-actions {
+  margin-top: 6px !important;
+}
+
+/* Top User Info meters: match compact top-rail stat row typography */
+
+.top-user-info .meter-label {
+  color: var(--text-soft) !important;
+  font-family: inherit !important;
+  font-size: 0.68rem !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+  text-align: left !important;
+  text-shadow: none !important;
+}
+
+.top-user-info .user-meter {
+  align-items: baseline !important;
+}
+
+.top-user-info .meter-track,
+.top-user-info .tick-meter .meter-track {
+  align-self: center !important;
+}

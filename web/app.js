@@ -3525,7 +3525,7 @@ function updateLiveServerClock() {
     return;
   }
 
-  serverTime.textContent = "Server Time: " + formatDateTime(Date.now() + serverClockOffsetMs);
+  serverTime.textContent = formatDateTime(Date.now() + serverClockOffsetMs);
 }
 
 function formatDateTime(value) {
