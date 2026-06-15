@@ -475,13 +475,6 @@ h2 {
   text-align: center;
 }
 
-.nami-placeholder p {
-  margin: 0;
-  color: var(--pink-soft);
-  font-size: 1.05rem;
-  font-weight: 950;
-}
-
 .nami-placeholder span,
 .muted,
 .placeholder-copy {
