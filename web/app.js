@@ -5,7 +5,7 @@ const careStats = document.querySelector("#care-stats");
 const namiMessage = document.querySelector("#nami-message");
 const namiMessageLog = document.querySelector("#nami-message-log");
 const namiRoomBackground = document.querySelector("#nami-room-background");
-const namiIdleSprite = document.querySelector("#nami-idle-sprite");
+const namiIdleVideo = document.querySelector("#nami-idle-video");
 const namiLevel = document.querySelector("#nami-level");
 const namiXpLabel = document.querySelector("#nami-xp-label");
 const namiXpFill = document.querySelector("#nami-xp-fill");
@@ -107,11 +107,6 @@ const NAMI_ROOM_BACKGROUND_PATHS = [
   "/images/backgrounds/Living_Room_04.png",
   "/images/backgrounds/Living_Room_05.png",
 ];
-
-const NAMI_IDLE_FRAME_COUNT = 12;
-const NAMI_IDLE_FRAME_COLUMNS = 6;
-const NAMI_IDLE_FRAME_ROWS = 2;
-const NAMI_IDLE_FRAME_MS = 500;
 
 const CURRENT_PLAYER_NAME = "Soryn";
 
@@ -493,8 +488,6 @@ let careCountdownTimer = null;
 let careCompletionRefreshInFlight = false;
 let emojiPickerNeedsRender = true;
 let emojiPickerPreloadTimer = null;
-let namiIdleFrameIndex = 0;
-let namiIdleAnimationTimer = null;
 let namiRoomBackgroundTimer = null;
 
 function setTextIfChanged(element, value) {
@@ -713,7 +706,7 @@ initializeHomeStage();
 function initializeHomeStage() {
   updateHomeRoomBackground();
   scheduleNextHomeRoomBackgroundUpdate();
-  startNamiIdleAnimation();
+  initializeNamiIdleVideo();
 }
 
 function updateHomeRoomBackground() {
@@ -804,30 +797,18 @@ function getNextLivingRoomBoundary(date = new Date()) {
   return nextDate;
 }
 
-function startNamiIdleAnimation() {
-  if (!namiIdleSprite || namiIdleAnimationTimer) {
+function initializeNamiIdleVideo() {
+  if (!namiIdleVideo) {
     return;
   }
 
-  renderNamiIdleFrame(0);
+  namiIdleVideo.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
 
-  namiIdleAnimationTimer = setInterval(() => {
-    namiIdleFrameIndex = (namiIdleFrameIndex + 1) % NAMI_IDLE_FRAME_COUNT;
-    renderNamiIdleFrame(namiIdleFrameIndex);
-  }, NAMI_IDLE_FRAME_MS);
-}
-
-function renderNamiIdleFrame(frameIndex) {
-  if (!namiIdleSprite) {
-    return;
-  }
-
-  const safeFrame = Math.max(0, Math.min(NAMI_IDLE_FRAME_COUNT - 1, Number(frameIndex) || 0));
-  const column = safeFrame % NAMI_IDLE_FRAME_COLUMNS;
-  const row = Math.floor(safeFrame / NAMI_IDLE_FRAME_COLUMNS);
-
-  namiIdleSprite.style.setProperty("--nami-sprite-x", `${-(column * (100 / NAMI_IDLE_FRAME_COLUMNS))}%`);
-  namiIdleSprite.style.setProperty("--nami-sprite-y", `${-(row * (100 / NAMI_IDLE_FRAME_ROWS))}%`);
+  namiIdleVideo.play().catch(() => {
+    // Muted autoplay should work in modern browsers, but this keeps failures quiet.
+  });
 }
 
 function showSection(sectionName, options = {}) {

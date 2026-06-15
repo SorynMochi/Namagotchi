@@ -586,31 +586,24 @@ h2 {
   pointer-events: none;
 }
 
-.nami-sprite-frame {
+.nami-video-frame {
   position: absolute;
   left: 50%;
-  bottom: 15%;
+  bottom: 0;
   z-index: 1;
-  height: 70%;
-  aspect-ratio: 2 / 3;
+  height: 100%;
   overflow: hidden;
   transform: translateX(-50%);
   pointer-events: none;
 }
 
-.nami-idle-sprite {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 15%;
-  width: 600%;
-  height: 200%;
-  max-width: none;
+.nami-idle-video {
+  height: 100%;
   display: block;
-  transform: translate(var(--nami-sprite-x, 0%), var(--nami-sprite-y, 0%));
+  object-fit: contain;
+  object-position: center bottom;
   user-select: none;
   pointer-events: none;
-  will-change: transform;
 }
 
 .nami-message {
