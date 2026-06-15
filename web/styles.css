@@ -7587,3 +7587,31 @@ body.is-resizing-chat * {
     padding-inline: 0 !important;
   }
 }
+
+/* Left rail logo */
+
+.menu-logo-wrap {
+  width: var(--left-menu-content-width);
+  box-sizing: border-box;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  padding: 8px var(--left-menu-inner-pad) 4px;
+}
+
+.menu-logo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 10px rgba(255, 140, 204, 0.22))
+    drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  user-select: none;
+  pointer-events: none;
+}
+
+.game-shell.is-left-rail-collapsed .left-rail .menu-logo-wrap {
+  display: none !important;
+}
