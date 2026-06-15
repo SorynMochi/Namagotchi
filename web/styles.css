@@ -7639,3 +7639,57 @@ body.is-resizing-chat * {
 .nami-room-stage.is-idle-stage .nami-idle-video {
   transform: none;
 }
+
+/* Work screen: 2x3 task grid with Nami work animation */
+
+.work-stage-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(220px, 0.85fr);
+  align-items: stretch;
+  gap: 14px;
+}
+
+#section-gathering .gathering-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  align-items: stretch;
+}
+
+#section-gathering .task-card {
+  min-height: 0;
+}
+
+.work-nami-stage {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 190, 226, 0.22);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 140, 204, 0.14), transparent 11rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 70%),
+    rgba(42, 20, 56, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 16px 36px rgba(0, 0, 0, 0.18);
+}
+
+.work-nami-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (max-width: 1450px) {
+  .work-stage-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .work-nami-stage {
+    min-height: 300px;
+  }
+}

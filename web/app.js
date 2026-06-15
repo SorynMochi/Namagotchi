@@ -727,6 +727,16 @@ initializeNamiMessages();
 initializeCareButtonTimer();
 initializeHomeStage();
 
+document.querySelectorAll(".work-nami-video").forEach((video) => {
+  video.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
+
+  video.play().catch(() => {
+    // Muted autoplay should work in modern browsers, but this keeps failures quiet.
+  });
+});
+
 function initializeHomeStage() {
   updateHomeStage(latestPlayerStatus);
   scheduleNextHomeRoomBackgroundUpdate();
