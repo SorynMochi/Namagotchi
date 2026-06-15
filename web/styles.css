@@ -6309,8 +6309,14 @@ body.is-resizing-chat * {
   --left-menu-button-width: 65px;
   --left-menu-button-gap: 4px;
   --left-menu-inner-pad: 4px;
-  --left-rail-width: calc((var(--left-menu-button-width) * 6) + (var(--left-menu-button-gap) * 5) + (var(--left-menu-inner-pad) * 2) + 2px);
-  --right-rail-width: 180px;
+  --left-menu-column-count: 3;
+  --left-menu-content-width: calc(
+    (var(--left-menu-button-width) * var(--left-menu-column-count)) +
+    (var(--left-menu-button-gap) * (var(--left-menu-column-count) - 1)) +
+    (var(--left-menu-inner-pad) * 2)
+  );
+  --left-rail-width: calc(var(--left-menu-content-width) + 2px);
+  --right-rail-width: 166px;
   --rail-collapsed-width: 38px;
 }
 
@@ -6335,6 +6341,18 @@ body.is-resizing-chat * {
     .game-shell {
       height: 100dvh !important;
     }
+  }
+
+  .game-shell.is-left-rail-collapsed {
+    grid-template-columns: var(--rail-collapsed-width) minmax(0, 1fr) var(--right-rail-width) !important;
+  }
+
+  .game-shell.is-right-rail-collapsed {
+    grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--rail-collapsed-width) !important;
+  }
+
+  .game-shell.is-left-rail-collapsed.is-right-rail-collapsed {
+    grid-template-columns: var(--rail-collapsed-width) minmax(0, 1fr) var(--rail-collapsed-width) !important;
   }
 
   .left-rail {
@@ -6368,30 +6386,10 @@ body.is-resizing-chat * {
     display: grid !important;
     grid-column: 3;
     grid-row: 1 / -1;
-    width: var(--right-rail-width);
+    width: var(--right-rail-width) !important;
     min-height: 0;
     max-height: 100%;
     overflow: hidden;
-  }
-
-  .game-shell.is-left-rail-collapsed {
-    grid-template-columns: var(--rail-collapsed-width) minmax(0, 1fr) var(--right-rail-width) !important;
-  }
-
-  .game-shell.is-right-rail-collapsed {
-    grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--rail-collapsed-width) !important;
-  }
-
-  .game-shell.is-left-rail-collapsed.is-right-rail-collapsed {
-    grid-template-columns: var(--rail-collapsed-width) minmax(0, 1fr) var(--rail-collapsed-width) !important;
-  }
-
-  .game-shell.is-left-rail-collapsed .left-rail {
-    width: var(--rail-collapsed-width) !important;
-  }
-
-  .game-shell.is-right-rail-collapsed .right-rail {
-    width: var(--rail-collapsed-width);
   }
 
   .main-panel,
@@ -6408,7 +6406,6 @@ body.is-resizing-chat * {
     overflow: hidden !important;
   }
 }
-
 /* Left rail menu */
 
 .left-rail .nav-panel {
@@ -6518,16 +6515,18 @@ body.is-resizing-chat * {
 .right-buffs-body {
   display: grid;
   align-content: start;
-  gap: 10px;
+  gap: 8px !important;
   min-height: 0;
   overflow-y: auto;
-  padding: 10px;
-  scrollbar-gutter: stable;
+  padding: 6px !important;
+  scrollbar-gutter: auto !important;
 }
 
 .right-buff-group {
+  width: 100% !important;
   min-width: 0;
   overflow: hidden;
+  box-sizing: border-box !important;
   border: 1px solid rgba(255, 190, 226, 0.2);
   border-radius: 14px;
   background:
@@ -6537,7 +6536,7 @@ body.is-resizing-chat * {
 
 .right-buff-group h3 {
   margin: 0;
-  padding: 8px 10px;
+  padding: 7px 8px !important;
   border-bottom: 1px solid rgba(255, 190, 226, 0.16);
   color: var(--pink-soft);
   font-family: var(--font-display);
@@ -6549,12 +6548,16 @@ body.is-resizing-chat * {
 
 .right-buff-list {
   display: grid;
-  gap: 8px;
-  padding: 10px;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  gap: 7px !important;
+  padding: 8px !important;
 }
 
 .right-buff-list .buff-card {
   display: grid;
+  width: 100%;
+  box-sizing: border-box;
   gap: 3px;
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(255, 190, 226, 0.12);
@@ -6600,7 +6603,7 @@ body.is-resizing-chat * {
 @media (max-width: 1500px) and (min-width: 981px) {
   :root {
     --left-menu-button-width: 58px;
-    --right-rail-width: 200px;
+    --right-rail-width: 166px;
   }
 
   .main-nav.menu-grid .nav-icon {
@@ -6638,97 +6641,6 @@ body.is-resizing-chat * {
     max-width: none !important;
   }
 }
-
-/* Rail width correction: 3-column menu and tighter right buff rail */
-
-:root {
-  --left-menu-column-count: 3;
-  --left-menu-content-width: calc(
-    (var(--left-menu-button-width) * var(--left-menu-column-count)) +
-    (var(--left-menu-button-gap) * (var(--left-menu-column-count) - 1)) +
-    (var(--left-menu-inner-pad) * 2)
-  );
-  --left-rail-width: calc(var(--left-menu-content-width) + 2px);
-  --right-rail-width: 166px;
-}
-
-@media (min-width: 981px) {
-  .game-shell {
-    grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--right-rail-width) !important;
-  }
-
-  .game-shell.is-left-rail-collapsed {
-    grid-template-columns: var(--rail-collapsed-width) minmax(0, 1fr) var(--right-rail-width) !important;
-  }
-
-  .game-shell.is-right-rail-collapsed {
-    grid-template-columns: var(--left-rail-width) minmax(0, 1fr) var(--rail-collapsed-width) !important;
-  }
-
-  .game-shell.is-left-rail-collapsed.is-right-rail-collapsed {
-    grid-template-columns: var(--rail-collapsed-width) minmax(0, 1fr) var(--rail-collapsed-width) !important;
-  }
-
-  .left-rail {
-    width: var(--left-rail-width) !important;
-  }
-
-  .right-rail {
-    width: var(--right-rail-width) !important;
-  }
-}
-
-.menu-status-card,
-.main-nav.menu-grid {
-  width: var(--left-menu-content-width) !important;
-}
-
-.main-nav.menu-grid {
-  grid-template-columns: repeat(var(--left-menu-column-count), var(--left-menu-button-width)) !important;
-}
-
-/* Remove the extra cushion inside both rails */
-.left-rail .nav-panel {
-  width: var(--left-rail-width) !important;
-  max-width: var(--left-rail-width) !important;
-}
-
-.right-buffs-body {
-  padding: 6px !important;
-  gap: 8px !important;
-}
-
-.right-buff-group h3 {
-  padding: 7px 8px !important;
-}
-
-.right-buff-list {
-  padding: 8px !important;
-  gap: 7px !important;
-}
-
-/* Right rail buff cards: stretch evenly inside the rail */
-
-.right-buff-list .buff-card {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.right-buffs-body {
-  scrollbar-gutter: auto !important;
-  padding: 6px !important;
-}
-
-.right-buff-group {
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-.right-buff-list {
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-
 /* Collapsed rails: keep one continuous matching rail surface */
 
 @media (min-width: 981px) {
