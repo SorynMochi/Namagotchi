@@ -630,7 +630,7 @@ sectionButtons.forEach((button) => {
 });
 
 collapseToggles.forEach((button) => {
-  button.dataset.label = cleanCollapseLabel(button.textContent);
+  button.dataset.label ||= cleanCollapseLabel(button.textContent)
 
   button.addEventListener("click", () => {
     const target = document.querySelector(`#${button.dataset.collapse}`);
@@ -645,7 +645,7 @@ collapseToggles.forEach((button) => {
   updateCollapseButton(button, false);
 });
 
-document.querySelectorAll(".left-rail .panel > .panel-title").forEach((title) => {
+document.querySelectorAll(".left-rail .panel > .panel-title:not(.user-info-title)").forEach((title) => {
   title.dataset.label = cleanCollapseLabel(title.textContent);
   title.setAttribute("role", "button");
   title.setAttribute("tabindex", "0");
@@ -3546,11 +3546,58 @@ function pad2(value) {
 }
 
 function cleanCollapseLabel(value) {
-  return String(value).replace(/^(\[[+-]\]\s*)+/, "").trim();
+  return String(value)
+    .replace(/^(\[[+-]\]\s*)+/, "")
+    .replace(/^(expand_(more|less)|keyboard_arrow_(down|up)|unfold_(more|less))\s*/i, "")
+    .trim();
 }
 
 function updateCollapseButton(button, isCollapsed) {
-  button.textContent = `${isCollapsed ? "[+]" : "[-]"} ${button.dataset.label}`;
+  updatePanelToggle(button, isCollapsed);
+}
+
+function updateLeftPanelTitle(title, isCollapsed) {
+  updatePanelToggle(title, isCollapsed);
+}
+
+function updatePanelToggle(element, isCollapsed) {
+  const { icon, label } = ensurePanelToggleContents(element);
+
+  setTextIfChanged(icon, isCollapsed ? "expand_more" : "expand_less");
+  setTextIfChanged(label, element.dataset.label || cleanCollapseLabel(element.textContent));
+  element.setAttribute("aria-expanded", String(!isCollapsed));
+}
+
+function ensurePanelToggleContents(element) {
+  let icon = Array.from(element.children).find((child) => child.classList.contains("collapse-glyph"));
+  let label = Array.from(element.children).find((child) => child.classList.contains("collapse-label"));
+
+  if (!element.dataset.label) {
+    element.dataset.label = cleanCollapseLabel(element.textContent);
+  }
+
+  if (!icon) {
+    icon = document.createElement("span");
+    icon.className = "material-symbols-rounded collapse-glyph";
+    icon.setAttribute("aria-hidden", "true");
+    element.prepend(icon);
+  }
+
+  if (!label) {
+    label = document.createElement("span");
+    label.className = "collapse-label";
+    label.textContent = element.dataset.label;
+
+    Array.from(element.childNodes).forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        node.remove();
+      }
+    });
+
+    icon.after(label);
+  }
+
+  return { icon, label };
 }
 
 function toggleLeftPanel(title) {
@@ -3561,10 +3608,6 @@ function toggleLeftPanel(title) {
 
   panel.classList.toggle("is-collapsed");
   updateLeftPanelTitle(title, panel.classList.contains("is-collapsed"));
-}
-
-function updateLeftPanelTitle(title, isCollapsed) {
-  title.textContent = `${isCollapsed ? "[+]" : "[-]"} ${title.dataset.label}`;
 }
 
 function taskFromButtonText(text) {

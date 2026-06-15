@@ -12,189 +12,239 @@
 </head>
 <body>
   <div class="game-shell">
-    <aside class="left-rail">
-<section class="panel user-card">
-  <div class="panel-title">[-] USER INFO</div>
+  <section class="panel top-stats-panel">
+    <button class="panel-title collapse-toggle top-panel-toggle" data-collapse="top-stats-body" data-label="OPERATOR STATS" type="button">
+      <span class="material-symbols-rounded collapse-glyph" aria-hidden="true">expand_less</span>
+      <span class="collapse-label">OPERATOR STATS</span>
+      <span class="server-clock" id="server-time">Checking...</span>
+    </button>
 
-  <div class="player-name">💎 Soryn</div>
+    <div class="collapse-body top-stats-compact" id="top-stats-body">
+      <section class="stat-group compact top-user-info">
+        <h2>User Info</h2>
 
-  <div class="user-meter tick-meter">
-    <div class="meter-label" id="current-action-label">Playdeck + Work [x0]</div>
-    <div class="meter-track">
-      <div class="meter-fill tick-fill" id="tick-fill"></div>
-    </div>
-  </div>
+        <div class="player-name">💎 Soryn</div>
 
-  <div class="user-meter">
-    <div class="meter-label" id="playdeck-hp-label">HP: 100 / 100</div>
-    <div class="meter-track">
-      <div class="meter-fill hp-fill" id="playdeck-hp-fill" style="width: 100%"></div>
-    </div>
-  </div>
-
-  <div class="user-meter">
-    <div class="meter-label" id="playdeck-xp-label">XP: 0 / 720</div>
-    <div class="meter-track">
-      <div class="meter-fill xp-fill" id="playdeck-xp-fill" style="width: 0%"></div>
-    </div>
-  </div>
-</section>
-
-      <section class="panel nav-panel">
-        <div class="panel-title">[-] MENU</div>
-<nav id="main-nav" class="main-nav menu-grid" aria-label="Main menu">
-  <button class="nav-item active" data-section="home">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">home</span>
-    <span class="nav-label">Home</span>
-  </button>
-
-  <button class="nav-item" data-section="playdeck">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">videogame_asset</span>
-    <span class="nav-label">Playdeck</span>
-  </button>
-
-  <button class="nav-item" data-section="gathering">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">handyman</span>
-    <span class="nav-label">Work</span>
-  </button>
-
-  <button class="nav-item" data-section="inventory">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">checkroom</span>
-    <span class="nav-label">Wardrobe</span>
-  </button>
-
-  <button class="nav-item" data-section="home-shop">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">other_houses</span>
-    <span class="nav-label">House</span>
-  </button>
-
-  <button class="nav-item" data-section="studio">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">design_services</span>
-    <span class="nav-label">Studio</span>
-  </button>
-
-  <button class="nav-item" data-section="market">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">storefront</span>
-    <span class="nav-label">Market</span>
-  </button>
-
-  <button class="nav-item" data-section="club">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">groups</span>
-    <span class="nav-label">Club</span>
-  </button>
-
-  <button class="nav-item" data-section="events">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">campaign</span>
-    <span class="nav-label">Events</span>
-  </button>
-
-  <button class="nav-item" data-section="achievements">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">workspace_premium</span>
-    <span class="nav-label">Badges</span>
-  </button>
-
-  <button class="nav-item" data-section="mail">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">mark_email_unread</span>
-    <span class="nav-label">Mail</span>
-  </button>
-
-  <button class="nav-item" data-section="friends">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">diversity_3</span>
-    <span class="nav-label">Friends</span>
-  </button>
-
-  <button class="nav-item" data-section="help">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">help</span>
-    <span class="nav-label">Help</span>
-  </button>
-
-  <button class="nav-item" data-section="settings">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">settings</span>
-    <span class="nav-label">Settings</span>
-  </button>
-
-  <button class="nav-item" data-section="premium">
-    <span class="material-symbols-rounded nav-icon" aria-hidden="true">diamond</span>
-    <span class="nav-label">Premium</span>
-  </button>
-</nav>
-      </section>
-
-      <section class="panel orders-panel">
-        <div class="panel-title">[-] ORDERS</div>
-        <button class="primary-button full-width" data-section-link="orders">📋 Open Orders</button>
-        <div id="order-tracker" class="order-tracker hidden">
-          <div class="tracker-label">
-            <span>Daily Order</span>
-            <strong id="order-progress-text">0 / 0</strong>
+        <div class="user-meter tick-meter">
+          <div class="meter-label" id="current-action-label">Playdeck + Work [x0]</div>
+          <div class="meter-track">
+            <div class="meter-fill tick-fill" id="tick-fill"></div>
           </div>
-          <div class="bar"><div id="order-progress-fill" class="fill order-fill" style="width: 0%"></div></div>
+        </div>
+
+        <div class="user-meter">
+          <div class="meter-label" id="playdeck-hp-label">HP: 100 / 100</div>
+          <div class="meter-track">
+            <div class="meter-fill hp-fill" id="playdeck-hp-fill" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <div class="user-meter">
+          <div class="meter-label" id="playdeck-xp-label">XP: 0 / 720</div>
+          <div class="meter-track">
+            <div class="meter-fill xp-fill" id="playdeck-xp-fill" style="width: 0%"></div>
+          </div>
         </div>
       </section>
-    </aside>
 
-    <div class="center-column">
-      <section class="panel top-stats-panel">
-  <button class="panel-title collapse-toggle top-panel-toggle" data-collapse="top-stats-body" type="button">
-    OPERATOR STATS
-  </button>
+      <section class="stat-group compact">
+        <h2>Wealth</h2>
+        <div class="stat-lines">
+          <p><span>Credits:</span><strong id="wealth-credits">0</strong></p>
+          <p><span>Nibbles:</span><strong id="wealth-nibbles">0</strong></p>
+          <p><span>NamiCoins:</span><strong id="wealth-namicoin">0</strong></p>
+        </div>
+      </section>
 
-  <div class="collapse-body top-stats-compact" id="top-stats-body">
-    <section class="stat-group compact">
-      <h2>Wealth</h2>
-      <div class="stat-lines">
-        <p><span>Credits:</span><strong id="wealth-credits">0</strong></p>
-        <p><span>Nibbles:</span><strong id="wealth-nibbles">0</strong></p>
-        <p><span>NamiCoins:</span><strong id="wealth-namicoin">0</strong></p>
+      <section class="stat-group compact">
+        <h2>Nami-Chan</h2>
+        <div class="stat-lines">
+          <p><span>Mood:</span><strong id="top-mood">0</strong></p>
+          <p><span>Status:</span><strong id="top-nami-status">Awake</strong></p>
+          <p><span>Wardrobe:</span><strong id="top-wardrobe">0 / 100</strong></p>
+        </div>
+      </section>
+
+      <section class="stat-group compact">
+        <h2>Playdeck</h2>
+        <div class="stat-lines">
+          <p><span>Level:</span><strong id="playdeck-top-level">1</strong></p>
+          <p><span>Outfit Level:</span><strong id="playdeck-equip-level">—</strong></p>
+          <p>
+            <span>Ingredients:</span>
+            <strong id="playdeck-ingredients" title="Ingredients are not implemented yet.">0</strong>
+          </p>
+        </div>
+      </section>
+
+      <section class="stat-group compact">
+        <h2>Resources</h2>
+        <div class="compact-grid-lines">
+          <p><span>Fans:</span><strong id="res-fans">0</strong></p>
+          <p><span>Memes:</span><strong id="res-memes">0</strong></p>
+          <p><span>Lost Items:</span><strong id="res-lost-items">0</strong></p>
+          <p><span>Confidence:</span><strong id="res-confidence">0</strong></p>
+          <p><span>Receipts:</span><strong id="res-receipts">0</strong></p>
+          <p><span>Patterns:</span><strong id="res-patterns">0</strong></p>
+        </div>
+      </section>
+
+      <section class="stat-group compact">
+        <h2>Activities</h2>
+        <div class="compact-grid-lines">
+          <p><span>Streaming:</span><strong id="act-streaming" title="Activity levels are not implemented yet.">1</strong></p>
+          <p><span>Doom Scroll:</span><strong id="act-doom-scrolling" title="Activity levels are not implemented yet.">1</strong></p>
+          <p><span>Cleaning:</span><strong id="act-cleaning" title="Activity levels are not implemented yet.">1</strong></p>
+          <p><span>Exercise:</span><strong id="act-exercising" title="Activity levels are not implemented yet.">1</strong></p>
+          <p><span>Shopping:</span><strong id="act-shopping" title="Activity levels are not implemented yet.">1</strong></p>
+          <p><span>Designing:</span><strong id="act-designing" title="Activity levels are not implemented yet.">1</strong></p>
+        </div>
+      </section>
+
+      <section class="stat-group compact top-game-info">
+        <h2>Game Info</h2>
+        <div class="stat-lines">
+          <p><span>Online Users</span><strong id="online-users">1</strong></p>
+        </div>
+        <div class="top-game-info-actions">
+          <button class="side-link" type="button">Updates</button>
+          <button class="side-link" type="button">Rankings</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <aside class="left-rail">
+    <section class="panel nav-panel">
+      <div class="panel-title">Menu</div>
+
+      <nav id="main-nav" class="main-nav menu-grid" aria-label="Main menu">
+        <button class="nav-item active" data-section="home">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">home</span>
+          <span class="nav-label">Home</span>
+        </button>
+
+        <button class="nav-item" data-section="playdeck">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">videogame_asset</span>
+          <span class="nav-label">Playdeck</span>
+        </button>
+
+        <button class="nav-item" data-section="gathering">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">handyman</span>
+          <span class="nav-label">Work</span>
+        </button>
+
+        <button class="nav-item" data-section="inventory">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">checkroom</span>
+          <span class="nav-label">Wardrobe</span>
+        </button>
+
+        <button class="nav-item" data-section="home-shop">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">other_houses</span>
+          <span class="nav-label">House</span>
+        </button>
+
+        <button class="nav-item" data-section="studio">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">design_services</span>
+          <span class="nav-label">Studio</span>
+        </button>
+
+        <button class="nav-item" data-section="market">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">storefront</span>
+          <span class="nav-label">Market</span>
+        </button>
+
+        <button class="nav-item" data-section="orders">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">assignment</span>
+          <span class="nav-label">Orders</span>
+        </button>
+
+        <button class="nav-item" data-section="club">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">groups</span>
+          <span class="nav-label">Club</span>
+        </button>
+
+        <button class="nav-item" data-section="events">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">campaign</span>
+          <span class="nav-label">Events</span>
+        </button>
+
+        <button class="nav-item" data-section="achievements">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">workspace_premium</span>
+          <span class="nav-label">Badges</span>
+        </button>
+
+        <button class="nav-item" data-section="mail">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">mark_email_unread</span>
+          <span class="nav-label">Mail</span>
+        </button>
+
+        <button class="nav-item" data-section="friends">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">diversity_3</span>
+          <span class="nav-label">Friends</span>
+        </button>
+
+        <button class="nav-item" data-section="help">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">help</span>
+          <span class="nav-label">Help</span>
+        </button>
+
+        <button class="nav-item" data-section="settings">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">settings</span>
+          <span class="nav-label">Settings</span>
+        </button>
+
+        <button class="nav-item premium" data-section="premium">
+          <span class="material-symbols-rounded nav-icon" aria-hidden="true">diamond</span>
+          <span class="nav-label">Premium</span>
+        </button>
+      </nav>
+    </section>
+
+    <section class="panel info-panel">
+      <button class="collapse-toggle" type="button" data-collapse="global-buffs" data-label="GLOBAL BUFFS">
+        <span class="material-symbols-rounded collapse-glyph" aria-hidden="true">expand_less</span>
+        <span class="collapse-label">GLOBAL BUFFS</span>
+      </button>
+
+      <div id="global-buffs" class="collapse-body">
+        <div class="buff-card">
+          <strong>Launch Sparkle</strong>
+          <span>+10% Work Resources</span>
+          <small>23:59:59 remaining</small>
+        </div>
+
+        <div class="buff-card">
+          <strong>Cozy Server Blessing</strong>
+          <span>+5% Playdeck XP</span>
+          <small>12:00:00 remaining</small>
+        </div>
       </div>
     </section>
 
-    <section class="stat-group compact">
-      <h2>Nami-Chan</h2>
-      <div class="stat-lines">
-        <p><span>Mood:</span><strong id="top-mood">0</strong></p>
-        <p><span>Status:</span><strong id="top-nami-status">Awake</strong></p>
-        <p><span>Wardrobe:</span><strong id="top-wardrobe">0 / 100</strong></p>
-      </div>
-    </section>
+    <section class="panel info-panel">
+      <button class="collapse-toggle" type="button" data-collapse="personal-buffs" data-label="PERSONAL BUFFS">
+        <span class="material-symbols-rounded collapse-glyph" aria-hidden="true">expand_less</span>
+        <span class="collapse-label">PERSONAL BUFFS</span>
+      </button>
 
-    <section class="stat-group compact">
-      <h2>Playdeck</h2>
-      <div class="stat-lines">
-        <p><span>Level:</span><strong id="playdeck-top-level">1</strong></p>
-        <p><span>Outfit Level:</span><strong id="playdeck-equip-level">—</strong></p>
-        <p>
-          <span>Ingredients:</span>
-          <strong id="playdeck-ingredients" title="Ingredients are not implemented yet.">0</strong>
-        </p>
-      </div>
-    </section>
+      <div id="personal-buffs" class="collapse-body">
+        <div class="buff-card">
+          <strong>Nami Mood Bonus</strong>
+          <span id="personal-mood-bonus">+40% Resource Gain</span>
+          <small>Updates live from Nami-chan’s mood.</small>
+        </div>
 
-    <section class="stat-group compact">
-      <h2>Resources</h2>
-      <div class="compact-grid-lines">
-        <p><span>Fans:</span><strong id="res-fans">0</strong></p>
-        <p><span>Memes:</span><strong id="res-memes">0</strong></p>
-        <p><span>Lost Items:</span><strong id="res-lost-items">0</strong></p>
-        <p><span>Confidence:</span><strong id="res-confidence">0</strong></p>
-        <p><span>Receipts:</span><strong id="res-receipts">0</strong></p>
-        <p><span>Patterns:</span><strong id="res-patterns">0</strong></p>
+        <div class="buff-card muted-card">
+          <strong>Food Buffs</strong>
+          <span>No active food buffs.</span>
+          <small>Cooking effects will appear here.</small>
+        </div>
       </div>
     </section>
+  </aside>
 
-    <section class="stat-group compact">
-      <h2>Activities</h2>
-      <div class="compact-grid-lines">
-        <p><span>Streaming:</span><strong id="act-streaming" title="Activity levels are not implemented yet.">1</strong></p>
-        <p><span>Doom Scroll:</span><strong id="act-doom-scrolling" title="Activity levels are not implemented yet.">1</strong></p>
-        <p><span>Cleaning:</span><strong id="act-cleaning" title="Activity levels are not implemented yet.">1</strong></p>
-        <p><span>Exercise:</span><strong id="act-exercising" title="Activity levels are not implemented yet.">1</strong></p>
-        <p><span>Shopping:</span><strong id="act-shopping" title="Activity levels are not implemented yet.">1</strong></p>
-        <p><span>Designing:</span><strong id="act-designing" title="Activity levels are not implemented yet.">1</strong></p>
-      </div>
-    </section>
-  </div>
-</section>
+  <div class="center-column">
 
       <main class="panel main-panel">
         <section class="content-section active" id="section-home">
@@ -567,51 +617,7 @@
 </form>
 </section>
     </div>
-
-    <aside class="right-rail">
-      <section class="panel info-panel">
-        <button class="collapse-toggle" type="button" data-collapse="game-info">[-] GAME INFO</button>
-        <div id="game-info" class="collapse-body">
-          <p class="server-clock" id="server-time">Checking...</p>
-<p><span>Online Users</span><strong id="online-users">1</strong></p>
-          <button class="side-link">Change Log</button>
-          <button class="side-link">Game Rules</button>
-          <button class="side-link">Rankings</button>
-        </div>
-      </section>
-
-      <section class="panel info-panel">
-        <button class="collapse-toggle" type="button" data-collapse="global-buffs">[-] GLOBAL BUFFS</button>
-        <div id="global-buffs" class="collapse-body">
-          <div class="buff-card">
-            <strong>Launch Sparkle</strong>
-            <span>+10% Work Resources</span>
-            <small>23:59:59 remaining</small>
-          </div>
-          <div class="buff-card">
-            <strong>Cozy Server Blessing</strong>
-            <span>+5% Playdeck XP</span>
-            <small>12:00:00 remaining</small>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel info-panel">
-        <button class="collapse-toggle" type="button" data-collapse="personal-buffs">[-] PERSONAL BUFFS</button>
-        <div id="personal-buffs" class="collapse-body">
-          <div class="buff-card">
-            <strong>Nami Mood Bonus</strong>
-            <span id="personal-mood-bonus">+40% Resource Gain</span>
-            <small>Updates live from Nami-chan’s mood.</small>
-          </div>
-          <div class="buff-card muted-card">
-            <strong>Food Buffs</strong>
-            <span>No active food buffs.</span>
-            <small>Cooking effects will appear here.</small>
-          </div>
-        </div>
-      </section>
-    </aside>
+    
   </div>
 
   <script src="/app.js"></script>
