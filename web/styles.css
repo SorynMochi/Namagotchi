@@ -6830,3 +6830,68 @@ body.is-resizing-chat * {
   font-size: 0.6rem;
   line-height: 1;
 }
+
+/* Left rail alignment polish: menu grid and buffs share the same width */
+
+:root {
+  --left-menu-button-width: 65px;
+  --left-menu-button-gap: 4px;
+  --left-menu-inner-pad: 4px;
+  --left-menu-content-width: calc(
+    (var(--left-menu-button-width) * 4) +
+    (var(--left-menu-button-gap) * 3) +
+    (var(--left-menu-inner-pad) * 2)
+  );
+  --left-rail-width: calc(var(--left-menu-content-width) + 2px);
+}
+
+@media (max-width: 1380px) {
+  :root {
+    --left-rail-width: calc(var(--left-menu-content-width) + 2px);
+  }
+}
+
+@media (min-width: 981px) {
+  .left-rail {
+    width: var(--left-rail-width);
+    grid-template-columns: minmax(0, 1fr) !important;
+    justify-items: stretch;
+  }
+}
+
+.left-rail .nav-panel {
+  width: var(--left-rail-width);
+  max-width: var(--left-rail-width);
+}
+
+.main-nav.menu-grid {
+  width: var(--left-menu-content-width) !important;
+  box-sizing: border-box;
+  grid-template-columns: repeat(4, var(--left-menu-button-width)) !important;
+  justify-content: start !important;
+  justify-self: center !important;
+  gap: var(--left-menu-button-gap) !important;
+  padding: var(--left-menu-inner-pad) !important;
+}
+
+.main-nav.menu-grid .nav-item {
+  width: var(--left-menu-button-width) !important;
+  min-width: var(--left-menu-button-width) !important;
+  max-width: var(--left-menu-button-width) !important;
+}
+
+/* Buffs align exactly with the 4x4 menu grid */
+.menu-buff-grid {
+  width: var(--left-menu-content-width) !important;
+  box-sizing: border-box;
+  justify-self: center;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 10px !important;
+  padding: 14px var(--left-menu-inner-pad) var(--left-menu-inner-pad) !important;
+}
+
+.menu-buff-card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
