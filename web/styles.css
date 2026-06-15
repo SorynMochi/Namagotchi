@@ -324,16 +324,6 @@ input:focus-visible {
   box-shadow: none;
 }
 
-.top-stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  padding: 12px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 70%),
-    rgba(14, 24, 39, 0.92);
-}
-
 .stat-group {
   min-width: 0;
   padding: 13px 14px;
@@ -498,21 +488,6 @@ h2 {
   color: var(--muted);
 }
 
-.nami-sparkle {
-  width: 84px;
-  height: 84px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255, 104, 183, 0.24);
-  border-radius: 999px;
-  background: rgba(255, 104, 183, 0.1);
-  color: var(--pink);
-  font-size: 3rem;
-  box-shadow:
-    0 0 42px rgba(255, 104, 183, 0.2),
-    inset 0 0 24px rgba(255, 255, 255, 0.04);
-}
-
 .nami-image-slot {
   position: relative;
   padding: 0;
@@ -523,17 +498,6 @@ h2 {
     radial-gradient(circle at 50% 26%, rgba(255, 217, 239, 0.24), transparent 9rem),
     radial-gradient(circle at 50% 74%, rgba(152, 221, 255, 0.14), transparent 14rem),
     rgba(255, 255, 255, 0.03);
-}
-
-.nami-display-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  border-radius: inherit;
-  object-fit: contain;
-  object-position: center bottom;
 }
 
 .nami-room-stage {
@@ -591,25 +555,6 @@ h2 {
 .stat-list {
   display: grid;
   gap: 11px;
-}
-
-.stat-row {
-  display: grid;
-  grid-template-columns: 108px 1fr 42px;
-  gap: 10px;
-  align-items: center;
-  color: var(--text-soft);
-  font-size: 0.84rem;
-}
-
-.stat-row strong {
-  color: var(--text);
-  text-align: right;
-}
-
-.stat-bar {
-  height: 10px;
-  margin: 0;
 }
 
 .care-actions {
