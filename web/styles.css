@@ -79,6 +79,10 @@
   --theme-work-active-bg: rgba(40, 18, 52, 0.74);
   --theme-work-active-pill-bg: linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
   --theme-work-active-pill-text: #241022;
+  --theme-work-active-button-bg: linear-gradient(180deg, var(--pink), #d85eb2);
+  --theme-work-active-button-border: rgba(255, 217, 239, 0.48);
+  --theme-work-active-button-text: #241022;
+  --theme-work-active-button-shadow: 0 8px 22px rgba(255, 140, 204, 0.18);
 
   --shadow:
     0 20px 54px rgba(15, 5, 24, 0.42),
@@ -6750,6 +6754,17 @@ body.is-resizing-chat * {
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
+#section-gathering .task-card.active button {
+  border-color: var(--theme-work-active-button-border) !important;
+  background: var(--theme-work-active-button-bg) !important;
+  color: var(--theme-work-active-button-text) !important;
+  box-shadow: var(--theme-work-active-button-shadow) !important;
+}
+
+#section-gathering .task-card.active button:hover {
+  filter: brightness(1.06);
+}
+
 #section-gathering .task-card-header {
   min-height: 20px;
 }
@@ -6777,7 +6792,7 @@ body.is-resizing-chat * {
   height: var(--work-video-height) !important;
   max-height: var(--work-video-height) !important;
   align-self: start !important;
-  overflow: visible !important;
+  overflow: hidden !important;
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
@@ -6791,7 +6806,7 @@ body.is-resizing-chat * {
   height: 125% !important;
   max-height: 125% !important;
   margin-top: -45px !important;
-  margin-left: -40px !important;
+  margin-left: -60px !important;
   background: transparent !important;
   object-fit: contain;
   object-position: center bottom;
