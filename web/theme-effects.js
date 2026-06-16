@@ -259,7 +259,7 @@
 
         layer.append(moon, skyline, signs, vapor, cityProps, rainField);
 
-        const rightRail = document.querySelector(".right-rail");
+            const rightRail = document.querySelector(".right-rail");
     const buffsPanel = document.querySelector(".right-buffs-panel");
     if (rightRail && buffsPanel) {
       rightRail.querySelectorAll(".tokyo-night-rail-signs").forEach((node) => node.remove());

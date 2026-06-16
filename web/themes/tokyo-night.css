@@ -1626,3 +1626,124 @@ body[data-theme="tokyo-night"] .tokyo-night-antenna-field {
     animation: none !important;
   }
 }
+/* Tokyo Night pass 6.1: creative external rail signs */
+
+/* Sign group lives outside the buff card and has no card chrome of its own. */
+body[data-theme="tokyo-night"] .right-rail > .tokyo-night-rail-signs {
+  position: relative !important;
+  z-index: 1;
+  width: calc(100% - 24px);
+  margin: 14px auto 10px;
+  padding: 2px 0 0;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none;
+  transform: perspective(420px) rotateY(-10deg) rotateZ(0.4deg);
+  transform-origin: center top;
+}
+
+/* Hide the whole neon sign stack when the right rail collapses. */
+.game-shell.is-right-rail-collapsed .tokyo-night-rail-signs {
+  display: none !important;
+}
+
+/* Bring back the smaller, uneven, billboard-ish sign style. */
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign {
+  display: grid;
+  place-items: center;
+  width: min(112px, calc(100% - 10px)) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 30px !important;
+  padding: 0 12px !important;
+  border-radius: 10px !important;
+  border: 1px solid currentColor !important;
+  font-size: 0.72rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.12), transparent 48%),
+    rgba(2, 5, 18, 0.78) !important;
+  color: currentColor;
+  text-shadow:
+    0 0 8px currentColor,
+    0 0 18px currentColor !important;
+  box-shadow:
+    0 0 14px currentColor,
+    0 0 24px color-mix(in srgb, currentColor 40%, transparent),
+    inset 0 0 12px rgba(255,255,255,0.08) !important;
+  animation: tokyoNightRailSignFlickerCreative 6.4s steps(1, end) infinite !important;
+}
+
+/* Intentional uneven stack so it feels designed, not like a plain menu. */
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign.sign-cyan {
+  justify-self: end;
+  color: #52ecff;
+  transform: rotate(-1.8deg) translateX(-5px);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign.sign-pink {
+  justify-self: start;
+  color: #ff46d2;
+  transform: rotate(2.4deg) translateX(8px);
+  animation-delay: -1.5s !important;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign.sign-violet {
+  justify-self: end;
+  color: #9f6bff;
+  transform: rotate(-2.3deg) translateX(-11px);
+  animation-delay: -3.1s !important;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign.sign-gold {
+  justify-self: center;
+  color: #ffe56f;
+  transform: rotate(1.4deg) translateX(3px);
+  animation-delay: -4.4s !important;
+}
+
+/* Previous oversized / card-like rail sign styling must lose. */
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs {
+  border-color: transparent !important;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs::before,
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Keep old floating stack dead, keep antennae alive. */
+body[data-theme="tokyo-night"] .tokyo-night-sign-stack {
+  display: none !important;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-antenna-field {
+  display: block !important;
+}
+
+@keyframes tokyoNightRailSignFlickerCreative {
+  0%, 3%, 5%, 41%, 44%, 76%, 100% {
+    opacity: 1;
+    filter: saturate(1.18) brightness(1.02);
+  }
+
+  4%, 42%, 77% {
+    opacity: 0.46;
+    filter: saturate(0.72) brightness(0.85);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign {
+    animation: none !important;
+  }
+}
