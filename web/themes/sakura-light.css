@@ -1093,3 +1093,28 @@ body[data-theme="sakura-light"] .accent,
 body[data-theme="sakura-light"] a {
   color: var(--sakura-readable-pink) !important;
 }
+/* Sakura Light Nami message pink fix */
+body[data-theme="sakura-light"] .nami-message-log-card,
+body[data-theme="sakura-light"] .nami-message-log,
+body[data-theme="sakura-light"] .nami-message {
+  border-color: rgba(201, 47, 120, 0.58) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.34), transparent 8rem),
+    linear-gradient(180deg, #f7a7c8 0%, #ef86b5 100%) !important;
+  color: #4a1629 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 10px 22px rgba(201, 47, 120, 0.16) !important;
+}
+
+body[data-theme="sakura-light"] .nami-message-log-card *,
+body[data-theme="sakura-light"] .nami-message-log *,
+body[data-theme="sakura-light"] .nami-message * {
+  color: #4a1629 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .nami-message-log .muted,
+body[data-theme="sakura-light"] .nami-message-log-card .muted {
+  color: rgba(74, 22, 41, 0.78) !important;
+}
