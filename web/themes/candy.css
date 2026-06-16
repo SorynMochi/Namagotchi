@@ -1545,3 +1545,107 @@ body[data-theme="candy"] .game-shell.is-left-rail-collapsed .center-column {
   position: relative !important;
   z-index: 1 !important;
 }
+/* Candy pass 6: rail containment and rail candy zones */
+
+/* Expanded left rail: stop content from escaping over the candy border. */
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow: visible !important;
+}
+
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail > .nav-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* Keep the logo inside the candy frame. */
+body[data-theme="candy"] .left-rail .menu-logo-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 12px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+body[data-theme="candy"] .left-rail .menu-logo {
+  display: block !important;
+  width: min(100%, 168px) !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin-inline: auto !important;
+  object-fit: contain !important;
+}
+
+/* Keep the menu button grid inside the candy frame. */
+body[data-theme="candy"] .left-rail .main-nav.menu-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  padding: 8px 10px 10px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+body[data-theme="candy"] .left-rail .main-nav.menu-grid .nav-item {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Keep collapsed rail fix, but do not let it affect expanded layout. */
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed {
+  overflow: visible !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail {
+  position: relative !important;
+  z-index: 30 !important;
+  overflow: visible !important;
+  padding-left: 6px !important;
+  padding-right: 0 !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel {
+  position: relative !important;
+  z-index: 31 !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  margin-left: 0 !important;
+  margin-right: -6px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* Rail candy zones: candy lives below the side rails, not across the whole board. */
+body[data-theme="candy"] .candy-float-layer {
+  position: fixed !important;
+  inset: 0 !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+body[data-theme="candy"] .candy-float-zone {
+  position: fixed !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+body[data-theme="candy"] .candy-float-zone-left,
+body[data-theme="candy"] .candy-float-zone-right {
+  min-height: 150px !important;
+}
+
+body[data-theme="candy"] .candy-float-zone .candy-piece {
+  position: absolute !important;
+}
