@@ -1466,3 +1466,82 @@ body[data-theme="candy"] .candy-piece.candy-truffle .candy-top {
     rotate: 360deg;
   }
 }
+/* Candy pass 5: collapsed rail and server status polish */
+
+/* Give the left rail status text room so it does not crowd the candy border. */
+body[data-theme="candy"] .left-rail .menu-status-card {
+  padding-inline: 10px !important;
+}
+
+body[data-theme="candy"] .left-rail .menu-status-card p {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 8px !important;
+  align-items: baseline !important;
+  padding-inline: 0 !important;
+}
+
+body[data-theme="candy"] .left-rail .menu-status-card span {
+  min-width: 0 !important;
+}
+
+body[data-theme="candy"] .left-rail .menu-status-card strong,
+body[data-theme="candy"] .left-rail #server-time,
+body[data-theme="candy"] .left-rail #online-users {
+  justify-self: end !important;
+  max-width: 100% !important;
+  padding-right: 3px !important;
+  color: #431f18 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.74) !important;
+}
+
+/* Keep expanded rail neat. */
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail {
+  overflow: visible !important;
+  padding-left: 6px !important;
+  padding-right: 2px !important;
+}
+
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail > .nav-panel {
+  width: calc(100% - 8px) !important;
+  max-width: calc(100% - 8px) !important;
+}
+
+/* Collapsed rail: let the candy border sit above nearby panels instead of being clipped/covered. */
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed {
+  overflow: visible !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail {
+  position: relative !important;
+  z-index: 30 !important;
+  overflow: visible !important;
+  padding-left: 6px !important;
+  padding-right: 0 !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel {
+  position: relative !important;
+  z-index: 31 !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  margin-left: 0 !important;
+  margin-right: -6px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* Keep the collapsed menu title centered and readable inside the slightly wider candy tab. */
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > .panel-title,
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > .rail-toggle {
+  width: 100% !important;
+  justify-content: center !important;
+  padding-inline: 6px !important;
+}
+
+/* Center column should not paint over the collapsed candy rail edge. */
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .center-column {
+  position: relative !important;
+  z-index: 1 !important;
+}
