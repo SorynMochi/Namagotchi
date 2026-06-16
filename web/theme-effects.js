@@ -38,8 +38,8 @@
       activeLayer = null;
     }
 
-    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy");
-    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy");
+    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe");
+    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe");
     document.querySelectorAll(".tokyo-night-rail-signs, .tokyo-night-left-signs").forEach((node) => node.remove());
   }
 
@@ -425,6 +425,114 @@
     document.body.append(layer);
     activeLayer = layer;
   }
+
+  function startCafeThemeEffect() {
+    document.documentElement.classList.add("theme-effect-cafe");
+    document.body?.classList.add("theme-effect-cafe");
+
+    const layer = document.createElement("div");
+    layer.className = "theme-effects-layer theme-effects-cafe cafe-float-layer";
+    layer.setAttribute("aria-hidden", "true");
+
+    const types = ["cup", "croissant", "macaron", "donut", "beans"];
+    const piecesPerZone = 8;
+
+    function buildCafePiece(type) {
+      const piece = document.createElement("div");
+      piece.className = `cafe-piece cafe-${type}`;
+
+      const size = randomBetween(58, 102);
+      const left = randomBetween(5, 78);
+      const top = randomBetween(4, 82);
+      const opacity = randomBetween(0.34, 0.52);
+      const driftX = randomBetween(-10, 10);
+      const driftY = randomBetween(-16, 16);
+      const spin = randomBetween(58, 106);
+      const float = randomBetween(30, 48);
+      const rot = randomBetween(0, 360);
+
+      piece.style.setProperty("--cafe-size", `${size.toFixed(1)}px`);
+      piece.style.setProperty("--cafe-opacity", opacity.toFixed(2));
+      piece.style.setProperty("--cafe-drift-x", `${driftX.toFixed(1)}px`);
+      piece.style.setProperty("--cafe-drift-y", `${driftY.toFixed(1)}px`);
+      piece.style.setProperty("--cafe-spin", `${spin.toFixed(1)}s`);
+      piece.style.setProperty("--cafe-float", `${float.toFixed(1)}s`);
+      piece.style.setProperty("--cafe-rot", `${rot.toFixed(1)}deg`);
+      piece.style.left = `${left.toFixed(1)}%`;
+      piece.style.top = `${top.toFixed(1)}%`;
+      piece.style.animationDelay = `${randomBetween(-42, 0).toFixed(1)}s, ${randomBetween(-42, 0).toFixed(1)}s`;
+
+      if (type === "cup") {
+        piece.innerHTML = `
+          <span class="cup-steam"></span>
+          <span class="cup-body"></span>
+          <span class="cup-handle"></span>
+          <span class="cup-saucer"></span>
+        `;
+      } else if (type === "croissant") {
+        piece.innerHTML = `
+          <span class="croissant-base"></span>
+          <span class="croissant-lines"></span>
+        `;
+      } else if (type === "macaron") {
+        piece.innerHTML = `
+          <span class="macaron-top"></span>
+          <span class="macaron-cream"></span>
+          <span class="macaron-bottom"></span>
+        `;
+      } else if (type === "donut") {
+        piece.innerHTML = `
+          <span class="donut-ring"></span>
+          <span class="donut-glaze"></span>
+        `;
+      } else if (type === "beans") {
+        piece.innerHTML = `
+          <span class="bean bean-1"></span>
+          <span class="bean bean-2"></span>
+        `;
+      }
+
+      return piece;
+    }
+
+    function buildCafeZone(zoneName, railElement, panelElement) {
+      const railRect = railElement.getBoundingClientRect();
+      const panelRect = panelElement.getBoundingClientRect();
+
+      const zone = document.createElement("div");
+      zone.className = `cafe-float-zone cafe-float-zone-${zoneName}`;
+
+      const top = Math.max(panelRect.bottom + 12, railRect.top + 48);
+      const height = Math.max(window.innerHeight - top - 8, 150);
+
+      zone.style.left = `${Math.max(0, railRect.left).toFixed(1)}px`;
+      zone.style.top = `${top.toFixed(1)}px`;
+      zone.style.width = `${Math.max(railRect.width, 38).toFixed(1)}px`;
+      zone.style.height = `${height.toFixed(1)}px`;
+
+      for (let index = 0; index < piecesPerZone; index += 1) {
+        const type = types[(index + Math.floor(randomBetween(0, types.length))) % types.length];
+        zone.append(buildCafePiece(type));
+      }
+
+      return zone;
+    }
+
+    const leftRail = document.querySelector(".left-rail");
+    const rightRail = document.querySelector(".right-rail");
+    const leftPanel = document.querySelector(".left-rail > .nav-panel") || leftRail;
+    const rightPanel = document.querySelector(".right-rail > .right-buffs-panel") || rightRail;
+
+    if (leftRail && rightRail && leftPanel && rightPanel) {
+      layer.append(
+        buildCafeZone("left", leftRail, leftPanel),
+        buildCafeZone("right", rightRail, rightPanel)
+      );
+    }
+
+    document.body.append(layer);
+    activeLayer = layer;
+  }
   window.NamigotchiThemeEffects = {
     setActiveThemeEffect,
     clearThemeEffects,
@@ -543,182 +651,5 @@
     document.addEventListener("DOMContentLoaded", installCandyWatcher, { once: true });
   } else {
     installCandyWatcher();
-  }
-})();
-
-// Cafe pass 1B: side-lane cafe props
-(() => {
-  const LAYER_ID = "cafe-float-layer";
-  const TYPES = ["cup", "croissant", "macaron", "donut", "beans"];
-  const PIECES_PER_ZONE = 6;
-
-  function getCurrentThemeName() {
-    return document.body?.dataset?.theme || "";
-  }
-
-  function isCafeTheme() {
-    return getCurrentThemeName() === "cafe";
-  }
-
-  function removeCafeLayer() {
-    document.getElementById(LAYER_ID)?.remove();
-  }
-
-  function buildCafePiece(type) {
-    const piece = document.createElement("div");
-    piece.className = `cafe-piece cafe-${type}`;
-
-    const size = 54 + Math.floor(Math.random() * 44);
-    const left = Math.random() * 74 + 5;
-    const top = Math.random() * 80 + 4;
-    const opacity = 0.18 + Math.random() * 0.14;
-    const driftX = -10 + Math.random() * 20;
-    const driftY = -16 + Math.random() * 32;
-    const spin = 58 + Math.random() * 48;
-    const float = 30 + Math.random() * 18;
-    const rot = Math.floor(Math.random() * 360);
-
-    piece.style.setProperty("--cafe-size", `${size}px`);
-    piece.style.setProperty("--cafe-opacity", opacity.toFixed(2));
-    piece.style.setProperty("--cafe-drift-x", `${driftX}px`);
-    piece.style.setProperty("--cafe-drift-y", `${driftY}px`);
-    piece.style.setProperty("--cafe-spin", `${spin.toFixed(1)}s`);
-    piece.style.setProperty("--cafe-float", `${float.toFixed(1)}s`);
-    piece.style.setProperty("--cafe-rot", `${rot}deg`);
-    piece.style.left = `${left}%`;
-    piece.style.top = `${top}%`;
-    piece.style.animationDelay = `${(Math.random() * -42).toFixed(1)}s, ${(Math.random() * -42).toFixed(1)}s`;
-
-    if (type === "cup") {
-      piece.innerHTML = `
-        <span class="cup-steam"></span>
-        <span class="cup-body"></span>
-        <span class="cup-handle"></span>
-        <span class="cup-saucer"></span>
-      `;
-    } else if (type === "croissant") {
-      piece.innerHTML = `
-        <span class="croissant-base"></span>
-        <span class="croissant-lines"></span>
-      `;
-    } else if (type === "macaron") {
-      piece.innerHTML = `
-        <span class="macaron-top"></span>
-        <span class="macaron-cream"></span>
-        <span class="macaron-bottom"></span>
-      `;
-    } else if (type === "donut") {
-      piece.innerHTML = `
-        <span class="donut-ring"></span>
-        <span class="donut-glaze"></span>
-      `;
-    } else if (type === "beans") {
-      piece.innerHTML = `
-        <span class="bean bean-1"></span>
-        <span class="bean bean-2"></span>
-      `;
-    }
-
-    return piece;
-  }
-
-  function buildCafeZone(zoneName, railElement, panelElement) {
-    const railRect = railElement.getBoundingClientRect();
-    const panelRect = panelElement.getBoundingClientRect();
-
-    const zone = document.createElement("div");
-    zone.className = `cafe-float-zone cafe-float-zone-${zoneName}`;
-
-    const top = Math.max(panelRect.bottom + 12, railRect.top + 48);
-    const viewportBottom = window.innerHeight - 8;
-    const height = Math.max(viewportBottom - top, 0);
-
-    zone.style.left = `${Math.max(0, railRect.left)}px`;
-    zone.style.top = `${top}px`;
-    zone.style.width = `${Math.max(railRect.width, 38)}px`;
-    zone.style.height = `${height}px`;
-
-    if (height < 90) {
-      zone.style.display = "none";
-      return zone;
-    }
-
-    for (let index = 0; index < PIECES_PER_ZONE; index += 1) {
-      const type = TYPES[(index + Math.floor(Math.random() * TYPES.length)) % TYPES.length];
-      zone.appendChild(buildCafePiece(type));
-    }
-
-    return zone;
-  }
-
-  function createCafeLayer() {
-    if (!document.body || document.getElementById(LAYER_ID) || !isCafeTheme()) {
-      return;
-    }
-
-    const leftRail = document.querySelector(".left-rail");
-    const rightRail = document.querySelector(".right-rail");
-    const leftPanel = document.querySelector(".left-rail > .nav-panel");
-    const rightPanel = document.querySelector(".right-rail > .right-buffs-panel");
-
-    if (!leftRail || !rightRail || !leftPanel || !rightPanel) {
-      return;
-    }
-
-    const layer = document.createElement("div");
-    layer.id = LAYER_ID;
-    layer.className = "cafe-float-layer";
-
-    layer.append(
-      buildCafeZone("left", leftRail, leftPanel),
-      buildCafeZone("right", rightRail, rightPanel)
-    );
-
-    document.body.appendChild(layer);
-  }
-
-  function syncCafeLayer() {
-    removeCafeLayer();
-
-    if (isCafeTheme()) {
-      createCafeLayer();
-    }
-  }
-
-  function scheduleCafeLayerSync() {
-    requestAnimationFrame(syncCafeLayer);
-  }
-
-  function installCafeWatcher() {
-    if (!document.body) {
-      return;
-    }
-
-    scheduleCafeLayerSync();
-
-    const observer = new MutationObserver(scheduleCafeLayerSync);
-
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["data-theme", "class"]
-    });
-
-    const shell = document.querySelector(".game-shell");
-
-    if (shell) {
-      observer.observe(shell, {
-        attributes: true,
-        attributeFilter: ["class"]
-      });
-    }
-
-    window.addEventListener("resize", scheduleCafeLayerSync);
-    window.addEventListener("pageshow", scheduleCafeLayerSync);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", installCafeWatcher, { once: true });
-  } else {
-    installCafeWatcher();
   }
 })();

@@ -342,3 +342,62 @@ body[data-theme="cafe"] .emoji-picker {
     0 16px 34px rgba(75,39,23,0.18),
     inset 0 1px 0 rgba(255,255,255,0.76) !important;
 }
+/* Cafe pass 1B visibility fix */
+
+/* Put cafe props above the page background, but below clickable UI. */
+body[data-theme="cafe"] .cafe-float-layer,
+body[data-theme="cafe"] .cafe-float-zone {
+  z-index: 2 !important;
+}
+
+body[data-theme="cafe"] .game-shell {
+  position: relative;
+  z-index: 5;
+}
+
+/* Make props visible enough to notice during this pass. */
+body[data-theme="cafe"] .cafe-piece {
+  opacity: var(--cafe-opacity, 0.42) !important;
+  filter:
+    drop-shadow(0 10px 18px rgba(75, 39, 23, 0.18))
+    drop-shadow(0 2px 8px rgba(255, 255, 255, 0.24)) !important;
+}
+
+/* Give side zones enough room even if the rail panels are tall. */
+body[data-theme="cafe"] .cafe-float-zone {
+  min-height: 150px !important;
+}
+/* Cafe pass 1B lifecycle visibility fix */
+
+body[data-theme="cafe"] .theme-effects-cafe,
+body[data-theme="cafe"] .cafe-float-layer {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  z-index: 2 !important;
+}
+
+body[data-theme="cafe"] .game-shell {
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+body[data-theme="cafe"] .cafe-float-zone {
+  position: fixed !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  min-height: 150px !important;
+}
+
+body[data-theme="cafe"] .cafe-float-zone .cafe-piece {
+  position: absolute !important;
+}
+
+body[data-theme="cafe"] .cafe-piece {
+  opacity: var(--cafe-opacity, 0.44) !important;
+  filter:
+    drop-shadow(0 10px 18px rgba(75, 39, 23, 0.18))
+    drop-shadow(0 2px 8px rgba(255, 255, 255, 0.24)) !important;
+}
