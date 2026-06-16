@@ -1,0 +1,344 @@
+﻿:root {
+  color-scheme: light;
+
+  --bg-0: #fff8ef;
+  --bg-1: #ead3bd;
+  --bg-2: #c59b78;
+
+  --panel: rgba(255, 248, 238, 0.92);
+  --panel-soft: rgba(250, 236, 220, 0.84);
+  --panel-deep: rgba(232, 207, 184, 0.88);
+
+  --line: rgba(94, 53, 36, 0.28);
+  --line-bright: rgba(255, 255, 255, 0.68);
+
+  --text: #321c13;
+  --text-soft: #5d3828;
+  --muted: #8b6654;
+
+  --pink: #b46a56;
+  --pink-soft: #f5d6c8;
+  --cyan: #fff8ef;
+  --cyan-soft: #ffffff;
+  --violet: #8d6043;
+  --violet-soft: #e8cdb9;
+  --green: #7b8d57;
+  --yellow: #f1cf8f;
+  --orange: #c98242;
+  --danger: #b05a45;
+  --cream: #fff7e8;
+
+  --cafe-espresso: #2c160e;
+  --cafe-dark-roast: #442416;
+  --cafe-mocha: #5e3524;
+  --cafe-coffee: #7a4a32;
+  --cafe-latte: #b98966;
+  --cafe-milk: #ead3bd;
+  --cafe-foam: #fff8ef;
+  --cafe-ceramic: #ffffff;
+  --cafe-croissant: #d99a45;
+  --cafe-pastry: #e6b66e;
+  --cafe-caramel: #c98242;
+
+  --shadow:
+    0 18px 48px rgba(75, 39, 23, 0.20),
+    0 0 26px rgba(255, 248, 239, 0.32);
+
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+
+  --theme-page-glow-pink: rgba(185, 122, 82, 0.22);
+  --theme-page-glow-cyan: rgba(255, 248, 239, 0.40);
+  --theme-page-glow-violet: rgba(94, 53, 36, 0.12);
+  --theme-page-gradient-top: #fff8ef;
+  --theme-page-gradient-bottom: #ead3bd;
+
+  --theme-panel-overlay: rgba(255, 255, 255, 0.28);
+  --theme-panel-border-sheen-pink: rgba(185, 122, 82, 0.24);
+  --theme-panel-border-sheen-cyan: rgba(255, 255, 255, 0.48);
+  --theme-panel-title-bg: rgba(94, 53, 36, 0.08);
+
+  --theme-card-border-cyan: rgba(94, 53, 36, 0.24);
+  --theme-card-bg-overlay: rgba(255, 255, 255, 0.24);
+  --theme-card-bg-deep: rgba(255, 248, 238, 0.82);
+  --theme-card-bg-deep-solid: rgba(255, 248, 238, 0.90);
+  --theme-card-inner-highlight: rgba(255, 255, 255, 0.56);
+
+  --theme-nav-hover-border: rgba(94, 53, 36, 0.34);
+  --theme-nav-hover-bg: rgba(123, 74, 50, 0.10);
+  --theme-nav-hover-text: #321c13;
+  --theme-nav-active-border: rgba(68, 36, 22, 0.42);
+  --theme-nav-active-bg: linear-gradient(135deg, rgba(255,248,239,0.86), rgba(217,154,69,0.32), rgba(123,74,50,0.18));
+  --theme-nav-active-text: #321c13;
+  --theme-nav-active-shadow: 0 0 18px rgba(123, 74, 50, 0.14);
+
+  --theme-chat-text: #321c13;
+  --theme-chat-name: #7a4a32;
+  --theme-chat-form-bg: rgba(255, 248, 238, 0.84);
+  --theme-chat-input-border: rgba(94, 53, 36, 0.26);
+  --theme-chat-input-bg: rgba(255, 255, 255, 0.78);
+  --theme-chat-input-placeholder: rgba(93, 56, 40, 0.62);
+  --theme-chat-submit-bg: #c98242;
+  --theme-chat-submit-text: #fff8ef;
+
+  --theme-button-primary-border: rgba(44, 22, 14, 0.24);
+  --theme-button-primary-bg: linear-gradient(180deg, #b98966 0%, #7a4a32 100%);
+  --theme-button-primary-text: #fff8ef;
+  --theme-button-primary-shadow: 0 8px 18px rgba(75, 39, 23, 0.16);
+
+  --theme-button-secondary-border: rgba(94, 53, 36, 0.24);
+  --theme-button-secondary-bg: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(234,211,189,0.84));
+  --theme-button-secondary-text: #442416;
+
+  --theme-care-button-border: rgba(94, 53, 36, 0.24);
+  --theme-care-button-bg: linear-gradient(180deg, #fff8ef 0%, #e7c8ad 100%);
+  --theme-care-button-text: #442416;
+
+  --theme-work-active-border: rgba(68, 36, 22, 0.44);
+  --theme-work-active-glow: rgba(185, 122, 82, 0.18);
+  --theme-work-active-bg: rgba(250, 236, 220, 0.94);
+  --theme-work-active-pill-bg: linear-gradient(180deg, #7a4a32, #442416);
+  --theme-work-active-pill-text: #fff8ef;
+  --theme-work-active-button-bg: linear-gradient(180deg, #c98242, #7a4a32);
+  --theme-work-active-button-border: rgba(44, 22, 14, 0.34);
+  --theme-work-active-button-text: #fff8ef;
+  --theme-work-active-button-shadow: 0 8px 18px rgba(75, 39, 23, 0.16);
+
+  --theme-nami-message-bg: rgba(255, 248, 238, 0.88);
+  --theme-nami-message-text: #442416;
+  --theme-nami-room-stage-bg: #ead3bd;
+
+  --theme-scrollbar-color: rgba(122, 74, 50, 0.9);
+  --theme-scrollbar-color-main: rgba(185, 122, 82, 0.9);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #b98966, #7a4a32);
+
+  --theme-tick-fill: linear-gradient(90deg, #fff8ef, #d99a45, #7a4a32);
+  --theme-hp-fill: linear-gradient(90deg, #7b8d57, #d99a45);
+  --theme-progress-xp-fill: linear-gradient(90deg, #c98242, #7a4a32);
+  --theme-progress-stat-fill: linear-gradient(90deg, #fff8ef, #b98966, #5e3524);
+  --theme-progress-track-border: rgba(94, 53, 36, 0.22);
+  --theme-progress-track-bg: rgba(255, 255, 255, 0.62);
+  --theme-progress-fill-shadow: 0 0 12px rgba(123, 74, 50, 0.18);
+}
+
+body[data-theme="cafe"] {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 248, 239, 0.62), transparent 20rem),
+    radial-gradient(circle at 86% 12%, rgba(185, 122, 82, 0.20), transparent 24rem),
+    radial-gradient(circle at 50% 96%, rgba(68, 36, 22, 0.13), transparent 30rem),
+    linear-gradient(180deg, #fff8ef 0%, #ead3bd 54%, #c59b78 100%) !important;
+  color: var(--text);
+}
+
+body[data-theme="cafe"]::before {
+  background:
+    radial-gradient(ellipse at 22px 26px, rgba(94,53,36,0.08) 0 12px, transparent 13px),
+    radial-gradient(ellipse at 92px 64px, rgba(185,122,82,0.10) 0 10px, transparent 11px),
+    linear-gradient(135deg, rgba(255,255,255,0.26), transparent 42%, rgba(68,36,22,0.04)) !important;
+  background-size: 148px 88px, 148px 88px, auto !important;
+  opacity: 1 !important;
+}
+
+body[data-theme="cafe"]::after {
+  content: "";
+  position: fixed;
+  inset: auto 0 0;
+  height: 24vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.24;
+  background:
+    radial-gradient(ellipse at 20% 100%, rgba(68,36,22,0.22), transparent 18rem),
+    radial-gradient(ellipse at 76% 100%, rgba(185,122,82,0.18), transparent 20rem),
+    linear-gradient(180deg, transparent, rgba(68,36,22,0.14));
+}
+
+body[data-theme="cafe"] .panel,
+body[data-theme="cafe"] .main-panel,
+body[data-theme="cafe"] .chat-panel,
+body[data-theme="cafe"] .top-stats-panel,
+body[data-theme="cafe"] .nav-panel,
+body[data-theme="cafe"] .right-buffs-panel,
+body[data-theme="cafe"] .nami-card,
+body[data-theme="cafe"] .care-card,
+body[data-theme="cafe"] .zone-list,
+body[data-theme="cafe"] .combat-panel,
+body[data-theme="cafe"] .task-card,
+body[data-theme="cafe"] .placeholder-copy,
+body[data-theme="cafe"] .settings-card,
+body[data-theme="cafe"] .wardrobe-panel,
+body[data-theme="cafe"] .equipment-card,
+body[data-theme="cafe"] .inventory-item-card,
+body[data-theme="cafe"] .right-buff-group {
+  border: 1px solid rgba(94,53,36,0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.58), rgba(255,255,255,0.14)),
+    linear-gradient(180deg, rgba(255,248,238,0.94), rgba(234,211,189,0.88)) !important;
+  color: #321c13 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.76),
+    0 0 0 2px rgba(255,255,255,0.20),
+    0 14px 32px rgba(75,39,23,0.14) !important;
+  backdrop-filter: blur(12px) saturate(1.08);
+}
+
+body[data-theme="cafe"] .panel-title,
+body[data-theme="cafe"] .collapse-toggle {
+  color: #fff8ef !important;
+  background:
+    linear-gradient(180deg, #7a4a32 0%, #5e3524 54%, #442416 100%) !important;
+  border-bottom-color: rgba(44,22,14,0.28) !important;
+  text-shadow: 0 1px 0 rgba(44,22,14,0.80) !important;
+}
+
+body[data-theme="cafe"] h1,
+body[data-theme="cafe"] h2,
+body[data-theme="cafe"] h3,
+body[data-theme="cafe"] .eyebrow {
+  color: #5e3524 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.66) !important;
+}
+
+body[data-theme="cafe"] .top-player-name-button {
+  border: 1px solid rgba(255,248,239,0.38) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255,248,239,0.18), transparent 5rem),
+    linear-gradient(180deg, #7a4a32, #442416) !important;
+  color: #fff8ef !important;
+  font-weight: 950 !important;
+  text-shadow: 0 1px 0 rgba(44,22,14,0.86) !important;
+}
+
+body[data-theme="cafe"] .main-nav.menu-grid .nav-item {
+  border: 1px solid rgba(94,53,36,0.22) !important;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255,255,255,0.50), transparent 2.6rem),
+    linear-gradient(180deg, rgba(255,248,239,0.96), rgba(232,205,185,0.88)) !important;
+  color: #5e3524 !important;
+}
+
+body[data-theme="cafe"] .main-nav.menu-grid .nav-icon,
+body[data-theme="cafe"] .main-nav.menu-grid .nav-label {
+  color: #6f3f2b !important;
+}
+
+body[data-theme="cafe"] .main-nav.menu-grid .nav-item.active {
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255,255,255,0.72), transparent 2.6rem),
+    linear-gradient(135deg, #fff8ef 0%, #d99a45 55%, #b98966 100%) !important;
+  color: #321c13 !important;
+}
+
+body[data-theme="cafe"] .task-card button,
+body[data-theme="cafe"] .care-button,
+body[data-theme="cafe"] .secondary-button,
+body[data-theme="cafe"] .chat-form button[type="submit"] {
+  border: 1px solid rgba(44,22,14,0.28) !important;
+  background: linear-gradient(180deg, #c98242 0%, #7a4a32 100%) !important;
+  color: #fff8ef !important;
+  font-weight: 950 !important;
+  text-shadow: 0 1px 0 rgba(44,22,14,0.86) !important;
+}
+
+body[data-theme="cafe"] .chat-toggle-button,
+body[data-theme="cafe"] #chat-toggle-button {
+  border: 1px solid rgba(94,53,36,0.28) !important;
+  background: linear-gradient(180deg, #fff8ef, #ead3bd) !important;
+  color: #442416 !important;
+  font-weight: 950 !important;
+}
+
+body[data-theme="cafe"] .chat-tabs,
+body[data-theme="cafe"] .emoji-picker-tabs {
+  border-bottom: 1px solid rgba(44,22,14,0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(122,74,50,0.98), rgba(68,36,22,0.98)),
+    radial-gradient(circle at 12% 0%, rgba(255,248,239,0.14), transparent 8rem) !important;
+}
+
+body[data-theme="cafe"] .chat-tab,
+body[data-theme="cafe"] .emoji-category-tab {
+  border: 1px solid rgba(255,248,239,0.20) !important;
+  background:
+    linear-gradient(180deg, rgba(255,248,239,0.16), rgba(68,36,22,0.22)) !important;
+  color: #fff8ef !important;
+  text-shadow: 0 1px 0 rgba(44,22,14,0.76) !important;
+}
+
+body[data-theme="cafe"] .chat-tab.active,
+body[data-theme="cafe"] .emoji-category-tab.active {
+  border-color: rgba(255,248,239,0.42) !important;
+  background: linear-gradient(180deg, #fff8ef, #d99a45) !important;
+  color: #321c13 !important;
+}
+
+body[data-theme="cafe"] .chat-log {
+  background:
+    linear-gradient(180deg, rgba(255,252,246,0.78), rgba(255,248,239,0.72)),
+    repeating-linear-gradient(0deg, transparent 0 22px, rgba(94,53,36,0.035) 22px 23px) !important;
+  color: #321c13 !important;
+}
+
+body[data-theme="cafe"] .chat-message,
+body[data-theme="cafe"] .chat-text,
+body[data-theme="cafe"] .chat-log * {
+  color: #321c13 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .chat-time,
+body[data-theme="cafe"] .chat-player-name,
+body[data-theme="cafe"] .player-name-button {
+  color: #7a4a32 !important;
+}
+
+body[data-theme="cafe"] .chat-form {
+  border-top: 1px solid rgba(94,53,36,0.24) !important;
+  background: linear-gradient(180deg, rgba(255,248,239,0.70), rgba(234,211,189,0.76)) !important;
+}
+
+body[data-theme="cafe"] input,
+body[data-theme="cafe"] select,
+body[data-theme="cafe"] textarea,
+body[data-theme="cafe"] .chat-form input {
+  border-color: rgba(94,53,36,0.24) !important;
+  background: rgba(255,255,255,0.78) !important;
+  color: #321c13 !important;
+}
+
+body[data-theme="cafe"] #nami-message,
+body[data-theme="cafe"] .nami-message,
+body[data-theme="cafe"] .nami-message-log-card,
+body[data-theme="cafe"] .nami-message-log,
+body[data-theme="cafe"] #nami-message-log {
+  color: #442416 !important;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255,255,255,0.52), transparent 7rem),
+    linear-gradient(180deg, rgba(255,248,239,0.96), rgba(232,205,185,0.88)) !important;
+  border-color: rgba(94,53,36,0.28) !important;
+}
+
+body[data-theme="cafe"] .meter-track,
+body[data-theme="cafe"] .stat-bar,
+body[data-theme="cafe"] .bar,
+body[data-theme="cafe"] .task-xp-bar {
+  border: 1px solid rgba(94,53,36,0.22) !important;
+  background: rgba(255,255,255,0.62) !important;
+}
+
+body[data-theme="cafe"] .meter-fill,
+body[data-theme="cafe"] .fill,
+body[data-theme="cafe"] .stat-fill,
+body[data-theme="cafe"] .task-xp-fill,
+body[data-theme="cafe"] .care-button-progress-fill {
+  background: linear-gradient(90deg, #fff8ef, #d99a45, #7a4a32) !important;
+  box-shadow: 0 0 10px rgba(123,74,50,0.14) !important;
+}
+
+body[data-theme="cafe"] .emoji-picker {
+  border: 1px solid rgba(94,53,36,0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(255,248,239,0.96), rgba(234,211,189,0.94)) !important;
+  box-shadow:
+    0 16px 34px rgba(75,39,23,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.76) !important;
+}

@@ -113,6 +113,7 @@ const THEME_FILES = {
   "sakura-light": "/themes/sakura-light.css",
   "tokyo-night": "/themes/tokyo-night.css",
   "candy": "/themes/candy.css",
+  "cafe": "/themes/cafe.css",
 };
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
