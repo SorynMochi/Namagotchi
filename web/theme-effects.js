@@ -260,6 +260,19 @@
 
     const crosswalk = document.createElement("div");
     crosswalk.className = "tokyo-night-crosswalk";
+    const commuterTrain = document.createElement("div");
+    commuterTrain.className = "tokyo-night-commuter-train";
+
+    const trainBody = document.createElement("div");
+    trainBody.className = "tokyo-night-train-body";
+
+    for (let index = 0; index < 18; index += 1) {
+      const windowLight = document.createElement("span");
+      windowLight.className = "tokyo-night-train-window";
+      trainBody.append(windowLight);
+    }
+
+    commuterTrain.append(trainBody);
 
         const jpSignCluster = document.createElement("div");
     jpSignCluster.className = "tokyo-night-jp-sign-cluster";
@@ -277,7 +290,7 @@
       jpSignCluster.append(sign);
     });
 
-    cityProps.append(antennaField, crosswalk, jpSignCluster);
+    cityProps.append(antennaField, crosswalk, commuterTrain, jpSignCluster);
 
     const rainField = document.createElement("div");
     rainField.className = "tokyo-night-rain-field";
