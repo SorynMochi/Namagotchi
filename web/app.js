@@ -109,6 +109,7 @@ const THEME_FILES = {
   "nami-default": "/themes/nami-default.css",
   midnight: "/themes/midnight.css",
   strawberry: "/themes/strawberry.css",
+  sakura: "/themes/sakura.css",
 };
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
