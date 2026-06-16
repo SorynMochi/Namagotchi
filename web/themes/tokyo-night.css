@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: dark;
 
   --bg-0: #030514;
@@ -1743,6 +1743,220 @@ body[data-theme="tokyo-night"] .tokyo-night-antenna-field {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign {
+    animation: none !important;
+  }
+}
+/* Tokyo Night pass 7: Japanese street identity */
+:root {
+  --tokyo-font-jp-neon: "Dela Gothic One", "Noto Sans JP", "Zen Maru Gothic", system-ui, sans-serif;
+  --tokyo-font-jp-soft: "Zen Maru Gothic", "Noto Sans JP", system-ui, sans-serif;
+}
+
+/* Let Tokyo Night headings borrow a touch of Japanese signage weight without changing normal UI too much. */
+body[data-theme="tokyo-night"] .panel-title,
+body[data-theme="tokyo-night"] .eyebrow,
+body[data-theme="tokyo-night"] .top-stats-panel h2,
+body[data-theme="tokyo-night"] .stat-group.compact h2,
+body[data-theme="tokyo-night"] #section-gathering .task-card h2 {
+  font-family: var(--tokyo-font-jp-soft);
+}
+
+/* Rail signs become Japanese-first neon signage with small English captions. */
+body[data-theme="tokyo-night"] .right-rail > .tokyo-night-rail-signs {
+  gap: 9px;
+  transform: perspective(440px) rotateY(-12deg) rotateZ(0.5deg);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign {
+  width: min(118px, calc(100% - 10px)) !important;
+  height: 38px !important;
+  padding: 3px 12px 5px !important;
+  grid-template-rows: 1fr auto;
+  font-family: var(--tokyo-font-jp-neon);
+  font-size: 1.02rem !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1 !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.13), transparent 46%),
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, currentColor 20%, transparent), transparent 80%),
+    rgba(2, 5, 18, 0.82) !important;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign::after {
+  content: attr(data-caption);
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-ui);
+  font-size: 0.42rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  opacity: 0.78;
+  text-shadow:
+    0 0 6px currentColor,
+    0 0 12px currentColor;
+}
+
+/* Make the uneven stack feel like real signboards strapped to a narrow building edge. */
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign.sign-cyan {
+  justify-self: end;
+  transform: rotate(-2deg) translateX(-4px);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign.sign-pink {
+  justify-self: start;
+  transform: rotate(2.6deg) translateX(9px);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign.sign-violet {
+  justify-self: end;
+  transform: rotate(-2.6deg) translateX(-12px);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign.sign-gold {
+  justify-self: center;
+  transform: rotate(1.6deg) translateX(2px);
+}
+
+/* Japanese street-sign cluster. It is decorative, pointerless, and intentionally low opacity. */
+body[data-theme="tokyo-night"] .tokyo-night-jp-sign-cluster {
+  position: absolute;
+  left: 13.4vw;
+  bottom: 21vh;
+  display: grid;
+  gap: 8px;
+  pointer-events: none;
+  opacity: 0.34;
+  transform: perspective(560px) rotateY(13deg) rotateZ(-1deg);
+  transform-origin: left bottom;
+  z-index: 3;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-jp-sign {
+  position: relative;
+  display: grid;
+  place-items: center;
+  grid-template-rows: 1fr auto;
+  min-width: 116px;
+  min-height: 40px;
+  padding: 4px 14px 5px;
+  border-radius: 10px;
+  border: 1px solid currentColor;
+  font-family: var(--tokyo-font-jp-neon);
+  font-size: 0.95rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.12), transparent 48%),
+    rgba(2, 5, 18, 0.76);
+  text-shadow:
+    0 0 8px currentColor,
+    0 0 18px currentColor;
+  box-shadow:
+    0 0 14px currentColor,
+    0 0 24px color-mix(in srgb, currentColor 42%, transparent),
+    inset 0 0 12px rgba(255,255,255,0.08);
+  animation: tokyoNightJapaneseSignPulse 5.8s ease-in-out infinite alternate;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-jp-sign::after {
+  content: attr(data-caption);
+  margin-top: 3px;
+  font-family: var(--font-ui);
+  font-size: 0.42rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  opacity: 0.72;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-jp-sign.jp-station {
+  color: #52ecff;
+  transform: rotate(-1.5deg);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-jp-sign.jp-konbini {
+  color: #ff46d2;
+  transform: translateX(28px) rotate(1.7deg);
+  animation-delay: -1.3s;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-jp-sign.jp-ramen {
+  color: #ffe56f;
+  transform: translateX(8px) rotate(-2.2deg);
+  animation-delay: -2.6s;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-jp-sign.jp-nami {
+  color: #9f6bff;
+  transform: translateX(38px) rotate(2.4deg);
+  animation-delay: -3.5s;
+}
+
+@keyframes tokyoNightJapaneseSignPulse {
+  from {
+    opacity: 0.62;
+    filter: saturate(0.95) brightness(0.92);
+  }
+
+  to {
+    opacity: 1;
+    filter: saturate(1.25) brightness(1.08);
+  }
+}
+
+/* Add Japanese platform-sign flavor to section headers without changing the interface text itself. */
+body[data-theme="tokyo-night"] #section-home .section-header::before,
+body[data-theme="tokyo-night"] #section-gathering .section-header::before,
+body[data-theme="tokyo-night"] #section-wardrobe .section-header::before,
+body[data-theme="tokyo-night"] #section-settings .section-header::before {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.6rem;
+  margin-right: 0.55rem;
+  padding: 0.08rem 0.34rem;
+  border-radius: 999px;
+  border: 1px solid rgba(82,236,255,0.42);
+  font-family: var(--tokyo-font-jp-soft);
+  font-size: 0.66rem;
+  font-weight: 950;
+  color: #52ecff;
+  background: rgba(82,236,255,0.08);
+  box-shadow:
+    0 0 12px rgba(82,236,255,0.18),
+    inset 0 0 10px rgba(82,236,255,0.05);
+}
+
+body[data-theme="tokyo-night"] #section-home .section-header::before {
+  content: "\591C"; /* 夜 */
+}
+
+body[data-theme="tokyo-night"] #section-gathering .section-header::before {
+  content: "\50CD"; /* 働 */
+}
+
+body[data-theme="tokyo-night"] #section-wardrobe .section-header::before {
+  content: "\670D"; /* 服 */
+}
+
+body[data-theme="tokyo-night"] #section-settings .section-header::before {
+  content: "\8A2D"; /* 設 */
+}
+
+/* Keep the Japanese props out of the way on small screens or collapsed layouts. */
+.game-shell.is-left-rail-collapsed body[data-theme="tokyo-night"] .tokyo-night-jp-sign-cluster {
+  left: 8vw;
+}
+
+@media (max-width: 1180px) {
+  body[data-theme="tokyo-night"] .tokyo-night-jp-sign-cluster {
+    opacity: 0.18;
+    transform: scale(0.82) perspective(560px) rotateY(13deg) rotateZ(-1deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-theme="tokyo-night"] .tokyo-night-jp-sign,
   body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign {
     animation: none !important;
   }

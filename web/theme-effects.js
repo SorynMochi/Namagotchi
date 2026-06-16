@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let activeThemeKey = "";
@@ -236,7 +236,23 @@
     const crosswalk = document.createElement("div");
     crosswalk.className = "tokyo-night-crosswalk";
 
-    cityProps.append(antennaField, crosswalk);
+        const jpSignCluster = document.createElement("div");
+    jpSignCluster.className = "tokyo-night-jp-sign-cluster";
+
+    [
+      { label: "\u6E0B\u8C37\u99C5", caption: "SHIBUYA ST.", className: "jp-station" },
+      { label: "\u30B3\u30F3\u30D3\u30CB", caption: "KONBINI", className: "jp-konbini" },
+      { label: "\u30E9\u30FC\u30E1\u30F3", caption: "RAMEN", className: "jp-ramen" },
+      { label: "\u30CA\u30DF", caption: "NAMI", className: "jp-nami" }
+    ].forEach((config) => {
+      const sign = document.createElement("span");
+      sign.className = `tokyo-night-jp-sign ${config.className}`;
+      sign.textContent = config.label;
+      sign.dataset.caption = config.caption;
+      jpSignCluster.append(sign);
+    });
+
+    cityProps.append(antennaField, crosswalk, jpSignCluster);
 
     const rainField = document.createElement("div");
     rainField.className = "tokyo-night-rain-field";
@@ -268,14 +284,19 @@
       railSigns.className = "tokyo-night-rail-signs";
 
       [
-        { label: "TOKYO", className: "sign-cyan" },
-        { label: "NAMI", className: "sign-pink" },
-        { label: "24H", className: "sign-violet" },
-        { label: "IDLE", className: "sign-gold" }
+        { label: "\u6771\u4EAC", caption: "TOKYO", className: "sign-cyan" },
+        { label: "\u30CA\u30DF", caption: "NAMI", className: "sign-pink" },
+        { label: "\u6DF1\u591C", caption: "MIDNIGHT", className: "sign-violet" },
+        { label: "24\u6642", caption: "24H", className: "sign-gold" }
       ].forEach((config) => {
         const sign = document.createElement("span");
         sign.className = `tokyo-night-rail-sign ${config.className}`;
         sign.textContent = config.label;
+
+        if (config.caption) {
+          sign.dataset.caption = config.caption;
+        }
+
         railSigns.append(sign);
       });
 
