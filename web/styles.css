@@ -7355,3 +7355,30 @@ body.is-resizing-chat * {
   font: inherit;
   font-weight: 900;
 }
+/* Work screen Nami face backing circle */
+#section-gathering .work-nami-stage {
+  --work-face-circle-size: 75px;
+  --work-face-circle-x: 43%;
+  --work-face-circle-y: 19%;
+
+  position: relative;
+}
+
+#section-gathering .work-nami-stage::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: var(--work-face-circle-x);
+  top: var(--work-face-circle-y);
+  width: var(--work-face-circle-size);
+  height: var(--work-face-circle-size);
+  border-radius: 50%;
+  background: #000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+#section-gathering .work-nami-video {
+  position: relative;
+  z-index: 1;
+}
