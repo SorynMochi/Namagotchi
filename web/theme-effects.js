@@ -18,6 +18,10 @@
     return themeKey === "sakura" || themeKey === "sakura-dark" || themeKey === "sakura-light";
   }
 
+  function isTokyoNightTheme(themeKey) {
+    return themeKey === "tokyo-night";
+  }
+
   function clearThemeEffects() {
     if (petalTimer) {
       window.clearInterval(petalTimer);
@@ -34,8 +38,8 @@
       activeLayer = null;
     }
 
-    document.documentElement.classList.remove("theme-effect-sakura");
-    document.body?.classList.remove("theme-effect-sakura");
+    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night");
+    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night");
   }
 
   function setActiveThemeEffect(themeKey) {
@@ -48,6 +52,10 @@
 
     if (isSakuraTheme(themeKey)) {
       startSakuraThemeEffect();
+    }
+
+    if (isTokyoNightTheme(themeKey)) {
+      startTokyoNightThemeEffect();
     }
   }
 
@@ -182,6 +190,50 @@
     window.setTimeout(() => petal.remove(), cleanupDelay);
   }
 
+
+  function startTokyoNightThemeEffect() {
+    document.documentElement.classList.add("theme-effect-tokyo-night");
+    document.body?.classList.add("theme-effect-tokyo-night");
+
+    const layer = document.createElement("div");
+    layer.className = "theme-effects-layer theme-effects-tokyo-night";
+    layer.setAttribute("aria-hidden", "true");
+
+    const moon = document.createElement("div");
+    moon.className = "tokyo-night-moon";
+
+    const skyline = document.createElement("div");
+    skyline.className = "tokyo-night-skyline";
+
+    const signs = document.createElement("div");
+    signs.className = "tokyo-night-signs";
+
+    const vapor = document.createElement("div");
+    vapor.className = "tokyo-night-vapor";
+
+    const rainField = document.createElement("div");
+    rainField.className = "tokyo-night-rain-field";
+
+    if (!reduceMotionQuery.matches) {
+      for (let index = 0; index < 90; index++) {
+        const drop = document.createElement("span");
+        drop.className = "tokyo-rain-drop";
+        drop.style.setProperty("--rain-left", `${randomBetween(-5, 105).toFixed(2)}vw`);
+        drop.style.setProperty("--rain-top", `${randomBetween(-20, 100).toFixed(2)}vh`);
+        drop.style.setProperty("--rain-length", `${randomBetween(28, 82).toFixed(1)}px`);
+        drop.style.setProperty("--rain-speed", `${randomBetween(0.9, 2.4).toFixed(2)}s`);
+        drop.style.setProperty("--rain-delay", `${randomBetween(-3.5, 0).toFixed(2)}s`);
+        drop.style.setProperty("--rain-opacity", randomBetween(0.12, 0.46).toFixed(2));
+        rainField.append(drop);
+      }
+    } else {
+      layer.classList.add("theme-effects-reduced-motion");
+    }
+
+    layer.append(moon, skyline, signs, vapor, rainField);
+    document.body.append(layer);
+    activeLayer = layer;
+  }
   window.NamigotchiThemeEffects = {
     setActiveThemeEffect,
     clearThemeEffects,

@@ -111,6 +111,7 @@ const THEME_FILES = {
   strawberry: "/themes/strawberry.css",
   "sakura-dark": "/themes/sakura-dark.css",
   "sakura-light": "/themes/sakura-light.css",
+  "tokyo-night": "/themes/tokyo-night.css",
 };
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
