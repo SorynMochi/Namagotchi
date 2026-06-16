@@ -211,6 +211,38 @@
     const vapor = document.createElement("div");
     vapor.className = "tokyo-night-vapor";
 
+    const cityProps = document.createElement("div");
+    cityProps.className = "tokyo-night-city-props";
+
+    const signStack = document.createElement("div");
+    signStack.className = "tokyo-night-sign-stack";
+
+    const signOne = document.createElement("span");
+    signOne.className = "tokyo-night-sign sign-cyan";
+    signOne.textContent = "TOKYO";
+
+    const signTwo = document.createElement("span");
+    signTwo.className = "tokyo-night-sign sign-pink";
+    signTwo.textContent = "NAMI";
+
+    const signThree = document.createElement("span");
+    signThree.className = "tokyo-night-sign sign-violet";
+    signThree.textContent = "24H";
+
+    const signFour = document.createElement("span");
+    signFour.className = "tokyo-night-sign sign-gold";
+    signFour.textContent = "IDLE";
+
+    signStack.append(signOne, signTwo, signThree, signFour);
+
+    const powerLines = document.createElement("div");
+    powerLines.className = "tokyo-night-power-lines";
+
+    const crosswalk = document.createElement("div");
+    crosswalk.className = "tokyo-night-crosswalk";
+
+    cityProps.append(signStack, powerLines, crosswalk);
+
     const rainField = document.createElement("div");
     rainField.className = "tokyo-night-rain-field";
 
@@ -230,7 +262,7 @@
       layer.classList.add("theme-effects-reduced-motion");
     }
 
-    layer.append(moon, skyline, signs, vapor, rainField);
+    layer.append(moon, skyline, signs, vapor, cityProps, rainField);
     document.body.append(layer);
     activeLayer = layer;
   }
