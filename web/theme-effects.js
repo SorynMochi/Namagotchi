@@ -21,6 +21,9 @@
   function isTokyoNightTheme(themeKey) {
     return themeKey === "tokyo-night";
   }
+  function isCafeTheme(themeKey) {
+    return themeKey === "cafe";
+  }
 
   function clearThemeEffects() {
     if (petalTimer) {
@@ -57,6 +60,9 @@
 
     if (isTokyoNightTheme(themeKey)) {
       startTokyoNightThemeEffect();
+    }
+    if (isCafeTheme(themeKey)) {
+      startCafeThemeEffect();
     }
   }
 

@@ -401,3 +401,245 @@ body[data-theme="cafe"] .cafe-piece {
     drop-shadow(0 10px 18px rgba(75, 39, 23, 0.18))
     drop-shadow(0 2px 8px rgba(255, 255, 255, 0.24)) !important;
 }
+/* Cafe pass 1B repair: visible prop shapes */
+
+body[data-theme="cafe"] .theme-effects-cafe,
+body[data-theme="cafe"] .cafe-float-layer {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  z-index: 2 !important;
+}
+
+body[data-theme="cafe"] .game-shell {
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+body[data-theme="cafe"] .cafe-float-zone {
+  position: fixed !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  min-height: 150px !important;
+}
+
+body[data-theme="cafe"] .cafe-piece {
+  position: absolute !important;
+  width: var(--cafe-size, 82px) !important;
+  height: var(--cafe-size, 82px) !important;
+  opacity: var(--cafe-opacity, 0.44) !important;
+  transform: rotate(var(--cafe-rot, 0deg));
+  filter:
+    drop-shadow(0 10px 18px rgba(75, 39, 23, 0.18))
+    drop-shadow(0 2px 8px rgba(255, 255, 255, 0.24)) !important;
+  animation:
+    cafeFloat var(--cafe-float, 34s) ease-in-out infinite alternate,
+    cafeSpin var(--cafe-spin, 58s) linear infinite;
+}
+
+body[data-theme="cafe"] .cafe-piece > * {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+/* Coffee cup: cup, saucer, handle, coffee surface */
+body[data-theme="cafe"] .cafe-piece.cafe-cup .cup-body {
+  left: 18%;
+  top: 30%;
+  width: 56%;
+  height: 42%;
+  border-radius: 10% 10% 42% 42%;
+  background:
+    radial-gradient(ellipse at 50% 12%, #5e3524 0 28%, #fff8ef 29% 46%, transparent 47%),
+    linear-gradient(180deg, #ffffff 0%, #fff8ef 42%, #ead3bd 100%);
+  border: 3px solid rgba(68, 36, 22, 0.32);
+  box-shadow:
+    inset 0 3px 8px rgba(255, 255, 255, 0.42),
+    inset 0 -6px 10px rgba(94, 53, 36, 0.08);
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-cup .cup-handle {
+  right: 6%;
+  top: 39%;
+  width: 25%;
+  height: 25%;
+  border: 4px solid rgba(68, 36, 22, 0.34);
+  border-left: 0;
+  border-radius: 0 999px 999px 0;
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-cup .cup-saucer {
+  left: 14%;
+  top: 72%;
+  width: 68%;
+  height: 10%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fff8ef, #d9bfa9);
+  border: 1px solid rgba(68, 36, 22, 0.22);
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-cup .cup-steam {
+  left: 36%;
+  top: 0%;
+  width: 28%;
+  height: 34%;
+  opacity: 0.65;
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-cup .cup-steam::before,
+body[data-theme="cafe"] .cafe-piece.cafe-cup .cup-steam::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 44px;
+  border-radius: 50%;
+  border-left: 3px solid rgba(255, 255, 255, 0.78);
+  animation: cafeSteamRise 6.8s ease-in-out infinite;
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-cup .cup-steam::after {
+  left: 18px;
+  animation-delay: -3.2s;
+}
+
+/* Croissant: crescent body and scored pastry arcs */
+body[data-theme="cafe"] .cafe-piece.cafe-croissant .croissant-base {
+  left: 8%;
+  top: 24%;
+  width: 84%;
+  height: 58%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 70%, rgba(255, 248, 239, 0.64) 0 24%, transparent 25%),
+    linear-gradient(180deg, #f1bf67 0%, #d99a45 62%, #9b5d28 100%);
+  clip-path: polygon(4% 62%, 16% 28%, 36% 12%, 58% 11%, 80% 28%, 96% 64%, 76% 55%, 58% 48%, 40% 49%, 23% 56%);
+  border: 2px solid rgba(94, 53, 36, 0.22);
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-croissant .croissant-lines {
+  left: 19%;
+  top: 27%;
+  width: 62%;
+  height: 42%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 20% 56%, transparent 0 44%, rgba(94, 53, 36, 0.22) 45% 48%, transparent 49%),
+    radial-gradient(ellipse at 50% 48%, transparent 0 47%, rgba(94, 53, 36, 0.18) 48% 51%, transparent 52%),
+    radial-gradient(ellipse at 80% 56%, transparent 0 44%, rgba(94, 53, 36, 0.22) 45% 48%, transparent 49%);
+}
+
+/* Macaron: shells with cream filling */
+body[data-theme="cafe"] .cafe-piece.cafe-macaron .macaron-top,
+body[data-theme="cafe"] .cafe-piece.cafe-macaron .macaron-bottom {
+  left: 17%;
+  width: 66%;
+  height: 29%;
+  border-radius: 999px 999px 36% 36%;
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.36), transparent 22%),
+    linear-gradient(180deg, #f7d7c8, #c98242);
+  border: 2px solid rgba(94, 53, 36, 0.18);
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-macaron .macaron-top {
+  top: 25%;
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-macaron .macaron-cream {
+  left: 18%;
+  top: 51%;
+  width: 64%;
+  height: 12%;
+  border-radius: 999px;
+  background: #fff8ef;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.36);
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-macaron .macaron-bottom {
+  top: 55%;
+  transform: scaleY(-1);
+}
+
+/* Donut: ring with glaze */
+body[data-theme="cafe"] .cafe-piece.cafe-donut .donut-ring {
+  left: 17%;
+  top: 17%;
+  width: 66%;
+  height: 66%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, transparent 0 24%, #ead3bd 25% 36%, transparent 37%),
+    radial-gradient(circle at 36% 28%, rgba(255, 255, 255, 0.46), transparent 16%),
+    linear-gradient(135deg, #7a4a32, #d99a45);
+  border: 2px solid rgba(94, 53, 36, 0.24);
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-donut .donut-glaze {
+  left: 25%;
+  top: 23%;
+  width: 50%;
+  height: 28%;
+  border-radius: 50%;
+  background: rgba(255, 248, 239, 0.74);
+}
+
+/* Coffee beans */
+body[data-theme="cafe"] .cafe-piece.cafe-beans .bean {
+  width: 28%;
+  height: 46%;
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent 44%, rgba(255, 248, 239, 0.22) 45% 55%, transparent 56%),
+    linear-gradient(180deg, #7a4a32, #2c160e);
+  border: 1px solid rgba(255, 248, 239, 0.16);
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-beans .bean-1 {
+  left: 25%;
+  top: 24%;
+  transform: rotate(-24deg);
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-beans .bean-2 {
+  left: 48%;
+  top: 40%;
+  transform: rotate(32deg);
+}
+
+@keyframes cafeFloat {
+  from {
+    transform: translate3d(0, 0, 0) rotate(var(--cafe-rot, 0deg));
+  }
+
+  to {
+    transform: translate3d(var(--cafe-drift-x, 14px), var(--cafe-drift-y, -18px), 0) rotate(calc(var(--cafe-rot, 0deg) + 3deg));
+  }
+}
+
+@keyframes cafeSpin {
+  from {
+    rotate: 0deg;
+  }
+
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes cafeSteamRise {
+  from {
+    transform: translateY(16px) scaleY(0.76);
+    opacity: 0;
+  }
+
+  35% {
+    opacity: 0.70;
+  }
+
+  to {
+    transform: translateY(-24px) scaleY(1.08);
+    opacity: 0;
+  }
+}
