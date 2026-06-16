@@ -74,7 +74,30 @@
     const petalField = document.createElement("div");
     petalField.className = "sakura-petal-field";
 
-    layer.append(moon, branch, lanternLeft, lanternRight, petalField);
+    if (activeThemeKey === "sakura-light") {
+      const ryokanLayer = document.createElement("div");
+      ryokanLayer.className = "sakura-light-ryokan-layer";
+
+      const noren = document.createElement("div");
+      noren.className = "sakura-light-noren";
+
+      const tokonoma = document.createElement("div");
+      tokonoma.className = "sakura-light-tokonoma";
+
+      const teaService = document.createElement("div");
+      teaService.className = "sakura-light-tea-service";
+
+      const steam = document.createElement("div");
+      steam.className = "sakura-light-steam";
+
+      const tatamiMark = document.createElement("div");
+      tatamiMark.className = "sakura-light-tatami-mark";
+
+      ryokanLayer.append(noren, tokonoma, teaService, steam, tatamiMark);
+      layer.append(ryokanLayer, petalField);
+    } else {
+      layer.append(moon, branch, lanternLeft, lanternRight, petalField);
+    }
     document.body.append(layer);
     activeLayer = layer;
 
