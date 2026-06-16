@@ -847,3 +847,249 @@ body[data-theme="sakura-light"] .secondary-button {
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     0 8px 18px rgba(230, 77, 147, 0.14);
 }
+/* Sakura Light readability rescue */
+:root {
+  --sakura-readable-ink: #351f22;
+  --sakura-readable-ink-soft: #57343b;
+  --sakura-readable-muted: #74545a;
+  --sakura-readable-pink: #c92f78;
+  --sakura-readable-cedar: #5f3924;
+  --sakura-readable-cream: #fff8f1;
+}
+
+/* Broad text rescue for dark-theme leftovers */
+body[data-theme="sakura-light"],
+body[data-theme="sakura-light"] .panel,
+body[data-theme="sakura-light"] .main-panel,
+body[data-theme="sakura-light"] .nav-panel,
+body[data-theme="sakura-light"] .right-buffs-panel,
+body[data-theme="sakura-light"] .top-stats-panel,
+body[data-theme="sakura-light"] .chat-panel,
+body[data-theme="sakura-light"] .content-section,
+body[data-theme="sakura-light"] .nami-card,
+body[data-theme="sakura-light"] .care-card,
+body[data-theme="sakura-light"] .task-card,
+body[data-theme="sakura-light"] .zone-card,
+body[data-theme="sakura-light"] .combat-panel,
+body[data-theme="sakura-light"] .combat-enemy-card,
+body[data-theme="sakura-light"] .placeholder-copy,
+body[data-theme="sakura-light"] .settings-card,
+body[data-theme="sakura-light"] .right-buff-group,
+body[data-theme="sakura-light"] .buff-card,
+body[data-theme="sakura-light"] .wardrobe-panel,
+body[data-theme="sakura-light"] .equipment-card,
+body[data-theme="sakura-light"] .inventory-item-card {
+  color: var(--sakura-readable-ink-soft) !important;
+}
+
+/* Headings and section labels */
+body[data-theme="sakura-light"] h1,
+body[data-theme="sakura-light"] h2,
+body[data-theme="sakura-light"] h3,
+body[data-theme="sakura-light"] strong {
+  color: var(--sakura-readable-ink) !important;
+}
+
+body[data-theme="sakura-light"] .eyebrow,
+body[data-theme="sakura-light"] .panel-title,
+body[data-theme="sakura-light"] .collapse-label,
+body[data-theme="sakura-light"] .mini-label,
+body[data-theme="sakura-light"] .task-card h2,
+body[data-theme="sakura-light"] .wardrobe-panel-titlebar h2,
+body[data-theme="sakura-light"] .right-buff-group h3 {
+  color: var(--sakura-readable-pink) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Menu rail readability */
+body[data-theme="sakura-light"] .menu-status-card,
+body[data-theme="sakura-light"] .menu-status-card p,
+body[data-theme="sakura-light"] .menu-status-card span,
+body[data-theme="sakura-light"] .menu-status-card strong,
+body[data-theme="sakura-light"] .server-clock,
+body[data-theme="sakura-light"] #server-time,
+body[data-theme="sakura-light"] #online-users {
+  color: var(--sakura-readable-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-icon,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-label {
+  color: var(--sakura-readable-ink-soft) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item.active,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item.active .nav-icon,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item.active .nav-label {
+  color: #5a1734 !important;
+}
+
+/* Top rail readability */
+body[data-theme="sakura-light"] .top-stats-panel,
+body[data-theme="sakura-light"] .top-stats-panel *,
+body[data-theme="sakura-light"] .top-stats-compact,
+body[data-theme="sakura-light"] .top-stats-compact *,
+body[data-theme="sakura-light"] .top-user-info,
+body[data-theme="sakura-light"] .top-user-info *,
+body[data-theme="sakura-light"] .stat-group.compact,
+body[data-theme="sakura-light"] .stat-group.compact *,
+body[data-theme="sakura-light"] .stat-lines,
+body[data-theme="sakura-light"] .stat-lines *,
+body[data-theme="sakura-light"] .compact-grid-lines,
+body[data-theme="sakura-light"] .compact-grid-lines * {
+  color: var(--sakura-readable-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .top-stats-panel h2,
+body[data-theme="sakura-light"] .stat-group.compact h2 {
+  color: var(--sakura-readable-pink) !important;
+}
+
+/* Work cards and task metadata */
+body[data-theme="sakura-light"] .task-card,
+body[data-theme="sakura-light"] .task-card *,
+body[data-theme="sakura-light"] .task-meta,
+body[data-theme="sakura-light"] .task-meta *,
+body[data-theme="sakura-light"] .task-level,
+body[data-theme="sakura-light"] .task-xp,
+body[data-theme="sakura-light"] .task-generates {
+  color: var(--sakura-readable-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .task-card h2 {
+  color: var(--sakura-readable-ink) !important;
+}
+
+body[data-theme="sakura-light"] .task-card .task-status {
+  border: 1px solid rgba(201, 47, 120, 0.34);
+  background: rgba(255, 224, 236, 0.92) !important;
+  color: #6a2142 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .task-card.active .task-status {
+  border-color: rgba(95, 57, 36, 0.28);
+  background: linear-gradient(90deg, #e64d93, #ffdca8) !important;
+  color: #3f1b2b !important;
+}
+
+body[data-theme="sakura-light"] .task-card button {
+  color: #3f1b2b !important;
+  text-shadow: none !important;
+}
+
+/* Home and care cards */
+body[data-theme="sakura-light"] .nami-message,
+body[data-theme="sakura-light"] .nami-message *,
+body[data-theme="sakura-light"] .nami-need-card,
+body[data-theme="sakura-light"] .nami-need-card *,
+body[data-theme="sakura-light"] .nami-progression-card,
+body[data-theme="sakura-light"] .nami-progression-card *,
+body[data-theme="sakura-light"] #care-stats,
+body[data-theme="sakura-light"] #care-stats *,
+body[data-theme="sakura-light"] .care-button,
+body[data-theme="sakura-light"] .care-button * {
+  color: var(--sakura-readable-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .care-button {
+  color: #4a1629 !important;
+}
+
+/* Right buffs */
+body[data-theme="sakura-light"] .right-buffs-panel,
+body[data-theme="sakura-light"] .right-buffs-panel *,
+body[data-theme="sakura-light"] .right-buff-group,
+body[data-theme="sakura-light"] .right-buff-group *,
+body[data-theme="sakura-light"] .buff-card,
+body[data-theme="sakura-light"] .buff-card * {
+  color: var(--sakura-readable-ink-soft) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .buff-card strong,
+body[data-theme="sakura-light"] .right-buff-group h3 {
+  color: var(--sakura-readable-pink) !important;
+}
+
+/* Chat */
+body[data-theme="sakura-light"] .chat-log,
+body[data-theme="sakura-light"] .chat-log *,
+body[data-theme="sakura-light"] .chat-message,
+body[data-theme="sakura-light"] .chat-text,
+body[data-theme="sakura-light"] .chat-time,
+body[data-theme="sakura-light"] .chat-emote-text {
+  color: var(--sakura-readable-ink-soft) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .chat-time {
+  color: var(--sakura-readable-pink) !important;
+}
+
+body[data-theme="sakura-light"] .player-name-button,
+body[data-theme="sakura-light"] .chat-message .player-name-button {
+  color: #6a2142 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .chat-tab {
+  color: var(--sakura-readable-ink-soft) !important;
+}
+
+body[data-theme="sakura-light"] .chat-tab.active {
+  color: #4a1629 !important;
+}
+
+/* Form and controls */
+body[data-theme="sakura-light"] input,
+body[data-theme="sakura-light"] select,
+body[data-theme="sakura-light"] textarea,
+body[data-theme="sakura-light"] button {
+  color: var(--sakura-readable-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] input::placeholder,
+body[data-theme="sakura-light"] textarea::placeholder {
+  color: rgba(87, 52, 59, 0.68) !important;
+}
+
+/* Bars: labels readable, fills remain colorful */
+body[data-theme="sakura-light"] .meter-label,
+body[data-theme="sakura-light"] #current-action-label,
+body[data-theme="sakura-light"] #playdeck-hp-label,
+body[data-theme="sakura-light"] #playdeck-xp-label {
+  color: var(--sakura-readable-ink) !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.75),
+    0 0 5px rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Inventory / wardrobe misc text */
+body[data-theme="sakura-light"] .wardrobe-panel,
+body[data-theme="sakura-light"] .wardrobe-panel *,
+body[data-theme="sakura-light"] .equipment-card,
+body[data-theme="sakura-light"] .equipment-card *,
+body[data-theme="sakura-light"] .inventory-item-card,
+body[data-theme="sakura-light"] .inventory-item-card *,
+body[data-theme="sakura-light"] .gear-card-name,
+body[data-theme="sakura-light"] .gear-level-tag,
+body[data-theme="sakura-light"] .gear-tailoring-tag,
+body[data-theme="sakura-light"] .wardrobe-bonus-list,
+body[data-theme="sakura-light"] .wardrobe-bonus-list * {
+  color: var(--sakura-readable-ink) !important;
+  text-shadow: none !important;
+}
+
+/* Keep intentionally colored accents pink */
+body[data-theme="sakura-light"] .pink,
+body[data-theme="sakura-light"] .accent,
+body[data-theme="sakura-light"] a {
+  color: var(--sakura-readable-pink) !important;
+}
