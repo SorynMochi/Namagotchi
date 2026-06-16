@@ -713,3 +713,123 @@ body[data-theme="tokyo-night"] .tokyo-rain-drop {
   background:
     linear-gradient(180deg, transparent, rgba(82,236,255,0.86), rgba(255,70,210,0.46), transparent);
 }
+/* Tokyo Night pass 3: cleanup and contrast rescue */
+
+/* No decorative vertical bars. Keep only soft glow blobs. */
+body[data-theme="tokyo-night"] .tokyo-night-signs {
+  background:
+    radial-gradient(circle at 78vw 12vh, rgba(159,107,255,0.24), transparent 7rem),
+    radial-gradient(circle at 18vw 78vh, rgba(255,70,210,0.14), transparent 7rem),
+    radial-gradient(circle at 52vw 92vh, rgba(82,236,255,0.12), transparent 9rem),
+    radial-gradient(circle at 90vw 44vh, rgba(82,236,255,0.16), transparent 6rem) !important;
+}
+
+/* Remove the decorative sign boxes entirely */
+body[data-theme="tokyo-night"] .tokyo-night-signs::before,
+body[data-theme="tokyo-night"] .tokyo-night-signs::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Buff rail should be clean neon glass, no grid weirdness showing through */
+body[data-theme="tokyo-night"] .right-buffs-panel,
+body[data-theme="tokyo-night"] .right-buff-group,
+body[data-theme="tokyo-night"] .buff-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), transparent 18%),
+    radial-gradient(circle at 100% 0%, rgba(255,70,210,0.10), transparent 9rem),
+    radial-gradient(circle at 0% 100%, rgba(82,236,255,0.08), transparent 10rem),
+    rgba(4, 10, 28, 0.94) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 0 0 1px rgba(82,236,255,0.12),
+    0 0 20px rgba(82,236,255,0.08),
+    0 0 26px rgba(255,70,210,0.06) !important;
+}
+
+/* Make sure no panel sheen/grid overlay lands on the buffs */
+body[data-theme="tokyo-night"] .right-buffs-panel::before,
+body[data-theme="tokyo-night"] .right-buff-group::before,
+body[data-theme="tokyo-night"] .buff-card::before,
+body[data-theme="tokyo-night"] .right-buffs-panel::after,
+body[data-theme="tokyo-night"] .right-buff-group::after,
+body[data-theme="tokyo-night"] .buff-card::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Brighter, more readable neon buttons */
+body[data-theme="tokyo-night"] .task-card button,
+body[data-theme="tokyo-night"] .care-button,
+body[data-theme="tokyo-night"] .secondary-button,
+body[data-theme="tokyo-night"] .chat-form button[type="submit"] {
+  border: 1px solid rgba(255,255,255,0.40) !important;
+  background:
+    linear-gradient(
+      90deg,
+      #8ff8ff 0%,
+      #63e8ff 18%,
+      #7ca8ff 38%,
+      #9d7dff 62%,
+      #ff77e7 100%
+    ) !important;
+  color: #07101d !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.28) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.38),
+    0 0 18px rgba(82,236,255,0.24),
+    0 0 26px rgba(255,70,210,0.16) !important;
+}
+
+/* Hover/focus makes them pop even harder */
+body[data-theme="tokyo-night"] .task-card button:hover,
+body[data-theme="tokyo-night"] .care-button:hover,
+body[data-theme="tokyo-night"] .secondary-button:hover,
+body[data-theme="tokyo-night"] .chat-form button[type="submit"]:hover,
+body[data-theme="tokyo-night"] .task-card button:focus-visible,
+body[data-theme="tokyo-night"] .care-button:focus-visible,
+body[data-theme="tokyo-night"] .secondary-button:focus-visible,
+body[data-theme="tokyo-night"] .chat-form button[type="submit"]:focus-visible {
+  filter: brightness(1.08) saturate(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.42),
+    0 0 24px rgba(82,236,255,0.30),
+    0 0 32px rgba(255,70,210,0.20) !important;
+}
+
+/* Active task button also stays bright/readable */
+body[data-theme="tokyo-night"] .task-card.active button {
+  background:
+    linear-gradient(
+      90deg,
+      #9cfaff 0%,
+      #72ecff 16%,
+      #93a2ff 42%,
+      #ae88ff 66%,
+      #ff82ea 100%
+    ) !important;
+  color: #06101c !important;
+}
+
+/* Care action labels should stay readable on brighter fills */
+body[data-theme="tokyo-night"] .care-button,
+body[data-theme="tokyo-night"] .task-card button {
+  font-weight: 700 !important;
+}
+
+/* Keep the lobby/chat tabs readable too */
+body[data-theme="tokyo-night"] .chat-tab {
+  color: #dcecff !important;
+}
+
+body[data-theme="tokyo-night"] .chat-tab.active {
+  color: #06101c !important;
+}
+
+/* Buff text remains crisp */
+body[data-theme="tokyo-night"] .right-buffs-panel,
+body[data-theme="tokyo-night"] .right-buffs-panel *,
+body[data-theme="tokyo-night"] .right-buff-group,
+body[data-theme="tokyo-night"] .right-buff-group * {
+  text-shadow: none !important;
+}
