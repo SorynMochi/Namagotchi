@@ -40,7 +40,7 @@
 
     document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night");
     document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night");
-    document.querySelectorAll(".tokyo-night-rail-signs").forEach((node) => node.remove());
+    document.querySelectorAll(".tokyo-night-rail-signs, .tokyo-night-left-signs").forEach((node) => node.remove());
   }
 
   function setActiveThemeEffect(themeKey) {
