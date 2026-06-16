@@ -38,8 +38,8 @@
       activeLayer = null;
     }
 
-    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night");
-    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night");
+    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy");
+    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy");
     document.querySelectorAll(".tokyo-night-rail-signs, .tokyo-night-left-signs").forEach((node) => node.remove());
   }
 
@@ -365,6 +365,63 @@
 
       navPanel.insertAdjacentElement("afterend", leftSigns);
     }
+    document.body.append(layer);
+    activeLayer = layer;
+  }
+
+  function startCandyThemeEffect() {
+    document.documentElement.classList.add("theme-effect-candy");
+    document.body?.classList.add("theme-effect-candy");
+
+    const layer = document.createElement("div");
+    layer.className = "theme-effects-layer theme-effects-candy";
+    layer.setAttribute("aria-hidden", "true");
+
+    const candyCloud = document.createElement("div");
+    candyCloud.className = "candy-cloud";
+
+    const candyShopAwning = document.createElement("div");
+    candyShopAwning.className = "candy-shop-awning";
+
+    const lollipopLeft = document.createElement("div");
+    lollipopLeft.className = "candy-lollipop candy-lollipop-left";
+
+    const lollipopRight = document.createElement("div");
+    lollipopRight.className = "candy-lollipop candy-lollipop-right";
+
+    const chocolateDrip = document.createElement("div");
+    chocolateDrip.className = "candy-chocolate-drip";
+
+    const gumdropRow = document.createElement("div");
+    gumdropRow.className = "candy-gumdrop-row";
+
+    for (let index = 0; index < 18; index += 1) {
+      const gumdrop = document.createElement("span");
+      gumdrop.className = `candy-gumdrop gumdrop-${(index % 6) + 1}`;
+      gumdropRow.append(gumdrop);
+    }
+
+    const sprinkleField = document.createElement("div");
+    sprinkleField.className = "candy-sprinkle-field";
+
+    if (!reduceMotionQuery.matches) {
+      for (let index = 0; index < 95; index += 1) {
+        const sprinkle = document.createElement("span");
+        sprinkle.className = `candy-sprinkle sprinkle-${(index % 7) + 1}`;
+        sprinkle.style.setProperty("--sprinkle-left", `${randomBetween(-4, 104).toFixed(2)}vw`);
+        sprinkle.style.setProperty("--sprinkle-top", `${randomBetween(-12, 104).toFixed(2)}vh`);
+        sprinkle.style.setProperty("--sprinkle-size", `${randomBetween(5, 13).toFixed(1)}px`);
+        sprinkle.style.setProperty("--sprinkle-speed", `${randomBetween(5.5, 13).toFixed(2)}s`);
+        sprinkle.style.setProperty("--sprinkle-delay", `${randomBetween(-12, 0).toFixed(2)}s`);
+        sprinkle.style.setProperty("--sprinkle-rotate", `${randomBetween(-120, 120).toFixed(1)}deg`);
+        sprinkle.style.setProperty("--sprinkle-opacity", randomBetween(0.26, 0.72).toFixed(2));
+        sprinkleField.append(sprinkle);
+      }
+    } else {
+      layer.classList.add("theme-effects-reduced-motion");
+    }
+
+    layer.append(candyCloud, candyShopAwning, lollipopLeft, lollipopRight, chocolateDrip, gumdropRow, sprinkleField);
     document.body.append(layer);
     activeLayer = layer;
   }

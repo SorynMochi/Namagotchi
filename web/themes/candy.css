@@ -1,0 +1,804 @@
+﻿:root {
+  color-scheme: light;
+
+  --bg-0: #fff3fb;
+  --bg-1: #ffe0f4;
+  --bg-2: #bdf8ff;
+
+  --panel: rgba(255, 244, 250, 0.88);
+  --panel-soft: rgba(255, 236, 247, 0.78);
+  --panel-deep: rgba(255, 222, 240, 0.82);
+
+  --line: rgba(255, 76, 166, 0.48);
+  --line-bright: rgba(99, 226, 255, 0.74);
+
+  --text: #3a1b29;
+  --text-soft: #6a3850;
+  --muted: #925c74;
+
+  --pink: #ff4ca6;
+  --pink-soft: #ffd3ec;
+  --cyan: #63e2ff;
+  --cyan-soft: #dcfbff;
+  --violet: #a56cff;
+  --violet-soft: #eadcff;
+  --yellow: #ffe46b;
+  --orange: #ff9a4f;
+  --green: #73e58d;
+  --danger: #ff4c77;
+  --cream: #fff4bf;
+
+  --candy-chocolate: #5b2c24;
+  --candy-dark-chocolate: #361914;
+  --candy-caramel: #d9863d;
+  --candy-vanilla: #fff4cf;
+  --candy-strawberry: #ff69b8;
+  --candy-blue-raspberry: #4bdcff;
+  --candy-grape: #9b6cff;
+  --candy-lime: #8bf06c;
+  --candy-lemon: #ffe45d;
+
+  --shadow:
+    0 20px 54px rgba(139, 48, 86, 0.24),
+    0 0 34px rgba(255, 76, 166, 0.14),
+    0 0 38px rgba(99, 226, 255, 0.10);
+
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+
+  --theme-page-glow-pink: rgba(255, 76, 166, 0.34);
+  --theme-page-glow-cyan: rgba(99, 226, 255, 0.30);
+  --theme-page-glow-violet: rgba(165, 108, 255, 0.24);
+  --theme-page-gradient-top: #fff5fc;
+  --theme-page-gradient-bottom: #ffd8ef;
+
+  --theme-panel-overlay: rgba(255, 255, 255, 0.34);
+  --theme-panel-border-sheen-pink: rgba(255, 76, 166, 0.42);
+  --theme-panel-border-sheen-cyan: rgba(99, 226, 255, 0.42);
+  --theme-panel-title-bg: rgba(255, 76, 166, 0.10);
+
+  --theme-card-border-cyan: rgba(99, 226, 255, 0.38);
+  --theme-card-bg-overlay: rgba(255, 255, 255, 0.28);
+  --theme-card-bg-deep: rgba(255, 244, 250, 0.82);
+  --theme-card-bg-deep-solid: rgba(255, 244, 250, 0.88);
+  --theme-card-inner-highlight: rgba(255, 255, 255, 0.52);
+
+  --theme-nav-hover-border: rgba(99, 226, 255, 0.72);
+  --theme-nav-hover-bg: rgba(99, 226, 255, 0.16);
+  --theme-nav-hover-text: #361914;
+  --theme-nav-active-border: rgba(255, 76, 166, 0.86);
+  --theme-nav-active-bg: linear-gradient(135deg, rgba(255, 76, 166, 0.38), rgba(255, 228, 107, 0.28), rgba(99, 226, 255, 0.26));
+  --theme-nav-active-text: #361914;
+  --theme-nav-active-shadow: 0 0 22px rgba(255, 76, 166, 0.28), 0 0 26px rgba(99, 226, 255, 0.16);
+
+  --theme-chat-text: #3a1b29;
+  --theme-chat-name: #c92277;
+  --theme-chat-form-bg: rgba(255, 244, 250, 0.82);
+  --theme-chat-input-border: rgba(255, 76, 166, 0.42);
+  --theme-chat-input-bg: rgba(255, 255, 255, 0.72);
+  --theme-chat-input-placeholder: rgba(106, 56, 80, 0.62);
+  --theme-chat-submit-bg: #ff69b8;
+  --theme-chat-submit-text: #35151f;
+
+  --theme-button-primary-border: rgba(91, 44, 36, 0.24);
+  --theme-button-primary-bg: linear-gradient(90deg, #ff4ca6 0%, #ffe46b 28%, #63e2ff 58%, #a56cff 100%);
+  --theme-button-primary-text: #35151f;
+  --theme-button-primary-shadow: 0 8px 20px rgba(255, 76, 166, 0.22), 0 0 18px rgba(99, 226, 255, 0.18);
+
+  --theme-button-secondary-border: rgba(165, 108, 255, 0.42);
+  --theme-button-secondary-bg: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,211,236,0.88));
+  --theme-button-secondary-text: #4b1d36;
+
+  --theme-care-button-border: rgba(91, 44, 36, 0.22);
+  --theme-care-button-bg: linear-gradient(90deg, #63e2ff 0%, #ff69b8 48%, #ffe46b 100%);
+  --theme-care-button-text: #35151f;
+
+  --theme-work-active-border: rgba(91, 44, 36, 0.32);
+  --theme-work-active-glow: rgba(255, 76, 166, 0.24);
+  --theme-work-active-bg: rgba(255, 222, 240, 0.92);
+  --theme-work-active-pill-bg: linear-gradient(90deg, #ff4ca6, #ffe46b, #63e2ff);
+  --theme-work-active-pill-text: #35151f;
+  --theme-work-active-button-bg: linear-gradient(90deg, #63e2ff, #ff69b8, #ffe46b);
+  --theme-work-active-button-border: rgba(91, 44, 36, 0.28);
+  --theme-work-active-button-text: #35151f;
+  --theme-work-active-button-shadow: 0 8px 20px rgba(255, 76, 166, 0.22);
+
+  --theme-nami-message-bg: rgba(255, 105, 184, 0.18);
+  --theme-nami-message-text: #4b1d36;
+  --theme-nami-room-stage-bg: #ffe7f5;
+
+  --theme-scrollbar-color: rgba(255, 76, 166, 0.9);
+  --theme-scrollbar-color-main: rgba(99, 226, 255, 0.9);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #ff4ca6, #ffe46b, #63e2ff);
+
+  --theme-tick-fill: linear-gradient(90deg, #ff4ca6, #ffe46b, #63e2ff, #a56cff);
+  --theme-hp-fill: linear-gradient(90deg, #73e58d, #ffe46b, #ff4ca6);
+  --theme-progress-xp-fill: linear-gradient(90deg, #ff69b8, #ffe46b, #63e2ff);
+  --theme-progress-stat-fill: linear-gradient(90deg, #a56cff, #ff4ca6, #63e2ff);
+  --theme-progress-track-border: rgba(91, 44, 36, 0.24);
+  --theme-progress-track-bg: rgba(255, 255, 255, 0.68);
+  --theme-progress-fill-shadow: 0 0 14px rgba(255, 76, 166, 0.24), 0 0 18px rgba(99, 226, 255, 0.16);
+}
+
+/* Candy Store: gumdrop wallpaper, chocolate depth, sugar glass */
+body[data-theme="candy"] {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 76, 166, 0.34), transparent 20rem),
+    radial-gradient(circle at 86% 10%, rgba(99, 226, 255, 0.30), transparent 22rem),
+    radial-gradient(circle at 52% 92%, rgba(255, 228, 107, 0.32), transparent 24rem),
+    linear-gradient(180deg, #fff7fd 0%, #ffe3f3 50%, #ffd2e8 100%);
+  color: var(--text);
+}
+
+body[data-theme="candy"]::before {
+  background:
+    radial-gradient(circle at 20px 20px, rgba(255,76,166,0.16) 0 7px, transparent 8px),
+    radial-gradient(circle at 58px 46px, rgba(99,226,255,0.16) 0 7px, transparent 8px),
+    radial-gradient(circle at 96px 18px, rgba(255,228,107,0.18) 0 7px, transparent 8px),
+    radial-gradient(circle at 132px 52px, rgba(165,108,255,0.14) 0 7px, transparent 8px),
+    linear-gradient(135deg, rgba(255,255,255,0.28), transparent 42%, rgba(91,44,36,0.035));
+  background-size: 152px 78px, 152px 78px, 152px 78px, 152px 78px, auto;
+  opacity: 1;
+}
+
+body[data-theme="candy"]::after {
+  content: "";
+  position: fixed;
+  inset: auto 0 0;
+  height: 20vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.34;
+  background:
+    radial-gradient(ellipse at 18% 100%, rgba(91,44,36,0.24), transparent 18rem),
+    radial-gradient(ellipse at 74% 100%, rgba(255,76,166,0.18), transparent 18rem),
+    linear-gradient(180deg, transparent, rgba(91,44,36,0.16));
+}
+
+/* Sugar glass panels with candy-stripe rims */
+body[data-theme="candy"] .panel,
+body[data-theme="candy"] .main-panel,
+body[data-theme="candy"] .chat-panel,
+body[data-theme="candy"] .top-stats-panel,
+body[data-theme="candy"] .nav-panel,
+body[data-theme="candy"] .right-buffs-panel,
+body[data-theme="candy"] .nami-card,
+body[data-theme="candy"] .care-card,
+body[data-theme="candy"] .zone-list,
+body[data-theme="candy"] .combat-panel,
+body[data-theme="candy"] .task-card,
+body[data-theme="candy"] .placeholder-copy,
+body[data-theme="candy"] .settings-card,
+body[data-theme="candy"] .wardrobe-panel,
+body[data-theme="candy"] .equipment-card,
+body[data-theme="candy"] .inventory-item-card,
+body[data-theme="candy"] .right-buff-group {
+  border: 2px solid transparent !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.18)) padding-box,
+    repeating-linear-gradient(
+      135deg,
+      #ff4ca6 0 12px,
+      #fff4bf 12px 24px,
+      #63e2ff 24px 36px,
+      #a56cff 36px 48px
+    ) border-box,
+    rgba(255, 244, 250, 0.86);
+  color: var(--text) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.72),
+    0 0 0 4px rgba(91,44,36,0.10),
+    0 16px 34px rgba(139,48,86,0.18),
+    0 0 24px rgba(255,76,166,0.10),
+    0 0 24px rgba(99,226,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.24);
+}
+
+/* Chocolate title strips */
+body[data-theme="candy"] .panel-title,
+body[data-theme="candy"] .eyebrow,
+body[data-theme="candy"] .top-stats-panel h2,
+body[data-theme="candy"] .stat-group.compact h2,
+body[data-theme="candy"] h2 {
+  color: #8a2559 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.48);
+}
+
+/* Top rail: candy counter display */
+body[data-theme="candy"] .top-stats-compact {
+  background:
+    linear-gradient(90deg, rgba(255,76,166,0.18), rgba(255,228,107,0.15), rgba(99,226,255,0.16), rgba(165,108,255,0.14)),
+    linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,236,247,0.78)) !important;
+}
+
+/* Menu tiles as wrapped candies */
+body[data-theme="candy"] .main-nav.menu-grid .nav-item {
+  border: 1px solid rgba(91,44,36,0.18) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.72), transparent 2.4rem),
+    linear-gradient(135deg, rgba(255,211,236,0.94), rgba(220,251,255,0.88)) !important;
+  color: #4b1d36 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.86),
+    0 7px 16px rgba(139,48,86,0.12) !important;
+}
+
+body[data-theme="candy"] .main-nav.menu-grid .nav-item.active {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.82), transparent 2.6rem),
+    linear-gradient(135deg, #ff9ccd, #ffe46b 48%, #63e2ff) !important;
+  color: #35151f !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 0 18px rgba(255,76,166,0.24),
+    0 0 22px rgba(99,226,255,0.16) !important;
+}
+
+/* Candy buttons */
+body[data-theme="candy"] .task-card button,
+body[data-theme="candy"] .care-button,
+body[data-theme="candy"] .secondary-button,
+body[data-theme="candy"] .chat-form button[type="submit"] {
+  border: 1px solid rgba(91,44,36,0.24) !important;
+  background:
+    linear-gradient(90deg, #63e2ff 0%, #ff69b8 38%, #ffe46b 70%, #a56cff 100%) !important;
+  color: #35151f !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.82),
+    0 8px 18px rgba(255,76,166,0.18),
+    0 0 18px rgba(99,226,255,0.12) !important;
+}
+
+/* Candy bars and tracks */
+body[data-theme="candy"] .meter-track,
+body[data-theme="candy"] .stat-bar,
+body[data-theme="candy"] .bar,
+body[data-theme="candy"] .task-xp-bar {
+  border: 1px solid rgba(91,44,36,0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(91,44,36,0.10), rgba(255,255,255,0.74)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.82),
+    inset 0 0 14px rgba(91,44,36,0.06) !important;
+}
+
+body[data-theme="candy"] .meter-fill,
+body[data-theme="candy"] .fill,
+body[data-theme="candy"] .stat-fill,
+body[data-theme="candy"] .task-xp-fill,
+body[data-theme="candy"] .care-button-progress-fill {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.38),
+    0 0 12px rgba(255,76,166,0.20),
+    0 0 14px rgba(99,226,255,0.14) !important;
+}
+
+/* Active task gets chocolate strawberry treatment */
+body[data-theme="candy"] .task-card.active {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(255,228,107,0.34), transparent 8rem),
+    linear-gradient(180deg, rgba(255,255,255,0.58), transparent 44px),
+    rgba(255, 225, 241, 0.92) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.82),
+    0 0 0 4px rgba(91,44,36,0.12),
+    0 0 24px rgba(255,76,166,0.24),
+    0 0 30px rgba(255,228,107,0.14) !important;
+}
+
+body[data-theme="candy"] .task-card.active .task-status {
+  background: linear-gradient(90deg, #5b2c24, #ff69b8, #ffe46b) !important;
+  color: #fff4cf !important;
+}
+
+/* Chat like candy receipt paper */
+body[data-theme="candy"] .chat-panel {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.58), transparent 28%),
+    radial-gradient(circle at 14% 100%, rgba(255,76,166,0.18), transparent 12rem),
+    radial-gradient(circle at 88% 100%, rgba(99,226,255,0.16), transparent 13rem),
+    rgba(255, 244, 250, 0.88) !important;
+}
+
+body[data-theme="candy"] .chat-tab.active {
+  background: linear-gradient(90deg, #ff69b8, #ffe46b, #63e2ff) !important;
+  color: #35151f !important;
+}
+
+body[data-theme="candy"] .chat-message,
+body[data-theme="candy"] .chat-log,
+body[data-theme="candy"] .chat-log * {
+  color: #4b1d36 !important;
+}
+
+body[data-theme="candy"] .chat-time,
+body[data-theme="candy"] .player-name-button {
+  color: #c92277 !important;
+}
+
+/* Nami message: candy label */
+body[data-theme="candy"] .nami-message,
+body[data-theme="candy"] .nami-message-log-card,
+body[data-theme="candy"] .nami-message-log {
+  border-color: rgba(91,44,36,0.18) !important;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255,255,255,0.64), transparent 7rem),
+    linear-gradient(180deg, rgba(255,211,236,0.92), rgba(255,156,205,0.86)) !important;
+  color: #4b1d36 !important;
+}
+
+/* Candy effects layer */
+.theme-effects-candy {
+  z-index: 9998;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.candy-cloud {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,76,166,0.18), transparent 12rem),
+    radial-gradient(circle at 88% 18%, rgba(99,226,255,0.18), transparent 13rem),
+    radial-gradient(circle at 52% 82%, rgba(255,228,107,0.16), transparent 16rem);
+  mix-blend-mode: multiply;
+}
+
+.candy-shop-awning {
+  position: absolute;
+  left: 11vw;
+  right: 9vw;
+  top: 0;
+  height: 46px;
+  opacity: 0.26;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #ff4ca6 0 32px,
+      #fff4bf 32px 64px,
+      #63e2ff 64px 96px,
+      #a56cff 96px 128px
+    );
+  border-bottom: 3px solid rgba(91,44,36,0.16);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.candy-chocolate-drip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 82px;
+  opacity: 0.16;
+  background:
+    radial-gradient(circle at 8% 82px, #5b2c24 0 20px, transparent 21px),
+    radial-gradient(circle at 26% 70px, #5b2c24 0 16px, transparent 17px),
+    radial-gradient(circle at 51% 88px, #5b2c24 0 24px, transparent 25px),
+    radial-gradient(circle at 76% 68px, #5b2c24 0 18px, transparent 19px),
+    linear-gradient(180deg, #5b2c24, #361914);
+  mask-image: linear-gradient(180deg, #000, transparent 96%);
+}
+
+.candy-lollipop {
+  position: absolute;
+  width: clamp(100px, 12vw, 190px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0.22;
+  background:
+    conic-gradient(
+      from 20deg,
+      #ff4ca6 0 12%,
+      #fff4bf 12% 24%,
+      #63e2ff 24% 36%,
+      #a56cff 36% 48%,
+      #ff4ca6 48% 60%,
+      #fff4bf 60% 72%,
+      #63e2ff 72% 84%,
+      #a56cff 84% 100%
+    );
+  box-shadow:
+    0 0 28px rgba(255,76,166,0.18),
+    inset 0 0 28px rgba(255,255,255,0.24);
+  animation: candySpin 18s linear infinite;
+}
+
+.candy-lollipop::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 86%;
+  width: 8px;
+  height: 130px;
+  border-radius: 999px;
+  background: rgba(91,44,36,0.24);
+  transform: translateX(-50%) rotate(-8deg);
+}
+
+.candy-lollipop-left {
+  left: 2vw;
+  bottom: 5vh;
+}
+
+.candy-lollipop-right {
+  right: 2vw;
+  bottom: 8vh;
+  animation-direction: reverse;
+}
+
+@keyframes candySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.candy-gumdrop-row {
+  position: absolute;
+  left: 10vw;
+  right: 8vw;
+  bottom: 0;
+  height: 90px;
+  display: flex;
+  align-items: end;
+  justify-content: space-around;
+  opacity: 0.28;
+}
+
+.candy-gumdrop {
+  width: 44px;
+  height: 34px;
+  border-radius: 999px 999px 14px 14px;
+  background: currentColor;
+  box-shadow:
+    inset 0 10px 14px rgba(255,255,255,0.34),
+    0 0 16px currentColor;
+  animation: gumdropBounce 5s ease-in-out infinite;
+}
+
+.gumdrop-1 { color: #ff4ca6; }
+.gumdrop-2 { color: #63e2ff; animation-delay: -0.8s; }
+.gumdrop-3 { color: #ffe46b; animation-delay: -1.6s; }
+.gumdrop-4 { color: #a56cff; animation-delay: -2.2s; }
+.gumdrop-5 { color: #73e58d; animation-delay: -3s; }
+.gumdrop-6 { color: #ff9a4f; animation-delay: -3.8s; }
+
+@keyframes gumdropBounce {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+  }
+
+  50% {
+    transform: translateY(-7px) scaleY(1.04);
+  }
+}
+
+.candy-sprinkle-field {
+  position: absolute;
+  inset: 0;
+}
+
+.candy-sprinkle {
+  position: absolute;
+  left: var(--sprinkle-left);
+  top: var(--sprinkle-top);
+  width: calc(var(--sprinkle-size) * 2.4);
+  height: var(--sprinkle-size);
+  border-radius: 999px;
+  opacity: var(--sprinkle-opacity);
+  background: currentColor;
+  transform: rotate(var(--sprinkle-rotate));
+  box-shadow: 0 0 8px currentColor;
+  animation: sprinkleFloat var(--sprinkle-speed) ease-in-out var(--sprinkle-delay) infinite alternate;
+}
+
+.sprinkle-1 { color: #ff4ca6; }
+.sprinkle-2 { color: #63e2ff; }
+.sprinkle-3 { color: #ffe46b; }
+.sprinkle-4 { color: #a56cff; }
+.sprinkle-5 { color: #73e58d; }
+.sprinkle-6 { color: #ff9a4f; }
+.sprinkle-7 { color: #5b2c24; }
+
+@keyframes sprinkleFloat {
+  from {
+    transform: translate3d(0, 0, 0) rotate(var(--sprinkle-rotate));
+  }
+
+  to {
+    transform: translate3d(18px, -18px, 0) rotate(calc(var(--sprinkle-rotate) + 80deg));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candy-lollipop,
+  .candy-gumdrop,
+  .candy-sprinkle {
+    animation: none !important;
+  }
+}
+/* Candy rescue pass: boutique candy shop, not rainbow eye laser */
+
+/* Overall vibe: creamy candy shop with chocolate depth, not full-screen rainbow stripes. */
+body[data-theme="candy"] {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 105, 184, 0.20), transparent 20rem),
+    radial-gradient(circle at 84% 12%, rgba(99, 226, 255, 0.16), transparent 22rem),
+    radial-gradient(circle at 50% 94%, rgba(91, 44, 36, 0.13), transparent 28rem),
+    linear-gradient(180deg, #fff7fb 0%, #ffe8f3 46%, #f8d3df 100%) !important;
+  color: #3a1b29 !important;
+}
+
+/* Replace the aggressive rainbow wallpaper with soft sprinkles and candy-shop warmth. */
+body[data-theme="candy"]::before {
+  background:
+    radial-gradient(circle at 24px 22px, rgba(255, 76, 166, 0.13) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 74px 52px, rgba(99, 226, 255, 0.12) 0 4px, transparent 4.5px),
+    radial-gradient(circle at 124px 28px, rgba(255, 228, 107, 0.14) 0 4px, transparent 4.5px),
+    linear-gradient(135deg, rgba(255,255,255,0.32), transparent 42%, rgba(91,44,36,0.045)) !important;
+  background-size: 148px 84px, 148px 84px, 148px 84px, auto !important;
+  opacity: 1 !important;
+}
+
+/* Warm chocolate base at bottom, subtle. */
+body[data-theme="candy"]::after {
+  height: 22vh !important;
+  opacity: 0.22 !important;
+  background:
+    radial-gradient(ellipse at 20% 100%, rgba(91,44,36,0.22), transparent 18rem),
+    radial-gradient(ellipse at 76% 100%, rgba(255,105,184,0.13), transparent 18rem),
+    linear-gradient(180deg, transparent, rgba(91,44,36,0.12)) !important;
+}
+
+/* Main panels: creamy vanilla surfaces with thin candy-striped rims only. */
+body[data-theme="candy"] .panel,
+body[data-theme="candy"] .main-panel,
+body[data-theme="candy"] .top-stats-panel,
+body[data-theme="candy"] .nav-panel,
+body[data-theme="candy"] .right-buffs-panel,
+body[data-theme="candy"] .nami-card,
+body[data-theme="candy"] .care-card,
+body[data-theme="candy"] .zone-list,
+body[data-theme="candy"] .combat-panel,
+body[data-theme="candy"] .task-card,
+body[data-theme="candy"] .placeholder-copy,
+body[data-theme="candy"] .settings-card,
+body[data-theme="candy"] .wardrobe-panel,
+body[data-theme="candy"] .equipment-card,
+body[data-theme="candy"] .inventory-item-card,
+body[data-theme="candy"] .right-buff-group {
+  border: 2px solid transparent !important;
+  background:
+    linear-gradient(180deg, rgba(255,252,246,0.94), rgba(255,232,244,0.90)) padding-box,
+    repeating-linear-gradient(
+      135deg,
+      #ff69b8 0 10px,
+      #fff4bf 10px 20px,
+      #63e2ff 20px 30px,
+      #a56cff 30px 40px
+    ) border-box !important;
+  background-clip: padding-box, border-box !important;
+  color: #3a1b29 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.78),
+    0 0 0 3px rgba(91,44,36,0.06),
+    0 12px 26px rgba(139,48,86,0.12),
+    0 0 18px rgba(255,76,166,0.08) !important;
+}
+
+/* Main content area gets a smoother candy-shop case look. */
+body[data-theme="candy"] .main-panel {
+  background:
+    radial-gradient(circle at 88% 6%, rgba(255, 228, 107, 0.18), transparent 12rem) padding-box,
+    linear-gradient(180deg, rgba(255,252,246,0.96), rgba(255,234,246,0.92)) padding-box,
+    repeating-linear-gradient(
+      135deg,
+      #ff69b8 0 10px,
+      #fff4bf 10px 20px,
+      #63e2ff 20px 30px,
+      #a56cff 30px 40px
+    ) border-box !important;
+  background-clip: padding-box, padding-box, border-box !important;
+}
+
+/* Top rail: less rainbow, more candy counter label. */
+body[data-theme="candy"] .top-stats-compact {
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.74), rgba(255,232,244,0.74)),
+    radial-gradient(circle at 0% 0%, rgba(255,105,184,0.18), transparent 12rem) !important;
+}
+
+/* Headings: readable chocolate/strawberry instead of washed white. */
+body[data-theme="candy"] h1,
+body[data-theme="candy"] h2,
+body[data-theme="candy"] h3,
+body[data-theme="candy"] .panel-title,
+body[data-theme="candy"] .eyebrow,
+body[data-theme="candy"] .top-stats-panel h2,
+body[data-theme="candy"] .stat-group.compact h2 {
+  color: #9b255f !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.72),
+    0 0 10px rgba(255,105,184,0.12) !important;
+}
+
+/* General text readability. */
+body[data-theme="candy"] p,
+body[data-theme="candy"] span,
+body[data-theme="candy"] small,
+body[data-theme="candy"] label,
+body[data-theme="candy"] strong {
+  color: inherit;
+}
+
+/* Menu tiles: wrapped candies, but not ghost-pale. */
+body[data-theme="candy"] .main-nav.menu-grid .nav-item {
+  border: 1px solid rgba(91,44,36,0.20) !important;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255,255,255,0.62), transparent 2.4rem),
+    linear-gradient(180deg, rgba(255,246,251,0.96), rgba(255,214,236,0.90)) !important;
+  color: #4b1d36 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.86),
+    0 6px 14px rgba(139,48,86,0.10) !important;
+}
+
+body[data-theme="candy"] .main-nav.menu-grid .nav-icon,
+body[data-theme="candy"] .main-nav.menu-grid .nav-label {
+  color: #8b285c !important;
+}
+
+body[data-theme="candy"] .main-nav.menu-grid .nav-item.active {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.72), transparent 2.6rem),
+    linear-gradient(135deg, #ff9ccd, #ffe46b 52%, #9eefff) !important;
+  color: #35151f !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.92),
+    0 0 16px rgba(255,76,166,0.20),
+    0 0 18px rgba(99,226,255,0.12) !important;
+}
+
+/* Buttons: still candy, far less muddy. */
+body[data-theme="candy"] .task-card button,
+body[data-theme="candy"] .care-button,
+body[data-theme="candy"] .secondary-button,
+body[data-theme="candy"] .chat-form button[type="submit"] {
+  border: 1px solid rgba(91,44,36,0.25) !important;
+  background:
+    linear-gradient(90deg, #ff7cbd 0%, #ffe46b 42%, #75e8ff 100%) !important;
+  color: #35151f !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.52) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.82),
+    0 8px 16px rgba(255,76,166,0.14) !important;
+}
+
+/* Chat: chocolate candy receipt, not ugly gray slab. */
+body[data-theme="candy"] .chat-panel {
+  border-color: transparent !important;
+  background:
+    linear-gradient(180deg, rgba(255,250,244,0.92), rgba(255,232,244,0.84)) padding-box,
+    repeating-linear-gradient(
+      135deg,
+      #5b2c24 0 10px,
+      #ff69b8 10px 20px,
+      #fff4bf 20px 30px,
+      #63e2ff 30px 40px
+    ) border-box !important;
+  background-clip: padding-box, border-box !important;
+  color: #3a1b29 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.72),
+    0 12px 28px rgba(91,44,36,0.12) !important;
+}
+
+body[data-theme="candy"] .chat-log {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,244,250,0.65)) !important;
+  color: #3a1b29 !important;
+}
+
+body[data-theme="candy"] .chat-message,
+body[data-theme="candy"] .chat-log,
+body[data-theme="candy"] .chat-log * {
+  color: #3a1b29 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="candy"] .chat-time,
+body[data-theme="candy"] .player-name-button {
+  color: #c92277 !important;
+}
+
+body[data-theme="candy"] .chat-tab {
+  border-color: rgba(91,44,36,0.16) !important;
+  background: rgba(255,255,255,0.62) !important;
+  color: #6a3850 !important;
+}
+
+body[data-theme="candy"] .chat-tab.active {
+  background: linear-gradient(90deg, #ff7cbd, #ffe46b, #75e8ff) !important;
+  color: #35151f !important;
+}
+
+/* Chat form: cream input with chocolate outline. */
+body[data-theme="candy"] .chat-form {
+  background: rgba(255,244,250,0.74) !important;
+}
+
+body[data-theme="candy"] .chat-form input,
+body[data-theme="candy"] input,
+body[data-theme="candy"] select,
+body[data-theme="candy"] textarea {
+  border-color: rgba(91,44,36,0.22) !important;
+  background: rgba(255,255,255,0.78) !important;
+  color: #35151f !important;
+}
+
+/* Right buffs need readable frosting cards. */
+body[data-theme="candy"] .right-buff-group,
+body[data-theme="candy"] .buff-card {
+  background:
+    linear-gradient(180deg, rgba(255,252,246,0.92), rgba(255,232,244,0.86)) padding-box,
+    linear-gradient(135deg, #ff69b8, #fff4bf, #63e2ff) border-box !important;
+  background-clip: padding-box, border-box !important;
+}
+
+body[data-theme="candy"] .right-buff-group *,
+body[data-theme="candy"] .buff-card * {
+  color: #4b1d36 !important;
+  text-shadow: none !important;
+}
+
+/* Candy effects: much softer so they decorate, not attack. */
+body[data-theme="candy"] .theme-effects-candy {
+  opacity: 0.66;
+}
+
+body[data-theme="candy"] .candy-shop-awning {
+  opacity: 0.16 !important;
+}
+
+body[data-theme="candy"] .candy-chocolate-drip {
+  opacity: 0.10 !important;
+}
+
+body[data-theme="candy"] .candy-lollipop {
+  opacity: 0.12 !important;
+  filter: blur(0.4px);
+}
+
+body[data-theme="candy"] .candy-gumdrop-row {
+  opacity: 0.18 !important;
+}
+
+body[data-theme="candy"] .candy-sprinkle {
+  opacity: calc(var(--sprinkle-opacity) * 0.55) !important;
+  box-shadow: 0 0 5px currentColor !important;
+}
+
+/* No aggressive stripe bleeding anywhere. */
+body[data-theme="candy"] .settings-card {
+  background:
+    linear-gradient(180deg, rgba(255,252,246,0.94), rgba(255,232,244,0.90)) padding-box,
+    linear-gradient(135deg, #ff69b8, #fff4bf, #63e2ff) border-box !important;
+  background-clip: padding-box, border-box !important;
+}
+
+/* Progress bars keep candy colors, but tracks are calmer. */
+body[data-theme="candy"] .meter-track,
+body[data-theme="candy"] .stat-bar,
+body[data-theme="candy"] .bar,
+body[data-theme="candy"] .task-xp-bar {
+  background: rgba(255,255,255,0.66) !important;
+}
+
+body[data-theme="candy"] .meter-fill,
+body[data-theme="candy"] .fill,
+body[data-theme="candy"] .stat-fill,
+body[data-theme="candy"] .task-xp-fill,
+body[data-theme="candy"] .care-button-progress-fill {
+  background: linear-gradient(90deg, #ff69b8, #ffe46b, #63e2ff) !important;
+}
