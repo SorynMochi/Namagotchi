@@ -2570,3 +2570,39 @@ body[data-theme="tokyo-night"] .left-rail > .tokyo-night-left-signs {
 .game-shell.is-right-rail-collapsed .tokyo-night-rail-signs {
   display: none !important;
 }
+/* Tokyo Night rail sign collapse override */
+
+/* These rules must live at the end of the Tokyo theme so they beat the theme's display:grid rules. */
+html body[data-theme="tokyo-night"] .game-shell.is-left-rail-collapsed .left-rail > .tokyo-night-left-signs,
+html body[data-theme="tokyo-night"] .game-shell.is-left-rail-collapsed .tokyo-night-left-signs,
+html body[data-theme="tokyo-night"] .is-left-rail-collapsed .tokyo-night-left-signs,
+html body[data-theme="tokyo-night"].is-left-rail-collapsed .tokyo-night-left-signs,
+html.is-left-rail-collapsed body[data-theme="tokyo-night"] .tokyo-night-left-signs {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+html body[data-theme="tokyo-night"] .game-shell.is-right-rail-collapsed .right-rail > .tokyo-night-rail-signs,
+html body[data-theme="tokyo-night"] .game-shell.is-right-rail-collapsed .tokyo-night-rail-signs,
+html body[data-theme="tokyo-night"] .is-right-rail-collapsed .tokyo-night-rail-signs,
+html body[data-theme="tokyo-night"].is-right-rail-collapsed .tokyo-night-rail-signs,
+html.is-right-rail-collapsed body[data-theme="tokyo-night"] .tokyo-night-rail-signs {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
