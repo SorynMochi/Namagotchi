@@ -196,20 +196,20 @@ body::before {
 
 .sakura-branch {
   position: absolute;
-  top: -1.5vh;
-  left: -5vw;
-  width: min(45vw, 680px);
-  height: 22vh;
-  opacity: 0.9;
-  transform: rotate(-8deg);
+  bottom: 8vh;
+  left: -4vw;
+  width: min(36vw, 560px);
+  height: 18vh;
+  opacity: 0.72;
+  transform: rotate(9deg);
   transform-origin: left center;
   background:
-    radial-gradient(ellipse at 18% 58%, rgba(52, 19, 10, 0.98) 0 5px, transparent 6px),
-    linear-gradient(8deg, transparent 0 14%, rgba(67, 29, 18, 0.98) 15% 20%, transparent 21%),
-    linear-gradient(-8deg, transparent 0 23%, rgba(45, 18, 12, 0.95) 24% 29%, transparent 30%);
+    radial-gradient(ellipse at 18% 58%, rgba(52, 19, 10, 0.92) 0 5px, transparent 6px),
+    linear-gradient(8deg, transparent 0 14%, rgba(67, 29, 18, 0.92) 15% 20%, transparent 21%),
+    linear-gradient(-8deg, transparent 0 23%, rgba(45, 18, 12, 0.88) 24% 29%, transparent 30%);
   filter:
-    drop-shadow(0 0 12px rgba(255, 233, 156, 0.22))
-    drop-shadow(0 6px 12px rgba(9, 2, 4, 0.55));
+    drop-shadow(0 0 10px rgba(255, 233, 156, 0.18))
+    drop-shadow(0 6px 12px rgba(9, 2, 4, 0.48));
 }
 
 .sakura-branch::before,
@@ -233,11 +233,11 @@ body::before {
 
 .sakura-lantern {
   position: absolute;
-  top: 9vh;
+  bottom: 14vh;
   width: 58px;
   height: 82px;
   border-radius: 44% 44% 48% 48%;
-  opacity: 0.84;
+  opacity: 0.78;
   background:
     linear-gradient(90deg, transparent 0 18%, rgba(121, 25, 38, 0.68) 19% 22%, transparent 23% 77%, rgba(121, 25, 38, 0.68) 78% 81%, transparent 82%),
     radial-gradient(ellipse at 50% 42%, #fff0cf 0 14%, #ffb1cc 48%, #c93276 100%);
@@ -265,14 +265,14 @@ body::before {
 }
 
 .sakura-lantern-left {
-  left: 5vw;
+  left: 8vw;
 }
 
 .sakura-lantern-right {
-  right: 17vw;
-  top: 13vh;
+  right: 10vw;
+  bottom: 18vh;
   transform: scale(0.78);
-  opacity: 0.62;
+  opacity: 0.58;
 }
 
 .sakura-lantern-breathe .sakura-lantern {
