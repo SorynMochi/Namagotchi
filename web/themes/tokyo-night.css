@@ -861,3 +861,252 @@ body[data-theme="tokyo-night"] .chat-tab.active {
     0 1px 0 rgba(0, 0, 0, 0.72),
     0 0 8px rgba(0, 0, 0, 0.42) !important;
 }
+/* Tokyo Night pass 4: neon city immersion */
+
+/* Deeper night city backdrop */
+body[data-theme="tokyo-night"] {
+  background:
+    radial-gradient(circle at 12% 7%, rgba(255, 70, 210, 0.32), transparent 22rem),
+    radial-gradient(circle at 86% 10%, rgba(82, 236, 255, 0.26), transparent 26rem),
+    radial-gradient(circle at 48% 92%, rgba(159, 107, 255, 0.22), transparent 30rem),
+    linear-gradient(180deg, #060a25 0%, #020412 54%, #01020a 100%) !important;
+}
+
+/* City-glass pane effect, no vertical bars */
+body[data-theme="tokyo-night"]::before {
+  background:
+    linear-gradient(120deg, rgba(82, 236, 255, 0.06), transparent 34%, rgba(255, 70, 210, 0.065) 68%, transparent),
+    repeating-linear-gradient(
+      90deg,
+      rgba(82, 236, 255, 0.028) 0 1px,
+      transparent 1px 78px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(159, 107, 255, 0.026) 0 1px,
+      transparent 1px 58px
+    ),
+    radial-gradient(circle at 50% 120%, rgba(82,236,255,0.10), transparent 30rem) !important;
+  opacity: 1 !important;
+}
+
+/* Wet street reflections, stronger but safely at bottom */
+body[data-theme="tokyo-night"]::after {
+  height: 38vh !important;
+  opacity: 0.58 !important;
+  background:
+    linear-gradient(180deg, transparent, rgba(1, 2, 10, 0.9)),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 72px,
+      rgba(82,236,255,0.08) 72px 74px,
+      transparent 74px 154px,
+      rgba(255,70,210,0.075) 154px 157px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 18px,
+      rgba(255,255,255,0.018) 18px 19px
+    ),
+    radial-gradient(ellipse at 26% 84%, rgba(255,70,210,0.24), transparent 18rem),
+    radial-gradient(ellipse at 74% 78%, rgba(82,236,255,0.22), transparent 20rem) !important;
+  mask-image: linear-gradient(180deg, transparent, #000 28%) !important;
+}
+
+/* Skyline gets more depth and window glow */
+body[data-theme="tokyo-night"] .tokyo-night-skyline {
+  opacity: 0.5;
+  background:
+    linear-gradient(180deg, transparent 0 16%, rgba(1, 3, 12, 0.88) 16% 100%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(82,236,255,0.34) 0 2px,
+      transparent 2px 18px,
+      rgba(255,70,210,0.24) 18px 20px,
+      transparent 20px 36px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 18px,
+      rgba(255,255,255,0.035) 18px 20px
+    ) !important;
+  filter:
+    drop-shadow(0 0 22px rgba(82,236,255,0.26))
+    drop-shadow(0 0 34px rgba(255,70,210,0.16)) !important;
+}
+
+/* Horizontal signs only, deliberately avoiding vertical bars */
+body[data-theme="tokyo-night"] .tokyo-night-signs {
+  background:
+    radial-gradient(circle at 78vw 12vh, rgba(159,107,255,0.30), transparent 7rem),
+    radial-gradient(circle at 18vw 78vh, rgba(255,70,210,0.20), transparent 7rem),
+    radial-gradient(circle at 52vw 92vh, rgba(82,236,255,0.17), transparent 9rem),
+    radial-gradient(circle at 90vw 44vh, rgba(82,236,255,0.18), transparent 6rem) !important;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-signs::before {
+  content: "";
+  display: block !important;
+  position: absolute;
+  right: 5vw;
+  bottom: 8vh;
+  width: min(18vw, 300px);
+  height: 54px;
+  opacity: 0.34;
+  border-radius: 999px;
+  border: 1px solid rgba(82, 236, 255, 0.44);
+  background:
+    linear-gradient(90deg, rgba(82,236,255,0.22), rgba(255,70,210,0.18), rgba(159,107,255,0.18)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.22) 0 2px,
+      transparent 2px 16px
+    );
+  box-shadow:
+    0 0 20px rgba(82,236,255,0.22),
+    0 0 34px rgba(255,70,210,0.16),
+    inset 0 0 18px rgba(255,255,255,0.06);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-signs::after {
+  content: "";
+  display: block !important;
+  position: absolute;
+  left: 15vw;
+  bottom: 11vh;
+  width: min(20vw, 330px);
+  height: 40px;
+  opacity: 0.26;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 70, 210, 0.46);
+  background:
+    linear-gradient(90deg, rgba(255,70,210,0.20), rgba(82,236,255,0.12), rgba(159,107,255,0.18));
+  box-shadow:
+    0 0 22px rgba(255,70,210,0.20),
+    0 0 30px rgba(82,236,255,0.10);
+}
+
+/* Panels gain neon rim-light and glass depth */
+body[data-theme="tokyo-night"] .panel,
+body[data-theme="tokyo-night"] .main-panel,
+body[data-theme="tokyo-night"] .chat-panel,
+body[data-theme="tokyo-night"] .top-stats-panel,
+body[data-theme="tokyo-night"] .nav-panel,
+body[data-theme="tokyo-night"] .right-buffs-panel,
+body[data-theme="tokyo-night"] .nami-card,
+body[data-theme="tokyo-night"] .care-card,
+body[data-theme="tokyo-night"] .task-card,
+body[data-theme="tokyo-night"] .settings-card,
+body[data-theme="tokyo-night"] .wardrobe-panel,
+body[data-theme="tokyo-night"] .equipment-card,
+body[data-theme="tokyo-night"] .inventory-item-card,
+body[data-theme="tokyo-night"] .right-buff-group {
+  border-color: rgba(82,236,255,0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 0 0 1px rgba(255,70,210,0.08),
+    0 0 0 1px rgba(82,236,255,0.10),
+    0 24px 58px rgba(0,0,0,0.52),
+    0 0 26px rgba(82,236,255,0.10),
+    0 0 32px rgba(255,70,210,0.08) !important;
+}
+
+/* Main area gets a subtle city-window reflection */
+body[data-theme="tokyo-night"] .main-panel {
+  background:
+    linear-gradient(115deg, rgba(82,236,255,0.035), transparent 24%, rgba(255,70,210,0.035) 58%, transparent 78%),
+    radial-gradient(circle at 90% 8%, rgba(159,107,255,0.13), transparent 12rem),
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 38%),
+    rgba(4, 10, 28, 0.88) !important;
+}
+
+/* Home panel: stronger night-room neon mood */
+body[data-theme="tokyo-night"] #section-home .nami-card {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255,70,210,0.14), transparent 10rem),
+    radial-gradient(circle at 92% 18%, rgba(82,236,255,0.10), transparent 12rem),
+    rgba(4, 10, 28, 0.88) !important;
+}
+
+body[data-theme="tokyo-night"] #section-home .nami-image-slot,
+body[data-theme="tokyo-night"] #section-home .nami-room-stage {
+  border-color: rgba(255,70,210,0.56) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 0 26px rgba(255,70,210,0.20),
+    0 0 40px rgba(82,236,255,0.12) !important;
+}
+
+/* Work screen: stronger neon signboard cards */
+body[data-theme="tokyo-night"] #section-gathering .task-card {
+  border-color: rgba(82,236,255,0.42) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.045), transparent 44px),
+    radial-gradient(circle at 100% 0%, rgba(82,236,255,0.14), transparent 8rem),
+    radial-gradient(circle at 0% 100%, rgba(255,70,210,0.10), transparent 8rem),
+    rgba(4, 10, 28, 0.9) !important;
+}
+
+body[data-theme="tokyo-night"] #section-gathering .task-card h2 {
+  color: #fff !important;
+  text-shadow:
+    0 0 10px rgba(255,70,210,0.22),
+    0 0 14px rgba(82,236,255,0.14) !important;
+}
+
+/* Chat: stronger late-night street terminal */
+body[data-theme="tokyo-night"] .chat-panel {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 20%),
+    radial-gradient(circle at 16% 100%, rgba(255,70,210,0.16), transparent 13rem),
+    radial-gradient(circle at 84% 100%, rgba(82,236,255,0.14), transparent 13rem),
+    rgba(2, 5, 18, 0.94) !important;
+}
+
+body[data-theme="tokyo-night"] .chat-form input {
+  border-color: rgba(159,107,255,0.46) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), transparent),
+    rgba(2,5,18,0.94) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 0 18px rgba(159,107,255,0.10) !important;
+}
+
+/* Buttons become more like neon signage */
+body[data-theme="tokyo-night"] .task-card button,
+body[data-theme="tokyo-night"] .care-button,
+body[data-theme="tokyo-night"] .secondary-button,
+body[data-theme="tokyo-night"] .chat-form button[type="submit"],
+body[data-theme="tokyo-night"] .task-card.active button {
+  background:
+    linear-gradient(
+      90deg,
+      #8ff8ff 0%,
+      #52ecff 22%,
+      #8a8dff 48%,
+      #c66bff 68%,
+      #ff5fde 100%
+    ) !important;
+  color: #f8fbff !important;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.72),
+    0 0 8px rgba(0,0,0,0.44) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.42),
+    0 0 20px rgba(82,236,255,0.28),
+    0 0 28px rgba(255,70,210,0.18) !important;
+}
+
+/* Inputs/selects pop more */
+body[data-theme="tokyo-night"] select,
+body[data-theme="tokyo-night"] input,
+body[data-theme="tokyo-night"] textarea {
+  border-color: rgba(82,236,255,0.36) !important;
+}
+
+/* Make rain feel a bit more visible without becoming a curtain */
+body[data-theme="tokyo-night"] .tokyo-rain-drop {
+  opacity: min(0.62, calc(var(--rain-opacity) + 0.14));
+  width: 1.2px;
+}
