@@ -833,3 +833,31 @@ body[data-theme="tokyo-night"] .right-buff-group,
 body[data-theme="tokyo-night"] .right-buff-group * {
   text-shadow: none !important;
 }
+/* Tokyo Night pass 3.1: button text contrast fix */
+body[data-theme="tokyo-night"] .task-card button,
+body[data-theme="tokyo-night"] .care-button,
+body[data-theme="tokyo-night"] .secondary-button,
+body[data-theme="tokyo-night"] .chat-form button[type="submit"],
+body[data-theme="tokyo-night"] .task-card.active button {
+  color: #f8fbff !important;
+  font-weight: 800 !important;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.72),
+    0 0 8px rgba(0, 0, 0, 0.42) !important;
+}
+
+body[data-theme="tokyo-night"] .task-card button *,
+body[data-theme="tokyo-night"] .care-button *,
+body[data-theme="tokyo-night"] .secondary-button *,
+body[data-theme="tokyo-night"] .chat-form button[type="submit"] * {
+  color: inherit !important;
+  text-shadow: inherit !important;
+}
+
+/* Keep active chat tab readable too */
+body[data-theme="tokyo-night"] .chat-tab.active {
+  color: #f8fbff !important;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.72),
+    0 0 8px rgba(0, 0, 0, 0.42) !important;
+}
