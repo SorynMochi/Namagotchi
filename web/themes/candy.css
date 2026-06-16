@@ -1788,3 +1788,41 @@ body[data-theme="candy"] .candy-float-zone-right {
 body[data-theme="candy"] .candy-float-zone .candy-piece {
   position: absolute !important;
 }
+/* Candy pass 8: emoji category bar matches chat channels */
+
+/* Match emoji category header to the chocolate chat channel bar. */
+body[data-theme="candy"] .emoji-picker-tabs {
+  margin: -8px -8px 8px !important;
+  padding: 5px 8px 6px !important;
+  border-bottom: 1px solid rgba(91,44,36,0.32) !important;
+  background:
+    linear-gradient(180deg, rgba(118,63,45,0.96), rgba(67,31,24,0.96)),
+    radial-gradient(circle at 12% 0%, rgba(255,244,191,0.16), transparent 8rem) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,244,191,0.18),
+    0 4px 12px rgba(91,44,36,0.10) !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+/* Make the category pills read like cream-on-chocolate until selected. */
+body[data-theme="candy"] .emoji-category-tab {
+  border: 1px solid rgba(255,244,191,0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(255,244,191,0.18), rgba(91,44,36,0.24)) !important;
+  color: #fff4cf !important;
+  text-shadow: 0 1px 0 rgba(54,25,20,0.72) !important;
+}
+
+body[data-theme="candy"] .emoji-category-tab:hover {
+  border-color: rgba(255,105,184,0.52) !important;
+  background:
+    linear-gradient(180deg, rgba(255,105,184,0.28), rgba(91,44,36,0.28)) !important;
+}
+
+body[data-theme="candy"] .emoji-category-tab.active {
+  border-color: rgba(255,244,191,0.44) !important;
+  background:
+    linear-gradient(90deg, #ff7cbd 0%, #ffe46b 48%, #75e8ff 100%) !important;
+  color: #35151f !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.50) !important;
+}
