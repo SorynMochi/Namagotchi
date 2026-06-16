@@ -252,7 +252,7 @@
       jpSignCluster.append(sign);
     });
 
-    cityProps.append(antennaField, crosswalk, commuterTrain, bgText, jpSignCluster);
+    cityProps.append(antennaField, crosswalk, jpSignCluster);
 
     const rainField = document.createElement("div");
     rainField.className = "tokyo-night-rain-field";
