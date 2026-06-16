@@ -109,7 +109,8 @@ const THEME_FILES = {
   "nami-default": "/themes/nami-default.css",
   midnight: "/themes/midnight.css",
   strawberry: "/themes/strawberry.css",
-  sakura: "/themes/sakura.css",
+  "sakura-dark": "/themes/sakura-dark.css",
+  "sakura-light": "/themes/sakura-light.css",
 };
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
@@ -135,7 +136,8 @@ const NAMI_SLEEP_VIDEO_SRC = "/images/animations/Nami_Sleep_01.webm";
 
 const CURRENT_PLAYER_NAME = "Soryn";
 function setTheme(themeKey) {
-  const safeThemeKey = Object.hasOwn(THEME_FILES, themeKey) ? themeKey : "nami-default";
+  const normalizedThemeKey = themeKey === "sakura" ? "sakura-dark" : themeKey;
+  const safeThemeKey = Object.hasOwn(THEME_FILES, normalizedThemeKey) ? normalizedThemeKey : "nami-default";
 
   if (themeStylesheet) {
     themeStylesheet.href = THEME_FILES[safeThemeKey];

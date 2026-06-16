@@ -42,7 +42,7 @@
 
     clearThemeEffects();
 
-    if (themeKey === "sakura") {
+    if (themeKey === "sakura-dark" || themeKey === "sakura-light" || themeKey === "sakura") {
       startSakuraThemeEffect();
     }
   }
