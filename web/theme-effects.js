@@ -14,6 +14,10 @@
     return items[Math.floor(Math.random() * items.length)];
   }
 
+  function isSakuraTheme(themeKey) {
+    return themeKey === "sakura" || themeKey === "sakura-dark" || themeKey === "sakura-light";
+  }
+
   function clearThemeEffects() {
     if (petalTimer) {
       window.clearInterval(petalTimer);
@@ -42,7 +46,7 @@
 
     clearThemeEffects();
 
-    if (themeKey === "sakura-dark" || themeKey === "sakura-light" || themeKey === "sakura") {
+    if (isSakuraTheme(themeKey)) {
       startSakuraThemeEffect();
     }
   }
@@ -97,7 +101,7 @@
     }, 260);
 
     lanternTimer = window.setInterval(() => {
-      if (activeThemeKey !== "sakura" || !activeLayer) {
+      if (!isSakuraTheme(activeThemeKey) || !activeLayer) {
         return;
       }
 
@@ -119,7 +123,7 @@
   }
 
   function spawnSakuraPetal(parent, isInitialBurst) {
-    if (activeThemeKey !== "sakura" || !parent?.isConnected) {
+    if (!isSakuraTheme(activeThemeKey) || !parent?.isConnected) {
       return;
     }
 
