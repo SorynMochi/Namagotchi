@@ -1352,3 +1352,277 @@ body[data-theme="tokyo-night"] .tokyo-rain-drop {
     animation: none !important;
   }
 }
+/* Tokyo Night pass 6: rail signs and rooftop antennae */
+
+/* Kill the old floating sign stack / old power lines completely */
+body[data-theme="tokyo-night"] .tokyo-night-sign-stack,
+body[data-theme="tokyo-night"] .tokyo-night-power-lines {
+  display: none !important;
+}
+
+/* Right rail holds the signs now */
+body[data-theme="tokyo-night"] .right-buffs-panel {
+  position: relative;
+}
+
+/* Signs sit below buffs and stay inside the rail */
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs {
+  position: relative;
+  z-index: 1;
+  width: calc(100% - 24px);
+  margin: 16px auto 10px;
+  display: grid;
+  gap: 10px;
+  pointer-events: none;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 12px;
+  border-radius: 16px;
+  border: 1px solid currentColor;
+  font-size: 0.86rem;
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.10), transparent 48%),
+    rgba(2, 5, 18, 0.74);
+  box-shadow:
+    inset 0 0 14px rgba(255,255,255,0.05),
+    0 0 16px currentColor,
+    0 0 28px color-mix(in srgb, currentColor 50%, transparent);
+  text-shadow:
+    0 0 8px currentColor,
+    0 0 18px currentColor;
+  animation: tokyoNightRailSignFlicker 6.4s steps(1, end) infinite;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign.sign-cyan {
+  color: #52ecff;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign.sign-pink {
+  color: #ff46d2;
+  animation-delay: -1.5s;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign.sign-violet {
+  color: #9f6bff;
+  animation-delay: -3.1s;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign.sign-gold {
+  color: #ffe56f;
+  animation-delay: -4.4s;
+}
+
+@keyframes tokyoNightRailSignFlicker {
+  0%, 3%, 5%, 41%, 44%, 76%, 100% {
+    opacity: 1;
+    filter: saturate(1.15);
+  }
+
+  4%, 42%, 77% {
+    opacity: 0.46;
+    filter: saturate(0.7);
+  }
+}
+
+/* Actual rooftop antenna field */
+body[data-theme="tokyo-night"] .tokyo-night-antenna-field {
+  position: absolute;
+  left: 10vw;
+  right: 10vw;
+  bottom: 18vh;
+  height: 16vh;
+  pointer-events: none;
+  opacity: 0.42;
+  z-index: 2;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-antenna {
+  position: absolute;
+  left: calc(var(--antenna-x) * 1%);
+  bottom: 0;
+  width: 2px;
+  height: calc(var(--antenna-h) * 1px);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.76), rgba(150,190,255,0.28));
+  box-shadow:
+    0 0 8px rgba(82,236,255,0.14);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-antenna::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: -7px;
+  width: 16px;
+  height: 1px;
+  background: rgba(220, 238, 255, 0.54);
+  box-shadow:
+    0 14px 0 rgba(220, 238, 255, 0.40),
+    0 28px 0 rgba(220, 238, 255, 0.28);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-antenna::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: #ff445f;
+  box-shadow:
+    0 0 10px rgba(255, 68, 95, 0.9),
+    0 0 20px rgba(255, 68, 95, 0.65),
+    0 0 30px rgba(255, 68, 95, 0.32);
+  animation: tokyoNightAntennaBlink 5.8s steps(1, end) infinite;
+  animation-delay: var(--antenna-delay, 0s);
+}
+
+@keyframes tokyoNightAntennaBlink {
+  0%, 6%, 15%, 31%, 33%, 52%, 100% {
+    opacity: 0.18;
+  }
+
+  7%, 16%, 32%, 53% {
+    opacity: 1;
+  }
+
+  8%, 17%, 54% {
+    opacity: 0.32;
+  }
+}
+
+/* Slightly reduce the old generic sign glow noise so the rail signs feel intentional */
+body[data-theme="tokyo-night"] .tokyo-night-signs {
+  opacity: 0.82;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-theme="tokyo-night"] .tokyo-night-rail-sign,
+  body[data-theme="tokyo-night"] .tokyo-night-antenna::after {
+    animation: none !important;
+  }
+}
+/* Tokyo Night pass 6.1: right rail sign restyle */
+
+/* The sign group itself is NOT a card. It lives below the buff card. */
+body[data-theme="tokyo-night"] .right-rail > .tokyo-night-rail-signs {
+  position: relative;
+  z-index: 1;
+  width: calc(100% - 24px);
+  margin: 14px auto 10px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none;
+  transform: perspective(420px) rotateY(-10deg) rotateZ(0.6deg);
+  transform-origin: center top;
+}
+
+/* Hide rail signs when the right rail collapses */
+.game-shell.is-right-rail-collapsed .tokyo-night-rail-signs {
+  display: none !important;
+}
+
+/* Restore the smaller, creative, angled sign feeling */
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign {
+  display: grid;
+  place-items: center;
+  width: min(112px, calc(100% - 8px));
+  min-height: 30px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid currentColor;
+  font-size: 0.72rem;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.11), transparent 48%),
+    rgba(2, 5, 18, 0.74);
+  text-shadow:
+    0 0 8px currentColor,
+    0 0 18px currentColor;
+  box-shadow:
+    0 0 14px currentColor,
+    0 0 24px color-mix(in srgb, currentColor 40%, transparent),
+    inset 0 0 12px rgba(255,255,255,0.08);
+  animation: tokyoNightRailSignFlicker 6.4s steps(1, end) infinite;
+}
+
+/* Intentional uneven billboard stack */
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign.sign-cyan {
+  justify-self: end;
+  color: #52ecff;
+  transform: rotate(-1.5deg) translateX(-4px);
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign.sign-pink {
+  justify-self: start;
+  color: #ff46d2;
+  transform: rotate(2deg) translateX(8px);
+  animation-delay: -1.5s;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign.sign-violet {
+  justify-self: end;
+  color: #9f6bff;
+  transform: rotate(-2.2deg) translateX(-10px);
+  animation-delay: -3.1s;
+}
+
+body[data-theme="tokyo-night"] .tokyo-night-rail-sign.sign-gold {
+  justify-self: center;
+  color: #ffe56f;
+  transform: rotate(1.3deg) translateX(3px);
+  animation-delay: -4.4s;
+}
+
+/* Do not let the earlier oversized rail-sign style win */
+body[data-theme="tokyo-night"] .tokyo-night-rail-signs .tokyo-night-rail-sign {
+  min-width: 0 !important;
+}
+
+/* Keep the old floating sign stack dead */
+body[data-theme="tokyo-night"] .tokyo-night-sign-stack {
+  display: none !important;
+}
+
+/* Keep antennae alive */
+body[data-theme="tokyo-night"] .tokyo-night-antenna-field {
+  display: block !important;
+}
+
+@keyframes tokyoNightRailSignFlicker {
+  0%, 3%, 5%, 41%, 44%, 76%, 100% {
+    opacity: 1;
+    filter: saturate(1.18) brightness(1.02);
+  }
+
+  4%, 42%, 77% {
+    opacity: 0.48;
+    filter: saturate(0.72) brightness(0.85);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-theme="tokyo-night"] .tokyo-night-rail-sign {
+    animation: none !important;
+  }
+}

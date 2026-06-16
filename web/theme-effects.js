@@ -40,6 +40,7 @@
 
     document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night");
     document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night");
+    document.querySelectorAll(".tokyo-night-rail-signs").forEach((node) => node.remove());
   }
 
   function setActiveThemeEffect(themeKey) {
@@ -214,34 +215,28 @@
     const cityProps = document.createElement("div");
     cityProps.className = "tokyo-night-city-props";
 
-    const signStack = document.createElement("div");
-    signStack.className = "tokyo-night-sign-stack";
+        const antennaField = document.createElement("div");
+    antennaField.className = "tokyo-night-antenna-field";
 
-    const signOne = document.createElement("span");
-    signOne.className = "tokyo-night-sign sign-cyan";
-    signOne.textContent = "TOKYO";
-
-    const signTwo = document.createElement("span");
-    signTwo.className = "tokyo-night-sign sign-pink";
-    signTwo.textContent = "NAMI";
-
-    const signThree = document.createElement("span");
-    signThree.className = "tokyo-night-sign sign-violet";
-    signThree.textContent = "24H";
-
-    const signFour = document.createElement("span");
-    signFour.className = "tokyo-night-sign sign-gold";
-    signFour.textContent = "IDLE";
-
-    signStack.append(signOne, signTwo, signThree, signFour);
-
-    const powerLines = document.createElement("div");
-    powerLines.className = "tokyo-night-power-lines";
+    [
+      { x: "12", h: "70", d: "-0.6s" },
+      { x: "26", h: "94", d: "-2.1s" },
+      { x: "43", h: "78", d: "-1.2s" },
+      { x: "61", h: "108", d: "-3.4s" },
+      { x: "79", h: "86", d: "-1.8s" }
+    ].forEach((config) => {
+      const antenna = document.createElement("span");
+      antenna.className = "tokyo-night-antenna";
+      antenna.style.setProperty("--antenna-x", config.x);
+      antenna.style.setProperty("--antenna-h", config.h);
+      antenna.style.setProperty("--antenna-delay", config.d);
+      antennaField.append(antenna);
+    });
 
     const crosswalk = document.createElement("div");
     crosswalk.className = "tokyo-night-crosswalk";
 
-    cityProps.append(signStack, powerLines, crosswalk);
+    cityProps.append(antennaField, crosswalk);
 
     const rainField = document.createElement("div");
     rainField.className = "tokyo-night-rain-field";
@@ -262,7 +257,30 @@
       layer.classList.add("theme-effects-reduced-motion");
     }
 
-    layer.append(moon, skyline, signs, vapor, cityProps, rainField);
+        layer.append(moon, skyline, signs, vapor, cityProps, rainField);
+
+        const rightRail = document.querySelector(".right-rail");
+    const buffsPanel = document.querySelector(".right-buffs-panel");
+    if (rightRail && buffsPanel) {
+      rightRail.querySelectorAll(".tokyo-night-rail-signs").forEach((node) => node.remove());
+
+      const railSigns = document.createElement("div");
+      railSigns.className = "tokyo-night-rail-signs";
+
+      [
+        { label: "TOKYO", className: "sign-cyan" },
+        { label: "NAMI", className: "sign-pink" },
+        { label: "24H", className: "sign-violet" },
+        { label: "IDLE", className: "sign-gold" }
+      ].forEach((config) => {
+        const sign = document.createElement("span");
+        sign.className = `tokyo-night-rail-sign ${config.className}`;
+        sign.textContent = config.label;
+        railSigns.append(sign);
+      });
+
+      buffsPanel.insertAdjacentElement("afterend", railSigns);
+    }
     document.body.append(layer);
     activeLayer = layer;
   }
