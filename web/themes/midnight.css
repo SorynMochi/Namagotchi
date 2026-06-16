@@ -1,48 +1,132 @@
 :root {
   color-scheme: dark;
 
-  --bg-0: #060b18;
-  --bg-1: #0b1430;
-  --bg-2: #121d42;
+  --bg-0: #030715;
+  --bg-1: #07112a;
+  --bg-2: #101b40;
 
-  --panel: rgba(12, 19, 44, 0.92);
-  --panel-soft: rgba(18, 30, 66, 0.78);
-  --panel-deep: rgba(6, 10, 26, 0.9);
+  --panel: rgba(9, 16, 39, 0.94);
+  --panel-soft: rgba(15, 29, 66, 0.82);
+  --panel-deep: rgba(4, 8, 22, 0.92);
 
-  --line: rgba(143, 205, 255, 0.2);
-  --line-bright: rgba(168, 221, 255, 0.44);
+  --line: rgba(122, 195, 255, 0.2);
+  --line-bright: rgba(164, 220, 255, 0.46);
 
-  --text: #f4f8ff;
-  --text-soft: #d7e6ff;
-  --muted: #9eb3d7;
+  --text: #f3f8ff;
+  --text-soft: #d8e7ff;
+  --muted: #9db2d7;
 
-  --cyan: #80d9ff;
-  --cyan-deep: #3aa8df;
-  --cyan-soft: #d9f4ff;
-  --pink: #bca8ff;
-  --pink-soft: #eee7ff;
-  --violet: #8ea7ff;
-  --violet-soft: #dfe6ff;
-  --green: #bdf2dc;
-  --yellow: #ffe7a8;
+  --cyan: #78d8ff;
+  --cyan-deep: #329ed8;
+  --cyan-soft: #d8f4ff;
+  --pink: #9ea7ff;
+  --pink-soft: #e8ebff;
+  --violet: #c3a6ff;
+  --violet-soft: #efe5ff;
+  --green: #adf2df;
+  --yellow: #ffe9a6;
   --orange: #ffc08c;
-  --danger: #ff7f9f;
+  --danger: #ff789b;
 
-  --cream: #f5edcf;
-  --rose-shadow: rgba(142, 167, 255, 0.16);
-  --blue-shadow: rgba(128, 217, 255, 0.16);
+  --cream: #f4edcf;
+  --rose-shadow: rgba(158, 167, 255, 0.18);
+  --blue-shadow: rgba(120, 216, 255, 0.18);
 
-  --theme-page-glow-pink: rgba(142, 167, 255, 0.22);
-  --theme-page-glow-cyan: rgba(73, 199, 255, 0.18);
-  --theme-page-glow-violet: rgba(188, 168, 255, 0.14);
-  --theme-page-gradient-top: #071125;
-  --theme-page-gradient-bottom: #040714;
+  --theme-page-glow-pink: rgba(111, 122, 255, 0.28);
+  --theme-page-glow-cyan: rgba(54, 190, 255, 0.22);
+  --theme-page-glow-violet: rgba(180, 145, 255, 0.2);
+  --theme-page-gradient-top: #061329;
+  --theme-page-gradient-bottom: #030715;
 
-  --theme-nav-active-bg: linear-gradient(90deg, rgba(142, 167, 255, 0.24), rgba(73, 199, 255, 0.1));
-  --theme-nav-active-text: #eef3ff;
+  --theme-panel-overlay: rgba(164, 220, 255, 0.035);
+  --theme-panel-border-sheen-pink: rgba(158, 167, 255, 0.22);
+  --theme-panel-border-sheen-cyan: rgba(120, 216, 255, 0.2);
+  --theme-panel-title-bg: rgba(120, 216, 255, 0.07);
 
-  --theme-button-primary-bg: linear-gradient(180deg, #bca8ff, #80d9ff);
-  --theme-button-primary-text: #06111d;
-  --theme-work-active-pill-bg: linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
-  --theme-work-active-button-bg: linear-gradient(180deg, var(--pink), #7c8fff);
+  --theme-card-border-cyan: rgba(122, 195, 255, 0.18);
+  --theme-card-bg-overlay: rgba(164, 220, 255, 0.045);
+  --theme-card-bg-deep: rgba(5, 12, 30, 0.78);
+  --theme-card-bg-deep-solid: rgba(5, 12, 30, 0.78);
+
+  --theme-nav-hover-border: rgba(120, 216, 255, 0.36);
+  --theme-nav-hover-bg: rgba(120, 216, 255, 0.12);
+  --theme-nav-hover-text: #bfeeff;
+  --theme-nav-active-border: rgba(158, 167, 255, 0.58);
+  --theme-nav-active-bg: linear-gradient(90deg, rgba(111, 122, 255, 0.32), rgba(120, 216, 255, 0.13));
+  --theme-nav-active-text: #f3f8ff;
+  --theme-nav-active-shadow: 0 0 26px rgba(111, 122, 255, 0.16);
+
+  --theme-chat-text: #d8e7ff;
+  --theme-chat-name: #b7c0ff;
+  --theme-chat-form-bg: rgba(3, 8, 22, 0.58);
+  --theme-chat-input-border: rgba(122, 195, 255, 0.2);
+  --theme-chat-input-bg: rgba(3, 8, 22, 0.76);
+  --theme-chat-input-placeholder: rgba(191, 219, 245, 0.62);
+  --theme-chat-submit-bg: #78d8ff;
+  --theme-chat-submit-text: #04101f;
+
+  --theme-button-primary-border: rgba(216, 244, 255, 0.54);
+  --theme-button-primary-bg: linear-gradient(180deg, #9ea7ff, #78d8ff);
+  --theme-button-primary-text: #04101f;
+  --theme-button-primary-shadow: 0 8px 22px rgba(120, 216, 255, 0.22);
+
+  --theme-button-secondary-border: rgba(195, 166, 255, 0.36);
+  --theme-button-secondary-bg: linear-gradient(180deg, rgba(195, 166, 255, 0.18), rgba(120, 216, 255, 0.08));
+  --theme-button-secondary-text: #e8ebff;
+
+  --theme-care-button-border: rgba(158, 167, 255, 0.46);
+  --theme-care-button-bg: linear-gradient(180deg, rgba(111, 122, 255, 0.24), rgba(120, 216, 255, 0.1));
+  --theme-care-button-text: #edf2ff;
+
+  --theme-work-active-border: rgba(158, 167, 255, 0.56);
+  --theme-work-active-glow: rgba(120, 216, 255, 0.18);
+  --theme-work-active-bg: rgba(8, 16, 42, 0.82);
+  --theme-work-active-pill-bg: linear-gradient(90deg, #9ea7ff, #c3a6ff, #78d8ff);
+  --theme-work-active-pill-text: #04101f;
+  --theme-work-active-button-bg: linear-gradient(180deg, #9ea7ff, #6677ff);
+  --theme-work-active-button-text: #f3f8ff;
+
+  --theme-nami-message-bg: rgba(111, 122, 255, 0.1);
+  --theme-nami-message-text: #edf2ff;
+  --theme-nami-room-stage-bg: #071329;
+
+  --theme-scrollbar-color: rgba(120, 216, 255, 0.88);
+  --theme-scrollbar-color-main: rgba(120, 216, 255, 0.82);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #78d8ff, #9ea7ff);
+
+  --theme-legacy-pink-22: rgba(111, 122, 255, 0.3);
+  --theme-legacy-pink-18: rgba(111, 122, 255, 0.24);
+  --theme-legacy-pink-075: rgba(111, 122, 255, 0.11);
+  --theme-legacy-rose-12: rgba(158, 167, 255, 0.14);
+  --theme-legacy-rose-16: rgba(158, 167, 255, 0.18);
+  --theme-legacy-rose-18: rgba(158, 167, 255, 0.2);
+  --theme-legacy-rose-20: rgba(158, 167, 255, 0.22);
+  --theme-legacy-rose-22: rgba(158, 167, 255, 0.24);
+  --theme-legacy-rose-28: rgba(158, 167, 255, 0.3);
+  --theme-legacy-cyan-20: rgba(120, 216, 255, 0.24);
+  --theme-legacy-cyan-22: rgba(120, 216, 255, 0.28);
+  --theme-legacy-cyan-24: rgba(120, 216, 255, 0.32);
+  --theme-legacy-muted-blue-text-72: rgba(216, 231, 255, 0.72);
+  --theme-legacy-muted-blue-text-78: rgba(216, 231, 255, 0.78);
+
+  --theme-residual-page-cyan-glow: rgba(120, 216, 255, 0.22);
+  --theme-residual-page-violet-glow: rgba(195, 166, 255, 0.24);
+  --theme-residual-log-card-bg: rgba(10, 20, 48, 0.86);
+  --theme-residual-panel-sheen-pink: rgba(158, 167, 255, 0.5);
+  --theme-residual-panel-sheen-cyan: rgba(120, 216, 255, 0.45);
+  --theme-residual-player-border-strong: rgba(216, 244, 255, 0.42);
+  --theme-residual-player-top-glow: rgba(120, 216, 255, 0.26);
+  --theme-residual-button-top: #e8ebff;
+  --theme-residual-button-mid: #9ea7ff;
+  --theme-residual-button-bottom: #6677ff;
+  --theme-residual-button-text: #04101f;
+  --theme-residual-chat-panel-bg: rgba(5, 11, 30, 0.92);
+  --theme-residual-chat-form-bg: rgba(4, 9, 25, 0.78);
+  --theme-residual-chat-log-bg: rgba(5, 12, 30, 0.66);
+  --theme-residual-chat-text: #dbe8ff;
+  --theme-residual-picker-bg: rgba(6, 12, 32, 0.98);
+  --theme-residual-grid-nav-active-rose: rgba(158, 167, 255, 0.38);
+  --theme-residual-right-buff-bg: rgba(10, 20, 48, 0.84);
+  --theme-residual-right-buff-text: rgba(216, 231, 255, 0.8);
+  --theme-residual-right-buff-small: rgba(157, 178, 215, 0.86);
 }
