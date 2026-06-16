@@ -153,6 +153,34 @@
 
   --theme-work-active-status-shadow: 0 0 14px rgba(255, 140, 204, 0.2);
   --theme-work-active-status-inner: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+
+  /* Theme chrome tokens */
+  --theme-nav-hover-border: rgba(73, 199, 255, 0.24);
+  --theme-nav-hover-bg: rgba(73, 199, 255, 0.08);
+  --theme-nav-hover-text: var(--cyan);
+  --theme-nav-active-border: rgba(255, 104, 183, 0.42);
+  --theme-nav-active-bg: linear-gradient(90deg, rgba(255, 104, 183, 0.22), rgba(73, 199, 255, 0.08));
+  --theme-nav-active-text: var(--pink-soft);
+  --theme-nav-active-shadow: 0 0 22px rgba(255, 104, 183, 0.1);
+
+  --theme-chat-text: #cad9e2;
+  --theme-chat-name: var(--pink);
+  --theme-chat-form-bg: rgba(0, 0, 0, 0.14);
+  --theme-chat-input-border: rgba(143, 205, 255, 0.15);
+  --theme-chat-input-bg: rgba(3, 8, 15, 0.66);
+  --theme-chat-input-placeholder: rgba(189, 208, 220, 0.58);
+  --theme-chat-submit-bg: var(--cyan);
+  --theme-chat-submit-text: #06111d;
+
+  --theme-side-link-text: var(--text-soft);
+  --theme-side-link-hover-text: var(--cyan);
+  --theme-buff-divider: rgba(143, 205, 255, 0.12);
+
+  --theme-scrollbar-color: rgba(73, 199, 255, 0.8);
+  --theme-scrollbar-color-main: rgba(73, 199, 255, 0.75);
+  --theme-scrollbar-track: rgba(255, 255, 255, 0.04);
+  --theme-scrollbar-track-clean: transparent;
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, var(--cyan), var(--pink));
 }
 
 * {
@@ -953,7 +981,7 @@ h2 {
 .chat-log::-webkit-scrollbar-thumb,
 .log-list::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--cyan), var(--pink));
+  background: var(--theme-scrollbar-thumb-bg);
 }
 
 .main-panel::-webkit-scrollbar-track,
@@ -1612,7 +1640,7 @@ body.is-resizing-chat {
 
 .emoji-picker::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--cyan), var(--pink));
+  background: var(--theme-scrollbar-thumb-bg);
 }
 
 .emoji-picker::-webkit-scrollbar-track {
@@ -6863,7 +6891,7 @@ body.is-resizing-chat * {
 .main-panel {
   scrollbar-gutter: auto !important;
   scrollbar-width: thin;
-  scrollbar-color: rgba(73, 199, 255, 0.75) transparent;
+  scrollbar-color: var(--theme-scrollbar-color-main) var(--theme-scrollbar-track-clean);
 }
 
 .main-panel::-webkit-scrollbar {
@@ -6880,7 +6908,7 @@ body.is-resizing-chat * {
 .main-panel::-webkit-scrollbar-thumb {
   border: 0 !important;
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--cyan), var(--pink));
+  background: var(--theme-scrollbar-thumb-bg);
   box-shadow: none !important;
 }
 
