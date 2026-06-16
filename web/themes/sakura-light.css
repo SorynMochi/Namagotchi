@@ -1,207 +1,216 @@
 :root {
   color-scheme: light;
 
-  --bg-0: #fffdf8;
-  --bg-1: #fff8fb;
-  --bg-2: #fff2f6;
+  --bg-0: #f7f1ec;
+  --bg-1: #f3ece6;
+  --bg-2: #eee4dd;
 
-  --panel: rgba(255, 251, 247, 0.95);
-  --panel-soft: rgba(255, 247, 250, 0.92);
-  --panel-deep: rgba(255, 245, 248, 0.96);
+  --panel: rgba(255, 250, 246, 0.93);
+  --panel-soft: rgba(255, 248, 244, 0.9);
+  --panel-deep: rgba(255, 247, 243, 0.95);
 
-  --line: rgba(232, 112, 165, 0.45);
-  --line-bright: rgba(255, 179, 208, 0.82);
+  --line: rgba(226, 112, 157, 0.48);
+  --line-bright: rgba(255, 171, 204, 0.78);
 
-  --text: #4a2631;
-  --text-soft: #6b3d4c;
-  --muted: #8b5f6b;
+  --text: #4d2d35;
+  --text-soft: #6d4650;
+  --muted: #8a6770;
 
-  --cyan: #7fcde6;
-  --cyan-deep: #5ab2d0;
-  --cyan-soft: #e6f9ff;
-  --pink: #f06aa7;
-  --pink-soft: #ffd8e8;
-  --violet: #c79af3;
-  --violet-soft: #f0e0ff;
-  --green: #93d5a8;
-  --yellow: #f2cb6d;
-  --orange: #d8835f;
-  --danger: #df5c86;
+  --cyan: #77bfd8;
+  --cyan-deep: #53a8c4;
+  --cyan-soft: #e6f8fc;
+  --pink: #e8649c;
+  --pink-soft: #ffd9e8;
+  --violet: #c59be8;
+  --violet-soft: #eee3fb;
+  --green: #8ec8a0;
+  --yellow: #f0c96d;
+  --orange: #d98960;
+  --danger: #d9567f;
 
-  --cream: #fff1d2;
-  --rose-shadow: rgba(240, 106, 167, 0.24);
-  --blue-shadow: rgba(127, 205, 230, 0.12);
+  --cream: #fff0d1;
+  --rose-shadow: rgba(232, 100, 156, 0.18);
+  --blue-shadow: rgba(119, 191, 216, 0.08);
 
   --shadow:
-    0 16px 36px rgba(124, 70, 88, 0.12),
-    0 0 20px rgba(240, 106, 167, 0.08);
+    0 16px 36px rgba(114, 77, 88, 0.12),
+    0 0 18px rgba(232, 100, 156, 0.05);
 
-  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
 
-  --theme-page-glow-pink: rgba(240, 106, 167, 0.16);
-  --theme-page-glow-cyan: rgba(127, 205, 230, 0.08);
-  --theme-page-glow-violet: rgba(199, 154, 243, 0.10);
-  --theme-page-gradient-top: #fffdf8;
-  --theme-page-gradient-bottom: #fff4f8;
+  --theme-page-glow-pink: rgba(232, 100, 156, 0.1);
+  --theme-page-glow-cyan: rgba(119, 191, 216, 0.06);
+  --theme-page-glow-violet: rgba(197, 155, 232, 0.08);
+  --theme-page-gradient-top: #f8f3ee;
+  --theme-page-gradient-bottom: #efe4de;
 
-  --theme-panel-overlay: rgba(255, 255, 255, 0.55);
-  --theme-panel-border-sheen-pink: rgba(255, 179, 208, 0.56);
-  --theme-panel-border-sheen-cyan: rgba(242, 203, 109, 0.26);
-  --theme-panel-title-bg: rgba(255, 240, 246, 0.84);
+  --theme-panel-overlay: rgba(255, 255, 255, 0.58);
+  --theme-panel-border-sheen-pink: rgba(255, 185, 213, 0.56);
+  --theme-panel-border-sheen-cyan: rgba(240, 201, 109, 0.22);
+  --theme-panel-title-bg: rgba(255, 241, 247, 0.88);
 
-  --theme-card-border-cyan: rgba(240, 106, 167, 0.44);
-  --theme-card-bg-overlay: rgba(255, 255, 255, 0.58);
-  --theme-card-bg-deep: rgba(255, 249, 251, 0.96);
-  --theme-card-bg-deep-solid: rgba(255, 249, 251, 0.96);
-  --theme-card-inner-highlight: rgba(255, 255, 255, 0.75);
+  --theme-card-border-cyan: rgba(232, 100, 156, 0.5);
+  --theme-card-bg-overlay: rgba(255, 255, 255, 0.64);
+  --theme-card-bg-deep: rgba(255, 249, 245, 0.95);
+  --theme-card-bg-deep-solid: rgba(255, 249, 245, 0.95);
+  --theme-card-inner-highlight: rgba(255, 255, 255, 0.8);
 
-  --theme-nav-hover-border: rgba(240, 106, 167, 0.58);
-  --theme-nav-hover-bg: rgba(255, 220, 235, 0.92);
-  --theme-nav-hover-text: #5e2c3b;
-  --theme-nav-active-border: rgba(240, 106, 167, 0.84);
-  --theme-nav-active-bg: linear-gradient(90deg, rgba(255, 236, 244, 0.96), rgba(255, 211, 228, 0.96), rgba(255, 246, 220, 0.92));
-  --theme-nav-active-text: #5a2434;
-  --theme-nav-active-shadow: 0 0 24px rgba(240, 106, 167, 0.18);
+  --theme-nav-hover-border: rgba(232, 100, 156, 0.6);
+  --theme-nav-hover-bg: rgba(255, 232, 241, 0.95);
+  --theme-nav-hover-text: #5f3340;
+  --theme-nav-active-border: rgba(232, 100, 156, 0.88);
+  --theme-nav-active-bg: linear-gradient(90deg, rgba(255, 243, 247, 0.98), rgba(255, 221, 234, 0.98), rgba(255, 243, 219, 0.94));
+  --theme-nav-active-text: #562737;
+  --theme-nav-active-shadow: 0 0 22px rgba(232, 100, 156, 0.16);
 
-  --theme-chat-text: #5d3040;
-  --theme-chat-name: #d95897;
-  --theme-chat-form-bg: rgba(255, 247, 250, 0.95);
-  --theme-chat-input-border: rgba(240, 106, 167, 0.44);
-  --theme-chat-input-bg: rgba(255, 255, 255, 0.9);
-  --theme-chat-input-placeholder: rgba(128, 86, 100, 0.68);
-  --theme-chat-submit-bg: #f06aa7;
+  --theme-chat-text: #5a3541;
+  --theme-chat-name: #d95291;
+  --theme-chat-form-bg: rgba(255, 247, 244, 0.96);
+  --theme-chat-input-border: rgba(232, 100, 156, 0.46);
+  --theme-chat-input-bg: rgba(255, 255, 255, 0.92);
+  --theme-chat-input-placeholder: rgba(115, 86, 96, 0.7);
+  --theme-chat-submit-bg: #e8649c;
   --theme-chat-submit-text: #fff9fb;
 
-  --theme-button-primary-border: rgba(240, 106, 167, 0.58);
-  --theme-button-primary-bg: linear-gradient(180deg, #fff4f8 0%, #ffc6dc 34%, #f06aa7 100%);
-  --theme-button-primary-text: #5a2434;
-  --theme-button-primary-shadow: 0 10px 22px rgba(240, 106, 167, 0.18);
+  --theme-button-primary-border: rgba(232, 100, 156, 0.56);
+  --theme-button-primary-bg: linear-gradient(180deg, #fff6f9 0%, #ffc6dc 38%, #e8649c 100%);
+  --theme-button-primary-text: #5b2736;
+  --theme-button-primary-shadow: 0 8px 18px rgba(232, 100, 156, 0.16);
 
-  --theme-button-secondary-border: rgba(240, 106, 167, 0.44);
-  --theme-button-secondary-bg: linear-gradient(180deg, rgba(255, 241, 246, 0.98), rgba(255, 228, 238, 0.95));
-  --theme-button-secondary-text: #6a3142;
+  --theme-button-secondary-border: rgba(232, 100, 156, 0.42);
+  --theme-button-secondary-bg: linear-gradient(180deg, rgba(255, 247, 244, 0.98), rgba(255, 236, 242, 0.96));
+  --theme-button-secondary-text: #6a3947;
 
-  --theme-care-button-border: rgba(240, 106, 167, 0.52);
-  --theme-care-button-bg: linear-gradient(180deg, rgba(255, 249, 251, 0.98), rgba(255, 230, 240, 0.95), rgba(255, 240, 246, 0.95));
-  --theme-care-button-text: #6a3142;
+  --theme-care-button-border: rgba(232, 100, 156, 0.5);
+  --theme-care-button-bg: linear-gradient(180deg, rgba(255, 250, 246, 0.98), rgba(255, 236, 242, 0.95), rgba(255, 245, 248, 0.94));
+  --theme-care-button-text: #653444;
 
-  --theme-work-active-border: rgba(240, 106, 167, 0.82);
-  --theme-work-active-glow: rgba(240, 106, 167, 0.18);
-  --theme-work-active-bg: rgba(255, 241, 246, 0.98);
-  --theme-work-active-pill-bg: linear-gradient(90deg, #f06aa7, #ffe8b5, #c79af3);
-  --theme-work-active-pill-text: #5a2434;
-  --theme-work-active-button-bg: linear-gradient(180deg, #fff5f8 0%, #ffd1e2 45%, #f06aa7 100%);
-  --theme-work-active-button-border: rgba(240, 106, 167, 0.66);
-  --theme-work-active-button-text: #5a2434;
-  --theme-work-active-button-shadow: 0 12px 24px rgba(240, 106, 167, 0.18);
+  --theme-work-active-border: rgba(232, 100, 156, 0.86);
+  --theme-work-active-glow: rgba(232, 100, 156, 0.12);
+  --theme-work-active-bg: rgba(255, 240, 246, 0.98);
+  --theme-work-active-pill-bg: linear-gradient(90deg, #e8649c, #f5dfa0, #c59be8);
+  --theme-work-active-pill-text: #592636;
+  --theme-work-active-button-bg: linear-gradient(180deg, #fff6f8 0%, #ffd1e2 48%, #e8649c 100%);
+  --theme-work-active-button-border: rgba(232, 100, 156, 0.68);
+  --theme-work-active-button-text: #592636;
+  --theme-work-active-button-shadow: 0 10px 22px rgba(232, 100, 156, 0.18);
 
-  --theme-nami-message-bg: rgba(255, 229, 239, 0.94);
-  --theme-nami-message-text: #5f3141;
-  --theme-nami-room-stage-bg: #fff7fb;
+  --theme-nami-message-bg: rgba(255, 234, 242, 0.96);
+  --theme-nami-message-text: #5c3140;
+  --theme-nami-room-stage-bg: #fff7f8;
 
-  --theme-scrollbar-color: rgba(240, 106, 167, 0.88);
-  --theme-scrollbar-color-main: rgba(240, 106, 167, 0.82);
-  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #ffd7e7, #f06aa7, #c79af3);
+  --theme-scrollbar-color: rgba(232, 100, 156, 0.86);
+  --theme-scrollbar-color-main: rgba(232, 100, 156, 0.82);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #ffd9e8, #e8649c, #c59be8);
 
-  --theme-tick-fill: linear-gradient(90deg, #f06aa7, #ffe8b5, #c79af3, #7fcde6);
-  --theme-hp-fill: linear-gradient(90deg, #93d5a8, #ffe8b5, #f06aa7);
-  --theme-progress-xp-fill: linear-gradient(90deg, #f06aa7, #ffe8b5);
-  --theme-progress-stat-fill: linear-gradient(90deg, #c79af3, #f06aa7, #ffe8b5);
-  --theme-progress-track-border: rgba(240, 106, 167, 0.42);
-  --theme-progress-track-bg: rgba(255, 246, 248, 0.96);
-  --theme-progress-fill-shadow: 0 0 18px rgba(240, 106, 167, 0.18);
+  --theme-tick-fill: linear-gradient(90deg, #e8649c, #f5dfa0, #c59be8, #77bfd8);
+  --theme-hp-fill: linear-gradient(90deg, #8ec8a0, #f5dfa0, #e8649c);
+  --theme-progress-xp-fill: linear-gradient(90deg, #e8649c, #f5dfa0);
+  --theme-progress-stat-fill: linear-gradient(90deg, #c59be8, #e8649c, #f5dfa0);
+  --theme-progress-track-border: rgba(232, 100, 156, 0.4);
+  --theme-progress-track-bg: rgba(255, 248, 244, 0.96);
+  --theme-progress-fill-shadow: 0 0 12px rgba(232, 100, 156, 0.12);
 
-  --theme-legacy-pink-22: rgba(240, 106, 167, 0.22);
-  --theme-legacy-pink-18: rgba(240, 106, 167, 0.18);
-  --theme-legacy-pink-075: rgba(240, 106, 167, 0.08);
-  --theme-legacy-rose-12: rgba(240, 106, 167, 0.12);
-  --theme-legacy-rose-16: rgba(240, 106, 167, 0.16);
-  --theme-legacy-rose-18: rgba(240, 106, 167, 0.18);
-  --theme-legacy-rose-20: rgba(240, 106, 167, 0.2);
-  --theme-legacy-rose-22: rgba(240, 106, 167, 0.22);
-  --theme-legacy-rose-28: rgba(240, 106, 167, 0.28);
-  --theme-legacy-cyan-20: rgba(242, 203, 109, 0.16);
-  --theme-legacy-cyan-22: rgba(242, 203, 109, 0.18);
-  --theme-legacy-cyan-24: rgba(242, 203, 109, 0.2);
-  --theme-legacy-cyan-80: rgba(240, 106, 167, 0.82);
-  --theme-legacy-muted-blue-text-72: rgba(107, 61, 76, 0.74);
-  --theme-legacy-muted-blue-text-78: rgba(107, 61, 76, 0.8);
+  --theme-legacy-pink-22: rgba(232, 100, 156, 0.22);
+  --theme-legacy-pink-18: rgba(232, 100, 156, 0.18);
+  --theme-legacy-pink-075: rgba(232, 100, 156, 0.08);
+  --theme-legacy-rose-12: rgba(232, 100, 156, 0.12);
+  --theme-legacy-rose-16: rgba(232, 100, 156, 0.16);
+  --theme-legacy-rose-18: rgba(232, 100, 156, 0.18);
+  --theme-legacy-rose-20: rgba(232, 100, 156, 0.2);
+  --theme-legacy-rose-22: rgba(232, 100, 156, 0.22);
+  --theme-legacy-rose-28: rgba(232, 100, 156, 0.28);
+  --theme-legacy-cyan-20: rgba(240, 201, 109, 0.16);
+  --theme-legacy-cyan-22: rgba(240, 201, 109, 0.18);
+  --theme-legacy-cyan-24: rgba(240, 201, 109, 0.2);
+  --theme-legacy-cyan-80: rgba(232, 100, 156, 0.82);
+  --theme-legacy-muted-blue-text-72: rgba(109, 70, 80, 0.76);
+  --theme-legacy-muted-blue-text-78: rgba(109, 70, 80, 0.82);
 
-  --theme-residual-page-cyan-glow: rgba(242, 203, 109, 0.16);
-  --theme-residual-page-violet-glow: rgba(199, 154, 243, 0.16);
-  --theme-residual-log-card-bg: rgba(255, 246, 250, 0.98);
-  --theme-residual-panel-sheen-pink: rgba(255, 179, 208, 0.7);
-  --theme-residual-panel-sheen-cyan: rgba(242, 203, 109, 0.36);
-  --theme-residual-player-border-strong: rgba(240, 106, 167, 0.54);
-  --theme-residual-player-top-glow: rgba(255, 241, 246, 0.62);
-  --theme-residual-button-top: #fff7fb;
-  --theme-residual-button-mid: #f06aa7;
-  --theme-residual-button-bottom: #d84f91;
-  --theme-residual-button-text: #5a2434;
-  --theme-residual-chat-panel-bg: rgba(255, 250, 252, 0.98);
-  --theme-residual-chat-form-bg: rgba(255, 246, 249, 0.98);
-  --theme-residual-chat-log-bg: rgba(255, 251, 252, 0.98);
-  --theme-residual-chat-text: #5f3141;
-  --theme-residual-picker-bg: rgba(255, 250, 252, 0.99);
-  --theme-residual-grid-nav-active-rose: rgba(240, 106, 167, 0.34);
-  --theme-residual-right-buff-bg: rgba(255, 249, 251, 0.98);
-  --theme-residual-right-buff-text: rgba(95, 49, 65, 0.92);
-  --theme-residual-right-buff-small: rgba(120, 79, 91, 0.88);
+  --theme-residual-page-cyan-glow: rgba(240, 201, 109, 0.14);
+  --theme-residual-page-violet-glow: rgba(197, 155, 232, 0.14);
+  --theme-residual-log-card-bg: rgba(255, 249, 246, 0.98);
+  --theme-residual-panel-sheen-pink: rgba(255, 185, 213, 0.68);
+  --theme-residual-panel-sheen-cyan: rgba(240, 201, 109, 0.34);
+  --theme-residual-player-border-strong: rgba(232, 100, 156, 0.5);
+  --theme-residual-player-top-glow: rgba(255, 244, 247, 0.7);
+  --theme-residual-button-top: #fff8fb;
+  --theme-residual-button-mid: #e8649c;
+  --theme-residual-button-bottom: #d14f8c;
+  --theme-residual-button-text: #592636;
+  --theme-residual-chat-panel-bg: rgba(255, 250, 247, 0.98);
+  --theme-residual-chat-form-bg: rgba(255, 247, 244, 0.98);
+  --theme-residual-chat-log-bg: rgba(255, 251, 248, 0.98);
+  --theme-residual-chat-text: #5c3140;
+  --theme-residual-picker-bg: rgba(255, 250, 247, 0.99);
+  --theme-residual-grid-nav-active-rose: rgba(232, 100, 156, 0.32);
+  --theme-residual-right-buff-bg: rgba(255, 249, 246, 0.98);
+  --theme-residual-right-buff-text: rgba(92, 49, 64, 0.94);
+  --theme-residual-right-buff-small: rgba(123, 84, 96, 0.88);
 }
 
 body {
   background:
-    linear-gradient(180deg, #fffdf9 0%, #fff7fb 52%, #fff2f6 100%);
+    radial-gradient(circle at 16% 10%, rgba(255, 231, 240, 0.55), transparent 18rem),
+    radial-gradient(circle at 88% 14%, rgba(255, 241, 214, 0.42), transparent 18rem),
+    radial-gradient(circle at 70% 90%, rgba(240, 220, 226, 0.45), transparent 20rem),
+    linear-gradient(180deg, #f8f3ee 0%, #f2ebe5 52%, #ede2db 100%);
 }
 
+/* visible shoji wall */
 body::before {
   background:
-    repeating-linear-gradient(90deg, rgba(138, 92, 63, 0.18) 0 2px, transparent 2px 78px),
-    repeating-linear-gradient(0deg, rgba(138, 92, 63, 0.14) 0 2px, transparent 2px 62px),
-    linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,247,250,0.9));
+    linear-gradient(180deg, rgba(255,255,255,0.56), rgba(255,255,255,0.36)),
+    repeating-linear-gradient(90deg, rgba(128, 90, 64, 0.19) 0 3px, transparent 3px 92px),
+    repeating-linear-gradient(0deg, rgba(128, 90, 64, 0.16) 0 3px, transparent 3px 74px),
+    linear-gradient(180deg, rgba(249, 244, 239, 0.92), rgba(243, 234, 226, 0.94));
   opacity: 1;
 }
 
-/* hide dark-theme-only decorations, keep petals */
+/* keep petals, hide dark-only decorations */
 body[data-theme="sakura-light"] .sakura-moon,
 body[data-theme="sakura-light"] .sakura-branch,
 body[data-theme="sakura-light"] .sakura-lantern {
   display: none;
 }
 
+/* Japanese decorative motifs in safe empty areas */
 body[data-theme="sakura-light"] .theme-effects-sakura::before {
   content: "";
   position: absolute;
-  right: 4vw;
-  bottom: 9vh;
+  right: 3.5vw;
+  bottom: 5.5vh;
   width: clamp(180px, 18vw, 320px);
-  aspect-ratio: 1;
+  height: clamp(180px, 18vw, 320px);
   border-radius: 50%;
   opacity: 0.12;
   background:
-    radial-gradient(circle, rgba(240, 106, 167, 0.85) 0 32%, rgba(240, 106, 167, 0.18) 55%, transparent 70%);
-  filter: blur(0.5px);
+    radial-gradient(circle at 50% 50%, rgba(232, 100, 156, 0.7) 0 28%, rgba(232, 100, 156, 0.18) 52%, transparent 62%),
+    repeating-conic-gradient(from 0deg, rgba(217, 143, 71, 0.18) 0deg 12deg, transparent 12deg 24deg);
+  filter: blur(0.3px);
 }
 
 body[data-theme="sakura-light"] .theme-effects-sakura::after {
   content: "";
   position: absolute;
-  left: 3vw;
-  bottom: 6vh;
-  width: min(23vw, 340px);
-  height: min(18vw, 260px);
-  opacity: 0.14;
+  left: 2.5vw;
+  bottom: 5vh;
+  width: min(26vw, 370px);
+  height: min(15vw, 210px);
+  opacity: 0.12;
   background:
-    radial-gradient(circle at 15% 88%, rgba(138, 92, 63, 0.18) 0 6%, transparent 7%),
-    radial-gradient(circle at 31% 88%, rgba(138, 92, 63, 0.18) 0 6%, transparent 7%),
-    radial-gradient(circle at 47% 88%, rgba(138, 92, 63, 0.18) 0 6%, transparent 7%),
-    radial-gradient(circle at 63% 88%, rgba(138, 92, 63, 0.18) 0 6%, transparent 7%),
-    radial-gradient(circle at 79% 88%, rgba(138, 92, 63, 0.18) 0 6%, transparent 7%),
-    radial-gradient(circle at 15% 88%, transparent 0 12%, rgba(240, 106, 167, 0.2) 12.5% 14.5%, transparent 15%),
-    radial-gradient(circle at 31% 88%, transparent 0 12%, rgba(240, 106, 167, 0.2) 12.5% 14.5%, transparent 15%),
-    radial-gradient(circle at 47% 88%, transparent 0 12%, rgba(240, 106, 167, 0.2) 12.5% 14.5%, transparent 15%),
-    radial-gradient(circle at 63% 88%, transparent 0 12%, rgba(240, 106, 167, 0.2) 12.5% 14.5%, transparent 15%),
-    radial-gradient(circle at 79% 88%, transparent 0 12%, rgba(240, 106, 167, 0.2) 12.5% 14.5%, transparent 15%);
+    radial-gradient(circle at 10% 80%, rgba(136, 93, 64, 0.2) 0 5%, transparent 5.5%),
+    radial-gradient(circle at 30% 80%, rgba(136, 93, 64, 0.2) 0 5%, transparent 5.5%),
+    radial-gradient(circle at 50% 80%, rgba(136, 93, 64, 0.2) 0 5%, transparent 5.5%),
+    radial-gradient(circle at 70% 80%, rgba(136, 93, 64, 0.2) 0 5%, transparent 5.5%),
+    radial-gradient(circle at 90% 80%, rgba(136, 93, 64, 0.2) 0 5%, transparent 5.5%),
+    radial-gradient(circle at 20% 52%, rgba(232, 100, 156, 0.24) 0 7%, transparent 7.5%),
+    radial-gradient(circle at 40% 52%, rgba(232, 100, 156, 0.24) 0 7%, transparent 7.5%),
+    radial-gradient(circle at 60% 52%, rgba(232, 100, 156, 0.24) 0 7%, transparent 7.5%),
+    radial-gradient(circle at 80% 52%, rgba(232, 100, 156, 0.24) 0 7%, transparent 7.5%),
+    radial-gradient(circle at 30% 24%, rgba(136, 93, 64, 0.18) 0 4%, transparent 4.5%),
+    radial-gradient(circle at 50% 24%, rgba(136, 93, 64, 0.18) 0 4%, transparent 4.5%),
+    radial-gradient(circle at 70% 24%, rgba(136, 93, 64, 0.18) 0 4%, transparent 4.5%);
 }
 
 /* shared effects layer for petals */
@@ -232,10 +241,10 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   border-radius: 75% 0 75% 10%;
   background:
     radial-gradient(circle at 38% 28%, rgba(255, 255, 255, 0.96), transparent 24%),
-    linear-gradient(145deg, rgba(255, 249, 252, 0.96), rgba(255, 183, 211, 0.96) 52%, rgba(199, 154, 243, 0.55));
+    linear-gradient(145deg, rgba(255, 249, 252, 0.96), rgba(255, 183, 211, 0.96) 52%, rgba(197, 155, 232, 0.55));
   filter:
     blur(var(--petal-blur))
-    drop-shadow(0 0 6px rgba(240, 106, 167, 0.28));
+    drop-shadow(0 0 6px rgba(232, 100, 156, 0.24));
   transform-origin: 50% 70%;
   animation: sakuraPetalFall var(--petal-duration) linear var(--petal-delay) forwards;
 }
@@ -245,7 +254,7 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   position: absolute;
   inset: 16% 42% 8%;
   border-radius: 999px;
-  background: rgba(184, 92, 129, 0.34);
+  background: rgba(184, 92, 129, 0.32);
   transform: rotate(14deg);
 }
 
@@ -253,20 +262,20 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   border-radius: 0 75% 10% 75%;
   background:
     radial-gradient(circle at 48% 26%, rgba(255, 255, 255, 0.92), transparent 22%),
-    linear-gradient(155deg, rgba(255, 233, 242, 0.98), rgba(240, 106, 167, 0.9) 58%, rgba(255, 232, 181, 0.34));
+    linear-gradient(155deg, rgba(255, 233, 242, 0.98), rgba(232, 100, 156, 0.88) 58%, rgba(255, 232, 181, 0.34));
 }
 
 .sakura-petal.petal-c {
   background:
     radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.94), transparent 24%),
-    linear-gradient(140deg, rgba(255, 242, 216, 0.92), rgba(240, 106, 167, 0.82) 46%, rgba(223, 92, 134, 0.56));
+    linear-gradient(140deg, rgba(255, 242, 216, 0.92), rgba(232, 100, 156, 0.82) 46%, rgba(217, 89, 129, 0.54));
 }
 
 .sakura-petal.petal-d {
   border-radius: 65% 20% 72% 10%;
   background:
     radial-gradient(circle at 42% 25%, rgba(255, 255, 255, 0.94), transparent 22%),
-    linear-gradient(145deg, rgba(255, 233, 242, 0.96), rgba(199, 154, 243, 0.56), rgba(240, 106, 167, 0.76));
+    linear-gradient(145deg, rgba(255, 233, 242, 0.96), rgba(197, 155, 232, 0.56), rgba(232, 100, 156, 0.76));
 }
 
 @keyframes sakuraPetalFall {
@@ -304,7 +313,7 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   }
 }
 
-/* light sakura surfaces */
+/* Make all major surfaces light, including the top rail */
 .panel,
 .nami-card,
 .care-card,
@@ -317,25 +326,42 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
 .equipment-card,
 .inventory-item-card,
 .right-buff-group,
-.chat-panel {
-  border-color: rgba(240, 106, 167, 0.64);
+.chat-panel,
+.top-summary,
+.key-information,
+.summary-card,
+.player-summary,
+.top-rail,
+.rail-section,
+.left-rail,
+.right-rail {
+  border-color: rgba(232, 100, 156, 0.58);
   background:
-    radial-gradient(circle at 14% 0%, rgba(255,255,255,0.88), transparent 13rem),
-    linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,243,248,0.88)),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0 1px, transparent 1px 24px),
+    radial-gradient(circle at 14% 0%, rgba(255,255,255,0.86), transparent 13rem),
+    linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,244,248,0.9)),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.34) 0 1px, transparent 1px 24px),
     var(--theme-card-bg-deep-solid);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.92),
-    0 0 0 3px rgba(143, 101, 71, 0.34),
-    0 14px 34px rgba(124, 70, 88, 0.12),
-    0 0 18px rgba(240, 106, 167, 0.08);
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 0 0 2px rgba(140, 102, 72, 0.28),
+    0 14px 32px rgba(114, 77, 88, 0.1),
+    0 0 18px rgba(232, 100, 156, 0.06);
   backdrop-filter: blur(10px) saturate(1.04);
+}
+
+/* force dark top rail text panels to inherit light theme */
+.top-summary,
+.key-information,
+.summary-card,
+.player-summary,
+.top-rail {
+  color: var(--text) !important;
 }
 
 .panel::before {
   background:
-    linear-gradient(90deg, transparent, rgba(255, 228, 238, 0.9), rgba(255, 240, 210, 0.62), transparent);
-  opacity: 0.72;
+    linear-gradient(90deg, transparent, rgba(255, 228, 238, 0.88), rgba(255, 240, 210, 0.6), transparent);
+  opacity: 0.68;
 }
 
 .panel::after {
@@ -344,10 +370,10 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   inset: 0;
   pointer-events: none;
   border-radius: inherit;
-  opacity: 0.22;
+  opacity: 0.2;
   background:
     radial-gradient(circle at 8% 16%, rgba(255, 240, 210, 0.34), transparent 4rem),
-    radial-gradient(circle at 92% 18%, rgba(255, 228, 238, 0.28), transparent 5rem);
+    radial-gradient(circle at 92% 18%, rgba(255, 228, 238, 0.26), transparent 5rem);
 }
 
 /* bars */
@@ -355,12 +381,12 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
 .stat-bar,
 .bar,
 .task-xp-bar {
-  border: 1px solid rgba(240, 106, 167, 0.46);
+  border: 1px solid rgba(232, 100, 156, 0.42);
   background:
-    linear-gradient(180deg, rgba(255, 252, 253, 0.98), rgba(255, 243, 248, 0.98));
+    linear-gradient(180deg, rgba(255, 252, 253, 0.98), rgba(255, 244, 248, 0.98));
   box-shadow:
-    inset 0 0 0 1px rgba(143, 101, 71, 0.08),
-    inset 0 0 12px rgba(240, 106, 167, 0.06);
+    inset 0 0 0 1px rgba(141, 101, 71, 0.08),
+    inset 0 0 10px rgba(232, 100, 156, 0.04);
 }
 
 .meter-fill,
@@ -371,8 +397,8 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   position: relative;
   overflow: hidden;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.46),
-    0 0 12px rgba(240, 106, 167, 0.16);
+    inset 0 1px 0 rgba(255,255,255,0.44),
+    0 0 10px rgba(232, 100, 156, 0.1);
 }
 
 .meter-fill::after,
@@ -384,29 +410,29 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, transparent, rgba(255,255,255,0.36), transparent);
+    linear-gradient(90deg, transparent, rgba(255,255,255,0.34), transparent);
   transform: translateX(-100%);
   animation: sakuraLightBarSheen 3s ease-in-out infinite;
 }
 
 .tick-fill {
-  background: linear-gradient(90deg, #f06aa7 0%, #ffe8b5 42%, #c79af3 72%, #7fcde6 100%);
+  background: linear-gradient(90deg, #e8649c 0%, #f5dfa0 42%, #c59be8 72%, #77bfd8 100%);
   animation:
     tickProgress 5s linear infinite,
     sakuraLightBarPulse 2.6s ease-in-out infinite;
 }
 
 .hp-fill {
-  background: linear-gradient(90deg, #93d5a8 0%, #ffe8b5 52%, #f06aa7 100%);
+  background: linear-gradient(90deg, #8ec8a0 0%, #f5dfa0 52%, #e8649c 100%);
 }
 
 .xp-fill,
 .task-xp-fill {
-  background: linear-gradient(90deg, #f06aa7 0%, #ffe8b5 62%, #d8835f 100%);
+  background: linear-gradient(90deg, #e8649c 0%, #f5dfa0 62%, #d98960 100%);
 }
 
 .stat-fill {
-  background: linear-gradient(90deg, #c79af3 0%, #f06aa7 50%, #ffe8b5 100%);
+  background: linear-gradient(90deg, #c59be8 0%, #e8649c 50%, #f5dfa0 100%);
 }
 
 @keyframes sakuraLightBarSheen {
@@ -425,35 +451,35 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   }
 
   50% {
-    filter: saturate(1.12) brightness(1.05);
+    filter: saturate(1.1) brightness(1.04);
   }
 }
 
-/* accents */
+/* readable, elegant accents */
 .main-nav.menu-grid .nav-item {
   box-shadow:
-    inset 0 0 0 1px rgba(143, 101, 71, 0.08),
-    0 8px 20px rgba(124, 70, 88, 0.08);
+    inset 0 0 0 1px rgba(140, 102, 72, 0.08),
+    0 6px 16px rgba(114, 77, 88, 0.07);
 }
 
 .main-nav.menu-grid .nav-item.active {
   box-shadow:
-    0 0 0 1px rgba(240, 106, 167, 0.22),
-    0 0 18px rgba(240, 106, 167, 0.12),
-    inset 0 0 18px rgba(255, 243, 248, 0.68);
+    0 0 0 1px rgba(232, 100, 156, 0.18),
+    0 0 14px rgba(232, 100, 156, 0.08),
+    inset 0 0 18px rgba(255, 244, 248, 0.7);
 }
 
 .main-nav.menu-grid .nav-item.active::after {
-  border-color: rgba(240, 106, 167, 0.4);
+  border-color: rgba(232, 100, 156, 0.36);
   box-shadow:
-    0 0 12px rgba(240, 106, 167, 0.2),
-    inset 0 0 12px rgba(255, 243, 248, 0.32);
+    0 0 10px rgba(232, 100, 156, 0.14),
+    inset 0 0 10px rgba(255, 243, 248, 0.3);
 }
 
 .menu-logo {
   filter:
-    drop-shadow(0 0 10px rgba(240, 106, 167, 0.16))
-    drop-shadow(0 0 18px rgba(242, 203, 109, 0.08));
+    drop-shadow(0 0 8px rgba(232, 100, 156, 0.14))
+    drop-shadow(0 0 14px rgba(240, 201, 109, 0.08));
 }
 
 .nami-room-stage::after {
@@ -463,17 +489,17 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
   z-index: 5;
   pointer-events: none;
   background:
-    radial-gradient(circle at 12% 12%, rgba(255, 240, 210, 0.16), transparent 9rem),
-    radial-gradient(circle at 80% 14%, rgba(255, 228, 238, 0.18), transparent 10rem),
-    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,228,238,0.08));
+    radial-gradient(circle at 12% 12%, rgba(255, 240, 210, 0.12), transparent 9rem),
+    radial-gradient(circle at 80% 14%, rgba(255, 228, 238, 0.14), transparent 10rem),
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,228,238,0.06));
   mix-blend-mode: screen;
 }
 
 .nami-message {
-  border: 1px solid rgba(240, 106, 167, 0.38);
+  border: 1px solid rgba(232, 100, 156, 0.34);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.6),
-    0 0 16px rgba(240, 106, 167, 0.08);
+    inset 0 1px 0 rgba(255,255,255,0.58),
+    0 0 12px rgba(232, 100, 156, 0.06);
 }
 
 .nami-message::before {
@@ -487,15 +513,15 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
 .wardrobe-panel h2,
 .panel-title {
   text-shadow:
-    0 0 8px rgba(240, 106, 167, 0.08),
-    0 0 14px rgba(255, 240, 210, 0.08);
+    0 0 6px rgba(232, 100, 156, 0.06),
+    0 0 12px rgba(255, 240, 210, 0.06);
 }
 
 .chat-panel {
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.7),
-    0 -10px 24px rgba(124, 70, 88, 0.08),
-    0 0 20px rgba(240, 106, 167, 0.08);
+    inset 0 1px 0 rgba(255,255,255,0.68),
+    0 -8px 18px rgba(114, 77, 88, 0.06),
+    0 0 16px rgba(232, 100, 156, 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {
