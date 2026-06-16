@@ -440,6 +440,104 @@
   --theme-legacy-success-95: rgba(168, 224, 95, 0.95);
   --theme-legacy-success-deep: rgba(5, 39, 31, 0.36);
   --theme-legacy-success-green-deep: rgba(101, 168, 54, 0.9);
+
+  /* Theme residual alias tokens */
+  --theme-residual-player-border: rgba(255, 212, 235, 0.28);
+  --theme-residual-nami-slot-pink: rgba(255, 217, 239, 0.24);
+  --theme-residual-nami-slot-cyan: rgba(152, 221, 255, 0.14);
+  --theme-residual-care-violet: rgba(168, 137, 255, 0.1);
+  --theme-residual-zone-active-bg: rgba(73, 199, 255, 0.055);
+  --theme-residual-chat-input-bg: rgba(3, 8, 15, 0.66);
+  --theme-residual-top-stats-bg: rgba(14, 24, 39, 0.92);
+  --theme-residual-mentioned-bg: rgba(255, 209, 102, 0.08);
+  --theme-residual-player-bg-deep: rgba(7, 13, 24, 0.62);
+  --theme-residual-rail-divider: rgba(143, 205, 255, 0.1);
+
+  --theme-residual-compact-care-deep-violet: rgba(124, 70, 153, 0.12);
+  --theme-residual-active-care-border: rgba(73, 199, 255, 0.88);
+  --theme-residual-active-care-text: #eaf8ff;
+  --theme-residual-queued-care-text: #f3ffd7;
+  --theme-residual-queued-care-fill-gold: rgba(255, 220, 112, 0.26);
+
+  --theme-residual-page-cyan-glow: rgba(152, 221, 255, 0.18);
+  --theme-residual-page-violet-glow: rgba(201, 167, 255, 0.2);
+  --theme-residual-before-pink: rgba(255, 217, 239, 0.16);
+
+  --theme-residual-log-card-rose-glow: rgba(255, 140, 204, 0.115);
+  --theme-residual-log-card-bg: rgba(42, 20, 56, 0.84);
+  --theme-residual-log-card-inner: rgba(255, 140, 204, 0.035);
+  --theme-residual-panel-sheen-pink: rgba(255, 190, 226, 0.55);
+  --theme-residual-panel-sheen-cyan: rgba(152, 221, 255, 0.35);
+
+  --theme-residual-control-violet: rgba(201, 167, 255, 0.08);
+  --theme-residual-control-cyan: rgba(152, 221, 255, 0.07);
+  --theme-residual-player-border-strong: rgba(255, 217, 239, 0.38);
+  --theme-residual-player-top-glow: rgba(255, 217, 239, 0.22);
+  --theme-residual-player-violet-bg: rgba(201, 167, 255, 0.07);
+  --theme-residual-player-rose-soft: rgba(255, 140, 204, 0.08);
+  --theme-residual-nav-icon-text: rgba(255, 217, 239, 0.55);
+  --theme-residual-nav-active-border: rgba(255, 217, 239, 0.52);
+  --theme-residual-nav-active-violet: rgba(201, 167, 255, 0.14);
+
+  --theme-residual-button-top: #ffd9ef;
+  --theme-residual-button-mid: #ff8ccc;
+  --theme-residual-button-bottom: #d874bd;
+  --theme-residual-button-text: #301127;
+  --theme-residual-button-shadow: rgba(255, 140, 204, 0.18);
+
+  --theme-residual-secondary-violet: rgba(201, 167, 255, 0.12);
+  --theme-residual-secondary-pink: rgba(255, 217, 239, 0.16);
+  --theme-residual-secondary-border: rgba(255, 190, 226, 0.34);
+  --theme-residual-stat-border: rgba(255, 217, 239, 0.12);
+  --theme-residual-stat-bg: rgba(19, 8, 30, 0.68);
+  --theme-residual-need-border: rgba(255, 190, 226, 0.17);
+
+  --theme-residual-nami-border: rgba(255, 190, 226, 0.28);
+  --theme-residual-nami-inner: rgba(255, 140, 204, 0.055);
+  --theme-residual-nami-shadow: rgba(255, 140, 204, 0.07);
+  --theme-residual-sparkle-border: rgba(255, 217, 239, 0.34);
+  --theme-residual-sparkle-rose: rgba(255, 140, 204, 0.08);
+  --theme-residual-sparkle-shadow: rgba(255, 140, 204, 0.22);
+
+  --theme-residual-log-card-border: rgba(255, 190, 226, 0.2);
+  --theme-residual-chat-panel-border: rgba(152, 221, 255, 0.18);
+  --theme-residual-chat-panel-bg: rgba(15, 10, 28, 0.88);
+  --theme-residual-chat-form-bg: rgba(19, 8, 30, 0.7);
+  --theme-residual-chat-log-bg: rgba(15, 8, 25, 0.58);
+  --theme-residual-chat-time: rgba(202, 161, 187, 0.76);
+  --theme-residual-chat-text: #f6ddeb;
+  --theme-residual-chat-input-bg: rgba(19, 8, 30, 0.78);
+  --theme-residual-chat-emoji-rose: rgba(255, 140, 204, 0.11);
+  --theme-residual-chat-emoji-pink: rgba(255, 217, 239, 0.18);
+  --theme-residual-picker-bg: rgba(20, 10, 30, 0.98);
+  --theme-residual-picker-rose: rgba(255, 140, 204, 0.13);
+
+  --theme-residual-care-progress-pink: rgba(255, 140, 204, 0.62);
+  --theme-residual-care-progress-violet: rgba(201, 167, 255, 0.56);
+  --theme-residual-care-progress-cyan: rgba(152, 221, 255, 0.45);
+  --theme-residual-care-active-border: rgba(255, 217, 239, 0.72);
+  --theme-residual-care-active-outline: rgba(255, 217, 239, 0.12);
+  --theme-residual-care-queued-border: rgba(255, 226, 150, 0.55);
+  --theme-residual-care-queued-text: #fff3cf;
+  --theme-residual-care-queued-glow-soft: rgba(255, 226, 150, 0.07);
+  --theme-residual-care-queued-glow: rgba(255, 226, 150, 0.08);
+
+  --theme-residual-grid-nav-border: rgba(255, 190, 226, 0.22);
+  --theme-residual-grid-nav-glow: rgba(255, 217, 239, 0.12);
+  --theme-residual-grid-nav-shadow: rgba(15, 5, 24, 0.1);
+  --theme-residual-grid-nav-hover-border: rgba(255, 217, 239, 0.42);
+  --theme-residual-grid-nav-hover-glow: rgba(255, 217, 239, 0.2);
+  --theme-residual-grid-nav-active-border: rgba(255, 217, 239, 0.66);
+  --theme-residual-grid-nav-active-violet: rgba(201, 167, 255, 0.15);
+  --theme-residual-grid-nav-active-rose: rgba(255, 140, 204, 0.34);
+  --theme-residual-grid-nav-active-outline: rgba(255, 217, 239, 0.08);
+
+  --theme-residual-combat-cyan-border: rgba(152, 221, 255, 0.22);
+  --theme-residual-right-buff-border: rgba(255, 190, 226, 0.2);
+  --theme-residual-right-buff-bg: rgba(42, 20, 56, 0.78);
+  --theme-residual-right-buff-divider: rgba(255, 190, 226, 0.12);
+  --theme-residual-right-buff-text: rgba(244, 212, 230, 0.78);
+  --theme-residual-right-buff-small: rgba(202, 161, 187, 0.82);
 }
 
 * {
@@ -562,7 +660,7 @@ input:focus-visible {
   width: calc(100% - 28px);
   margin: 14px auto 12px;
   padding: 12px 10px;
-  border: 1px solid rgba(255, 212, 235, 0.28);
+  border: 1px solid var(--theme-residual-player-border);
   border-radius: 14px;
   background:
     radial-gradient(circle at top, var(--theme-pink-border-16), transparent 8rem),
@@ -836,8 +934,8 @@ h2 {
   align-content: stretch;
   place-items: stretch;
   background:
-    radial-gradient(circle at 50% 26%, rgba(255, 217, 239, 0.24), transparent 9rem),
-    radial-gradient(circle at 50% 74%, rgba(152, 221, 255, 0.14), transparent 14rem),
+    radial-gradient(circle at 50% 26%, var(--theme-residual-nami-slot-pink), transparent 9rem),
+    radial-gradient(circle at 50% 74%, var(--theme-residual-nami-slot-cyan), transparent 14rem),
     var(--theme-white-surface-03);
 }
 
@@ -908,7 +1006,7 @@ h2 {
 .care-button {
   padding: 9px 8px;
   background:
-    linear-gradient(180deg, var(--theme-legacy-pink-22), rgba(168, 137, 255, 0.1));
+    linear-gradient(180deg, var(--theme-legacy-pink-22), var(--theme-residual-care-violet));
   color: var(--pink-soft);
   border-color: var(--theme-legacy-pink-30);
   box-shadow: none;
@@ -942,7 +1040,7 @@ h2 {
   border-color: var(--theme-cyan-active-border-58);
   background:
     radial-gradient(circle at top right, var(--theme-cyan-bg-18), transparent 9rem),
-    rgba(73, 199, 255, 0.055);
+    var(--theme-residual-zone-active-bg);
   box-shadow: 0 0 28px var(--theme-cyan-bg-10);
 }
 
@@ -1138,7 +1236,7 @@ h2 {
   border: 1px solid var(--theme-cyan-border-15);
   border-radius: 999px;
   padding: 10px 14px;
-  background: rgba(3, 8, 15, 0.66);
+  background: var(--theme-residual-chat-input-bg);
   color: var(--text);
 }
 
@@ -1467,7 +1565,7 @@ h2 {
   padding: 8px 10px 10px;
   background:
     linear-gradient(180deg, var(--theme-white-surface-03), transparent 70%),
-    rgba(14, 24, 39, 0.92);
+    var(--theme-residual-top-stats-bg);
 }
 
 .top-stats-panel .collapse-body.collapsed {
@@ -2313,7 +2411,7 @@ body > .emoji-picker-floating .emoji-option:hover {
 .chat-message.chat-mentioned {
   border-left: 3px solid var(--yellow);
   padding-left: 6px;
-  background: rgba(255, 209, 102, 0.08);
+  background: var(--theme-residual-mentioned-bg);
 }
 
 .chat-message.chat-whisper {
@@ -2450,7 +2548,7 @@ body > .emoji-picker-floating .emoji-option:hover {
   color: var(--text-soft);
   background:
     linear-gradient(180deg, var(--theme-white-surface-025), transparent),
-    rgba(7, 13, 24, 0.62);
+    var(--theme-residual-player-bg-deep);
   box-shadow: none;
 }
 
@@ -2696,7 +2794,7 @@ body > .emoji-picker-floating .emoji-option:hover {
 .right-rail .buff-card {
   gap: 1px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(143, 205, 255, 0.1);
+  border-bottom: 1px solid var(--theme-residual-rail-divider);
 }
 
 .right-rail .buff-card strong {
@@ -3770,7 +3868,7 @@ body > .emoji-picker-floating .emoji-option {
   justify-content: center;
   border-color: var(--theme-legacy-pink-52);
   background:
-    linear-gradient(180deg, var(--theme-legacy-pink-18), rgba(124, 70, 153, 0.12)),
+    linear-gradient(180deg, var(--theme-legacy-pink-18), var(--theme-residual-compact-care-deep-violet)),
     var(--theme-white-surface-035);
   color: var(--theme-legacy-nami-text);
   transition:
@@ -3806,8 +3904,8 @@ body > .emoji-picker-floating .emoji-option {
 }
 
 .compact-care-actions .care-button.care-button-active {
-  border-color: rgba(73, 199, 255, 0.88);
-  color: #eaf8ff;
+  border-color: var(--theme-residual-active-care-border);
+  color: var(--theme-residual-active-care-text);
   box-shadow:
     0 0 0 1px var(--theme-legacy-cyan-16),
     0 0 16px var(--theme-legacy-cyan-22),
@@ -3820,7 +3918,7 @@ body > .emoji-picker-floating .emoji-option {
 
 .compact-care-actions .care-button.care-button-queued {
   border-color: var(--theme-legacy-success-62);
-  color: #f3ffd7;
+  color: var(--theme-residual-queued-care-text);
   box-shadow:
     inset 0 0 12px var(--theme-legacy-success-08),
     0 0 10px var(--theme-legacy-success-08);
@@ -3828,7 +3926,7 @@ body > .emoji-picker-floating .emoji-option {
 
 .compact-care-actions .care-button.care-button-queued .care-button-progress-fill {
   width: 0%;
-  background: linear-gradient(90deg, var(--theme-legacy-success-32), rgba(255, 220, 112, 0.26));
+  background: linear-gradient(90deg, var(--theme-legacy-success-32), var(--theme-residual-queued-care-fill-gold));
 }
 
 .compact-care-actions .care-button.care-button-blocked {
@@ -3854,8 +3952,8 @@ input {
 body {
   background:
     radial-gradient(circle at 10% 8%, var(--theme-legacy-rose-28), transparent 28rem),
-    radial-gradient(circle at 90% 10%, rgba(152, 221, 255, 0.18), transparent 34rem),
-    radial-gradient(circle at 50% 100%, rgba(201, 167, 255, 0.2), transparent 36rem),
+    radial-gradient(circle at 90% 10%, var(--theme-residual-page-cyan-glow), transparent 34rem),
+    radial-gradient(circle at 50% 100%, var(--theme-residual-page-violet-glow), transparent 36rem),
     linear-gradient(180deg, var(--theme-legacy-page-gradient-warm-top) 0%, var(--theme-legacy-page-gradient-warm-middle) 55%, var(--theme-legacy-page-gradient-warm-bottom) 100%);
 }
 
@@ -3866,7 +3964,7 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background-image:
-    radial-gradient(circle, rgba(255, 217, 239, 0.16) 0 1px, transparent 1.5px),
+    radial-gradient(circle, var(--theme-residual-before-pink) 0 1px, transparent 1.5px),
     radial-gradient(circle, var(--theme-inventory-quantity-bg) 0 1px, transparent 1.5px);
   background-position:
     0 0,
@@ -3889,22 +3987,22 @@ body::before {
   border-radius: var(--radius-lg);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.065), transparent 70%),
-    radial-gradient(circle at top left, rgba(255, 140, 204, 0.115), transparent 16rem),
-    rgba(42, 20, 56, 0.84);
+    radial-gradient(circle at top left, var(--theme-residual-log-card-rose-glow), transparent 16rem),
+    var(--theme-residual-log-card-bg);
   box-shadow:
     var(--shadow),
     var(--inner-glow),
-    inset 0 0 34px rgba(255, 140, 204, 0.035);
+    inset 0 0 34px var(--theme-residual-log-card-inner);
 }
 
 .panel::before {
   background:
     linear-gradient(
       100deg,
-      rgba(255, 190, 226, 0.55),
+      var(--theme-residual-panel-sheen-pink),
       transparent 26%,
       transparent 70%,
-      rgba(152, 221, 255, 0.35)
+      var(--theme-residual-panel-sheen-cyan)
     );
   opacity: 0.48;
 }
@@ -3928,7 +4026,7 @@ h3 {
 .collapse-toggle {
   color: var(--pink-soft);
   background:
-    linear-gradient(90deg, var(--theme-legacy-rose-16), rgba(201, 167, 255, 0.08)),
+    linear-gradient(90deg, var(--theme-legacy-rose-16), var(--theme-residual-control-violet)),
     var(--theme-white-surface-025);
   border-bottom-color: var(--theme-wardrobe-capacity-border);
   letter-spacing: 0.045em;
@@ -3937,21 +4035,21 @@ h3 {
 
 .top-panel-toggle {
   background:
-    linear-gradient(90deg, var(--theme-legacy-rose-18), rgba(152, 221, 255, 0.07)) !important;
+    linear-gradient(90deg, var(--theme-legacy-rose-18), var(--theme-residual-control-cyan)) !important;
 }
 
 .player-name {
-  border-color: rgba(255, 217, 239, 0.38);
+  border-color: var(--theme-residual-player-border-strong);
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 217, 239, 0.22), transparent 7rem),
-    linear-gradient(180deg, var(--theme-legacy-rose-12), rgba(201, 167, 255, 0.07));
+    radial-gradient(circle at 50% 0%, var(--theme-residual-player-top-glow), transparent 7rem),
+    linear-gradient(180deg, var(--theme-legacy-rose-12), var(--theme-residual-player-violet-bg));
   color: var(--cream);
   text-shadow:
     0 0 10px var(--theme-legacy-rose-32),
     0 1px 2px rgba(0, 0, 0, 0.45);
   box-shadow:
-    inset 0 0 24px rgba(255, 140, 204, 0.08),
-    0 0 18px rgba(255, 140, 204, 0.08);
+    inset 0 0 24px var(--theme-residual-player-rose-soft),
+    0 0 18px var(--theme-residual-player-rose-soft);
 }
 
 .nav-item {
@@ -3964,7 +4062,7 @@ h3 {
 .nav-item::before {
   content: "♡";
   margin-right: 5px;
-  color: rgba(255, 217, 239, 0.55);
+  color: var(--theme-residual-nav-icon-text);
 }
 
 .nav-item:hover {
@@ -3974,9 +4072,9 @@ h3 {
 }
 
 .nav-item.active {
-  border-color: rgba(255, 217, 239, 0.52);
+  border-color: var(--theme-residual-nav-active-border);
   background:
-    linear-gradient(90deg, var(--theme-legacy-rose-28), rgba(201, 167, 255, 0.14)),
+    linear-gradient(90deg, var(--theme-legacy-rose-28), var(--theme-residual-nav-active-violet)),
     var(--theme-white-surface-035);
   color: var(--theme-legacy-soft-white);
   box-shadow:
@@ -3994,7 +4092,7 @@ h3 {
 .task-card button {
   border-color: var(--theme-legacy-pink-soft-border-36);
   background:
-    linear-gradient(180deg, #ffd9ef 0%, #ff8ccc 52%, #d874bd 100%);
+    linear-gradient(180deg, var(--theme-residual-button-top) 0%, var(--theme-residual-button-mid) 52%, var(--theme-residual-button-bottom) 100%);
   color: var(--theme-legacy-warm-dark-ink);
   letter-spacing: 0.035em;
   box-shadow:
@@ -4012,16 +4110,16 @@ h3 {
 
 .secondary-button {
   background:
-    linear-gradient(180deg, rgba(255, 217, 239, 0.16), rgba(201, 167, 255, 0.12));
+    linear-gradient(180deg, var(--theme-residual-before-pink), var(--theme-residual-secondary-violet));
   color: var(--pink-soft);
-  border-color: rgba(255, 190, 226, 0.34);
+  border-color: var(--theme-residual-secondary-border);
 }
 
 .bar,
 .meter-track,
 .stat-bar {
-  border-color: rgba(255, 217, 239, 0.12);
-  background: rgba(19, 8, 30, 0.68);
+  border-color: var(--theme-residual-stat-border);
+  background: var(--theme-residual-stat-bg);
   box-shadow:
     inset 0 0 0 1px var(--theme-white-surface-035),
     inset 0 0 16px rgba(0, 0, 0, 0.24);
@@ -4061,7 +4159,7 @@ h3 {
 .care-status-compact,
 .nami-progression-card,
 .nami-need-card {
-  border-color: rgba(255, 190, 226, 0.17);
+  border-color: var(--theme-residual-need-border);
   background:
     radial-gradient(circle at top right, var(--theme-rarity-cute-shadow-soft), transparent 9rem),
     rgba(255, 255, 255, 0.028);
@@ -4117,19 +4215,19 @@ h3 {
 .nami-placeholder {
   border-color: var(--theme-legacy-pink-soft-border-28);
   background:
-    radial-gradient(circle at 50% 24%, rgba(255, 217, 239, 0.24), transparent 9rem),
-    radial-gradient(circle at 50% 74%, rgba(152, 221, 255, 0.14), transparent 14rem),
+    radial-gradient(circle at 50% 24%, var(--theme-residual-nami-slot-pink), transparent 9rem),
+    radial-gradient(circle at 50% 74%, var(--theme-residual-nami-slot-cyan), transparent 14rem),
     linear-gradient(180deg, var(--theme-gear-pill-bg), transparent),
     var(--theme-white-surface-03);
   box-shadow:
-    inset 0 0 28px rgba(255, 140, 204, 0.055),
-    0 0 22px rgba(255, 140, 204, 0.07);
+    inset 0 0 28px var(--theme-residual-nami-inner),
+    0 0 22px var(--theme-residual-nami-shadow);
 }
 
 .nami-sparkle {
-  border-color: rgba(255, 217, 239, 0.34);
+  border-color: var(--theme-residual-sparkle-border);
   background:
-    radial-gradient(circle, rgba(255, 217, 239, 0.24), rgba(255, 140, 204, 0.08));
+    radial-gradient(circle, var(--theme-residual-nami-slot-pink), var(--theme-residual-player-rose-soft));
   color: var(--cream);
   box-shadow:
     0 0 36px var(--theme-legacy-rose-22),
@@ -4138,7 +4236,7 @@ h3 {
 
 .nami-message,
 .nami-message-log-card {
-  border-color: rgba(255, 190, 226, 0.2);
+  border-color: var(--theme-residual-log-card-border);
   background:
     radial-gradient(circle at top left, var(--theme-legacy-rose-12), transparent 14rem),
     var(--theme-white-surface-035);
@@ -4171,15 +4269,15 @@ h3 {
 }
 
 .chat-panel {
-  border-color: rgba(152, 221, 255, 0.18);
+  border-color: var(--theme-residual-page-cyan-glow);
   background:
     linear-gradient(180deg, var(--theme-white-surface-035), transparent 70%),
-    rgba(15, 10, 28, 0.88);
+    var(--theme-residual-chat-panel-bg);
 }
 
 .chat-tabs,
 .chat-form {
-  background: rgba(19, 8, 30, 0.7);
+  background: var(--theme-residual-chat-form-bg);
   border-color: var(--theme-wardrobe-row-border);
 }
 
@@ -4196,13 +4294,13 @@ h3 {
 
 .chat-log {
   background:
-    radial-gradient(circle at top left, rgba(255, 140, 204, 0.055), transparent 16rem),
-    rgba(15, 8, 25, 0.58);
+    radial-gradient(circle at top left, var(--theme-residual-nami-inner), transparent 16rem),
+    var(--theme-residual-chat-log-bg);
   color: var(--text-soft);
 }
 
 .chat-time {
-  color: rgba(202, 161, 187, 0.76);
+  color: var(--theme-residual-chat-time);
 }
 
 .chat-name {
@@ -4210,12 +4308,12 @@ h3 {
 }
 
 .chat-text {
-  color: #f6ddeb;
+  color: var(--theme-residual-chat-text);
 }
 
 .chat-form input {
   border-color: var(--theme-wardrobe-capacity-border);
-  background: rgba(19, 8, 30, 0.78);
+  background: var(--theme-residual-chat-input-bg);
   color: var(--theme-legacy-soft-white);
 }
 
@@ -4224,7 +4322,7 @@ h3 {
 .chat-emoji-button {
   border-color: var(--theme-legacy-pink-soft-border-24);
   background:
-    linear-gradient(180deg, rgba(255, 217, 239, 0.18), rgba(255, 140, 204, 0.11));
+    linear-gradient(180deg, rgba(255, 217, 239, 0.18), var(--theme-residual-chat-emoji-rose));
   color: var(--pink-soft);
   box-shadow: none;
 }
@@ -4237,8 +4335,8 @@ h3 {
 .emoji-picker {
   border-color: var(--theme-legacy-pink-soft-border-28);
   background:
-    radial-gradient(circle at top left, rgba(255, 140, 204, 0.13), transparent 10rem),
-    rgba(20, 10, 30, 0.98);
+    radial-gradient(circle at top left, var(--theme-residual-picker-rose), transparent 10rem),
+    var(--theme-residual-picker-bg);
 }
 
 .emoji-option:hover {
@@ -4251,30 +4349,30 @@ h3 {
 .compact-care-actions .care-button {
   border-color: var(--theme-legacy-pink-soft-border-42);
   background:
-    linear-gradient(180deg, rgba(255, 217, 239, 0.16), var(--theme-legacy-rose-12)),
+    linear-gradient(180deg, var(--theme-residual-before-pink), var(--theme-legacy-rose-12)),
     var(--theme-white-surface-035);
   color: var(--theme-legacy-nami-text-bright);
 }
 
 .compact-care-actions .care-button .care-button-progress-fill {
-  background: linear-gradient(90deg, rgba(255, 140, 204, 0.62), rgba(201, 167, 255, 0.56), rgba(152, 221, 255, 0.45));
+  background: linear-gradient(90deg, var(--theme-residual-care-progress-pink), var(--theme-residual-care-progress-violet), var(--theme-residual-care-progress-cyan));
 }
 
 .compact-care-actions .care-button.care-button-active {
-  border-color: rgba(255, 217, 239, 0.72);
+  border-color: var(--theme-residual-care-active-border);
   color: var(--theme-legacy-soft-white);
   box-shadow:
-    0 0 0 1px rgba(255, 217, 239, 0.12),
+    0 0 0 1px var(--theme-residual-stat-border),
     0 0 18px var(--theme-legacy-rose-18),
     inset 0 0 18px var(--theme-rarity-cute-shadow);
 }
 
 .compact-care-actions .care-button.care-button-queued {
-  border-color: rgba(255, 226, 150, 0.55);
-  color: #fff3cf;
+  border-color: var(--theme-residual-care-queued-border);
+  color: var(--theme-residual-care-queued-text);
   box-shadow:
-    inset 0 0 12px rgba(255, 226, 150, 0.07),
-    0 0 10px rgba(255, 226, 150, 0.08);
+    inset 0 0 12px var(--theme-residual-care-queued-glow-soft),
+    0 0 10px var(--theme-residual-care-queued-glow);
 }
 
 /* Chat name + whisper formatting cleanup */
@@ -4339,8 +4437,8 @@ h3 {
   border: 1px solid var(--theme-legacy-pink-soft-border-22);
   border-radius: 8px;
   background:
-    radial-gradient(circle at 50% 18%, rgba(255, 217, 239, 0.12), transparent 3.2rem),
-    linear-gradient(180deg, var(--theme-gear-pill-bg), rgba(255, 140, 204, 0.035)),
+    radial-gradient(circle at 50% 18%, var(--theme-residual-stat-border), transparent 3.2rem),
+    linear-gradient(180deg, var(--theme-gear-pill-bg), var(--theme-residual-log-card-inner)),
     var(--theme-white-surface-025);
   color: var(--text-soft);
   text-align: center;
@@ -4352,7 +4450,7 @@ h3 {
   text-transform: none;
   box-shadow:
     inset 0 1px 0 var(--theme-gear-pill-bg),
-    0 8px 18px rgba(15, 5, 24, 0.1);
+    0 8px 18px var(--theme-residual-grid-nav-shadow);
   transition:
     transform 140ms ease,
     border-color 140ms ease,
@@ -4367,10 +4465,10 @@ h3 {
 
 .main-nav.menu-grid .nav-item:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 217, 239, 0.42);
+  border-color: var(--theme-residual-grid-nav-hover-border);
   background:
-    radial-gradient(circle at 50% 18%, rgba(255, 217, 239, 0.2), transparent 3.2rem),
-    linear-gradient(180deg, var(--theme-legacy-rose-16), rgba(201, 167, 255, 0.08)),
+    radial-gradient(circle at 50% 18%, var(--theme-residual-grid-nav-hover-glow), transparent 3.2rem),
+    linear-gradient(180deg, var(--theme-legacy-rose-16), var(--theme-residual-control-violet)),
     var(--theme-white-surface-035);
   color: var(--pink-soft);
   box-shadow:
@@ -4379,16 +4477,16 @@ h3 {
 }
 
 .main-nav.menu-grid .nav-item.active {
-  border-color: rgba(255, 217, 239, 0.66);
+  border-color: var(--theme-residual-grid-nav-active-border);
   background:
     radial-gradient(circle at 50% 15%, var(--theme-legacy-cream-glow-22), transparent 3.4rem),
-    linear-gradient(180deg, rgba(255, 140, 204, 0.34), rgba(201, 167, 255, 0.15)),
+    linear-gradient(180deg, var(--theme-residual-grid-nav-active-rose), var(--theme-residual-grid-nav-active-violet)),
     var(--theme-white-surface-04);
   color: var(--theme-legacy-soft-white);
   box-shadow:
-    0 0 0 1px rgba(255, 217, 239, 0.08),
+    0 0 0 1px var(--theme-residual-grid-nav-active-outline),
     0 0 5px var(--theme-legacy-rose-18),
-    inset 0 0 10px rgba(255, 217, 239, 0.08);
+    inset 0 0 10px var(--theme-residual-grid-nav-active-outline);
 }
 
 .main-nav.menu-grid .nav-item.active::after {
@@ -4672,7 +4770,7 @@ h3 {
 
 .combat-enemy-header > span {
   padding: 4px 9px;
-  border: 1px solid rgba(152, 221, 255, 0.22);
+  border: 1px solid var(--theme-residual-combat-cyan-border);
   border-radius: 999px;
   color: var(--cyan);
   font-size: 0.72rem;
@@ -6491,12 +6589,12 @@ body.is-resizing-chat * {
 .top-player-name-button {
   width: 100%;
   min-height: 22px;
-  border: 1px solid rgba(255, 217, 239, 0.38);
+  border: 1px solid var(--theme-residual-player-border-strong);
   border-radius: 8px;
   padding: 4px 7px;
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 217, 239, 0.22), transparent 7rem),
-    linear-gradient(180deg, var(--theme-legacy-rose-12), rgba(201, 167, 255, 0.07));
+    radial-gradient(circle at 50% 0%, var(--theme-residual-player-top-glow), transparent 7rem),
+    linear-gradient(180deg, var(--theme-legacy-rose-12), var(--theme-residual-player-violet-bg));
   color: var(--cream);
   font-family: var(--font-display);
   font-size: 0.68rem;
@@ -6507,8 +6605,8 @@ body.is-resizing-chat * {
     0 0 10px var(--theme-legacy-rose-32),
     0 1px 2px rgba(0, 0, 0, 0.45);
   box-shadow:
-    inset 0 0 24px rgba(255, 140, 204, 0.08),
-    0 0 18px rgba(255, 140, 204, 0.08);
+    inset 0 0 24px var(--theme-residual-player-rose-soft),
+    0 0 18px var(--theme-residual-player-rose-soft);
 }
 
 .top-user-meter-list {
@@ -6761,11 +6859,11 @@ body.is-resizing-chat * {
   min-width: 0;
   overflow: hidden;
   box-sizing: border-box !important;
-  border: 1px solid rgba(255, 190, 226, 0.2);
+  border: 1px solid var(--theme-residual-log-card-border);
   border-radius: 14px;
   background:
     linear-gradient(180deg, var(--theme-white-border-045), transparent 70%),
-    rgba(42, 20, 56, 0.78);
+    var(--theme-residual-right-buff-bg);
 }
 
 .right-buff-group h3 {
@@ -6794,7 +6892,7 @@ body.is-resizing-chat * {
   box-sizing: border-box;
   gap: 3px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 190, 226, 0.12);
+  border-bottom: 1px solid var(--theme-residual-right-buff-divider);
 }
 
 .right-buff-list .buff-card:last-child {
@@ -6809,13 +6907,13 @@ body.is-resizing-chat * {
 }
 
 .right-buff-list .buff-card span {
-  color: rgba(244, 212, 230, 0.78);
+  color: var(--theme-residual-right-buff-text);
   font-size: 0.66rem;
   line-height: 1.15;
 }
 
 .right-buff-list .buff-card small {
-  color: rgba(202, 161, 187, 0.82);
+  color: var(--theme-residual-right-buff-small);
   font-size: 0.6rem;
   line-height: 1.15;
 }
