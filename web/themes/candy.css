@@ -1649,3 +1649,142 @@ body[data-theme="candy"] .candy-float-zone-right {
 body[data-theme="candy"] .candy-float-zone .candy-piece {
   position: absolute !important;
 }
+/* Candy pass 7: proper collapsed left rail and side candy zones */
+
+/* Expanded left rail: contain the logo and buttons inside the candy frame. */
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow: visible !important;
+}
+
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail > .nav-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail .menu-logo-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 12px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail .menu-logo {
+  width: min(100%, 168px) !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin-inline: auto !important;
+  object-fit: contain !important;
+}
+
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail .main-nav.menu-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  padding: 8px 10px 10px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+body[data-theme="candy"] .game-shell:not(.is-left-rail-collapsed) .left-rail .main-nav.menu-grid .nav-item {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Collapsed left rail: behave like the right rail. No content body should remain visible. */
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed {
+  overflow: visible !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail {
+  position: relative !important;
+  z-index: 20 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow: visible !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel {
+  width: var(--rail-collapsed-width, 38px) !important;
+  min-width: var(--rail-collapsed-width, 38px) !important;
+  max-width: var(--rail-collapsed-width, 38px) !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* Hide all expanded menu content when collapsed. Only the rail toggle/title survives. */
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > *:not(.panel-title):not(.rail-toggle),
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail .menu-logo-wrap,
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail .menu-status-card,
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail .main-nav,
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail .main-nav.menu-grid {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > .panel-title,
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > .rail-toggle {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  justify-content: center !important;
+  padding: 8px 0 !important;
+  border-bottom: 0 !important;
+  overflow: hidden !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > .panel-title .collapse-label,
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > .rail-toggle .collapse-label {
+  display: none !important;
+}
+
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > .panel-title .collapse-glyph,
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .left-rail > .nav-panel > .rail-toggle .collapse-glyph {
+  margin: 0 !important;
+}
+
+/* The center column should never paint over the collapsed rail. */
+body[data-theme="candy"] .game-shell.is-left-rail-collapsed .center-column {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Side candy zones: fixed to the empty side lanes below the actual rail panels. */
+body[data-theme="candy"] .candy-float-layer {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  z-index: 0 !important;
+}
+
+body[data-theme="candy"] .candy-float-zone {
+  position: fixed !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  z-index: 0 !important;
+}
+
+body[data-theme="candy"] .candy-float-zone-left,
+body[data-theme="candy"] .candy-float-zone-right {
+  min-height: 140px !important;
+}
+
+body[data-theme="candy"] .candy-float-zone .candy-piece {
+  position: absolute !important;
+}
