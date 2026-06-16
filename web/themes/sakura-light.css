@@ -535,3 +535,315 @@ body[data-theme="sakura-light"] .theme-effects-sakura::after {
     animation: none;
   }
 }
+/* Sakura Light hard contrast override */
+:root {
+  --sakura-paper: #f5eadf;
+  --sakura-paper-bright: #fff8f1;
+  --sakura-paper-soft: #f1dfd3;
+  --sakura-ink: #3e2525;
+  --sakura-ink-soft: #624142;
+  --sakura-cedar: #815334;
+  --sakura-cedar-dark: #5f3924;
+  --sakura-cedar-soft: rgba(129, 83, 52, 0.42);
+  --sakura-pink-strong: #e64d93;
+  --sakura-pink-bright: #ff7eb8;
+  --sakura-pink-soft: #ffd4e5;
+  --sakura-gold: #d8a94b;
+
+  --text: var(--sakura-ink);
+  --text-soft: var(--sakura-ink-soft);
+  --muted: #7c5b5a;
+
+  --panel: rgba(255, 248, 241, 0.96);
+  --panel-soft: rgba(250, 238, 229, 0.96);
+  --panel-deep: rgba(246, 231, 220, 0.98);
+
+  --line: rgba(230, 77, 147, 0.62);
+  --line-bright: rgba(255, 126, 184, 0.9);
+
+  --cyan: #357c91;
+  --cyan-soft: #2f7184;
+  --pink: var(--sakura-pink-strong);
+  --pink-soft: #8b3158;
+  --violet: #8a5ab7;
+  --violet-soft: #6f4695;
+  --cream: #fff0c8;
+
+  --theme-residual-top-stats-bg: rgba(255, 248, 241, 0.98);
+  --theme-panel-title-bg: rgba(255, 223, 235, 0.9);
+  --theme-card-bg-deep-solid: rgba(255, 248, 241, 0.97);
+  --theme-card-bg-deep: rgba(255, 248, 241, 0.97);
+  --theme-chat-input-bg: rgba(255, 252, 248, 0.96);
+
+  --theme-button-primary-bg: linear-gradient(180deg, #fff8f1 0%, #ffb7d3 42%, #e64d93 100%);
+  --theme-button-primary-text: #3f1b2b;
+  --theme-button-secondary-bg: linear-gradient(180deg, #fff8f1 0%, #ffe0eb 100%);
+  --theme-button-secondary-text: #563039;
+
+  --theme-tick-fill: linear-gradient(90deg, #e64d93, #d8a94b, #8a5ab7, #357c91);
+  --theme-hp-fill: linear-gradient(90deg, #5daa79, #d8a94b, #e64d93);
+  --theme-progress-xp-fill: linear-gradient(90deg, #e64d93, #d8a94b);
+  --theme-progress-stat-fill: linear-gradient(90deg, #8a5ab7, #e64d93, #d8a94b);
+}
+
+body[data-theme="sakura-light"] {
+  background:
+    radial-gradient(circle at 14% 8%, rgba(255, 202, 224, 0.48), transparent 18rem),
+    radial-gradient(circle at 82% 14%, rgba(216, 169, 75, 0.28), transparent 20rem),
+    linear-gradient(180deg, #f5eadf 0%, #ecd9cc 52%, #e5cfc1 100%);
+  color: var(--sakura-ink);
+}
+
+/* Big visible shoji wall behind the interface */
+body[data-theme="sakura-light"]::before {
+  background:
+    linear-gradient(180deg, rgba(255, 248, 241, 0.58), rgba(245, 234, 223, 0.48)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(129, 83, 52, 0.34) 0 3px,
+      transparent 3px 94px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(129, 83, 52, 0.26) 0 3px,
+      transparent 3px 72px
+    ),
+    linear-gradient(180deg, #f5eadf, #ead6c8);
+  opacity: 1;
+}
+
+/* Real targets: major layout panels, including the top rail */
+body[data-theme="sakura-light"] .panel,
+body[data-theme="sakura-light"] .main-panel,
+body[data-theme="sakura-light"] .chat-panel,
+body[data-theme="sakura-light"] .top-stats-panel,
+body[data-theme="sakura-light"] .nav-panel,
+body[data-theme="sakura-light"] .right-buffs-panel,
+body[data-theme="sakura-light"] .nami-card,
+body[data-theme="sakura-light"] .care-card,
+body[data-theme="sakura-light"] .zone-list,
+body[data-theme="sakura-light"] .combat-panel,
+body[data-theme="sakura-light"] .task-card,
+body[data-theme="sakura-light"] .placeholder-copy,
+body[data-theme="sakura-light"] .settings-card,
+body[data-theme="sakura-light"] .wardrobe-panel,
+body[data-theme="sakura-light"] .equipment-card,
+body[data-theme="sakura-light"] .inventory-item-card,
+body[data-theme="sakura-light"] .right-buff-group {
+  border: 2px solid rgba(230, 77, 147, 0.72);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.38), transparent 42%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(129, 83, 52, 0.12) 0 2px,
+      transparent 2px 62px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(129, 83, 52, 0.09) 0 2px,
+      transparent 2px 48px
+    ),
+    linear-gradient(135deg, #fff8f1 0%, #f6e6dc 100%);
+  color: var(--sakura-ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 0 0 4px rgba(129, 83, 52, 0.34),
+    0 16px 36px rgba(91, 54, 40, 0.18),
+    0 0 22px rgba(230, 77, 147, 0.08);
+}
+
+/* Top rail, specifically. The previous pass missed this. */
+body[data-theme="sakura-light"] .top-stats-compact {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.48), transparent 60%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(129, 83, 52, 0.12) 0 2px,
+      transparent 2px 66px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(129, 83, 52, 0.08) 0 2px,
+      transparent 2px 44px
+    ),
+    linear-gradient(135deg, #fff8f1 0%, #f3dfd3 100%) !important;
+  color: var(--sakura-ink) !important;
+}
+
+body[data-theme="sakura-light"] .top-stats-panel .stat-group.compact,
+body[data-theme="sakura-light"] .top-stats-panel .top-user-info {
+  color: var(--sakura-ink) !important;
+  border-right-color: rgba(129, 83, 52, 0.28);
+  background: transparent !important;
+}
+
+body[data-theme="sakura-light"] .top-stats-panel h2,
+body[data-theme="sakura-light"] .top-stats-panel span,
+body[data-theme="sakura-light"] .top-stats-panel strong,
+body[data-theme="sakura-light"] .top-stats-panel p,
+body[data-theme="sakura-light"] .top-stats-panel .meter-label {
+  color: var(--sakura-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .top-stats-panel h2,
+body[data-theme="sakura-light"] .panel-title,
+body[data-theme="sakura-light"] .eyebrow {
+  color: var(--sakura-pink-strong) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Add stronger cedar framing around primary zones */
+body[data-theme="sakura-light"] .main-panel,
+body[data-theme="sakura-light"] .chat-panel,
+body[data-theme="sakura-light"] .top-stats-panel,
+body[data-theme="sakura-light"] .nav-panel,
+body[data-theme="sakura-light"] .right-buffs-panel {
+  outline: 1px solid rgba(255, 248, 241, 0.86);
+  outline-offset: -7px;
+}
+
+/* Make text readable, not cotton-candy faded */
+body[data-theme="sakura-light"] h1,
+body[data-theme="sakura-light"] h2,
+body[data-theme="sakura-light"] h3,
+body[data-theme="sakura-light"] .settings-card,
+body[data-theme="sakura-light"] .placeholder-copy,
+body[data-theme="sakura-light"] .chat-message,
+body[data-theme="sakura-light"] .chat-text,
+body[data-theme="sakura-light"] .stat-lines,
+body[data-theme="sakura-light"] .compact-grid-lines,
+body[data-theme="sakura-light"] .right-buff-list,
+body[data-theme="sakura-light"] .task-meta,
+body[data-theme="sakura-light"] .nami-need-card,
+body[data-theme="sakura-light"] .muted {
+  color: var(--sakura-ink-soft) !important;
+}
+
+body[data-theme="sakura-light"] h1 {
+  color: var(--sakura-ink) !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8),
+    0 0 12px rgba(230, 77, 147, 0.1);
+}
+
+body[data-theme="sakura-light"] h2,
+body[data-theme="sakura-light"] h3 {
+  color: #5f3924 !important;
+}
+
+/* Menu buttons should read as pink lacquer tiles on paper */
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item {
+  border: 1px solid rgba(230, 77, 147, 0.32);
+  background:
+    linear-gradient(180deg, rgba(255, 248, 241, 0.96), rgba(255, 226, 237, 0.78));
+  color: var(--sakura-ink-soft);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    0 6px 14px rgba(91, 54, 40, 0.08);
+}
+
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item:hover {
+  border-color: rgba(230, 77, 147, 0.66);
+  background:
+    linear-gradient(180deg, rgba(255, 250, 248, 0.98), rgba(255, 204, 225, 0.94));
+  transform: translateY(-1px);
+}
+
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(230, 77, 147, 0.9);
+  background:
+    linear-gradient(180deg, rgba(255, 245, 249, 1), rgba(255, 188, 215, 0.98));
+  color: #4a1629;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 2px rgba(129, 83, 52, 0.16),
+    0 0 20px rgba(230, 77, 147, 0.16);
+}
+
+/* Bars need contrast on light paper */
+body[data-theme="sakura-light"] .meter-track,
+body[data-theme="sakura-light"] .stat-bar,
+body[data-theme="sakura-light"] .bar,
+body[data-theme="sakura-light"] .task-xp-bar {
+  border: 1px solid rgba(129, 83, 52, 0.42);
+  background:
+    linear-gradient(180deg, rgba(79, 48, 38, 0.14), rgba(255, 248, 241, 0.96));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.82),
+    inset 0 0 16px rgba(129, 83, 52, 0.14);
+}
+
+body[data-theme="sakura-light"] .meter-fill,
+body[data-theme="sakura-light"] .fill,
+body[data-theme="sakura-light"] .stat-fill,
+body[data-theme="sakura-light"] .task-xp-fill,
+body[data-theme="sakura-light"] .care-button-progress-fill {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 0 14px rgba(230, 77, 147, 0.22);
+}
+
+body[data-theme="sakura-light"] .tick-fill {
+  background: linear-gradient(90deg, #e64d93 0%, #d8a94b 42%, #8a5ab7 72%, #357c91 100%);
+}
+
+body[data-theme="sakura-light"] .hp-fill {
+  background: linear-gradient(90deg, #4fa96d 0%, #d8a94b 54%, #e64d93 100%);
+}
+
+body[data-theme="sakura-light"] .xp-fill,
+body[data-theme="sakura-light"] .task-xp-fill {
+  background: linear-gradient(90deg, #e64d93 0%, #d8a94b 70%, #d98960 100%);
+}
+
+body[data-theme="sakura-light"] .stat-fill {
+  background: linear-gradient(90deg, #8a5ab7 0%, #e64d93 52%, #d8a94b 100%);
+}
+
+/* Subtle Japanese motifs, now stronger but still out of the way */
+body[data-theme="sakura-light"] .theme-effects-sakura::before {
+  opacity: 0.22;
+  right: 2.8vw;
+  bottom: 4.2vh;
+  filter: none;
+}
+
+body[data-theme="sakura-light"] .theme-effects-sakura::after {
+  opacity: 0.2;
+  left: 2vw;
+  bottom: 4vh;
+}
+
+/* Petals should remain visible against the warmer paper */
+body[data-theme="sakura-light"] .sakura-petal {
+  filter:
+    blur(var(--petal-blur))
+    drop-shadow(0 0 5px rgba(230, 77, 147, 0.38))
+    drop-shadow(0 2px 4px rgba(91, 54, 40, 0.12));
+}
+
+/* Form fields and buttons */
+body[data-theme="sakura-light"] input,
+body[data-theme="sakura-light"] select,
+body[data-theme="sakura-light"] .chat-form input {
+  color: var(--sakura-ink) !important;
+  background: rgba(255, 252, 248, 0.96) !important;
+  border-color: rgba(230, 77, 147, 0.46) !important;
+}
+
+body[data-theme="sakura-light"] button {
+  color: var(--sakura-ink) !important;
+}
+
+body[data-theme="sakura-light"] .chat-form button[type="submit"],
+body[data-theme="sakura-light"] .task-card button,
+body[data-theme="sakura-light"] .care-button,
+body[data-theme="sakura-light"] .secondary-button {
+  border-color: rgba(230, 77, 147, 0.6) !important;
+  background: linear-gradient(180deg, #fff8f1 0%, #ffc7dc 48%, #e64d93 100%) !important;
+  color: #4a1629 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 8px 18px rgba(230, 77, 147, 0.14);
+}
