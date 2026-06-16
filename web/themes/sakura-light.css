@@ -1430,3 +1430,389 @@ body[data-theme="sakura-light"] .sakura-petal {
     drop-shadow(0 0 5px rgba(217, 75, 141, 0.34))
     drop-shadow(0 2px 4px rgba(104, 66, 44, 0.10));
 }
+/* Sakura Light Ryokan immersion pass */
+:root {
+  --ryokan-paper: #f4ebdf;
+  --ryokan-paper-soft: #fbf6ef;
+  --ryokan-paper-deep: #ead9c7;
+
+  --ryokan-cedar: #8e5c3d;
+  --ryokan-cedar-dark: #69422b;
+  --ryokan-cedar-line: rgba(142, 92, 61, 0.26);
+
+  --ryokan-rose: #d74d8d;
+  --ryokan-rose-bright: #ef7caf;
+  --ryokan-rose-soft: #ffd7e7;
+
+  --ryokan-gold: #cfa454;
+  --ryokan-matcha: #7da169;
+
+  --ryokan-ink: #332222;
+  --ryokan-ink-soft: #5b4240;
+  --ryokan-muted: #7d6760;
+
+  --ryokan-shadow: rgba(92, 63, 46, 0.14);
+  --ryokan-steam: rgba(255,255,255,0.46);
+  --ryokan-tatami-line: rgba(145, 170, 120, 0.20);
+}
+
+/* whole page: warmer, calmer, more inn-like */
+body[data-theme="sakura-light"] {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(255, 220, 234, 0.30), transparent 20rem),
+    radial-gradient(circle at 84% 12%, rgba(230, 204, 138, 0.18), transparent 20rem),
+    radial-gradient(circle at 50% 100%, rgba(234, 217, 199, 0.46), transparent 28rem),
+    linear-gradient(180deg, #f7f0e7 0%, #efe1d2 58%, #e6d2bf 100%) !important;
+  color: var(--ryokan-ink) !important;
+}
+
+/* shoji wall texture: stronger and more visible */
+body[data-theme="sakura-light"]::before {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.12)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(142, 92, 61, 0.24) 0 3px,
+      transparent 3px 92px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(142, 92, 61, 0.16) 0 3px,
+      transparent 3px 66px
+    ),
+    linear-gradient(180deg, rgba(251,246,239,0.96), rgba(238,225,210,0.96)) !important;
+  opacity: 1 !important;
+}
+
+/* subtle bottom-left crest / seal style motif */
+body[data-theme="sakura-light"]::after {
+  content: "";
+  position: fixed;
+  left: 1.5vw;
+  bottom: 3vh;
+  width: min(18vw, 260px);
+  height: min(12vw, 170px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.10;
+  background:
+    radial-gradient(circle at 18% 54%, rgba(215, 77, 141, 0.22) 0 10%, transparent 11%),
+    radial-gradient(circle at 34% 54%, rgba(215, 77, 141, 0.18) 0 10%, transparent 11%),
+    radial-gradient(circle at 50% 54%, rgba(215, 77, 141, 0.14) 0 10%, transparent 11%),
+    radial-gradient(circle at 66% 54%, rgba(215, 77, 141, 0.18) 0 10%, transparent 11%),
+    radial-gradient(circle at 82% 54%, rgba(215, 77, 141, 0.22) 0 10%, transparent 11%);
+}
+
+/* major surfaces: framed rice-paper cards */
+body[data-theme="sakura-light"] .panel,
+body[data-theme="sakura-light"] .main-panel,
+body[data-theme="sakura-light"] .chat-panel,
+body[data-theme="sakura-light"] .top-stats-panel,
+body[data-theme="sakura-light"] .nav-panel,
+body[data-theme="sakura-light"] .right-buffs-panel,
+body[data-theme="sakura-light"] .nami-card,
+body[data-theme="sakura-light"] .care-card,
+body[data-theme="sakura-light"] .zone-list,
+body[data-theme="sakura-light"] .combat-panel,
+body[data-theme="sakura-light"] .task-card,
+body[data-theme="sakura-light"] .placeholder-copy,
+body[data-theme="sakura-light"] .settings-card,
+body[data-theme="sakura-light"] .wardrobe-panel,
+body[data-theme="sakura-light"] .equipment-card,
+body[data-theme="sakura-light"] .inventory-item-card,
+body[data-theme="sakura-light"] .right-buff-group {
+  border: 2px solid rgba(215, 77, 141, 0.74) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.34) 0 58px, transparent 58px),
+    repeating-linear-gradient(
+      90deg,
+      rgba(142, 92, 61, 0.05) 0 2px,
+      transparent 2px 36px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(142, 92, 61, 0.04) 0 2px,
+      transparent 2px 24px
+    ),
+    linear-gradient(135deg, rgba(251,246,239,0.98), rgba(239,226,210,0.98)) !important;
+  color: var(--ryokan-ink-soft) !important;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 240, 246, 0.78),
+    0 0 0 5px rgba(142, 92, 61, 0.24),
+    0 12px 28px rgba(92, 63, 46, 0.12),
+    0 0 24px rgba(215, 77, 141, 0.06) !important;
+}
+
+/* panel interior frame */
+body[data-theme="sakura-light"] .main-panel,
+body[data-theme="sakura-light"] .chat-panel,
+body[data-theme="sakura-light"] .top-stats-panel,
+body[data-theme="sakura-light"] .nav-panel,
+body[data-theme="sakura-light"] .right-buffs-panel {
+  outline: 1px solid rgba(255, 247, 240, 0.85);
+  outline-offset: -8px;
+}
+
+/* tatami floor feeling in the lower open area of the main screen */
+body[data-theme="sakura-light"] .main-panel {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.30) 0 58px, transparent 58px),
+    linear-gradient(
+      180deg,
+      rgba(251,246,239,0.98) 0 72%,
+      rgba(233, 224, 204, 0.98) 72% 100%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(142, 92, 61, 0.05) 0 2px,
+      transparent 2px 36px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(125, 161, 105, 0.08) 0 2px,
+      transparent 2px 30px
+    ) !important;
+}
+
+/* light top rail, but richer and more deliberate */
+body[data-theme="sakura-light"] .top-stats-compact {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.34), transparent 55%),
+    linear-gradient(90deg, rgba(215, 77, 141, 0.10), rgba(207, 164, 84, 0.08), rgba(255,255,255,0)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(142, 92, 61, 0.07) 0 2px,
+      transparent 2px 40px
+    ),
+    linear-gradient(135deg, rgba(251,246,239,0.99), rgba(237,223,205,0.99)) !important;
+  color: var(--ryokan-ink) !important;
+}
+
+body[data-theme="sakura-light"] .top-stats-panel,
+body[data-theme="sakura-light"] .top-stats-panel *,
+body[data-theme="sakura-light"] .top-stats-compact *,
+body[data-theme="sakura-light"] .top-user-info,
+body[data-theme="sakura-light"] .top-user-info *,
+body[data-theme="sakura-light"] .stat-group.compact,
+body[data-theme="sakura-light"] .stat-group.compact * {
+  color: var(--ryokan-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .top-stats-panel h2,
+body[data-theme="sakura-light"] .stat-group.compact h2,
+body[data-theme="sakura-light"] .panel-title,
+body[data-theme="sakura-light"] .eyebrow {
+  color: var(--ryokan-rose) !important;
+}
+
+/* menu rail tiles: lacquered and a bit more boutique */
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item {
+  border: 1px solid rgba(215, 77, 141, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(255,250,246,0.98), rgba(255,232,240,0.88)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.90),
+    0 5px 14px rgba(92, 63, 46, 0.08) !important;
+}
+
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-icon,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-label {
+  color: var(--ryokan-ink-soft) !important;
+}
+
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(215, 77, 141, 0.84) !important;
+  background:
+    linear-gradient(180deg, rgba(255,246,249,1), rgba(255,202,223,0.96)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.92),
+    0 0 0 2px rgba(142, 92, 61, 0.14),
+    0 0 18px rgba(215, 77, 141, 0.14) !important;
+}
+
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item.active,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item.active .nav-icon,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item.active .nav-label {
+  color: #5c1735 !important;
+}
+
+/* work/task cards feel like little ryokan placards */
+body[data-theme="sakura-light"] .task-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.20), transparent 42px),
+    linear-gradient(180deg, rgba(251,246,239,0.98), rgba(240,227,213,0.98)) !important;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,240,246,0.78),
+    0 0 0 4px rgba(142,92,61,0.14),
+    0 8px 20px rgba(92,63,46,0.10) !important;
+}
+
+body[data-theme="sakura-light"] .task-card,
+body[data-theme="sakura-light"] .task-card *,
+body[data-theme="sakura-light"] .task-card h2 {
+  color: var(--ryokan-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .task-card .task-status {
+  border: 1px solid rgba(215, 77, 141, 0.32) !important;
+  background: rgba(255, 229, 239, 0.94) !important;
+  color: #662140 !important;
+}
+
+body[data-theme="sakura-light"] .task-card.active .task-status {
+  background: linear-gradient(90deg, #e8649c, #f5dda4) !important;
+  color: #452029 !important;
+  border-color: rgba(142, 92, 61, 0.26) !important;
+}
+
+/* lacquered pink buttons */
+body[data-theme="sakura-light"] .task-card button,
+body[data-theme="sakura-light"] .care-button,
+body[data-theme="sakura-light"] .secondary-button,
+body[data-theme="sakura-light"] .chat-form button[type="submit"] {
+  border: 1px solid rgba(215, 77, 141, 0.56) !important;
+  background:
+    linear-gradient(180deg, #fff8f1 0%, #ffc8dd 50%, #e8649c 100%) !important;
+  color: #4a1629 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.86),
+    0 8px 18px rgba(215, 77, 141, 0.12) !important;
+}
+
+/* bars: warmer ryokan palette */
+body[data-theme="sakura-light"] .meter-track,
+body[data-theme="sakura-light"] .stat-bar,
+body[data-theme="sakura-light"] .bar,
+body[data-theme="sakura-light"] .task-xp-bar {
+  border: 1px solid rgba(142, 92, 61, 0.38) !important;
+  background:
+    linear-gradient(180deg, rgba(87,58,43,0.10), rgba(255,248,241,0.98)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.82),
+    inset 0 0 10px rgba(142,92,61,0.08) !important;
+}
+
+body[data-theme="sakura-light"] .tick-fill {
+  background: linear-gradient(90deg, #d74d8d 0%, #cfa454 42%, #9b6dcb 72%, #6ca2b3 100%) !important;
+}
+
+body[data-theme="sakura-light"] .hp-fill {
+  background: linear-gradient(90deg, #7da169 0%, #cfa454 55%, #d74d8d 100%) !important;
+}
+
+body[data-theme="sakura-light"] .xp-fill,
+body[data-theme="sakura-light"] .task-xp-fill {
+  background: linear-gradient(90deg, #d74d8d 0%, #d8b46f 72%, #d88959 100%) !important;
+}
+
+body[data-theme="sakura-light"] .stat-fill {
+  background: linear-gradient(90deg, #9b6dcb 0%, #d74d8d 52%, #d8b46f 100%) !important;
+}
+
+/* Nami message: tea-rose card, a touch more luxe */
+body[data-theme="sakura-light"] .nami-message-log-card,
+body[data-theme="sakura-light"] .nami-message-log,
+body[data-theme="sakura-light"] .nami-message {
+  border-color: rgba(215, 77, 141, 0.60) !important;
+  background:
+    linear-gradient(180deg, rgba(251, 207, 225, 0.96), rgba(236, 141, 184, 0.96)) !important;
+  color: #4a1629 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.42),
+    0 8px 18px rgba(215, 77, 141, 0.15) !important;
+}
+
+/* Tea service scene: stronger and easier to read */
+body[data-theme="sakura-light"] .theme-effects-sakura::before {
+  content: "";
+  position: absolute;
+  right: 2.6vw;
+  bottom: 4.2vh;
+  width: min(28vw, 430px);
+  height: min(18vw, 270px);
+  pointer-events: none;
+  opacity: 0.26;
+  background:
+    radial-gradient(ellipse at 50% 87%, rgba(142, 92, 61, 0.18) 0 34%, transparent 36%),
+    linear-gradient(180deg, transparent 70%, rgba(142, 92, 61, 0.16) 70% 76%, transparent 76%),
+    radial-gradient(circle at 29% 61%, rgba(255,255,255,0.90) 0 5.6%, rgba(142,92,61,0.30) 6% 7.4%, transparent 7.8%),
+    radial-gradient(circle at 71% 61%, rgba(255,255,255,0.90) 0 5.6%, rgba(142,92,61,0.30) 6% 7.4%, transparent 7.8%),
+    radial-gradient(circle at 50% 49%, rgba(255,255,255,0.92) 0 9.4%, rgba(142,92,61,0.30) 9.8% 11.2%, transparent 11.6%),
+    radial-gradient(circle at 50% 49%, rgba(125, 161, 105, 0.26) 0 4.9%, transparent 5.3%),
+    radial-gradient(circle at 57% 43%, rgba(255,255,255,0.88) 0 1.7%, transparent 2%),
+    radial-gradient(circle at 43% 43%, rgba(255,255,255,0.88) 0 1.7%, transparent 2%);
+  filter: blur(0.15px);
+}
+
+/* steam above tea set */
+body[data-theme="sakura-light"] .theme-effects-sakura::after {
+  content: "";
+  position: absolute;
+  right: 6vw;
+  bottom: 11vh;
+  width: min(18vw, 260px);
+  height: min(22vw, 320px);
+  pointer-events: none;
+  opacity: 0.22;
+  background:
+    radial-gradient(ellipse at 26% 84%, transparent 0 72%, rgba(255,255,255,0.60) 73% 76%, transparent 77%),
+    radial-gradient(ellipse at 48% 72%, transparent 0 72%, rgba(255,255,255,0.54) 73% 76%, transparent 77%),
+    radial-gradient(ellipse at 69% 86%, transparent 0 72%, rgba(255,255,255,0.58) 73% 76%, transparent 77%),
+    radial-gradient(ellipse at 58% 52%, transparent 0 72%, rgba(255,255,255,0.46) 73% 76%, transparent 77%),
+    radial-gradient(ellipse at 36% 34%, transparent 0 72%, rgba(255,255,255,0.36) 73% 76%, transparent 77%);
+  filter: blur(0.7px);
+  animation: sakuraLightSteamDrift 10s ease-in-out infinite alternate;
+}
+
+@keyframes sakuraLightSteamDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.18;
+  }
+  50% {
+    transform: translate3d(-6px, -8px, 0) scale(1.03);
+    opacity: 0.24;
+  }
+  100% {
+    transform: translate3d(8px, -14px, 0) scale(1.06);
+    opacity: 0.18;
+  }
+}
+
+/* text cleanup / keep everything readable */
+body[data-theme="sakura-light"] h1,
+body[data-theme="sakura-light"] h2,
+body[data-theme="sakura-light"] h3,
+body[data-theme="sakura-light"] strong,
+body[data-theme="sakura-light"] .settings-card,
+body[data-theme="sakura-light"] .placeholder-copy,
+body[data-theme="sakura-light"] .chat-log,
+body[data-theme="sakura-light"] .chat-log *,
+body[data-theme="sakura-light"] .right-buffs-panel,
+body[data-theme="sakura-light"] .right-buffs-panel *,
+body[data-theme="sakura-light"] .server-clock,
+body[data-theme="sakura-light"] #server-time,
+body[data-theme="sakura-light"] #online-users,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-item,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-icon,
+body[data-theme="sakura-light"] .main-nav.menu-grid .nav-label {
+  color: var(--ryokan-ink) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="sakura-light"] .chat-time,
+body[data-theme="sakura-light"] .player-name-button,
+body[data-theme="sakura-light"] a {
+  color: var(--ryokan-rose) !important;
+}
+
+/* petals a little richer */
+body[data-theme="sakura-light"] .sakura-petal {
+  filter:
+    blur(var(--petal-blur))
+    drop-shadow(0 0 5px rgba(215, 77, 141, 0.34))
+    drop-shadow(0 2px 4px rgba(92, 63, 46, 0.10));
+}
