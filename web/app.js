@@ -146,6 +146,8 @@ function setTheme(themeKey) {
   }
 
   localStorage.setItem(THEME_STORAGE_KEY, safeThemeKey);
+
+  window.NamigotchiThemeEffects?.setActiveThemeEffect(safeThemeKey);
 }
 
 function initializeTheme() {
