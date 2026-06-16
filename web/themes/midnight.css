@@ -1,0 +1,48 @@
+:root {
+  color-scheme: dark;
+
+  --bg-0: #060b18;
+  --bg-1: #0b1430;
+  --bg-2: #121d42;
+
+  --panel: rgba(12, 19, 44, 0.92);
+  --panel-soft: rgba(18, 30, 66, 0.78);
+  --panel-deep: rgba(6, 10, 26, 0.9);
+
+  --line: rgba(143, 205, 255, 0.2);
+  --line-bright: rgba(168, 221, 255, 0.44);
+
+  --text: #f4f8ff;
+  --text-soft: #d7e6ff;
+  --muted: #9eb3d7;
+
+  --cyan: #80d9ff;
+  --cyan-deep: #3aa8df;
+  --cyan-soft: #d9f4ff;
+  --pink: #bca8ff;
+  --pink-soft: #eee7ff;
+  --violet: #8ea7ff;
+  --violet-soft: #dfe6ff;
+  --green: #bdf2dc;
+  --yellow: #ffe7a8;
+  --orange: #ffc08c;
+  --danger: #ff7f9f;
+
+  --cream: #f5edcf;
+  --rose-shadow: rgba(142, 167, 255, 0.16);
+  --blue-shadow: rgba(128, 217, 255, 0.16);
+
+  --theme-page-glow-pink: rgba(142, 167, 255, 0.22);
+  --theme-page-glow-cyan: rgba(73, 199, 255, 0.18);
+  --theme-page-glow-violet: rgba(188, 168, 255, 0.14);
+  --theme-page-gradient-top: #071125;
+  --theme-page-gradient-bottom: #040714;
+
+  --theme-nav-active-bg: linear-gradient(90deg, rgba(142, 167, 255, 0.24), rgba(73, 199, 255, 0.1));
+  --theme-nav-active-text: #eef3ff;
+
+  --theme-button-primary-bg: linear-gradient(180deg, #bca8ff, #80d9ff);
+  --theme-button-primary-text: #06111d;
+  --theme-work-active-pill-bg: linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
+  --theme-work-active-button-bg: linear-gradient(180deg, var(--pink), #7c8fff);
+}

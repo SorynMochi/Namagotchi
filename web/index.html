@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-50..200&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600;700&family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css" />
+<link id="theme-stylesheet" rel="stylesheet" href="/themes/nami-default.css" />
 </head>
 <body>
   <div class="game-shell">
@@ -578,7 +579,30 @@
         <section class="content-section" id="section-help"><div class="placeholder-copy">Help shell. This will explain how to play, formulas, resources, care, Playdeck, Orders, and more.</div></section>
         <section class="content-section" id="section-rankings"><div class="placeholder-copy">Rankings shell. Player standings, Playdeck ladders, seasonal boards, and other competitive sparkle charts will live here.</div></section>
         <section class="content-section" id="section-updates"><div class="placeholder-copy">Updates shell. Patch notes, change logs, announcements, and tiny dev dispatches will live here.</div></section>
-        <section class="content-section" id="section-settings"><div class="placeholder-copy">Settings shell. Account, accessibility, UI preferences, notifications, and display options.</div></section>
+        <section class="content-section" id="section-settings">
+  <div class="section-header">
+    <div>
+      <p class="eyebrow">Settings</p>
+      <h1>Display Options</h1>
+    </div>
+  </div>
+
+  <div class="settings-grid">
+    <section class="settings-card">
+      <h2>Theme</h2>
+      <p class="muted">Choose the UI color mood. This only changes presentation and saves on this device.</p>
+
+      <label class="settings-field" for="theme-select">
+        <span>Theme</span>
+        <select id="theme-select">
+          <option value="nami-default">Nami Default</option>
+          <option value="midnight">Midnight</option>
+          <option value="strawberry">Strawberry</option>
+        </select>
+      </label>
+    </section>
+  </div>
+</section>
         <section class="content-section" id="section-premium"><div class="placeholder-copy">Premium shell. We’ll figure this out later without making the game gross. Tiny monetization goblin stays leashed.</div></section>
       </main>
 

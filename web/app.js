@@ -86,6 +86,8 @@ const chatToggleButton = document.querySelector("#chat-toggle-button");
 const collapseToggles = document.querySelectorAll(".collapse-toggle");
 const railToggleButtons = document.querySelectorAll("[data-rail-toggle]");
 const gameShell = document.querySelector(".game-shell");
+const themeStylesheet = document.querySelector("#theme-stylesheet");
+const themeSelect = document.querySelector("#theme-select");
 
 const MAX_CHAT_MESSAGES = 100;
 const MAX_NAMI_MESSAGES = 100;
@@ -101,6 +103,13 @@ const RECENT_EMOJI_LIMIT = 70;
 const CHAT_IGNORE_KEY = "namigotchi_chat_ignore_list_v1";
 const CHAT_LAST_WHISPER_KEY = "namigotchi_chat_last_whisper_v1";
 const CHAT_OFFLINE_WHISPERS_KEY = "namigotchi_offline_whispers_v1";
+
+const THEME_STORAGE_KEY = "namigotchi_theme_v1";
+const THEME_FILES = {
+  "nami-default": "/themes/nami-default.css",
+  midnight: "/themes/midnight.css",
+  strawberry: "/themes/strawberry.css",
+};
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
   "/images/backgrounds/Living_Room_00.webp",
@@ -124,6 +133,31 @@ const NAMI_IDLE_VIDEO_SRC = "/images/animations/Nami_Idle_01.webm";
 const NAMI_SLEEP_VIDEO_SRC = "/images/animations/Nami_Sleep_01.webm";
 
 const CURRENT_PLAYER_NAME = "Soryn";
+function setTheme(themeKey) {
+  const safeThemeKey = Object.hasOwn(THEME_FILES, themeKey) ? themeKey : "nami-default";
+
+  if (themeStylesheet) {
+    themeStylesheet.href = THEME_FILES[safeThemeKey];
+  }
+
+  if (themeSelect) {
+    themeSelect.value = safeThemeKey;
+  }
+
+  localStorage.setItem(THEME_STORAGE_KEY, safeThemeKey);
+}
+
+function initializeTheme() {
+  const storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || "nami-default";
+
+  setTheme(storedTheme);
+
+  if (themeSelect) {
+    themeSelect.addEventListener("change", () => {
+      setTheme(themeSelect.value);
+    });
+  }
+}
 
 const GATHERING_TASK_CONFIG = {
   streaming: {
@@ -3800,6 +3834,7 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
+initializeTheme();
 loadStatus();
 loadPlayerStatus();
 
