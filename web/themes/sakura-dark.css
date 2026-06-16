@@ -589,3 +589,9 @@ body::before {
     animation: none;
   }
 }
+/* Remove broken Sakura message emoji prefix */
+body[data-theme="sakura-dark"] .nami-message::before,
+body[data-theme="sakura-light"] .nami-message::before {
+  content: "" !important;
+  display: none !important;
+}

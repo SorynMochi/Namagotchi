@@ -1118,3 +1118,9 @@ body[data-theme="sakura-light"] .nami-message-log .muted,
 body[data-theme="sakura-light"] .nami-message-log-card .muted {
   color: rgba(74, 22, 41, 0.78) !important;
 }
+/* Remove broken Sakura message emoji prefix */
+body[data-theme="sakura-dark"] .nami-message::before,
+body[data-theme="sakura-light"] .nami-message::before {
+  content: "" !important;
+  display: none !important;
+}
