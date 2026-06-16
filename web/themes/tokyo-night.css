@@ -2547,3 +2547,26 @@ body[data-theme="tokyo-night"] .tokyo-night-train-body::after {
       drop-shadow(0 0 24px rgba(255,70,210,0.10)) !important;
   }
 }
+/* Tokyo Night sign leak guard */
+
+/* Default: Tokyo sign props should never show unless Tokyo Night is active. */
+.tokyo-night-left-signs,
+.tokyo-night-rail-signs {
+  display: none !important;
+}
+
+/* Tokyo Night only: restore right rail sign stack. */
+body[data-theme="tokyo-night"] .right-rail > .tokyo-night-rail-signs {
+  display: grid !important;
+}
+
+/* Tokyo Night only: restore left rail sign stack. */
+body[data-theme="tokyo-night"] .left-rail > .tokyo-night-left-signs {
+  display: grid !important;
+}
+
+/* Collapsed rails still hide their sign stacks. */
+.game-shell.is-left-rail-collapsed .tokyo-night-left-signs,
+.game-shell.is-right-rail-collapsed .tokyo-night-rail-signs {
+  display: none !important;
+}

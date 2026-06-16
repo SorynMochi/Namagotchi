@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: dark;
 
   --font-ui:
@@ -2632,7 +2632,7 @@ body > .emoji-picker-floating .emoji-option:hover {
 }
 
 .nav-item.premium::before {
-  content: "★";
+  content: "â˜…";
   color: var(--yellow);
 }
 
@@ -4064,7 +4064,7 @@ h3 {
 }
 
 .nav-item::before {
-  content: "♡";
+  content: "â™¡";
   margin-right: 5px;
   color: var(--theme-residual-nav-icon-text);
 }
@@ -7381,4 +7381,41 @@ body.is-resizing-chat * {
 #section-gathering .work-nami-video {
   position: relative;
   z-index: 1;
+}
+/* Global guard: keep Tokyo Night signs out of non-Tokyo themes */
+
+/* Default: Tokyo-only sign props are hidden globally. */
+.tokyo-night-left-signs,
+.tokyo-night-rail-signs {
+  display: none !important;
+}
+
+/* Non-Tokyo themes must never show leftover Tokyo sign DOM. */
+html:not([data-theme="tokyo-night"]) .tokyo-night-left-signs,
+html:not([data-theme="tokyo-night"]) .tokyo-night-rail-signs,
+body:not([data-theme="tokyo-night"]) .tokyo-night-left-signs,
+body:not([data-theme="tokyo-night"]) .tokyo-night-rail-signs {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Tokyo Night only: allow the sign stacks to render. */
+html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .left-rail > .tokyo-night-left-signs,
+html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tokyo-night-rail-signs {
+  display: grid !important;
+  visibility: visible !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* Collapsed rails still hide their signs. */
+.game-shell.is-left-rail-collapsed .tokyo-night-left-signs,
+.game-shell.is-right-rail-collapsed .tokyo-night-rail-signs {
+  display: none !important;
+  visibility: hidden !important;
 }
