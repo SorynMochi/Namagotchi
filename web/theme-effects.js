@@ -545,3 +545,180 @@
     installCandyWatcher();
   }
 })();
+
+// Cafe pass 1B: side-lane cafe props
+(() => {
+  const LAYER_ID = "cafe-float-layer";
+  const TYPES = ["cup", "croissant", "macaron", "donut", "beans"];
+  const PIECES_PER_ZONE = 6;
+
+  function getCurrentThemeName() {
+    return document.body?.dataset?.theme || "";
+  }
+
+  function isCafeTheme() {
+    return getCurrentThemeName() === "cafe";
+  }
+
+  function removeCafeLayer() {
+    document.getElementById(LAYER_ID)?.remove();
+  }
+
+  function buildCafePiece(type) {
+    const piece = document.createElement("div");
+    piece.className = `cafe-piece cafe-${type}`;
+
+    const size = 54 + Math.floor(Math.random() * 44);
+    const left = Math.random() * 74 + 5;
+    const top = Math.random() * 80 + 4;
+    const opacity = 0.18 + Math.random() * 0.14;
+    const driftX = -10 + Math.random() * 20;
+    const driftY = -16 + Math.random() * 32;
+    const spin = 58 + Math.random() * 48;
+    const float = 30 + Math.random() * 18;
+    const rot = Math.floor(Math.random() * 360);
+
+    piece.style.setProperty("--cafe-size", `${size}px`);
+    piece.style.setProperty("--cafe-opacity", opacity.toFixed(2));
+    piece.style.setProperty("--cafe-drift-x", `${driftX}px`);
+    piece.style.setProperty("--cafe-drift-y", `${driftY}px`);
+    piece.style.setProperty("--cafe-spin", `${spin.toFixed(1)}s`);
+    piece.style.setProperty("--cafe-float", `${float.toFixed(1)}s`);
+    piece.style.setProperty("--cafe-rot", `${rot}deg`);
+    piece.style.left = `${left}%`;
+    piece.style.top = `${top}%`;
+    piece.style.animationDelay = `${(Math.random() * -42).toFixed(1)}s, ${(Math.random() * -42).toFixed(1)}s`;
+
+    if (type === "cup") {
+      piece.innerHTML = `
+        <span class="cup-steam"></span>
+        <span class="cup-body"></span>
+        <span class="cup-handle"></span>
+        <span class="cup-saucer"></span>
+      `;
+    } else if (type === "croissant") {
+      piece.innerHTML = `
+        <span class="croissant-base"></span>
+        <span class="croissant-lines"></span>
+      `;
+    } else if (type === "macaron") {
+      piece.innerHTML = `
+        <span class="macaron-top"></span>
+        <span class="macaron-cream"></span>
+        <span class="macaron-bottom"></span>
+      `;
+    } else if (type === "donut") {
+      piece.innerHTML = `
+        <span class="donut-ring"></span>
+        <span class="donut-glaze"></span>
+      `;
+    } else if (type === "beans") {
+      piece.innerHTML = `
+        <span class="bean bean-1"></span>
+        <span class="bean bean-2"></span>
+      `;
+    }
+
+    return piece;
+  }
+
+  function buildCafeZone(zoneName, railElement, panelElement) {
+    const railRect = railElement.getBoundingClientRect();
+    const panelRect = panelElement.getBoundingClientRect();
+
+    const zone = document.createElement("div");
+    zone.className = `cafe-float-zone cafe-float-zone-${zoneName}`;
+
+    const top = Math.max(panelRect.bottom + 12, railRect.top + 48);
+    const viewportBottom = window.innerHeight - 8;
+    const height = Math.max(viewportBottom - top, 0);
+
+    zone.style.left = `${Math.max(0, railRect.left)}px`;
+    zone.style.top = `${top}px`;
+    zone.style.width = `${Math.max(railRect.width, 38)}px`;
+    zone.style.height = `${height}px`;
+
+    if (height < 90) {
+      zone.style.display = "none";
+      return zone;
+    }
+
+    for (let index = 0; index < PIECES_PER_ZONE; index += 1) {
+      const type = TYPES[(index + Math.floor(Math.random() * TYPES.length)) % TYPES.length];
+      zone.appendChild(buildCafePiece(type));
+    }
+
+    return zone;
+  }
+
+  function createCafeLayer() {
+    if (!document.body || document.getElementById(LAYER_ID) || !isCafeTheme()) {
+      return;
+    }
+
+    const leftRail = document.querySelector(".left-rail");
+    const rightRail = document.querySelector(".right-rail");
+    const leftPanel = document.querySelector(".left-rail > .nav-panel");
+    const rightPanel = document.querySelector(".right-rail > .right-buffs-panel");
+
+    if (!leftRail || !rightRail || !leftPanel || !rightPanel) {
+      return;
+    }
+
+    const layer = document.createElement("div");
+    layer.id = LAYER_ID;
+    layer.className = "cafe-float-layer";
+
+    layer.append(
+      buildCafeZone("left", leftRail, leftPanel),
+      buildCafeZone("right", rightRail, rightPanel)
+    );
+
+    document.body.appendChild(layer);
+  }
+
+  function syncCafeLayer() {
+    removeCafeLayer();
+
+    if (isCafeTheme()) {
+      createCafeLayer();
+    }
+  }
+
+  function scheduleCafeLayerSync() {
+    requestAnimationFrame(syncCafeLayer);
+  }
+
+  function installCafeWatcher() {
+    if (!document.body) {
+      return;
+    }
+
+    scheduleCafeLayerSync();
+
+    const observer = new MutationObserver(scheduleCafeLayerSync);
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-theme", "class"]
+    });
+
+    const shell = document.querySelector(".game-shell");
+
+    if (shell) {
+      observer.observe(shell, {
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+    }
+
+    window.addEventListener("resize", scheduleCafeLayerSync);
+    window.addEventListener("pageshow", scheduleCafeLayerSync);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", installCafeWatcher, { once: true });
+  } else {
+    installCafeWatcher();
+  }
+})();
