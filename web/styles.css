@@ -268,6 +268,93 @@
   --theme-task-active-border: var(--theme-work-active-border);
   --theme-task-active-glow: var(--theme-work-active-glow);
   --theme-task-active-bg: var(--theme-work-active-bg);
+
+  /* Theme inventory and rarity tokens */
+  --theme-wardrobe-capacity-border: rgba(255, 190, 226, 0.18);
+  --theme-wardrobe-panel-bg: rgba(7, 13, 24, 0.72);
+  --theme-wardrobe-row-border: rgba(255, 190, 226, 0.13);
+  --theme-wardrobe-row-bg: rgba(255, 255, 255, 0.026);
+
+  --theme-equipment-card-border: rgba(201, 167, 255, 0.22);
+  --theme-equipment-card-border-strong: rgba(201, 167, 255, 0.24);
+  --theme-equipment-card-bg: rgba(43, 22, 61, 0.8);
+  --theme-equipment-card-bg-strong: rgba(32, 17, 48, 0.82);
+  --theme-equipment-card-outline: rgba(255, 140, 204, 0.04);
+
+  --theme-equipment-empty-border: rgba(110, 188, 255, 0.5);
+  --theme-equipment-empty-border-strong: rgba(110, 188, 255, 0.58);
+  --theme-equipment-empty-border-bright: rgba(110, 188, 255, 0.62);
+  --theme-equipment-empty-bg-glow: rgba(110, 188, 255, 0.08);
+  --theme-equipment-empty-bg-glow-strong: rgba(110, 188, 255, 0.085);
+  --theme-equipment-empty-bg: rgba(26, 43, 66, 0.72);
+  --theme-equipment-empty-bg-strong: rgba(21, 42, 66, 0.64);
+  --theme-equipment-empty-shadow: rgba(110, 188, 255, 0.22);
+  --theme-equipment-empty-shadow-soft: rgba(110, 188, 255, 0.14);
+  --theme-equipment-empty-shadow-mid: rgba(110, 188, 255, 0.15);
+  --theme-equipment-empty-shadow-strong: rgba(110, 188, 255, 0.16);
+  --theme-equipment-empty-shadow-glow: rgba(110, 188, 255, 0.07);
+  --theme-equipment-empty-shadow-glow-strong: rgba(110, 188, 255, 0.08);
+  --theme-equipment-empty-shadow-glow-bright: rgba(110, 188, 255, 0.24);
+
+  --theme-gear-pill-bg: rgba(255, 255, 255, 0.055);
+  --theme-gear-pill-border: rgba(255, 255, 255, 0.08);
+  --theme-gear-empty-name-text: rgba(225, 239, 255, 0.35);
+  --theme-gear-empty-name-text-strong: rgba(225, 239, 255, 0.38);
+
+  --theme-inventory-quantity-bg: rgba(152, 221, 255, 0.12);
+  --theme-inventory-quantity-border: rgba(152, 221, 255, 0.2);
+  --theme-inventory-section-border: rgba(255, 255, 255, 0.06);
+  --theme-inventory-section-bg: rgba(255, 255, 255, 0.015);
+  --theme-inventory-empty-border: rgba(255, 255, 255, 0.09);
+  --theme-inventory-group-bg: rgba(3, 9, 16, 0.48);
+  --theme-inventory-tailoring-bg: rgba(5, 10, 18, 0.58);
+
+  --theme-inventory-item-name-text: rgba(255, 246, 251, 0.72);
+  --theme-equipment-item-name-text: rgba(255, 246, 251, 0.76);
+  --theme-inventory-empty-text: rgba(244, 212, 230, 0.44);
+  --theme-inventory-group-muted-text: rgba(244, 212, 230, 0.62);
+  --theme-equipment-slot-muted-text: rgba(244, 212, 230, 0.66);
+  --theme-equipment-slot-muted-text-strong: rgba(244, 212, 230, 0.68);
+
+  --theme-rarity-basic-border: rgba(170, 185, 210, 0.34);
+  --theme-rarity-basic-shadow: rgba(170, 185, 210, 0.08);
+  --theme-rarity-basic-shadow-soft: rgba(170, 185, 210, 0.07);
+  --theme-rarity-basic-bg: rgba(170, 185, 210, 0.14);
+  --theme-rarity-basic-text: #dbe7ff;
+
+  --theme-rarity-cute-border: rgba(255, 170, 214, 0.36);
+  --theme-rarity-cute-shadow: rgba(255, 140, 204, 0.1);
+  --theme-rarity-cute-shadow-soft: rgba(255, 140, 204, 0.09);
+  --theme-rarity-cute-bg: rgba(255, 170, 214, 0.14);
+  --theme-rarity-cute-text: #ffe0f1;
+
+  --theme-rarity-chic-border: rgba(210, 179, 255, 0.38);
+  --theme-rarity-chic-shadow: rgba(201, 167, 255, 0.1);
+  --theme-rarity-chic-bg: rgba(210, 179, 255, 0.14);
+  --theme-rarity-chic-text: #efe3ff;
+
+  --theme-rarity-trendy-border: rgba(132, 225, 255, 0.42);
+  --theme-rarity-trendy-shadow: rgba(132, 225, 255, 0.12);
+  --theme-rarity-trendy-shadow-soft: rgba(132, 225, 255, 0.11);
+  --theme-rarity-trendy-bg: rgba(132, 225, 255, 0.14);
+  --theme-rarity-trendy-text: #dcf8ff;
+
+  --theme-rarity-glam-border: rgba(255, 226, 150, 0.44);
+  --theme-rarity-glam-shadow: rgba(255, 226, 150, 0.12);
+  --theme-rarity-glam-shadow-soft: rgba(255, 226, 150, 0.11);
+  --theme-rarity-glam-bg: rgba(255, 226, 150, 0.15);
+  --theme-rarity-glam-text: #fff4c7;
+
+  --theme-rarity-iconic-border: rgba(255, 179, 124, 0.48);
+  --theme-rarity-iconic-shadow: rgba(255, 179, 124, 0.13);
+  --theme-rarity-iconic-bg: rgba(255, 179, 124, 0.15);
+  --theme-rarity-iconic-text: #ffe5cf;
+
+  --theme-rarity-devastating-border: rgba(255, 111, 146, 0.54);
+  --theme-rarity-devastating-shadow: rgba(255, 111, 146, 0.18);
+  --theme-rarity-devastating-shadow-soft: rgba(255, 111, 146, 0.16);
+  --theme-rarity-devastating-bg: rgba(255, 111, 146, 0.17);
+  --theme-rarity-devastating-text: #ffd7e1;
 }
 
 * {
@@ -2617,7 +2704,7 @@ body > .emoji-picker-floating .emoji-option:hover {
 .task-status {
   padding: 2px 7px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.055);
+  background: var(--theme-gear-pill-bg);
   color: var(--muted);
   font-size: 0.56rem !important;
   font-weight: 950 !important;
@@ -3696,7 +3783,7 @@ body::before {
   pointer-events: none;
   background-image:
     radial-gradient(circle, rgba(255, 217, 239, 0.16) 0 1px, transparent 1.5px),
-    radial-gradient(circle, rgba(152, 221, 255, 0.12) 0 1px, transparent 1.5px);
+    radial-gradient(circle, var(--theme-inventory-quantity-bg) 0 1px, transparent 1.5px);
   background-position:
     0 0,
     18px 22px;
@@ -3759,7 +3846,7 @@ h3 {
   background:
     linear-gradient(90deg, rgba(255, 140, 204, 0.16), rgba(201, 167, 255, 0.08)),
     var(--theme-white-surface-025);
-  border-bottom-color: rgba(255, 190, 226, 0.18);
+  border-bottom-color: var(--theme-wardrobe-capacity-border);
   letter-spacing: 0.045em;
   text-shadow: 0 0 12px rgba(255, 140, 204, 0.22);
 }
@@ -3892,7 +3979,7 @@ h3 {
 .nami-need-card {
   border-color: rgba(255, 190, 226, 0.17);
   background:
-    radial-gradient(circle at top right, rgba(255, 140, 204, 0.09), transparent 9rem),
+    radial-gradient(circle at top right, var(--theme-rarity-cute-shadow-soft), transparent 9rem),
     rgba(255, 255, 255, 0.028);
 }
 
@@ -3900,7 +3987,7 @@ h3 {
 .nami-care-summary h2,
 .care-status-compact h2 {
   color: var(--pink-soft);
-  border-bottom-color: rgba(255, 190, 226, 0.18);
+  border-bottom-color: var(--theme-wardrobe-capacity-border);
   font-family: var(--font-display);
   letter-spacing: 0.05em;
 }
@@ -3948,7 +4035,7 @@ h3 {
   background:
     radial-gradient(circle at 50% 24%, rgba(255, 217, 239, 0.24), transparent 9rem),
     radial-gradient(circle at 50% 74%, rgba(152, 221, 255, 0.14), transparent 14rem),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent),
+    linear-gradient(180deg, var(--theme-gear-pill-bg), transparent),
     var(--theme-white-surface-03);
   box-shadow:
     inset 0 0 28px rgba(255, 140, 204, 0.055),
@@ -3962,7 +4049,7 @@ h3 {
   color: var(--cream);
   box-shadow:
     0 0 36px rgba(255, 140, 204, 0.22),
-    inset 0 0 24px rgba(255, 255, 255, 0.08);
+    inset 0 0 24px var(--theme-gear-pill-border);
 }
 
 .nami-message,
@@ -4009,7 +4096,7 @@ h3 {
 .chat-tabs,
 .chat-form {
   background: rgba(19, 8, 30, 0.7);
-  border-color: rgba(255, 190, 226, 0.13);
+  border-color: var(--theme-wardrobe-row-border);
 }
 
 .chat-tab {
@@ -4043,7 +4130,7 @@ h3 {
 }
 
 .chat-form input {
-  border-color: rgba(255, 190, 226, 0.18);
+  border-color: var(--theme-wardrobe-capacity-border);
   background: rgba(19, 8, 30, 0.78);
   color: #fff8fd;
 }
@@ -4095,7 +4182,7 @@ h3 {
   box-shadow:
     0 0 0 1px rgba(255, 217, 239, 0.12),
     0 0 18px rgba(255, 140, 204, 0.18),
-    inset 0 0 18px rgba(255, 140, 204, 0.1);
+    inset 0 0 18px var(--theme-rarity-cute-shadow);
 }
 
 .compact-care-actions .care-button.care-button-queued {
@@ -4169,7 +4256,7 @@ h3 {
   border-radius: 8px;
   background:
     radial-gradient(circle at 50% 18%, rgba(255, 217, 239, 0.12), transparent 3.2rem),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 140, 204, 0.035)),
+    linear-gradient(180deg, var(--theme-gear-pill-bg), rgba(255, 140, 204, 0.035)),
     var(--theme-white-surface-025);
   color: var(--text-soft);
   text-align: center;
@@ -4180,7 +4267,7 @@ h3 {
   letter-spacing: 0.015em;
   text-transform: none;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    inset 0 1px 0 var(--theme-gear-pill-bg),
     0 8px 18px rgba(15, 5, 24, 0.1);
   transition:
     transform 140ms ease,
@@ -4204,7 +4291,7 @@ h3 {
   color: var(--pink-soft);
   box-shadow:
     0 6px 6px rgba(255, 140, 204, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    inset 0 1px 0 var(--theme-gear-pill-border);
 }
 
 .main-nav.menu-grid .nav-item.active {
@@ -4531,7 +4618,7 @@ h3 {
   gap: 10px;
   margin: 0;
   padding: 8px 10px;
-  border: 1px solid rgba(152, 221, 255, 0.12);
+  border: 1px solid var(--theme-inventory-quantity-bg);
   border-radius: 12px;
   background: var(--theme-white-surface-025);
   color: var(--muted);
@@ -4582,7 +4669,7 @@ h3 {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border: 1px solid rgba(255, 190, 226, 0.18);
+  border: 1px solid var(--theme-wardrobe-capacity-border);
   border-radius: 999px;
   background: var(--theme-white-surface-04);
   color: var(--text-soft);
@@ -4616,7 +4703,7 @@ h3 {
   border-radius: 18px;
   background:
     linear-gradient(180deg, var(--theme-white-surface-035), transparent 62%),
-    rgba(7, 13, 24, 0.72);
+    var(--theme-wardrobe-panel-bg);
   box-shadow:
     inset 0 1px 0 var(--theme-white-surface-04),
     0 18px 40px rgba(0, 0, 0, 0.2);
@@ -4651,13 +4738,13 @@ h3 {
   position: relative;
   min-width: 0;
   border-radius: 16px;
-  border: 1px solid rgba(201, 167, 255, 0.22);
+  border: 1px solid var(--theme-equipment-card-border);
   background:
     linear-gradient(180deg, var(--theme-white-border-045), transparent 70%),
-    rgba(43, 22, 61, 0.8);
+    var(--theme-equipment-card-bg);
   box-shadow:
     inset 0 1px 0 var(--theme-white-surface-04),
-    0 0 0 1px rgba(255, 140, 204, 0.04);
+    0 0 0 1px var(--theme-equipment-card-outline);
 }
 
 .equipment-card {
@@ -4720,8 +4807,8 @@ h3 {
   justify-self: start;
   padding: 4px 8px;
   border-radius: 999px;
-  background: rgba(152, 221, 255, 0.12);
-  border: 1px solid rgba(152, 221, 255, 0.2);
+  background: var(--theme-inventory-quantity-bg);
+  border: 1px solid var(--theme-inventory-quantity-border);
   color: var(--cyan-soft);
   font-size: 0.7rem;
   font-weight: 900;
@@ -4737,8 +4824,8 @@ h3 {
 .gear-stat-chip {
   padding: 4px 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.055);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--theme-gear-pill-bg);
+  border: 1px solid var(--theme-gear-pill-border);
   color: var(--text-soft);
   font-size: 0.68rem;
   font-weight: 850;
@@ -4758,7 +4845,7 @@ h3 {
   justify-content: space-between;
   gap: 10px;
   padding: 9px 10px;
-  border: 1px solid rgba(255, 190, 226, 0.13);
+  border: 1px solid var(--theme-wardrobe-row-border);
   border-radius: 12px;
   background: var(--theme-white-surface-03);
   color: var(--muted);
@@ -4811,85 +4898,85 @@ h3 {
 
 .rarity-empty {
   background: var(--theme-white-surface-05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--theme-gear-pill-border);
   color: var(--muted);
 }
 
 .rarity-basic {
-  border-color: rgba(170, 185, 210, 0.34);
-  box-shadow: 0 0 18px rgba(170, 185, 210, 0.08);
+  border-color: var(--theme-rarity-basic-border);
+  box-shadow: 0 0 18px var(--theme-rarity-basic-shadow);
 }
 .rarity-basic .rarity-pill,
 .rarity-pill.rarity-basic {
-  background: rgba(170, 185, 210, 0.14);
-  border: 1px solid rgba(170, 185, 210, 0.34);
-  color: #dbe7ff;
+  background: var(--theme-rarity-basic-bg);
+  border: 1px solid var(--theme-rarity-basic-border);
+  color: var(--theme-rarity-basic-text);
 }
 
 .rarity-cute {
-  border-color: rgba(255, 170, 214, 0.36);
-  box-shadow: 0 0 20px rgba(255, 140, 204, 0.1);
+  border-color: var(--theme-rarity-cute-border);
+  box-shadow: 0 0 20px var(--theme-rarity-cute-shadow);
 }
 .rarity-cute .rarity-pill,
 .rarity-pill.rarity-cute {
-  background: rgba(255, 170, 214, 0.14);
-  border: 1px solid rgba(255, 170, 214, 0.36);
-  color: #ffe0f1;
+  background: var(--theme-rarity-cute-bg);
+  border: 1px solid var(--theme-rarity-cute-border);
+  color: var(--theme-rarity-cute-text);
 }
 
 .rarity-chic {
-  border-color: rgba(210, 179, 255, 0.38);
-  box-shadow: 0 0 20px rgba(201, 167, 255, 0.1);
+  border-color: var(--theme-rarity-chic-border);
+  box-shadow: 0 0 20px var(--theme-rarity-chic-shadow);
 }
 .rarity-chic .rarity-pill,
 .rarity-pill.rarity-chic {
-  background: rgba(210, 179, 255, 0.14);
-  border: 1px solid rgba(210, 179, 255, 0.38);
-  color: #efe3ff;
+  background: var(--theme-rarity-chic-bg);
+  border: 1px solid var(--theme-rarity-chic-border);
+  color: var(--theme-rarity-chic-text);
 }
 
 .rarity-trendy {
-  border-color: rgba(132, 225, 255, 0.42);
-  box-shadow: 0 0 22px rgba(132, 225, 255, 0.12);
+  border-color: var(--theme-rarity-trendy-border);
+  box-shadow: 0 0 22px var(--theme-rarity-trendy-shadow);
 }
 .rarity-trendy .rarity-pill,
 .rarity-pill.rarity-trendy {
-  background: rgba(132, 225, 255, 0.14);
-  border: 1px solid rgba(132, 225, 255, 0.42);
-  color: #dcf8ff;
+  background: var(--theme-rarity-trendy-bg);
+  border: 1px solid var(--theme-rarity-trendy-border);
+  color: var(--theme-rarity-trendy-text);
 }
 
 .rarity-glam {
-  border-color: rgba(255, 226, 150, 0.44);
-  box-shadow: 0 0 24px rgba(255, 226, 150, 0.12);
+  border-color: var(--theme-rarity-glam-border);
+  box-shadow: 0 0 24px var(--theme-rarity-glam-shadow);
 }
 .rarity-glam .rarity-pill,
 .rarity-pill.rarity-glam {
-  background: rgba(255, 226, 150, 0.15);
-  border: 1px solid rgba(255, 226, 150, 0.44);
-  color: #fff4c7;
+  background: var(--theme-rarity-glam-bg);
+  border: 1px solid var(--theme-rarity-glam-border);
+  color: var(--theme-rarity-glam-text);
 }
 
 .rarity-iconic {
-  border-color: rgba(255, 179, 124, 0.48);
-  box-shadow: 0 0 26px rgba(255, 179, 124, 0.13);
+  border-color: var(--theme-rarity-iconic-border);
+  box-shadow: 0 0 26px var(--theme-rarity-iconic-shadow);
 }
 .rarity-iconic .rarity-pill,
 .rarity-pill.rarity-iconic {
-  background: rgba(255, 179, 124, 0.15);
-  border: 1px solid rgba(255, 179, 124, 0.48);
-  color: #ffe5cf;
+  background: var(--theme-rarity-iconic-bg);
+  border: 1px solid var(--theme-rarity-iconic-border);
+  color: var(--theme-rarity-iconic-text);
 }
 
 .rarity-devastating {
-  border-color: rgba(255, 111, 146, 0.54);
-  box-shadow: 0 0 30px rgba(255, 111, 146, 0.18);
+  border-color: var(--theme-rarity-devastating-border);
+  box-shadow: 0 0 30px var(--theme-rarity-devastating-shadow);
 }
 .rarity-devastating .rarity-pill,
 .rarity-pill.rarity-devastating {
-  background: rgba(255, 111, 146, 0.17);
-  border: 1px solid rgba(255, 111, 146, 0.54);
-  color: #ffd7e1;
+  background: var(--theme-rarity-devastating-bg);
+  border: 1px solid var(--theme-rarity-devastating-border);
+  color: var(--theme-rarity-devastating-text);
 }
 
 @media (max-width: 1400px) {
@@ -4937,9 +5024,9 @@ h3 {
   justify-content: space-between;
   gap: 12px;
   padding: 9px 10px;
-  border: 1px solid rgba(255, 190, 226, 0.13);
+  border: 1px solid var(--theme-wardrobe-row-border);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.026);
+  background: var(--theme-wardrobe-row-bg);
 }
 
 .equipment-slot-row span,
@@ -4999,13 +5086,13 @@ h3 {
   position: relative;
   min-width: 0;
   border-radius: 16px;
-  border: 1px solid rgba(201, 167, 255, 0.24);
+  border: 1px solid var(--theme-equipment-card-border-strong);
   background:
     linear-gradient(180deg, var(--theme-white-surface-03), transparent 68%),
-    rgba(32, 17, 48, 0.82);
+    var(--theme-equipment-card-bg-strong);
   box-shadow:
     inset 0 1px 0 var(--theme-white-surface-03),
-    0 0 0 1px rgba(255, 140, 204, 0.04);
+    0 0 0 1px var(--theme-equipment-card-outline);
 }
 
 .equipment-card {
@@ -5016,13 +5103,13 @@ h3 {
 }
 
 .equipment-card.is-empty {
-  border-color: rgba(110, 188, 255, 0.5);
+  border-color: var(--theme-equipment-empty-border);
   background:
-    linear-gradient(180deg, rgba(110, 188, 255, 0.08), transparent 60%),
-    rgba(26, 43, 66, 0.72);
+    linear-gradient(180deg, var(--theme-equipment-empty-bg-glow), transparent 60%),
+    var(--theme-equipment-empty-bg);
   box-shadow:
-    0 0 0 2px rgba(110, 188, 255, 0.22),
-    inset 0 0 0 1px rgba(110, 188, 255, 0.14);
+    0 0 0 2px var(--theme-equipment-empty-shadow),
+    inset 0 0 0 1px var(--theme-equipment-empty-shadow-soft);
 }
 
 .gear-card-topline,
@@ -5058,7 +5145,7 @@ h3 {
   padding: 2px 7px;
   border-radius: 999px;
   background: var(--theme-white-surface-05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--theme-gear-pill-border);
   color: var(--text-soft);
   font-size: 0.66rem;
   font-weight: 900;
@@ -5084,7 +5171,7 @@ h3 {
 }
 
 .gear-card-empty-name {
-  color: rgba(225, 239, 255, 0.35);
+  color: var(--theme-gear-empty-name-text);
   font-style: italic;
   letter-spacing: 0.04em;
 }
@@ -5099,7 +5186,7 @@ h3 {
   justify-content: space-between;
   gap: 10px;
   padding: 9px 10px;
-  border: 1px solid rgba(255, 190, 226, 0.13);
+  border: 1px solid var(--theme-wardrobe-row-border);
   border-radius: 12px;
   background: var(--theme-white-surface-03);
   color: var(--muted);
@@ -5124,9 +5211,9 @@ h3 {
   display: grid;
   gap: 8px;
   padding: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--theme-inventory-section-border);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.015);
+  background: var(--theme-inventory-section-bg);
 }
 
 .inventory-group-header {
@@ -5159,7 +5246,7 @@ h3 {
   display: grid;
   place-items: center;
   min-height: 58px;
-  border: 1px dashed rgba(255, 255, 255, 0.09);
+  border: 1px dashed var(--theme-inventory-empty-border);
   border-radius: 10px;
   color: var(--muted);
   font-size: 0.8rem;
@@ -5622,14 +5709,14 @@ body.is-resizing-chat * {
 }
 
 #section-inventory .equipment-card.is-empty {
-  border: 1px solid rgba(110, 188, 255, 0.58);
+  border: 1px solid var(--theme-equipment-empty-border-strong);
   background:
-    linear-gradient(180deg, rgba(110, 188, 255, 0.085), transparent 65%),
-    rgba(21, 42, 66, 0.64);
+    linear-gradient(180deg, var(--theme-equipment-empty-bg-glow-strong), transparent 65%),
+    var(--theme-equipment-empty-bg-strong);
   box-shadow:
-    0 0 0 1px rgba(110, 188, 255, 0.22),
-    inset 0 0 0 1px rgba(110, 188, 255, 0.16),
-    0 0 22px rgba(110, 188, 255, 0.08);
+    0 0 0 1px var(--theme-equipment-empty-shadow),
+    inset 0 0 0 1px var(--theme-equipment-empty-shadow-strong),
+    0 0 22px var(--theme-equipment-empty-bg-glow);
   opacity: 1;
 }
 
@@ -5642,7 +5729,7 @@ body.is-resizing-chat * {
 #section-inventory .equipment-slot-label {
   max-width: 70%;
   overflow: hidden;
-  color: rgba(244, 212, 230, 0.66);
+  color: var(--theme-equipment-slot-muted-text);
   font-size: 0.58rem;
   font-weight: 950;
   letter-spacing: 0.08em;
@@ -5656,7 +5743,7 @@ body.is-resizing-chat * {
   min-height: 16px;
   padding: 1px 5px;
   border-radius: 5px;
-  background: rgba(5, 10, 18, 0.58);
+  background: var(--theme-inventory-tailoring-bg);
   border: 1px solid rgba(255, 255, 255, 0.07);
   color: var(--pink-soft);
   font-size: 0.56rem;
@@ -5671,7 +5758,7 @@ body.is-resizing-chat * {
 #section-inventory .equipment-card .gear-card-name {
   display: -webkit-box;
   overflow: hidden;
-  color: rgba(255, 246, 251, 0.76);
+  color: var(--theme-equipment-item-name-text);
   font-size: 0.72rem;
   font-weight: 900;
   line-height: 1.12;
@@ -5682,7 +5769,7 @@ body.is-resizing-chat * {
 }
 
 #section-inventory .equipment-card .gear-card-empty-name {
-  color: rgba(225, 239, 255, 0.38);
+  color: var(--theme-gear-empty-name-text-strong);
   font-size: 0.82rem;
   font-style: italic;
   font-weight: 850;
@@ -5734,7 +5821,7 @@ body.is-resizing-chat * {
   padding: 4px;
   border: 1px solid var(--theme-cyan-border-18);
   border-radius: 6px;
-  background: rgba(3, 9, 16, 0.48);
+  background: var(--theme-inventory-group-bg);
 }
 
 #section-inventory .inventory-group-header {
@@ -5750,7 +5837,7 @@ body.is-resizing-chat * {
 }
 
 #section-inventory .inventory-group-header strong {
-  color: rgba(244, 212, 230, 0.62);
+  color: var(--theme-inventory-group-muted-text);
   font-size: 0.56rem;
 }
 
@@ -5770,7 +5857,7 @@ body.is-resizing-chat * {
   border: 0;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.012);
-  color: rgba(244, 212, 230, 0.44);
+  color: var(--theme-inventory-empty-text);
   font-size: 0.62rem;
   font-style: normal;
   font-weight: 850;
@@ -5803,7 +5890,7 @@ body.is-resizing-chat * {
 #section-inventory .inventory-item-card .gear-card-name {
   display: -webkit-box;
   overflow: hidden;
-  color: rgba(255, 246, 251, 0.72);
+  color: var(--theme-inventory-item-name-text);
   font-size: 0.58rem;
   font-weight: 850;
   line-height: 1.08;
@@ -5817,37 +5904,37 @@ body.is-resizing-chat * {
 
 #section-inventory .inventory-item-card.rarity-basic,
 #section-inventory .equipment-card.rarity-basic {
-  box-shadow: 0 0 12px rgba(170, 185, 210, 0.07);
+  box-shadow: 0 0 12px var(--theme-rarity-basic-shadow-soft);
 }
 
 #section-inventory .inventory-item-card.rarity-cute,
 #section-inventory .equipment-card.rarity-cute {
-  box-shadow: 0 0 14px rgba(255, 140, 204, 0.09);
+  box-shadow: 0 0 14px var(--theme-rarity-cute-shadow-soft);
 }
 
 #section-inventory .inventory-item-card.rarity-chic,
 #section-inventory .equipment-card.rarity-chic {
-  box-shadow: 0 0 14px rgba(201, 167, 255, 0.1);
+  box-shadow: 0 0 14px var(--theme-rarity-chic-shadow);
 }
 
 #section-inventory .inventory-item-card.rarity-trendy,
 #section-inventory .equipment-card.rarity-trendy {
-  box-shadow: 0 0 16px rgba(132, 225, 255, 0.11);
+  box-shadow: 0 0 16px var(--theme-rarity-trendy-shadow-soft);
 }
 
 #section-inventory .inventory-item-card.rarity-glam,
 #section-inventory .equipment-card.rarity-glam {
-  box-shadow: 0 0 18px rgba(255, 226, 150, 0.11);
+  box-shadow: 0 0 18px var(--theme-rarity-glam-shadow-soft);
 }
 
 #section-inventory .inventory-item-card.rarity-iconic,
 #section-inventory .equipment-card.rarity-iconic {
-  box-shadow: 0 0 20px rgba(255, 179, 124, 0.13);
+  box-shadow: 0 0 20px var(--theme-rarity-iconic-shadow);
 }
 
 #section-inventory .inventory-item-card.rarity-devastating,
 #section-inventory .equipment-card.rarity-devastating {
-  box-shadow: 0 0 22px rgba(255, 111, 146, 0.16);
+  box-shadow: 0 0 22px var(--theme-rarity-devastating-shadow-soft);
 }
 
 /* Medium screens: keep the reference shape as long as possible. */
@@ -6032,21 +6119,21 @@ body.is-resizing-chat * {
 }
 
 #section-inventory .equipment-card.is-empty {
-  border: 1px solid rgba(110, 188, 255, 0.62);
+  border: 1px solid var(--theme-equipment-empty-border-bright);
   background:
-    linear-gradient(180deg, rgba(110, 188, 255, 0.08), transparent 66%),
-    rgba(21, 42, 66, 0.64);
+    linear-gradient(180deg, var(--theme-equipment-empty-bg-glow), transparent 66%),
+    var(--theme-equipment-empty-bg-strong);
   box-shadow:
-    0 0 0 1px rgba(110, 188, 255, 0.24),
-    inset 0 0 0 1px rgba(110, 188, 255, 0.15),
-    0 0 18px rgba(110, 188, 255, 0.07);
+    0 0 0 1px var(--theme-equipment-empty-shadow-glow-bright),
+    inset 0 0 0 1px var(--theme-equipment-empty-shadow-mid),
+    0 0 18px var(--theme-equipment-empty-shadow-glow);
   opacity: 1;
 }
 
 #section-inventory .equipment-slot-label {
   max-width: 70%;
   overflow: hidden;
-  color: rgba(244, 212, 230, 0.68);
+  color: var(--theme-equipment-slot-muted-text-strong);
   font-size: 0.55rem;
   font-weight: 950;
   letter-spacing: 0.08em;
@@ -6066,7 +6153,7 @@ body.is-resizing-chat * {
   min-height: 14px;
   padding: 1px 5px;
   border-radius: 4px;
-  background: rgba(5, 10, 18, 0.58);
+  background: var(--theme-inventory-tailoring-bg);
   border: 1px solid rgba(255, 255, 255, 0.07);
   color: var(--pink-soft);
   font-size: 0.52rem;
@@ -6084,7 +6171,7 @@ body.is-resizing-chat * {
 #section-inventory .equipment-card .gear-card-name {
   display: -webkit-box;
   overflow: hidden;
-  color: rgba(255, 246, 251, 0.76);
+  color: var(--theme-equipment-item-name-text);
   font-size: 0.66rem;
   font-weight: 900;
   line-height: 1.1;
@@ -6095,7 +6182,7 @@ body.is-resizing-chat * {
 }
 
 #section-inventory .equipment-card .gear-card-empty-name {
-  color: rgba(225, 239, 255, 0.38);
+  color: var(--theme-gear-empty-name-text-strong);
   font-size: 0.76rem;
   font-style: italic;
   font-weight: 850;
@@ -6142,7 +6229,7 @@ body.is-resizing-chat * {
   padding: 3px;
   border: 1px solid var(--theme-cyan-border-18);
   border-radius: 5px;
-  background: rgba(3, 9, 16, 0.48);
+  background: var(--theme-inventory-group-bg);
 }
 
 #section-inventory .inventory-group-header {
@@ -6161,7 +6248,7 @@ body.is-resizing-chat * {
 }
 
 #section-inventory .inventory-group-header strong {
-  color: rgba(244, 212, 230, 0.62);
+  color: var(--theme-inventory-group-muted-text);
   font-size: 0.54rem;
 }
 
@@ -6184,7 +6271,7 @@ body.is-resizing-chat * {
   border: 0;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.012);
-  color: rgba(244, 212, 230, 0.44);
+  color: var(--theme-inventory-empty-text);
   font-size: 0.58rem;
   font-style: normal;
   font-weight: 850;
@@ -6219,7 +6306,7 @@ body.is-resizing-chat * {
 #section-inventory .inventory-item-card .gear-card-name {
   display: -webkit-box;
   overflow: hidden;
-  color: rgba(255, 246, 251, 0.72);
+  color: var(--theme-inventory-item-name-text);
   font-size: 0.53rem;
   font-weight: 850;
   line-height: 1.05;
