@@ -107,6 +107,31 @@
     } else {
       layer.append(moon, branch, lanternLeft, lanternRight, petalField);
     }
+
+    const leftRail = document.querySelector(".left-rail");
+    const navPanel = document.querySelector(".nav-panel");
+
+    if (leftRail && navPanel) {
+      leftRail.querySelectorAll(".tokyo-night-left-signs").forEach((node) => node.remove());
+
+      const leftSigns = document.createElement("div");
+      leftSigns.className = "tokyo-night-left-signs";
+
+      [
+        { label: "\u6E0B\u8C37\u99C5", caption: "SHIBUYA ST.", className: "jp-station" },
+        { label: "\u30B3\u30F3\u30D3\u30CB", caption: "KONBINI", className: "jp-konbini" },
+        { label: "\u30E9\u30FC\u30E1\u30F3", caption: "RAMEN", className: "jp-ramen" },
+        { label: "\u30CA\u30DF", caption: "NAMI", className: "jp-nami" }
+      ].forEach((config) => {
+        const sign = document.createElement("span");
+        sign.className = `tokyo-night-left-sign ${config.className}`;
+        sign.textContent = config.label;
+        sign.dataset.caption = config.caption;
+        leftSigns.append(sign);
+      });
+
+      navPanel.insertAdjacentElement("afterend", leftSigns);
+    }
     document.body.append(layer);
     activeLayer = layer;
 
@@ -301,6 +326,31 @@
       });
 
       buffsPanel.insertAdjacentElement("afterend", railSigns);
+    }
+
+    const leftRail = document.querySelector(".left-rail");
+    const navPanel = document.querySelector(".nav-panel");
+
+    if (leftRail && navPanel) {
+      leftRail.querySelectorAll(".tokyo-night-left-signs").forEach((node) => node.remove());
+
+      const leftSigns = document.createElement("div");
+      leftSigns.className = "tokyo-night-left-signs";
+
+      [
+        { label: "\u6E0B\u8C37\u99C5", caption: "SHIBUYA ST.", className: "jp-station" },
+        { label: "\u30B3\u30F3\u30D3\u30CB", caption: "KONBINI", className: "jp-konbini" },
+        { label: "\u30E9\u30FC\u30E1\u30F3", caption: "RAMEN", className: "jp-ramen" },
+        { label: "\u30CA\u30DF", caption: "NAMI", className: "jp-nami" }
+      ].forEach((config) => {
+        const sign = document.createElement("span");
+        sign.className = `tokyo-night-left-sign ${config.className}`;
+        sign.textContent = config.label;
+        sign.dataset.caption = config.caption;
+        leftSigns.append(sign);
+      });
+
+      navPanel.insertAdjacentElement("afterend", leftSigns);
     }
     document.body.append(layer);
     activeLayer = layer;
