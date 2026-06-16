@@ -119,6 +119,40 @@
   --work-card-height: 158px;
   --work-card-gap: 10px;
   --work-video-height: calc((var(--work-card-height) * 2) + var(--work-card-gap));
+
+  /* Theme interaction tokens */
+  --theme-focus-outline: var(--pink);
+
+  --theme-progress-track-border: rgba(255, 255, 255, 0.05);
+  --theme-progress-track-bg: rgba(255, 255, 255, 0.075);
+  --theme-progress-fill-shadow: 0 0 18px rgba(255, 255, 255, 0.16);
+  --theme-progress-xp-fill: linear-gradient(90deg, var(--pink), var(--orange));
+  --theme-progress-stat-fill: linear-gradient(90deg, var(--cyan), var(--pink));
+  --theme-progress-chat-handle-fill: linear-gradient(90deg, var(--cyan), var(--pink));
+
+  --theme-button-primary-border: rgba(73, 199, 255, 0.38);
+  --theme-button-primary-bg: linear-gradient(180deg, rgba(73, 199, 255, 0.95), rgba(18, 154, 216, 0.9));
+  --theme-button-primary-text: #03111c;
+  --theme-button-primary-shadow: 0 8px 22px rgba(73, 199, 255, 0.14);
+
+  --theme-button-secondary-border: rgba(255, 104, 183, 0.34);
+  --theme-button-secondary-bg: linear-gradient(180deg, rgba(255, 104, 183, 0.22), rgba(73, 199, 255, 0.08));
+  --theme-button-secondary-text: var(--pink-soft);
+  --theme-button-secondary-shadow: none;
+
+  --theme-care-button-border: rgba(255, 104, 183, 0.3);
+  --theme-care-button-bg: linear-gradient(180deg, rgba(255, 104, 183, 0.22), rgba(168, 137, 255, 0.1));
+  --theme-care-button-text: var(--pink-soft);
+  --theme-care-button-shadow: none;
+
+  --theme-pill-border: rgba(143, 205, 255, 0.15);
+  --theme-pill-bg: rgba(255, 255, 255, 0.025);
+  --theme-pill-text: var(--muted);
+  --theme-pill-active-bg: linear-gradient(90deg, var(--cyan), var(--pink));
+  --theme-pill-active-text: #06111d;
+
+  --theme-work-active-status-shadow: 0 0 14px rgba(255, 140, 204, 0.2);
+  --theme-work-active-status-inner: inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 * {
@@ -159,7 +193,7 @@ button {
 
 button:focus-visible,
 input:focus-visible {
-  outline: 2px solid var(--pink);
+  outline: 2px solid var(--theme-focus-outline);
   outline-offset: 2px;
 }
 
