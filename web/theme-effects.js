@@ -430,3 +430,118 @@
     clearThemeEffects,
   };
 })();
+// Candy pass 4: floating candy background
+(() => {
+  const LAYER_ID = "candy-float-layer";
+  const TYPES = ["wrapped", "lollipop", "peppermint", "gumdrop", "truffle"];
+  const PIECE_COUNT = 16;
+
+  function getCurrentThemeName() {
+    return document.body?.dataset?.theme || "";
+  }
+
+  function isCandyTheme() {
+    return getCurrentThemeName() === "candy";
+  }
+
+  function removeCandyLayer() {
+    const existing = document.getElementById(LAYER_ID);
+    if (existing) existing.remove();
+  }
+
+  function buildCandyPiece(type) {
+    const piece = document.createElement("div");
+    piece.className = `candy-piece candy-${type}`;
+
+    const size = 56 + Math.floor(Math.random() * 54);
+    const left = Math.random() * 94;
+    const top = Math.random() * 88;
+    const opacity = 0.16 + Math.random() * 0.20;
+    const driftX = -18 + Math.random() * 36;
+    const driftY = -24 + Math.random() * 48;
+    const spin = 34 + Math.random() * 34;
+    const float = 24 + Math.random() * 18;
+    const rot = Math.floor(Math.random() * 360);
+
+    piece.style.setProperty("--candy-size", `${size}px`);
+    piece.style.setProperty("--candy-opacity", opacity.toFixed(2));
+    piece.style.setProperty("--candy-drift-x", `${driftX}px`);
+    piece.style.setProperty("--candy-drift-y", `${driftY}px`);
+    piece.style.setProperty("--candy-spin", `${spin.toFixed(1)}s`);
+    piece.style.setProperty("--candy-float", `${float.toFixed(1)}s`);
+    piece.style.setProperty("--candy-rot", `${rot}deg`);
+    piece.style.left = `${left}%`;
+    piece.style.top = `${top}%`;
+    piece.style.animationDelay = `${(Math.random() * -30).toFixed(1)}s, ${(Math.random() * -30).toFixed(1)}s`;
+
+    if (type === "wrapped") {
+      piece.innerHTML = `
+        <span class="candy-tail candy-tail-left"></span>
+        <span class="candy-center"></span>
+        <span class="candy-tail candy-tail-right"></span>
+      `;
+    } else if (type === "lollipop") {
+      piece.innerHTML = `
+        <span class="candy-disc"></span>
+        <span class="candy-stick"></span>
+      `;
+    } else if (type === "peppermint") {
+      piece.innerHTML = `<span class="candy-disc"></span>`;
+    } else if (type === "gumdrop") {
+      piece.innerHTML = `<span class="candy-body"></span>`;
+    } else if (type === "truffle") {
+      piece.innerHTML = `
+        <span class="candy-base"></span>
+        <span class="candy-top"></span>
+      `;
+    }
+
+    return piece;
+  }
+
+  function createCandyLayer() {
+    if (!document.body || document.getElementById(LAYER_ID) || !isCandyTheme()) return;
+
+    const layer = document.createElement("div");
+    layer.id = LAYER_ID;
+    layer.className = "candy-float-layer";
+
+    for (let i = 0; i < PIECE_COUNT; i += 1) {
+      const type = TYPES[Math.floor(Math.random() * TYPES.length)];
+      layer.appendChild(buildCandyPiece(type));
+    }
+
+    document.body.appendChild(layer);
+  }
+
+  function syncCandyLayer() {
+    if (isCandyTheme()) {
+      createCandyLayer();
+    } else {
+      removeCandyLayer();
+    }
+  }
+
+  function installCandyWatcher() {
+    if (!document.body) return;
+
+    syncCandyLayer();
+
+    const observer = new MutationObserver(() => {
+      syncCandyLayer();
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-theme", "class"]
+    });
+
+    window.addEventListener("pageshow", syncCandyLayer);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", installCandyWatcher, { once: true });
+  } else {
+    installCandyWatcher();
+  }
+})();

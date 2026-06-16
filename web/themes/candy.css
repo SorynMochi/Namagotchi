@@ -1257,3 +1257,212 @@ body[data-theme="candy"] #section-home .care-button:hover,
 body[data-theme="candy"] #section-home .care-button:hover .care-button-label {
   color: #431f18 !important;
 }
+/* Candy pass 4: floating candy background */
+
+/* Keep the candy border from clipping on the left rail, including collapsed state. */
+body[data-theme="candy"] .left-rail {
+  overflow: visible !important;
+  padding-left: 6px !important;
+  box-sizing: border-box !important;
+}
+
+body[data-theme="candy"] .left-rail > .nav-panel,
+body[data-theme="candy"] .left-rail .nav-panel {
+  width: calc(100% - 6px) !important;
+  max-width: calc(100% - 6px) !important;
+  box-sizing: border-box !important;
+}
+
+body[data-theme="candy"] .left-rail.collapsed,
+body[data-theme="candy"] .left-rail.is-collapsed,
+body[data-theme="candy"] .left-rail[data-collapsed="true"] {
+  overflow: visible !important;
+  padding-left: 6px !important;
+}
+
+body[data-theme="candy"] .left-rail.collapsed > .nav-panel,
+body[data-theme="candy"] .left-rail.is-collapsed > .nav-panel,
+body[data-theme="candy"] .left-rail[data-collapsed="true"] > .nav-panel,
+body[data-theme="candy"] .left-rail.collapsed .nav-panel,
+body[data-theme="candy"] .left-rail.is-collapsed .nav-panel,
+body[data-theme="candy"] .left-rail[data-collapsed="true"] .nav-panel {
+  width: calc(100% - 6px) !important;
+  max-width: calc(100% - 6px) !important;
+  margin-left: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Candy background layer */
+body[data-theme="candy"] .game-shell {
+  position: relative;
+  z-index: 1;
+}
+
+body[data-theme="candy"] .candy-float-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body[data-theme="candy"] .candy-piece {
+  position: absolute;
+  width: var(--candy-size, 84px);
+  height: var(--candy-size, 84px);
+  opacity: var(--candy-opacity, 0.28);
+  transform: translate3d(0,0,0) rotate(var(--candy-rot, 0deg));
+  filter:
+    drop-shadow(0 10px 18px rgba(128, 64, 32, 0.10))
+    drop-shadow(0 2px 8px rgba(255, 255, 255, 0.18));
+  animation:
+    candyFloat var(--candy-float, 34s) ease-in-out infinite alternate,
+    candySpin var(--candy-spin, 42s) linear infinite;
+  will-change: transform;
+}
+
+body[data-theme="candy"] .candy-piece > * {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+/* Wrapped candy */
+body[data-theme="candy"] .candy-piece.candy-wrapped .candy-center {
+  left: 18%;
+  top: 28%;
+  width: 64%;
+  height: 44%;
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, #ff9dc8 0%, #ffd36c 48%, #7de3ff 100%);
+  border: 2px solid rgba(255,255,255,0.75);
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,0.45),
+    inset 0 -4px 8px rgba(160, 60, 120, 0.12);
+}
+
+body[data-theme="candy"] .candy-piece.candy-wrapped .candy-tail {
+  top: 32%;
+  width: 22%;
+  height: 34%;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.88), rgba(255,255,255,0.35));
+  border: 2px solid rgba(255,255,255,0.62);
+  clip-path: polygon(0 50%, 24% 0, 100% 18%, 76% 50%, 100% 82%, 24% 100%);
+}
+
+body[data-theme="candy"] .candy-piece.candy-wrapped .candy-tail-left {
+  left: 1%;
+}
+
+body[data-theme="candy"] .candy-piece.candy-wrapped .candy-tail-right {
+  right: 1%;
+  transform: scaleX(-1);
+}
+
+/* Lollipop */
+body[data-theme="candy"] .candy-piece.candy-lollipop .candy-disc {
+  left: 20%;
+  top: 6%;
+  width: 58%;
+  height: 58%;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.76);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.44), transparent 28%),
+    conic-gradient(
+      from 0deg,
+      #ff84c8 0deg 72deg,
+      #fff1a8 72deg 144deg,
+      #8ce7ff 144deg 216deg,
+      #c7a2ff 216deg 288deg,
+      #ff84c8 288deg 360deg
+    );
+  box-shadow: inset 0 3px 10px rgba(255,255,255,0.28);
+}
+
+body[data-theme="candy"] .candy-piece.candy-lollipop .candy-stick {
+  left: 48%;
+  top: 55%;
+  width: 7%;
+  height: 42%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fffdfb 0%, #f3e7dd 100%);
+  border: 1px solid rgba(180, 140, 120, 0.22);
+}
+
+/* Peppermint */
+body[data-theme="candy"] .candy-piece.candy-peppermint .candy-disc {
+  left: 17%;
+  top: 17%;
+  width: 66%;
+  height: 66%;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.88);
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.28) 0 18%, transparent 18% 100%),
+    repeating-conic-gradient(
+      from -8deg,
+      #ffffff 0deg 16deg,
+      #ff8bb9 16deg 32deg
+    );
+  box-shadow: inset 0 2px 10px rgba(255,255,255,0.34);
+}
+
+/* Gumdrop */
+body[data-theme="candy"] .candy-piece.candy-gumdrop .candy-body {
+  left: 20%;
+  top: 18%;
+  width: 60%;
+  height: 62%;
+  border-radius: 52% 52% 44% 44% / 58% 58% 36% 36%;
+  background:
+    radial-gradient(circle at 38% 24%, rgba(255,255,255,0.48), transparent 20%),
+    linear-gradient(180deg, #ffa0c7 0%, #ff89a7 50%, #ffbd67 100%);
+  border: 2px solid rgba(255,255,255,0.70);
+  box-shadow:
+    inset 0 -10px 14px rgba(180, 70, 60, 0.15),
+    0 0 0 5px rgba(255,255,255,0.05);
+}
+
+/* Chocolate truffle */
+body[data-theme="candy"] .candy-piece.candy-truffle .candy-base {
+  left: 22%;
+  top: 28%;
+  width: 56%;
+  height: 42%;
+  border-radius: 50% 50% 42% 42%;
+  background:
+    radial-gradient(circle at 35% 26%, rgba(255,255,255,0.20), transparent 18%),
+    linear-gradient(180deg, #7a4a36 0%, #4d2a1f 68%, #2d160f 100%);
+  border: 2px solid rgba(255,243,226,0.40);
+  box-shadow: inset 0 4px 10px rgba(255,255,255,0.08);
+}
+
+body[data-theme="candy"] .candy-piece.candy-truffle .candy-top {
+  left: 34%;
+  top: 18%;
+  width: 32%;
+  height: 18%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffd382 0%, #f7a63c 100%);
+  box-shadow: 0 0 10px rgba(255, 211, 130, 0.20);
+}
+
+@keyframes candyFloat {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(var(--candy-rot, 0deg));
+  }
+  100% {
+    transform: translate3d(var(--candy-drift-x, 18px), var(--candy-drift-y, -20px), 0) rotate(calc(var(--candy-rot, 0deg) + 4deg));
+  }
+}
+
+@keyframes candySpin {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
