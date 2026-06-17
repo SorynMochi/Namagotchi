@@ -1235,10 +1235,10 @@ function renderPlayerStatus(status) {
   setTextIfChanged(actDesigning, activityLevel(status.activities?.designing));
 
   const xpPercent = percent(player.xpIntoLevel, player.xpToNext);
-
-  setTextIfChanged(
+  setTopUserMetricLabel(
     playdeckXpLabel,
-    `XP: ${Number(player.xpIntoLevel ?? 0).toLocaleString()} / ${Number(player.xpToNext ?? 720).toLocaleString()}`
+    "XP:",
+    `${Number(player.xpIntoLevel ?? 0).toLocaleString()} / ${Number(player.xpToNext ?? 720).toLocaleString()}`
   );
   setWidthIfChanged(playdeckXpFill, `${xpPercent}%`);
 
