@@ -329,3 +329,17 @@ body[data-theme="rainy-mood"] {
 }
 
 /* Top user metric text polish END */
+
+/* Top user row vertical nudge START */
+
+/* Shift the user metric rows upward to line up with the other top rail sections. */
+.top-user-info .top-user-meter-list {
+  transform: translateY(-7px) !important;
+}
+
+/* Reclaim the visual space from the upward nudge so the user area stays tidy. */
+.top-user-info {
+  padding-bottom: 0 !important;
+}
+
+/* Top user row vertical nudge END */
