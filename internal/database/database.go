@@ -129,8 +129,8 @@ type TickState struct {
 	PlaydeckEnabled           bool      `json:"playdeckEnabled"`
 	PlaydeckZoneID            int       `json:"playdeckZoneId"`
 	PlaydeckZoneName          string    `json:"playdeckZoneName"`
-	PlaydeckStreak            int64     `json:"playdeckStreak"`
-.\.git\PlaydeckMaxStreak         int64     `json:"playdeckMaxStreak"`
+	PlaydeckStreak            int64     `json:"playdeckStreak"`
+	PlaydeckMaxStreak         int64     `json:"playdeckMaxStreak"`
 	PlaydeckTimeoutTicks      int       `json:"playdeckTimeoutTicks"`
 	ActiveGatheringTask       string    `json:"activeGatheringTask"`
 	ActiveGatheringName       string    `json:"activeGatheringName"`
@@ -4529,25 +4529,24 @@ func (s *Store) SeedDevPlayer(ctx context.Context) error {
 	return nil
 }
 
-
 func normalizePlaydeckZoneID(zoneID int) int {
-if zoneID < 1 {
-return 1
-}
+	if zoneID < 1 {
+		return 1
+	}
 
-return zoneID
+	return zoneID
 }
 
 func normalizePlaydeckStreak(streak int64) int64 {
-if streak < 0 {
-return 0
-}
+	if streak < 0 {
+		return 0
+	}
 
-return streak
+	return streak
 }
 
 func (s *Store) ensurePlaydeckZoneRecordsTable(ctx context.Context) error {
-_, err := s.Pool.Exec(ctx, `
+	_, err := s.Pool.Exec(ctx, `
 create table if not exists player_playdeck_zone_records (
 player_id bigint not null references players(id) on delete cascade,
 zone_id integer not null,
@@ -4557,24 +4556,24 @@ updated_at timestamptz not null default now(),
 primary key (player_id, zone_id)
 )
 `)
-if err != nil {
-return fmt.Errorf("ensure playdeck zone records table: %w", err)
-}
+	if err != nil {
+		return fmt.Errorf("ensure playdeck zone records table: %w", err)
+	}
 
-return nil
+	return nil
 }
 
 func (s *Store) UpdateAndGetPlaydeckZoneMaxStreak(ctx context.Context, playerID int64, zoneID int, streak int64) (int64, error) {
-zoneID = normalizePlaydeckZoneID(zoneID)
-streak = normalizePlaydeckStreak(streak)
+	zoneID = normalizePlaydeckZoneID(zoneID)
+	streak = normalizePlaydeckStreak(streak)
 
-if err := s.ensurePlaydeckZoneRecordsTable(ctx); err != nil {
-return 0, err
-}
+	if err := s.ensurePlaydeckZoneRecordsTable(ctx); err != nil {
+		return 0, err
+	}
 
-var maxStreak int64
+	var maxStreak int64
 
-if err := s.Pool.QueryRow(ctx, `
+	if err := s.Pool.QueryRow(ctx, `
 insert into player_playdeck_zone_records (
 player_id,
 zone_id,
@@ -4586,10 +4585,10 @@ set max_streak = greatest(player_playdeck_zone_records.max_streak, excluded.max_
 updated_at = now()
 returning max_streak
 `, playerID, zoneID, streak).Scan(&maxStreak); err != nil {
-return 0, fmt.Errorf("upsert playdeck zone max streak: %w", err)
-}
+		return 0, fmt.Errorf("upsert playdeck zone max streak: %w", err)
+	}
 
-return maxStreak, nil
+	return maxStreak, nil
 }
 func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 	var status PlayerStatus
@@ -4722,13 +4721,12 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 
 	status.Playdeck = playdeckStatus
 
+	playdeckMaxStreak, err := s.UpdateAndGetPlaydeckZoneMaxStreak(ctx, status.Player.ID, status.Tick.PlaydeckZoneID, status.Tick.PlaydeckStreak)
+	if err != nil {
+		return nil, err
+	}
 
-playdeckMaxStreak, err := s.UpdateAndGetPlaydeckZoneMaxStreak(ctx, status.Player.ID, status.Tick.PlaydeckZoneID, status.Tick.PlaydeckStreak)
-if err != nil {
-return nil, err
-}
-
-status.Tick.PlaydeckMaxStreak = playdeckMaxStreak
+	status.Tick.PlaydeckMaxStreak = playdeckMaxStreak
 	status.Tick.PlaydeckZoneName = ZoneName(status.Tick.PlaydeckZoneID)
 	status.Tick.ActiveGatheringName = GatheringTaskName(status.Tick.ActiveGatheringTask)
 	status.Tick.ActiveGatheringOutput = GatheringResourceName(status.Tick.ActiveGatheringTask)
