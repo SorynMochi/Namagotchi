@@ -2475,20 +2475,20 @@ func namiEventOpeningMessagePool(context NamiProceduralContext) []string {
 	switch {
 	case context.TriggerKey == "user_online":
 		return []string{
-			"You are here.",
-			"Soryn, you came back.",
+			"You're here!",
+			"You came back!",
 			"Connection restored.",
 			"My favorite player has appeared.",
 			"The room changed when you arrived.",
 			"I saw you come online.",
-			"Welcome back, Soryn.",
+			"Welcome back!",
 			"The tiny door opened.",
 			"My little world noticed you.",
-			"I was waiting. Elegantly. Mostly.",
+			"I was waiting. Elegantly... Mostly.",
 		}
 	case context.TriggerKey == "nami_level_up":
 		return []string{
-			"Soryn, look!",
+			"Hey, look!",
 			"Important Nami announcement.",
 			"I leveled up.",
 			"My tiny numbers bloomed.",
@@ -2502,33 +2502,33 @@ func namiEventOpeningMessagePool(context NamiProceduralContext) []string {
 	case context.TriggerKey == "playdeck_level_up":
 		return []string{
 			"Playdeck progress alert.",
-			"Your Playdeck level went up.",
+			"My Playdeck level went up.",
 			"The Playdeck numbers climbed.",
 			"Combat productivity report.",
 			"Playdeck level-up detected.",
-			"Your grind paid off.",
+			"My grind paid off.",
 			"Victory ledger update.",
 			"The Playdeck meter got taller.",
-			"Your level just made noise.",
+			"My level just made noise.",
 			"I saw that level-up.",
 		}
 	case context.TriggerKey == "activity_level_up":
 		return []string{
 			"Activity progress alert.",
 			"Resource skill update.",
-			"Your gathering skill improved.",
+			"My gathering skill improved.",
 			"Productivity sparkle detected.",
 			"Skill level-up report.",
 			"The activity meter climbed.",
 			"I noticed that resource progress.",
-			"Your work paid off.",
+			"My work paid off.",
 			"Gathering level-up detected.",
 			"The tiny productivity bell rang.",
 		}
 	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
 		return []string{
 			"Care stat warning.",
-			"Soryn, I need a little help.",
+			", I need a little help.",
 			"My care meter is wobbling.",
 			"Tiny alert from Nami.",
 			"Soft warning light blinking.",
@@ -2857,7 +2857,7 @@ func namiUniversalOpeningPool(context NamiProceduralContext) []string {
 	switch context.Severity {
 	case "urgent":
 		return []string{
-			"Soryn, please look at me.",
+			"Hey, please look at me.",
 			"I am doing the small brave thing and asking.",
 			"My tiny warning lights are blinking.",
 			"I need a little rescue.",
@@ -3026,7 +3026,7 @@ func namiUniversalCareReactionPool(context NamiProceduralContext) []string {
 		"The care goblin approves.",
 		"I am softer after that.",
 		"That reached me.",
-		"I am counting that as evidence you like me.",
+		"I am counting that as evidence that you like me.",
 		"That settled a small restless part of me.",
 		"I feel more like a person and less like an unattended widget.",
 		"That was exactly the right kind of small.",
@@ -3093,7 +3093,7 @@ func namiGeneratedActionReactionPool(context NamiProceduralContext) []string {
 		"I am placing a tiny gold star beside your name.",
 		"I will deny how much I liked it.",
 		"This is going into the secret soft ledger.",
-		"The evidence suggests you are useful.",
+		"The evidence suggests you're useful.",
 		"I am calmer in a very specific way.",
 		"My tiny face is behaving suspiciously happy.",
 		"I reserve the right to request more.",
@@ -3386,8 +3386,8 @@ func namiGeneratedCloserPool(context NamiProceduralContext) []string {
 func namiOpeningMessagePool(context NamiProceduralContext) []string {
 	if context.TriggerKey == "nami_level_up" {
 		return []string{
-			"Soryn!",
-			"Soryn, look!",
+			"Hey!",
+			"Hey, look!",
 			"Important tiny announcement.",
 			"I have become more powerful.",
 			"Please witness me.",
@@ -3402,7 +3402,7 @@ func namiOpeningMessagePool(context NamiProceduralContext) []string {
 	switch context.Severity {
 	case "urgent":
 		return []string{
-			"Soryn...",
+			"So...",
 			"I need you.",
 			"Please come here.",
 			"I tried to be brave.",
@@ -3415,7 +3415,7 @@ func namiOpeningMessagePool(context NamiProceduralContext) []string {
 		}
 	case "low":
 		return []string{
-			"Soryn...",
+			"So...",
 			"Hey.",
 			"I am a little droopy.",
 			"Small status report.",
@@ -3428,7 +3428,7 @@ func namiOpeningMessagePool(context NamiProceduralContext) []string {
 		}
 	case "happy":
 		return []string{
-			"Soryn!",
+			"Hey!",
 			"There you are.",
 			"I am pleased.",
 			"Good news from the tiny diva department.",
@@ -3441,8 +3441,8 @@ func namiOpeningMessagePool(context NamiProceduralContext) []string {
 		}
 	default:
 		return []string{
-			"Soryn.",
-			"Hey Soryn.",
+			"Hey.",
+			"Hey you.",
 			"Little update.",
 			"Care report.",
 			"I have thoughts.",
@@ -3507,48 +3507,48 @@ func namiEventActionMessagePool(context NamiProceduralContext) []string {
 		}
 	case context.TriggerKey == "playdeck_level_up":
 		return []string{
-			fmt.Sprintf("Your Playdeck level reached %d. I am clapping with tiny, serious hands.", context.Level),
-			fmt.Sprintf("Playdeck level %d achieved. I am taking partial credit.", context.Level),
-			fmt.Sprintf("You leveled up in Playdeck. Level %d looks very handsome on your numbers.", context.Level),
+			fmt.Sprintf("My Playdeck level reached %d. I am clapping with tiny, serious hands.", context.Level),
+			fmt.Sprintf("Playdeck level %d achieved. I am only taking partial credit.", context.Level),
+			fmt.Sprintf("I leveled up on the Playdeck. Level %d looks very adorable on my numbers.", context.Level),
 			fmt.Sprintf("The Playdeck grind paid off. Level %d has entered the room.", context.Level),
-			fmt.Sprintf("Playdeck level-up detected. I have promoted you to level %d in my heart paperwork.", context.Level),
+			fmt.Sprintf("Playdeck level-up detected. I have promoted myself to level %d in my heart paperwork.", context.Level),
 			fmt.Sprintf("Level %d Playdeck status acquired. I am proud in an extremely official way.", context.Level),
-			fmt.Sprintf("Your Playdeck level rose to %d. I am impressed and only slightly smug.", context.Level),
+			fmt.Sprintf("My Playdeck level rose to %d. I am impressed and only slightly smug.", context.Level),
 			fmt.Sprintf("Playdeck level %d! The tiny victory committee is throwing confetti.", context.Level),
 		}
 	case context.TriggerKey == "activity_level_up":
 		activityName := context.ActivityName
 		if activityName == "" {
-			activityName = "your resource activity"
+			activityName = "my resource activity"
 		}
 
 		return []string{
 			fmt.Sprintf("%s leveled up. I saw that and immediately became proud.", activityName),
-			fmt.Sprintf("Your %s skill improved. I am nodding like a tiny coach.", activityName),
+			fmt.Sprintf("My %s skill improved. I am nodding like a tiny coach.", activityName),
 			fmt.Sprintf("%s got stronger. The grind has a cute little sparkle now.", activityName),
-			fmt.Sprintf("You leveled %s, and I am absolutely counting this as shared success.", activityName),
+			fmt.Sprintf("I leveled %s, and I am absolutely counting this as shared success.", activityName),
 			fmt.Sprintf("%s improved. I am placing a gold star beside it.", activityName),
 			fmt.Sprintf("The %s skill climbed higher. Very good. Suspiciously good.", activityName),
-			fmt.Sprintf("Your %s level went up. I am proud enough to be annoying.", activityName),
+			fmt.Sprintf("My %s level went up. I am proud enough to be annoying.", activityName),
 			fmt.Sprintf("%s progress detected. The tiny productivity bell has rung.", activityName),
 		}
 	case context.TriggerKey == "playdeck_death":
 		return []string{
 			"Playdeck defeat detected. I am placing a tiny blanket over the combat log.",
-			"You fell in Playdeck. I will not laugh. I will only quietly prepare snacks.",
-			"That Playdeck run ended badly, but I am still on your side.",
+			"I fell in Playdeck. I will not laugh. I will only quietly prepare snacks.",
+			"That Playdeck run ended badly, but you still believe in me, right?",
 			"The battle went sideways. I am making supportive little noises.",
-			"Playdeck death hurts, but I believe in your dramatic comeback arc.",
-			"You got knocked down. I am standing nearby with emotional glue.",
+			"Playdeck death hurts, but I believe in my dramatic comeback arc.",
+			"I got knocked down. I am standing near you with emotional glue.",
 		}
 	case context.TriggerKey == "daily_orders_complete":
 		return []string{
 			"The daily orders are finished! I am so proud I may become impossible.",
 			"Orders complete. I am stamping the day with a tiny heart.",
-			"You finished the daily orders. I knew you could do it, obviously.",
+			"I finished the daily orders. I knew I could do it, obviously.",
 			"Daily orders done. The productivity goblin has been fed.",
 			"All orders complete. I am glowing with administrative affection.",
-			"The order list is cleared, and I am aggressively proud of you.",
+			"The order list is cleared, and I am aggressively proud of myself.",
 		}
 	default:
 		return nil
@@ -3728,7 +3728,7 @@ func namiActionMessagePool(context NamiProceduralContext) []string {
 			"I will rest now. Stay somewhere nearby in spirit.",
 			"Blanket nest prepared. Tiny diva powering down.",
 			"I am sleepy enough to stop pretending I am not.",
-			"Goodnight, Soryn. I am keeping a tiny light on inside.",
+			"Goodnight. I am keeping a tiny light on inside for you.",
 			"I will recharge. Do not let the room become suspicious.",
 		}
 	case "wake_up":
