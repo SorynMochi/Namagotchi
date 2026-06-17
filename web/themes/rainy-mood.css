@@ -520,3 +520,289 @@ body[data-theme="rainy-mood"] .chat-form input {
 }
 
 /* Rainy Mood video background END */
+
+/* Rainy Mood pass 3A storm glass UI START */
+
+body[data-theme="rainy-mood"] {
+  --rainy-glass-deep: rgba(8, 20, 36, 0.30);
+  --rainy-glass-mid: rgba(12, 35, 58, 0.24);
+  --rainy-glass-soft: rgba(34, 64, 88, 0.18);
+  --rainy-card-deep: rgba(9, 24, 42, 0.22);
+  --rainy-card-mid: rgba(20, 48, 76, 0.16);
+
+  --rainy-storm-ink: #07131f;
+  --rainy-navy: #0a1f36;
+  --rainy-blue: #133b63;
+  --rainy-slate-blue: #244861;
+  --rainy-cold-line: rgba(154, 195, 224, 0.30);
+  --rainy-cold-line-soft: rgba(154, 195, 224, 0.18);
+
+  --rainy-text-main: #e8f1f6;
+  --rainy-text-strong: #f5fbff;
+  --rainy-text-soft: #c8d9e4;
+  --rainy-text-muted: #9fb6c8;
+  --rainy-text-dim: #7f98aa;
+  --rainy-warm-glow: rgba(243, 199, 127, 0.16);
+}
+
+/* Let the video feel deeper and stormier without changing the asset. */
+body[data-theme="rainy-mood"] .rainy-mood-video-bg {
+  filter: saturate(1.18) contrast(1.08) brightness(0.82) !important;
+}
+
+/* The veil should add depth, not grey fog. */
+body[data-theme="rainy-mood"] .rainy-mood-video-veil {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(243, 199, 127, 0.08), transparent 18rem),
+    radial-gradient(circle at 84% 16%, rgba(68, 148, 198, 0.13), transparent 24rem),
+    radial-gradient(circle at 50% 100%, rgba(3, 10, 20, 0.28), transparent 36rem),
+    linear-gradient(180deg, rgba(4, 13, 26, 0.08), rgba(4, 13, 26, 0.22)) !important;
+}
+
+/* Screen-level glass: transparent storm blue, not grey/white. */
+body[data-theme="rainy-mood"] .panel,
+body[data-theme="rainy-mood"] .main-panel,
+body[data-theme="rainy-mood"] .chat-panel,
+body[data-theme="rainy-mood"] .top-stats-panel,
+body[data-theme="rainy-mood"] .nav-panel,
+body[data-theme="rainy-mood"] .right-buffs-panel,
+body[data-theme="rainy-mood"] .zone-list,
+body[data-theme="rainy-mood"] .combat-panel,
+body[data-theme="rainy-mood"] .wardrobe-panel,
+body[data-theme="rainy-mood"] .settings-card,
+body[data-theme="rainy-mood"] .screen-shell,
+body[data-theme="rainy-mood"] .page-shell {
+  background:
+    linear-gradient(180deg, rgba(92, 137, 166, 0.10), rgba(3, 14, 28, 0.08)),
+    linear-gradient(135deg, rgba(9, 31, 52, 0.30), rgba(11, 22, 38, 0.22)) !important;
+  border-color: var(--rainy-cold-line) !important;
+  color: var(--rainy-text-main) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(224, 244, 255, 0.16),
+    inset 0 -1px 0 rgba(3, 10, 20, 0.20),
+    0 14px 34px rgba(2, 8, 18, 0.24) !important;
+  backdrop-filter: blur(15px) saturate(1.16) !important;
+}
+
+/* Card-level glass: a little thinner, still readable. */
+body[data-theme="rainy-mood"] .nami-card,
+body[data-theme="rainy-mood"] .care-card,
+body[data-theme="rainy-mood"] .nami-progression-card,
+body[data-theme="rainy-mood"] .nami-need-card,
+body[data-theme="rainy-mood"] .nami-message,
+body[data-theme="rainy-mood"] .nami-message-log-card,
+body[data-theme="rainy-mood"] .zone-card,
+body[data-theme="rainy-mood"] .combat-success,
+body[data-theme="rainy-mood"] .combat-enemy-card,
+body[data-theme="rainy-mood"] .combat-log,
+body[data-theme="rainy-mood"] .task-card,
+body[data-theme="rainy-mood"] .placeholder-copy,
+body[data-theme="rainy-mood"] .equipment-card,
+body[data-theme="rainy-mood"] .inventory-item-card,
+body[data-theme="rainy-mood"] .right-buff-group,
+body[data-theme="rainy-mood"] .buff-card,
+body[data-theme="rainy-mood"] .settings-field,
+body[data-theme="rainy-mood"] .menu-button {
+  background:
+    linear-gradient(180deg, rgba(130, 180, 210, 0.08), rgba(4, 13, 26, 0.06)),
+    linear-gradient(135deg, rgba(11, 38, 64, 0.22), rgba(8, 20, 36, 0.16)) !important;
+  border-color: var(--rainy-cold-line-soft) !important;
+  color: var(--rainy-text-main) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(224, 244, 255, 0.12),
+    inset 0 -1px 0 rgba(3, 10, 20, 0.18),
+    0 10px 26px rgba(2, 8, 18, 0.20) !important;
+  backdrop-filter: blur(14px) saturate(1.12) !important;
+}
+
+/* Header bars: moody blue glass instead of black/grey. */
+body[data-theme="rainy-mood"] .panel-title,
+body[data-theme="rainy-mood"] .collapse-toggle,
+body[data-theme="rainy-mood"] .chat-tabs,
+body[data-theme="rainy-mood"] .emoji-picker-tabs {
+  background:
+    linear-gradient(180deg, rgba(37, 76, 108, 0.52), rgba(6, 21, 38, 0.46)) !important;
+  border-color: rgba(154, 195, 224, 0.28) !important;
+  color: var(--rainy-text-strong) !important;
+  text-shadow: 0 1px 1px rgba(0, 8, 16, 0.72) !important;
+  backdrop-filter: blur(16px) saturate(1.14) !important;
+}
+
+/* General text: soft rain-grey, no black-on-glass. */
+body[data-theme="rainy-mood"] h1,
+body[data-theme="rainy-mood"] h2,
+body[data-theme="rainy-mood"] h3,
+body[data-theme="rainy-mood"] h4,
+body[data-theme="rainy-mood"] .eyebrow,
+body[data-theme="rainy-mood"] .panel-title,
+body[data-theme="rainy-mood"] .collapse-label {
+  color: var(--rainy-text-strong) !important;
+  text-shadow: 0 1px 1px rgba(0, 8, 16, 0.56) !important;
+}
+
+body[data-theme="rainy-mood"] p,
+body[data-theme="rainy-mood"] span,
+body[data-theme="rainy-mood"] small,
+body[data-theme="rainy-mood"] label,
+body[data-theme="rainy-mood"] li,
+body[data-theme="rainy-mood"] .muted,
+body[data-theme="rainy-mood"] .subtle,
+body[data-theme="rainy-mood"] .secondary-text {
+  color: var(--rainy-text-soft) !important;
+  text-shadow: 0 1px 1px rgba(0, 8, 16, 0.36) !important;
+}
+
+body[data-theme="rainy-mood"] strong,
+body[data-theme="rainy-mood"] b,
+body[data-theme="rainy-mood"] .stat-value,
+body[data-theme="rainy-mood"] .meter-value {
+  color: var(--rainy-text-strong) !important;
+  text-shadow: 0 1px 1px rgba(0, 8, 16, 0.48) !important;
+}
+
+/* Top stat strip should stay rich and readable. */
+body[data-theme="rainy-mood"] .top-stats-panel {
+  background:
+    linear-gradient(180deg, rgba(19, 55, 86, 0.54), rgba(5, 16, 30, 0.50)) !important;
+  border-color: rgba(159, 204, 236, 0.34) !important;
+}
+
+/* Left/right rails need a little less chalky opacity. */
+body[data-theme="rainy-mood"] .nav-panel,
+body[data-theme="rainy-mood"] .right-buffs-panel {
+  background:
+    linear-gradient(180deg, rgba(28, 63, 94, 0.30), rgba(7, 22, 39, 0.24)) !important;
+}
+
+/* Nav buttons: storm-blue glass tiles. */
+body[data-theme="rainy-mood"] .main-nav.menu-grid .nav-item {
+  background:
+    linear-gradient(180deg, rgba(92, 142, 176, 0.18), rgba(8, 25, 43, 0.18)) !important;
+  border-color: rgba(154, 195, 224, 0.24) !important;
+  color: var(--rainy-text-main) !important;
+}
+
+body[data-theme="rainy-mood"] .main-nav.menu-grid .nav-item.active {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(243, 199, 127, 0.18), transparent 4.5rem),
+    linear-gradient(180deg, rgba(77, 126, 162, 0.34), rgba(10, 31, 54, 0.26)) !important;
+  border-color: rgba(243, 199, 127, 0.46) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 239, 198, 0.22),
+    0 0 0 1px rgba(243, 199, 127, 0.14),
+    0 10px 22px rgba(2, 8, 18, 0.24) !important;
+}
+
+body[data-theme="rainy-mood"] .main-nav.menu-grid .nav-icon,
+body[data-theme="rainy-mood"] .main-nav.menu-grid .nav-label {
+  color: var(--rainy-text-main) !important;
+}
+
+/* Chat becomes storm-glass instead of white sheet. */
+body[data-theme="rainy-mood"] .chat-log,
+body[data-theme="rainy-mood"] #chat-log {
+  background:
+    linear-gradient(180deg, rgba(12, 35, 58, 0.24), rgba(6, 17, 31, 0.18)) !important;
+  color: var(--rainy-text-main) !important;
+  border-color: rgba(154, 195, 224, 0.22) !important;
+  backdrop-filter: blur(14px) saturate(1.10) !important;
+}
+
+body[data-theme="rainy-mood"] .chat-message,
+body[data-theme="rainy-mood"] .chat-text,
+body[data-theme="rainy-mood"] .chat-log *,
+body[data-theme="rainy-mood"] #chat-log * {
+  color: var(--rainy-text-main) !important;
+  text-shadow: 0 1px 1px rgba(0, 8, 16, 0.40) !important;
+}
+
+body[data-theme="rainy-mood"] .chat-player-name {
+  color: #d6e9f5 !important;
+}
+
+body[data-theme="rainy-mood"] .chat-time {
+  color: var(--rainy-text-muted) !important;
+}
+
+/* Chat input/footer should be blue glass too, not grey-purple. */
+body[data-theme="rainy-mood"] .chat-form {
+  background:
+    linear-gradient(180deg, rgba(30, 63, 92, 0.34), rgba(7, 20, 36, 0.30)) !important;
+  border-top-color: rgba(154, 195, 224, 0.28) !important;
+}
+
+body[data-theme="rainy-mood"] input,
+body[data-theme="rainy-mood"] select,
+body[data-theme="rainy-mood"] textarea,
+body[data-theme="rainy-mood"] .chat-form input {
+  background: rgba(7, 23, 40, 0.36) !important;
+  color: var(--rainy-text-strong) !important;
+  border-color: rgba(154, 195, 224, 0.28) !important;
+  text-shadow: none !important;
+  backdrop-filter: blur(12px) saturate(1.08) !important;
+}
+
+body[data-theme="rainy-mood"] input::placeholder,
+body[data-theme="rainy-mood"] textarea::placeholder {
+  color: rgba(200, 217, 228, 0.70) !important;
+}
+
+/* Buttons: storm-blue with small warm glints. */
+body[data-theme="rainy-mood"] .task-card button,
+body[data-theme="rainy-mood"] .care-button,
+body[data-theme="rainy-mood"] .secondary-button,
+body[data-theme="rainy-mood"] .chat-form button[type="submit"],
+body[data-theme="rainy-mood"] .chat-toggle-button,
+body[data-theme="rainy-mood"] #chat-toggle-button {
+  background:
+    linear-gradient(180deg, rgba(61, 110, 146, 0.58), rgba(10, 30, 52, 0.52)) !important;
+  border-color: rgba(154, 195, 224, 0.34) !important;
+  color: var(--rainy-text-strong) !important;
+  text-shadow: 0 1px 1px rgba(0, 8, 16, 0.62) !important;
+}
+
+/* Bars: readable but more storm-integrated. */
+body[data-theme="rainy-mood"] .meter-track,
+body[data-theme="rainy-mood"] .stat-bar,
+body[data-theme="rainy-mood"] .bar,
+body[data-theme="rainy-mood"] .task-xp-bar {
+  background: rgba(4, 16, 29, 0.30) !important;
+  border-color: rgba(154, 195, 224, 0.20) !important;
+}
+
+body[data-theme="rainy-mood"] .meter-fill,
+body[data-theme="rainy-mood"] .fill,
+body[data-theme="rainy-mood"] .stat-fill,
+body[data-theme="rainy-mood"] .task-xp-fill,
+body[data-theme="rainy-mood"] .care-button-progress-fill {
+  background: linear-gradient(90deg, #f0c575, #68a9c6, #244d71) !important;
+  box-shadow: 0 0 12px rgba(104, 169, 198, 0.22) !important;
+}
+
+/* Nami message needs readable glass, not paper white. */
+body[data-theme="rainy-mood"] #nami-message,
+body[data-theme="rainy-mood"] .nami-message,
+body[data-theme="rainy-mood"] .nami-message-log-card,
+body[data-theme="rainy-mood"] .nami-message-log,
+body[data-theme="rainy-mood"] #nami-message-log {
+  background:
+    linear-gradient(180deg, rgba(23, 54, 82, 0.28), rgba(7, 20, 36, 0.20)) !important;
+  border-color: rgba(154, 195, 224, 0.24) !important;
+  color: var(--rainy-text-main) !important;
+}
+
+/* Scrollbars: blue storm steel. */
+body[data-theme="rainy-mood"] * {
+  scrollbar-color: #5d91b1 rgba(7, 20, 36, 0.34) !important;
+}
+
+body[data-theme="rainy-mood"] *::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #76aeca 0%, #244d71 100%) !important;
+  border: 2px solid rgba(7, 20, 36, 0.70) !important;
+}
+
+body[data-theme="rainy-mood"] *::-webkit-scrollbar-track {
+  background: rgba(7, 20, 36, 0.28) !important;
+}
+
+/* Rainy Mood pass 3A storm glass UI END */
