@@ -753,3 +753,53 @@ body[data-theme="rainy-mood"] .emoji-picker-tabs {
 }
 
 /* Rainy Mood pass 2D END */
+
+/* Rainy Mood pass 2E START */
+
+/* Stronger storm palette: mostly deep blues, with dark cloud greys layered in */
+body[data-theme="rainy-mood"] {
+  background:
+    radial-gradient(58% 22% at 10% 9%, rgba(38, 56, 92, 0.88) 0%, rgba(38, 56, 92, 0.46) 42%, rgba(38, 56, 92, 0.00) 74%),
+    radial-gradient(52% 18% at 28% 11%, rgba(26, 54, 102, 0.82) 0%, rgba(26, 54, 102, 0.42) 44%, rgba(26, 54, 102, 0.00) 76%),
+    radial-gradient(56% 20% at 52% 10%, rgba(28, 47, 82, 0.86) 0%, rgba(28, 47, 82, 0.42) 44%, rgba(28, 47, 82, 0.00) 76%),
+    radial-gradient(48% 18% at 74% 9%, rgba(52, 66, 86, 0.66) 0%, rgba(52, 66, 86, 0.32) 42%, rgba(52, 66, 86, 0.00) 74%),
+    radial-gradient(42% 16% at 88% 8%, rgba(20, 32, 51, 0.82) 0%, rgba(20, 32, 51, 0.34) 40%, rgba(20, 32, 51, 0.00) 72%),
+    radial-gradient(90% 30% at 50% 16%, rgba(145, 158, 176, 0.18) 0%, rgba(145, 158, 176, 0.08) 34%, rgba(145, 158, 176, 0.00) 66%),
+    linear-gradient(
+      180deg,
+      #13294b 0%,
+      #18365f 10%,
+      #214674 22%,
+      #294e76 34%,
+      #31546d 46%,
+      #314b5e 60%,
+      #2b3d4d 74%,
+      #22303d 88%,
+      #1b2732 100%
+    ) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+}
+
+/* Let the storm colors show through more cleanly */
+body[data-theme="rainy-mood"] .rainy-mood-glass-canvas {
+  opacity: 0.46 !important;
+  filter: saturate(1.05) contrast(1.03) blur(0.14px) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body[data-theme="rainy-mood"] .rainy-mood-static-glass {
+  opacity: 0.14 !important;
+  filter: blur(0.18px) saturate(0.96) !important;
+}
+
+/* Slight cool tint for the wide surfaces so they still feel part of the storm */
+body[data-theme="rainy-mood"] .panel-title,
+body[data-theme="rainy-mood"] .collapse-toggle,
+body[data-theme="rainy-mood"] .chat-tabs,
+body[data-theme="rainy-mood"] .emoji-picker-tabs {
+  background:
+    linear-gradient(180deg, rgba(41, 63, 90, 0.30), rgba(22, 36, 52, 0.22)) !important;
+}
+
+/* Rainy Mood pass 2E END */
