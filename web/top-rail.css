@@ -434,3 +434,24 @@ body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-value {
 }
 
 /* Top user visual font correction END */
+
+/* Cafe top user colors START */
+
+/* Cafe's normal --muted/--text are dark coffee colors.
+   The top rail uses a dark header surface, so the user section needs the same cream/foam text as the other Cafe stat sections. */
+body[data-theme="cafe"] .top-user-info {
+  --top-user-label-color: #f3d2b8;
+  --top-user-value-color: #fff8ef;
+}
+
+body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-name {
+  color: #f3d2b8 !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.72) !important;
+}
+
+body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-value {
+  color: #fff8ef !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.78) !important;
+}
+
+/* Cafe top user colors END */
