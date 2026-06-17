@@ -518,3 +518,65 @@ body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-value {
 }
 
 /* Top rail section width rebalance END */
+
+/* Top rail section width rebalance START */
+
+/* Six top-rail sections:
+   1 User         = gains space from Currency + Playdeck
+   2 Currency     = 10% narrower than previous 0.90fr
+   3 Nami-Chan    = unchanged
+   4 Playdeck     = 10% narrower than previous 0.90fr
+   5 Resources    = unchanged
+   6 Work Levels  = unchanged */
+.top-stats-compact {
+  grid-template-columns:
+    minmax(0, 1.18fr)
+    minmax(0, 0.81fr)
+    minmax(0, 0.9fr)
+    minmax(0, 0.81fr)
+    minmax(0, 1.15fr)
+    minmax(0, 1.15fr) !important;
+}
+
+.top-stats-compact > .stat-group.compact:nth-child(1) {
+  grid-column: 1 !important;
+}
+
+.top-stats-compact > .stat-group.compact:nth-child(2) {
+  grid-column: 2 !important;
+}
+
+.top-stats-compact > .stat-group.compact:nth-child(3) {
+  grid-column: 3 !important;
+}
+
+.top-stats-compact > .stat-group.compact:nth-child(4) {
+  grid-column: 4 !important;
+}
+
+.top-stats-compact > .stat-group.compact:nth-child(5) {
+  grid-column: 5 !important;
+}
+
+.top-stats-compact > .stat-group.compact:nth-child(6) {
+  grid-column: 6 !important;
+}
+
+/* Restore wrapping behavior on narrower screens. */
+@media (max-width: 1600px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .top-stats-compact > .stat-group.compact {
+    grid-column: auto !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Top rail section width rebalance END */
