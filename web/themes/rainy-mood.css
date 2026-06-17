@@ -472,3 +472,88 @@ body[data-theme="rainy-mood"] .theme-effects-rainy-mood.rainy-mood-fallback .rai
 }
 
 /* Rainy Mood pass 2 glass effect END */
+
+/* Rainy Mood pass 2B glass tuning START */
+
+/* Make the glass effect feel less zoomed and less chunky. */
+body[data-theme="rainy-mood"] .rainy-mood-glass-canvas {
+  opacity: 0.56 !important;
+  filter: saturate(0.92) contrast(0.96) blur(0.15px) !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* Static glass stays subtle under the real drops. */
+body[data-theme="rainy-mood"] .rainy-mood-static-glass {
+  opacity: 0.42 !important;
+}
+
+/* Screen-level surfaces: about 50% opacity, text remains fully opaque. */
+body[data-theme="rainy-mood"] .panel,
+body[data-theme="rainy-mood"] .main-panel,
+body[data-theme="rainy-mood"] .chat-panel,
+body[data-theme="rainy-mood"] .top-stats-panel,
+body[data-theme="rainy-mood"] .nav-panel,
+body[data-theme="rainy-mood"] .right-buffs-panel,
+body[data-theme="rainy-mood"] .zone-list,
+body[data-theme="rainy-mood"] .combat-panel,
+body[data-theme="rainy-mood"] .wardrobe-panel,
+body[data-theme="rainy-mood"] .settings-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.30), rgba(255, 255, 255, 0.08)),
+    linear-gradient(180deg, rgba(248, 251, 250, 0.50), rgba(220, 233, 238, 0.50)) !important;
+  border-color: rgba(46, 73, 88, 0.30) !important;
+  backdrop-filter: blur(14px) saturate(1.08) !important;
+}
+
+/* Card-level surfaces: about 30% opacity. */
+body[data-theme="rainy-mood"] .nami-card,
+body[data-theme="rainy-mood"] .care-card,
+body[data-theme="rainy-mood"] .nami-progression-card,
+body[data-theme="rainy-mood"] .nami-need-card,
+body[data-theme="rainy-mood"] .nami-message,
+body[data-theme="rainy-mood"] .nami-message-log-card,
+body[data-theme="rainy-mood"] .zone-card,
+body[data-theme="rainy-mood"] .combat-success,
+body[data-theme="rainy-mood"] .combat-enemy-card,
+body[data-theme="rainy-mood"] .combat-log,
+body[data-theme="rainy-mood"] .task-card,
+body[data-theme="rainy-mood"] .placeholder-copy,
+body[data-theme="rainy-mood"] .equipment-card,
+body[data-theme="rainy-mood"] .inventory-item-card,
+body[data-theme="rainy-mood"] .right-buff-group,
+body[data-theme="rainy-mood"] .buff-card,
+body[data-theme="rainy-mood"] .settings-field {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06)),
+    linear-gradient(180deg, rgba(248, 251, 250, 0.30), rgba(220, 233, 238, 0.30)) !important;
+  border-color: rgba(46, 73, 88, 0.34) !important;
+  backdrop-filter: blur(16px) saturate(1.10) !important;
+}
+
+/* Keep dark header bars readable and intentionally opaque enough. */
+body[data-theme="rainy-mood"] .panel-title,
+body[data-theme="rainy-mood"] .collapse-toggle,
+body[data-theme="rainy-mood"] .chat-tabs,
+body[data-theme="rainy-mood"] .emoji-picker-tabs {
+  background:
+    linear-gradient(180deg, rgba(77, 106, 124, 0.88), rgba(36, 53, 68, 0.90)) !important;
+}
+
+/* Inputs need slightly more backing than cards for legibility. */
+body[data-theme="rainy-mood"] input,
+body[data-theme="rainy-mood"] select,
+body[data-theme="rainy-mood"] textarea,
+body[data-theme="rainy-mood"] .chat-form input {
+  background: rgba(255, 255, 255, 0.62) !important;
+  backdrop-filter: blur(10px) saturate(1.04) !important;
+}
+
+/* Progress tracks need backing so fills still read through the rain. */
+body[data-theme="rainy-mood"] .meter-track,
+body[data-theme="rainy-mood"] .stat-bar,
+body[data-theme="rainy-mood"] .bar,
+body[data-theme="rainy-mood"] .task-xp-bar {
+  background: rgba(255, 255, 255, 0.46) !important;
+}
+
+/* Rainy Mood pass 2B glass tuning END */
