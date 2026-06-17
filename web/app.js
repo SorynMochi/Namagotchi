@@ -1246,14 +1246,14 @@ function renderPlayerStatus(status) {
   setWidthIfChanged(playdeckHpFill, "100%");
   const currentStreak = Math.max(0, Number(tick.playdeckStreak ?? 0));
   const maxStreak = Math.max(currentStreak, Number(tick.playdeckMaxStreak ?? currentStreak));
+  const streakPercent = percent(currentStreak, maxStreak);
 
   setTopUserMetricLabel(
     currentActionLabel,
-    "Current/Max Streak:",
+    "Streak:",
     `${currentStreak.toLocaleString()} / ${maxStreak.toLocaleString()}`
   );
-
-  syncTickProgress(tick);
+  setWidthIfChanged(tickFill, `${streakPercent}%`);
   syncTopPlayerTickPill(tick);
   scheduleNextPlayerStatusRefresh(tick);
 

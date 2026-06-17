@@ -162,43 +162,7 @@ body[data-theme="rainy-mood"] {
 
 /* Top player tick pill END */
 
-/* Top rail current max streak label START */
 
-.top-user-info .tick-meter .meter-track {
-  display: none !important;
-}
-
-.top-user-info .tick-meter {
-  margin-top: 0.22rem;
-}
-
-.top-user-info .tick-meter .meter-label {
-  color: currentColor;
-  opacity: 0.96;
-  letter-spacing: 0.01em;
-  text-shadow: inherit;
-}
-
-/* Top rail current max streak label END */
-
-/* Top rail current max streak label START */
-
-.top-user-info .tick-meter .meter-track {
-  display: none !important;
-}
-
-.top-user-info .tick-meter {
-  margin-top: 0.22rem;
-}
-
-.top-user-info .tick-meter .meter-label {
-  color: currentColor;
-  opacity: 0.96;
-  letter-spacing: 0.01em;
-  text-shadow: inherit;
-}
-
-/* Top rail current max streak label END */
 
 /* Top user metric text polish START */
 
@@ -309,6 +273,121 @@ body[data-theme="rainy-mood"] {
   .top-user-info .top-user-meter-list .meter-track {
     width: 100%;
     min-width: 0;
+  }
+}
+
+/* Top user metric text polish END */
+
+/* Top user metric text polish START */
+
+:root {
+  --top-user-metric-label: var(--muted);
+  --top-user-metric-value: var(--text);
+  --top-user-value-width: 104px;
+  --top-user-bar-width: 168px;
+}
+
+body[data-theme="rainy-mood"] {
+  --top-user-metric-label: #c8d9e4;
+  --top-user-metric-value: #f5fbff;
+}
+
+/* Match the top rail stat-section rhythm:
+   label left, value right, bar right. */
+.top-user-info .top-user-meter-list {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+}
+
+/* All three rows use the same columns. */
+.top-user-info .top-user-meter-list .user-meter,
+.top-user-info .top-user-meter-list .tick-meter {
+  width: 100%;
+  margin: 0 !important;
+  min-height: 18px;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    var(--top-user-value-width)
+    var(--top-user-bar-width);
+  align-items: center;
+  column-gap: 10px;
+}
+
+/* The label wrapper becomes layout-transparent so label/value can occupy
+   columns 1 and 2, while the bar occupies column 3. */
+.top-user-info .top-user-meter-list .meter-label {
+  display: contents !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  text-shadow: none !important;
+}
+
+.top-user-info .top-user-meter-list .metric-name {
+  grid-column: 1;
+  min-width: 0;
+  color: var(--top-user-metric-label) !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  line-height: 1.22 !important;
+  text-align: left !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-user-info .top-user-meter-list .metric-value {
+  grid-column: 2;
+  justify-self: end;
+  color: var(--top-user-metric-value) !important;
+  font-size: 0.8rem !important;
+  font-weight: 900 !important;
+  line-height: 1.22 !important;
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.top-user-info .top-user-meter-list .meter-track {
+  grid-column: 3;
+  justify-self: end;
+  width: 100%;
+  min-width: 0;
+  margin-top: 0 !important;
+}
+
+/* Show the first row bar again, now as the Streak current/max bar. */
+.top-user-info .top-user-meter-list .tick-meter .meter-track {
+  display: block !important;
+}
+
+/* Keep the player pill as its own header-like piece. */
+.top-user-info .top-player-name-button.top-player-tick-pill {
+  margin-bottom: 8px;
+}
+
+/* Mobile fallback. */
+@media (max-width: 900px) {
+  .top-user-info .top-user-meter-list .user-meter,
+  .top-user-info .top-user-meter-list .tick-meter {
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
+    row-gap: 4px;
+  }
+
+  .top-user-info .top-user-meter-list .metric-value {
+    grid-column: 2;
+  }
+
+  .top-user-info .top-user-meter-list .meter-track {
+    grid-column: 1 / -1;
+    width: 100%;
   }
 }
 
