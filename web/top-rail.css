@@ -552,3 +552,190 @@ body[data-theme="rainy-mood"] {
 }
 
 /* Top user metric text polish END */
+
+/* Top user metric text polish START */
+
+:root {
+  --top-user-label-color: var(--muted);
+  --top-user-value-color: var(--text);
+
+  /* Exact internal user section columns. */
+  --top-user-value-column: 104px;
+  --top-user-bar-column: 75px;
+
+  --top-user-row-font-size: 0.8rem;
+  --top-user-row-line-height: 1.22;
+  --top-user-row-gap: 6px;
+  --top-user-column-gap: 10px;
+}
+
+body[data-theme="rainy-mood"] {
+  --top-user-label-color: #c8d9e4;
+  --top-user-value-color: #f5fbff;
+}
+
+/* Contain the whole user area. No bleeding into Currency. */
+.top-user-info {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  padding-right: 18px !important;
+}
+
+/* Keep the player tick pill contained and separate from the metric grid. */
+.top-user-info .top-player-name-button,
+.top-user-info .top-player-name-button.top-player-tick-pill {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 0 10px !important;
+  box-sizing: border-box !important;
+}
+
+/* One parent grid controls all three rows.
+   This is the important part. */
+.top-user-info .top-user-meter-list {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  display: grid !important;
+  grid-template-columns:
+    minmax(0, 1fr)
+    var(--top-user-value-column)
+    var(--top-user-bar-column) !important;
+  grid-auto-rows: 19px !important;
+  column-gap: var(--top-user-column-gap) !important;
+  row-gap: var(--top-user-row-gap) !important;
+  align-items: center !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* Make each metric row stop being its own layout island. */
+.top-user-info .top-user-meter-list .user-meter,
+.top-user-info .top-user-meter-list .tick-meter {
+  display: contents !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Make the label wrapper transparent too.
+   Its children become real grid cells. */
+.top-user-info .top-user-meter-list .meter-label {
+  display: contents !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+}
+
+/* Column 1: labels, always left aligned. */
+.top-user-info .top-user-meter-list .metric-name {
+  grid-column: 1 !important;
+  justify-self: start !important;
+  align-self: center !important;
+
+  min-width: 0 !important;
+  max-width: 100% !important;
+
+  color: var(--top-user-label-color) !important;
+  font-size: var(--top-user-row-font-size) !important;
+  font-weight: 500 !important;
+  line-height: var(--top-user-row-line-height) !important;
+  text-align: left !important;
+
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+/* Column 2: values, always right aligned. */
+.top-user-info .top-user-meter-list .metric-value {
+  grid-column: 2 !important;
+  justify-self: end !important;
+  align-self: center !important;
+
+  min-width: 0 !important;
+
+  color: var(--top-user-value-color) !important;
+  font-size: var(--top-user-row-font-size) !important;
+  font-weight: 900 !important;
+  line-height: var(--top-user-row-line-height) !important;
+  text-align: right !important;
+
+  white-space: nowrap !important;
+}
+
+/* Column 3: bars, always right of values and fully inside user section. */
+.top-user-info .top-user-meter-list .meter-track {
+  grid-column: 3 !important;
+  justify-self: stretch !important;
+  align-self: center !important;
+
+  width: 100% !important;
+  max-width: var(--top-user-bar-column) !important;
+  min-width: 0 !important;
+  height: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Streak uses the old tick track as its current/max bar. */
+.top-user-info .top-user-meter-list .tick-meter .meter-track {
+  display: block !important;
+}
+
+/* The fills should not create oversized row height. */
+.top-user-info .top-user-meter-list .fill,
+.top-user-info .top-user-meter-list .tick-fill {
+  height: 100% !important;
+  min-height: 0 !important;
+  border-radius: inherit !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Hard reset for XP so it cannot inherit any oversized styling. */
+.top-user-info .top-user-meter-list #playdeck-xp-label,
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-name,
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-value {
+  font-size: var(--top-user-row-font-size) !important;
+  font-weight: 500 !important;
+  line-height: var(--top-user-row-line-height) !important;
+}
+
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-value {
+  font-weight: 900 !important;
+}
+
+/* Mobile fallback. */
+@media (max-width: 900px) {
+  .top-user-info .top-user-meter-list {
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto !important;
+  }
+
+  .top-user-info .top-user-meter-list .meter-track {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Top user metric text polish END */
