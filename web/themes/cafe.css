@@ -1032,3 +1032,181 @@ body[data-theme="cafe"] .cafe-piece.cafe-macaron .macaron-top {
 }
 
 /* Cafe pass 3 atmosphere END */
+
+/* Cafe pass 4 screen identity START */
+
+/* Shared gentle paper texture for screen-specific cards. */
+body[data-theme="cafe"] #section-home .care-card,
+body[data-theme="cafe"] #section-home .nami-card,
+body[data-theme="cafe"] #section-playdeck .zone-list,
+body[data-theme="cafe"] #section-playdeck .combat-panel,
+body[data-theme="cafe"] #section-gathering .task-card,
+body[data-theme="cafe"] #section-inventory .wardrobe-panel,
+body[data-theme="cafe"] #section-settings .settings-card {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.42), transparent 8rem),
+    linear-gradient(180deg, rgba(255, 248, 238, 0.96), rgba(232, 205, 185, 0.90)) !important;
+  border-color: rgba(91, 55, 36, 0.24) !important;
+}
+
+/* ---------- Home: cozy cafe booth / message card ---------- */
+body[data-theme="cafe"] #section-home .nami-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 18px 38px rgba(75, 39, 23, 0.16),
+    0 0 0 2px rgba(255, 248, 238, 0.26) !important;
+}
+
+body[data-theme="cafe"] #section-home .nami-card::after {
+  content: "";
+  position: absolute;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  width: 5.8rem;
+  height: 3.4rem;
+  pointer-events: none;
+  opacity: 0.18;
+  background:
+    radial-gradient(ellipse at 24% 58%, transparent 0 0.82rem, rgba(123, 74, 50, 0.55) 0.86rem 1.02rem, transparent 1.06rem),
+    radial-gradient(ellipse at 72% 54%, rgba(123, 74, 50, 0.44) 0 0.46rem, transparent 0.52rem),
+    linear-gradient(180deg, transparent 0 72%, rgba(123, 74, 50, 0.38) 73% 80%, transparent 81%);
+}
+
+body[data-theme="cafe"] #section-home .nami-message {
+  border-style: dashed !important;
+  border-color: rgba(122, 74, 50, 0.30) !important;
+}
+
+/* ---------- Playdeck: tabletop gaming cafe vibe ---------- */
+body[data-theme="cafe"] #section-playdeck .zone-list {
+  position: relative;
+}
+
+body[data-theme="cafe"] #section-playdeck .zone-list::after {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.7rem;
+  height: 0.34rem;
+  pointer-events: none;
+  opacity: 0.22;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(91, 55, 36, 0.38), transparent);
+}
+
+body[data-theme="cafe"] #section-playdeck .zone-card {
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: rgba(91, 55, 36, 0.22) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.60),
+    0 10px 18px rgba(75, 39, 23, 0.10) !important;
+}
+
+body[data-theme="cafe"] #section-playdeck .zone-card.active {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 0 0 2px rgba(81, 167, 202, 0.22),
+    0 12px 22px rgba(75, 39, 23, 0.12) !important;
+}
+
+/* ---------- Work: cafe order-ticket task cards ---------- */
+body[data-theme="cafe"] #section-gathering .task-card {
+  position: relative;
+  border-left: 5px solid rgba(185, 122, 82, 0.46) !important;
+}
+
+body[data-theme="cafe"] #section-gathering .task-card::before {
+  content: "";
+  position: absolute;
+  left: 0.72rem;
+  top: 0.72rem;
+  bottom: 0.72rem;
+  width: 1px;
+  pointer-events: none;
+  opacity: 0.22;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(91, 55, 36, 0.38) 0 5px,
+      transparent 5px 10px
+    );
+}
+
+body[data-theme="cafe"] #section-gathering .task-card.active {
+  border-left-color: rgba(123, 74, 50, 0.72) !important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(255, 255, 255, 0.50), transparent 5.2rem),
+    linear-gradient(180deg, rgba(255, 246, 232, 0.98), rgba(232, 205, 185, 0.94)) !important;
+}
+
+body[data-theme="cafe"] #section-gathering .task-card button {
+  border-radius: 999px !important;
+}
+
+/* ---------- Wardrobe: bakery display counter ---------- */
+body[data-theme="cafe"] #section-inventory .wardrobe-studio-layout {
+  position: relative;
+}
+
+body[data-theme="cafe"] #section-inventory .wardrobe-panel-titlebar {
+  border-bottom: 1px solid rgba(91, 55, 36, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(185, 122, 82, 0.10)) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .wardrobe-equipment-panel {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    0 16px 32px rgba(75, 39, 23, 0.14) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .wardrobe-equipment-panel::after {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.72rem;
+  height: 0.42rem;
+  pointer-events: none;
+  opacity: 0.20;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, transparent, rgba(75, 39, 23, 0.36), transparent);
+}
+
+/* ---------- Settings: cafe menu card ---------- */
+body[data-theme="cafe"] #section-settings .settings-card {
+  border-style: solid !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 14px 30px rgba(75, 39, 23, 0.14) !important;
+}
+
+body[data-theme="cafe"] #section-settings .settings-field {
+  border-radius: 16px;
+  border: 1px solid rgba(91, 55, 36, 0.18);
+  padding: 0.8rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 248, 238, 0.22));
+}
+
+/* ---------- Chat: order pad texture only, no contrast changes ---------- */
+body[data-theme="cafe"] .chat-log {
+  background:
+    linear-gradient(180deg, rgba(255, 252, 246, 0.82), rgba(255, 248, 239, 0.76)),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 23px,
+      rgba(122, 74, 50, 0.055) 23px 24px
+    ) !important;
+}
+
+body[data-theme="cafe"] .chat-form {
+  border-top: 1px solid rgba(91, 55, 36, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 238, 0.78), rgba(232, 205, 185, 0.78)) !important;
+}
+
+/* Cafe pass 4 screen identity END */
