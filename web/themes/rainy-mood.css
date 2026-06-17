@@ -557,3 +557,149 @@ body[data-theme="rainy-mood"] .task-xp-bar {
 }
 
 /* Rainy Mood pass 2B glass tuning END */
+
+/* Rainy Mood pass 2C START */
+
+body[data-theme="rainy-mood"] {
+  --rainy-screen-opacity: 0.20;
+  --rainy-card-opacity: 0.20;
+  --rainy-border: rgba(41, 68, 86, 0.34);
+  --rainy-border-soft: rgba(72, 104, 126, 0.22);
+  --rainy-text-main: #eef5f8;
+  --rainy-text-soft: #dbe7ec;
+  --rainy-text-muted: #b7c7d2;
+  --rainy-header-bg: rgba(50, 66, 79, 0.36);
+
+  /* Stormy, realistic cloud massing */
+  background:
+    radial-gradient(58% 20% at 12% 10%, rgba(76, 89, 104, 0.58) 0%, rgba(76, 89, 104, 0.34) 40%, rgba(76, 89, 104, 0.00) 72%),
+    radial-gradient(42% 16% at 34% 8%, rgba(88, 102, 118, 0.56) 0%, rgba(88, 102, 118, 0.30) 45%, rgba(88, 102, 118, 0.00) 76%),
+    radial-gradient(50% 18% at 57% 11%, rgba(68, 82, 98, 0.60) 0%, rgba(68, 82, 98, 0.32) 42%, rgba(68, 82, 98, 0.00) 74%),
+    radial-gradient(40% 15% at 80% 9%, rgba(99, 112, 126, 0.52) 0%, rgba(99, 112, 126, 0.28) 44%, rgba(99, 112, 126, 0.00) 76%),
+    radial-gradient(80% 28% at 50% 18%, rgba(132, 148, 162, 0.20) 0%, rgba(132, 148, 162, 0.12) 36%, rgba(132, 148, 162, 0.00) 70%),
+    linear-gradient(
+      180deg,
+      #49596b 0%,
+      #5d7081 16%,
+      #748998 34%,
+      #8ea4b2 52%,
+      #b2c0c8 70%,
+      #d8e0e4 88%,
+      #e7ecef 100%
+    ) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+}
+
+/* Keep the glass layers subtle and smaller-looking */
+body[data-theme="rainy-mood"] .rainy-mood-glass-canvas {
+  opacity: 0.48 !important;
+  filter: saturate(0.92) contrast(0.97) blur(0.18px) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body[data-theme="rainy-mood"] .rainy-mood-static-glass {
+  opacity: 0.26 !important;
+  filter: blur(0.25px) !important;
+}
+
+/* Broad screen/panel surfaces at ~20% */
+body[data-theme="rainy-mood"] .panel,
+body[data-theme="rainy-mood"] .main-panel,
+body[data-theme="rainy-mood"] .chat-panel,
+body[data-theme="rainy-mood"] .top-stats-panel,
+body[data-theme="rainy-mood"] .nav-panel,
+body[data-theme="rainy-mood"] .right-buffs-panel,
+body[data-theme="rainy-mood"] .zone-list,
+body[data-theme="rainy-mood"] .combat-panel,
+body[data-theme="rainy-mood"] .wardrobe-panel,
+body[data-theme="rainy-mood"] .settings-card,
+body[data-theme="rainy-mood"] .screen-shell,
+body[data-theme="rainy-mood"] .page-shell {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04)),
+    rgba(221, 232, 239, 0.20) !important;
+  border-color: var(--rainy-border) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 12px 28px rgba(28, 40, 50, 0.10) !important;
+  backdrop-filter: blur(14px) saturate(1.04) !important;
+}
+
+/* Cards also at ~20% per your request */
+body[data-theme="rainy-mood"] .nami-card,
+body[data-theme="rainy-mood"] .care-card,
+body[data-theme="rainy-mood"] .nami-progression-card,
+body[data-theme="rainy-mood"] .nami-need-card,
+body[data-theme="rainy-mood"] .nami-message,
+body[data-theme="rainy-mood"] .nami-message-log-card,
+body[data-theme="rainy-mood"] .zone-card,
+body[data-theme="rainy-mood"] .combat-success,
+body[data-theme="rainy-mood"] .combat-enemy-card,
+body[data-theme="rainy-mood"] .combat-log,
+body[data-theme="rainy-mood"] .task-card,
+body[data-theme="rainy-mood"] .placeholder-copy,
+body[data-theme="rainy-mood"] .equipment-card,
+body[data-theme="rainy-mood"] .inventory-item-card,
+body[data-theme="rainy-mood"] .right-buff-group,
+body[data-theme="rainy-mood"] .buff-card,
+body[data-theme="rainy-mood"] .settings-field,
+body[data-theme="rainy-mood"] .menu-button,
+body[data-theme="rainy-mood"] .care-button {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03)),
+    rgba(230, 238, 243, 0.20) !important;
+  border-color: var(--rainy-border-soft) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 10px 24px rgba(31, 45, 56, 0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.02) !important;
+}
+
+/* Header bars slightly stormier, but still translucent */
+body[data-theme="rainy-mood"] .panel-title,
+body[data-theme="rainy-mood"] .collapse-toggle,
+body[data-theme="rainy-mood"] .chat-tabs,
+body[data-theme="rainy-mood"] .emoji-picker-tabs {
+  background:
+    linear-gradient(180deg, rgba(70, 87, 103, 0.44), rgba(48, 62, 75, 0.38)) !important;
+  border-color: rgba(53, 82, 104, 0.30) !important;
+}
+
+/* Inputs remain readable */
+body[data-theme="rainy-mood"] input,
+body[data-theme="rainy-mood"] select,
+body[data-theme="rainy-mood"] textarea,
+body[data-theme="rainy-mood"] .chat-form input {
+  background: rgba(248, 252, 255, 0.42) !important;
+  color: #18303e !important;
+  border-color: rgba(64, 92, 112, 0.26) !important;
+  backdrop-filter: blur(10px) saturate(1.02) !important;
+}
+
+/* Tracks behind bars need enough backing */
+body[data-theme="rainy-mood"] .meter-track,
+body[data-theme="rainy-mood"] .stat-bar,
+body[data-theme="rainy-mood"] .bar,
+body[data-theme="rainy-mood"] .task-xp-bar {
+  background: rgba(242, 248, 252, 0.34) !important;
+  border-color: rgba(69, 92, 110, 0.18) !important;
+}
+
+/* Text treatment */
+body[data-theme="rainy-mood"] .panel,
+body[data-theme="rainy-mood"] .card,
+body[data-theme="rainy-mood"] .main-panel,
+body[data-theme="rainy-mood"] .chat-panel,
+body[data-theme="rainy-mood"] .top-stats-panel,
+body[data-theme="rainy-mood"] .right-buffs-panel {
+  color: var(--rainy-text-main) !important;
+}
+
+body[data-theme="rainy-mood"] .muted,
+body[data-theme="rainy-mood"] .subtle,
+body[data-theme="rainy-mood"] .secondary-text {
+  color: var(--rainy-text-muted) !important;
+}
+
+/* Rainy Mood pass 2C END */
