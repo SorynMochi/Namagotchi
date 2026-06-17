@@ -164,18 +164,18 @@ body[data-theme="rainy-mood"] {
 
 /* Top user metric text polish START */
 
-/* Match the typography of the other top rail stat sections:
-   .stat-group p = 0.8rem row text
-   .stat-group strong = 900 weight value text */
 :root {
   --top-user-label-color: var(--muted);
   --top-user-value-color: var(--text);
   --top-user-value-column: 104px;
   --top-user-bar-column: 75px;
-  --top-user-row-height: 19px;
-  --top-user-row-gap: 0px;
+  --top-user-row-height: 16px;
+  --top-user-row-gap: 2px;
   --top-user-column-gap: 10px;
-  --top-user-row-font-size: 0.8rem;
+
+  /* Match the compact stat rows in the rest of the top rail. */
+  --top-user-row-font-size: 0.72rem;
+  --top-user-row-line-height: 1.05;
 }
 
 body[data-theme="rainy-mood"] {
@@ -183,7 +183,6 @@ body[data-theme="rainy-mood"] {
   --top-user-value-color: #f5fbff;
 }
 
-/* Keep user content inside the user section. */
 .top-user-info {
   min-width: 0 !important;
   overflow: hidden !important;
@@ -191,18 +190,15 @@ body[data-theme="rainy-mood"] {
   padding-right: 18px !important;
 }
 
-/* Player pill remains separate and unchanged. */
 .top-user-info .top-player-name-button,
 .top-user-info .top-player-name-button.top-player-tick-pill {
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
-  margin: 0 0 8px !important;
+  margin: 0 0 7px !important;
   box-sizing: border-box !important;
 }
 
-/* One shared grid for all user rows:
-   [label] [value] [bar] */
 .top-user-info .top-user-meter-list {
   width: 100% !important;
   max-width: 100% !important;
@@ -224,7 +220,6 @@ body[data-theme="rainy-mood"] {
   box-sizing: border-box !important;
 }
 
-/* Rows stop creating their own layout. */
 .top-user-info .top-user-meter-list .user-meter,
 .top-user-info .top-user-meter-list .tick-meter {
   display: contents !important;
@@ -237,7 +232,6 @@ body[data-theme="rainy-mood"] {
   padding: 0 !important;
 }
 
-/* Label wrapper stops influencing typography/layout. */
 .top-user-info .top-user-meter-list .meter-label {
   display: contents !important;
   width: auto !important;
@@ -250,11 +244,10 @@ body[data-theme="rainy-mood"] {
   text-shadow: none !important;
 }
 
-/* Column 1: exact label style to match other top rail rows. */
 .top-user-info .top-user-meter-list .metric-name {
   grid-column: 1 !important;
   justify-self: start !important;
-  align-self: baseline !important;
+  align-self: center !important;
 
   min-width: 0 !important;
   max-width: 100% !important;
@@ -264,7 +257,7 @@ body[data-theme="rainy-mood"] {
   font-size: var(--top-user-row-font-size) !important;
   font-style: normal !important;
   font-weight: 400 !important;
-  line-height: normal !important;
+  line-height: var(--top-user-row-line-height) !important;
   letter-spacing: 0 !important;
   text-align: left !important;
   text-shadow: none !important;
@@ -274,11 +267,10 @@ body[data-theme="rainy-mood"] {
   text-overflow: clip !important;
 }
 
-/* Column 2: exact value style to match other top rail strong values. */
 .top-user-info .top-user-meter-list .metric-value {
   grid-column: 2 !important;
   justify-self: end !important;
-  align-self: baseline !important;
+  align-self: center !important;
 
   min-width: 0 !important;
 
@@ -287,7 +279,7 @@ body[data-theme="rainy-mood"] {
   font-size: var(--top-user-row-font-size) !important;
   font-style: normal !important;
   font-weight: 900 !important;
-  line-height: normal !important;
+  line-height: var(--top-user-row-line-height) !important;
   letter-spacing: 0 !important;
   text-align: right !important;
   text-shadow: none !important;
@@ -295,7 +287,6 @@ body[data-theme="rainy-mood"] {
   white-space: nowrap !important;
 }
 
-/* Column 3: bars stay right of values. */
 .top-user-info .top-user-meter-list .meter-track {
   grid-column: 3 !important;
   justify-self: stretch !important;
@@ -311,7 +302,6 @@ body[data-theme="rainy-mood"] {
   box-sizing: border-box !important;
 }
 
-/* Streak bar remains visible. */
 .top-user-info .top-user-meter-list .tick-meter .meter-track {
   display: block !important;
 }
@@ -324,7 +314,6 @@ body[data-theme="rainy-mood"] {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.14) !important;
 }
 
-/* Mobile fallback. */
 @media (max-width: 900px) {
   .top-user-info .top-user-meter-list {
     grid-template-columns:
