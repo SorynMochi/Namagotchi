@@ -1,0 +1,385 @@
+﻿:root {
+  color-scheme: light;
+
+  --rain-ink: #1f2b35;
+  --rain-ink-soft: #4b5e6b;
+  --rain-ink-muted: #6d7f8b;
+
+  --rain-cloud: #eef4f6;
+  --rain-glass: #dce9ee;
+  --rain-glass-deep: #bed1da;
+  --rain-mist: #f8fbfa;
+  --rain-fog: #e7eef1;
+
+  --rain-slate: #243544;
+  --rain-slate-soft: #334b5d;
+  --rain-night: #172431;
+
+  --rain-lamp: #f3c77f;
+  --rain-lamp-soft: #ffe4aa;
+  --rain-wood: #8c6246;
+  --rain-copper: #b77a4e;
+
+  --bg-0: #eef4f6;
+  --bg-1: #dce9ee;
+  --bg-2: #bed1da;
+
+  --panel: rgba(248, 251, 250, 0.92);
+  --panel-soft: rgba(238, 246, 248, 0.86);
+  --panel-deep: rgba(220, 233, 238, 0.88);
+
+  --line: rgba(46, 73, 88, 0.24);
+  --line-bright: rgba(255, 255, 255, 0.70);
+
+  --text: #1f2b35;
+  --text-soft: #4b5e6b;
+  --muted: #6d7f8b;
+
+  --pink: #b77a7a;
+  --pink-soft: #ead4d6;
+  --cyan: #dceff4;
+  --cyan-soft: #f6fbfc;
+  --violet: #6d789b;
+  --violet-soft: #d7deef;
+  --green: #6f8f86;
+  --yellow: #f3c77f;
+  --orange: #b77a4e;
+  --danger: #a65e5e;
+  --cream: #f8fbfa;
+
+  --shadow:
+    0 18px 48px rgba(23, 36, 49, 0.18),
+    0 0 28px rgba(255, 255, 255, 0.34);
+
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+
+  --theme-page-glow-pink: rgba(243, 199, 127, 0.18);
+  --theme-page-glow-cyan: rgba(220, 239, 244, 0.44);
+  --theme-page-glow-violet: rgba(36, 53, 68, 0.12);
+  --theme-page-gradient-top: #f8fbfa;
+  --theme-page-gradient-bottom: #dce9ee;
+
+  --theme-panel-overlay: rgba(255, 255, 255, 0.30);
+  --theme-panel-border-sheen-pink: rgba(243, 199, 127, 0.22);
+  --theme-panel-border-sheen-cyan: rgba(255, 255, 255, 0.50);
+  --theme-panel-title-bg: rgba(36, 53, 68, 0.08);
+
+  --theme-card-border-cyan: rgba(46, 73, 88, 0.24);
+  --theme-card-bg-overlay: rgba(255, 255, 255, 0.28);
+  --theme-card-bg-deep: rgba(248, 251, 250, 0.84);
+  --theme-card-bg-deep-solid: rgba(248, 251, 250, 0.92);
+  --theme-card-inner-highlight: rgba(255, 255, 255, 0.60);
+
+  --theme-nav-hover-border: rgba(46, 73, 88, 0.34);
+  --theme-nav-hover-bg: rgba(220, 239, 244, 0.34);
+  --theme-nav-hover-text: #1f2b35;
+  --theme-nav-active-border: rgba(243, 199, 127, 0.48);
+  --theme-nav-active-bg: linear-gradient(135deg, rgba(255,251,240,0.92), rgba(243,199,127,0.34), rgba(190,209,218,0.34));
+  --theme-nav-active-text: #1f2b35;
+  --theme-nav-active-shadow: 0 0 18px rgba(243, 199, 127, 0.18);
+
+  --theme-chat-text: #1f2b35;
+  --theme-chat-name: #334b5d;
+  --theme-chat-form-bg: rgba(248, 251, 250, 0.86);
+  --theme-chat-input-border: rgba(46, 73, 88, 0.26);
+  --theme-chat-input-bg: rgba(255, 255, 255, 0.82);
+  --theme-chat-input-placeholder: rgba(75, 94, 107, 0.66);
+  --theme-chat-submit-bg: #334b5d;
+  --theme-chat-submit-text: #f8fbfa;
+
+  --theme-button-primary-border: rgba(23, 36, 49, 0.26);
+  --theme-button-primary-bg: linear-gradient(180deg, #4d6a7c 0%, #243544 100%);
+  --theme-button-primary-text: #f8fbfa;
+  --theme-button-primary-shadow: 0 8px 18px rgba(23, 36, 49, 0.16);
+
+  --theme-button-secondary-border: rgba(46, 73, 88, 0.24);
+  --theme-button-secondary-bg: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(220,233,238,0.86));
+  --theme-button-secondary-text: #243544;
+
+  --theme-care-button-border: rgba(46, 73, 88, 0.24);
+  --theme-care-button-bg: linear-gradient(180deg, #f8fbfa 0%, #dce9ee 100%);
+  --theme-care-button-text: #1f2b35;
+
+  --theme-work-active-border: rgba(243, 199, 127, 0.48);
+  --theme-work-active-glow: rgba(243, 199, 127, 0.18);
+  --theme-work-active-bg: rgba(248, 251, 250, 0.96);
+  --theme-work-active-pill-bg: linear-gradient(180deg, #4d6a7c, #243544);
+  --theme-work-active-pill-text: #f8fbfa;
+  --theme-work-active-button-bg: linear-gradient(180deg, #4d6a7c, #243544);
+  --theme-work-active-button-border: rgba(23, 36, 49, 0.34);
+  --theme-work-active-button-text: #f8fbfa;
+  --theme-work-active-button-shadow: 0 8px 18px rgba(23, 36, 49, 0.16);
+
+  --theme-nami-message-bg: rgba(248, 251, 250, 0.90);
+  --theme-nami-message-text: #1f2b35;
+  --theme-nami-room-stage-bg: #dce9ee;
+
+  --theme-scrollbar-color: rgba(77, 106, 124, 0.92);
+  --theme-scrollbar-color-main: rgba(77, 106, 124, 0.92);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #6f8da0, #334b5d);
+
+  --theme-tick-fill: linear-gradient(90deg, #f3c77f, #7ca5b8, #334b5d);
+  --theme-hp-fill: linear-gradient(90deg, #6f8f86, #f3c77f);
+  --theme-progress-xp-fill: linear-gradient(90deg, #f3c77f, #4d6a7c);
+  --theme-progress-stat-fill: linear-gradient(90deg, #f8fbfa, #7ca5b8, #334b5d);
+  --theme-progress-track-border: rgba(46, 73, 88, 0.22);
+  --theme-progress-track-bg: rgba(255, 255, 255, 0.66);
+  --theme-progress-fill-shadow: 0 0 12px rgba(77, 106, 124, 0.18);
+}
+
+body[data-theme="rainy-mood"] {
+  background:
+    radial-gradient(circle at 10% 12%, rgba(255, 228, 170, 0.36), transparent 22rem),
+    radial-gradient(circle at 88% 10%, rgba(220, 239, 244, 0.54), transparent 24rem),
+    radial-gradient(circle at 50% 96%, rgba(23, 36, 49, 0.13), transparent 30rem),
+    linear-gradient(180deg, #f8fbfa 0%, #dce9ee 48%, #bed1da 100%) !important;
+  color: var(--rain-ink);
+}
+
+body[data-theme="rainy-mood"]::before {
+  background:
+    radial-gradient(ellipse at 24px 30px, rgba(77, 106, 124, 0.08) 0 10px, transparent 11px),
+    radial-gradient(ellipse at 98px 70px, rgba(255, 228, 170, 0.10) 0 9px, transparent 10px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 46%, rgba(36, 53, 68, 0.05)) !important;
+  background-size: 154px 94px, 154px 94px, auto !important;
+  opacity: 1 !important;
+}
+
+body[data-theme="rainy-mood"]::after {
+  content: "";
+  position: fixed;
+  inset: auto 0 0;
+  height: 26vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.26;
+  background:
+    radial-gradient(ellipse at 18% 100%, rgba(23,36,49,0.20), transparent 18rem),
+    radial-gradient(ellipse at 78% 100%, rgba(77,106,124,0.18), transparent 20rem),
+    linear-gradient(180deg, transparent, rgba(23,36,49,0.14));
+}
+
+body[data-theme="rainy-mood"] .panel,
+body[data-theme="rainy-mood"] .main-panel,
+body[data-theme="rainy-mood"] .chat-panel,
+body[data-theme="rainy-mood"] .top-stats-panel,
+body[data-theme="rainy-mood"] .nav-panel,
+body[data-theme="rainy-mood"] .right-buffs-panel,
+body[data-theme="rainy-mood"] .nami-card,
+body[data-theme="rainy-mood"] .care-card,
+body[data-theme="rainy-mood"] .zone-list,
+body[data-theme="rainy-mood"] .combat-panel,
+body[data-theme="rainy-mood"] .task-card,
+body[data-theme="rainy-mood"] .placeholder-copy,
+body[data-theme="rainy-mood"] .settings-card,
+body[data-theme="rainy-mood"] .wardrobe-panel,
+body[data-theme="rainy-mood"] .equipment-card,
+body[data-theme="rainy-mood"] .inventory-item-card,
+body[data-theme="rainy-mood"] .right-buff-group {
+  border: 1px solid rgba(46, 73, 88, 0.26) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.60), rgba(255,255,255,0.20)),
+    linear-gradient(180deg, rgba(248,251,250,0.94), rgba(220,233,238,0.88)) !important;
+  color: #1f2b35 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.76),
+    0 0 0 2px rgba(255,255,255,0.20),
+    0 14px 32px rgba(23,36,49,0.13) !important;
+  backdrop-filter: blur(12px) saturate(1.04);
+}
+
+body[data-theme="rainy-mood"] .panel-title,
+body[data-theme="rainy-mood"] .collapse-toggle {
+  color: #f8fbfa !important;
+  background:
+    linear-gradient(180deg, #4d6a7c 0%, #334b5d 54%, #243544 100%) !important;
+  border-bottom-color: rgba(23,36,49,0.30) !important;
+  text-shadow: 0 1px 0 rgba(23,36,49,0.80) !important;
+}
+
+body[data-theme="rainy-mood"] h1,
+body[data-theme="rainy-mood"] h2,
+body[data-theme="rainy-mood"] h3,
+body[data-theme="rainy-mood"] .eyebrow {
+  color: #243544 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.66) !important;
+}
+
+body[data-theme="rainy-mood"] .top-stats-panel,
+body[data-theme="rainy-mood"] .top-stats-panel .collapse-body,
+body[data-theme="rainy-mood"] .top-stats-panel .stat-group,
+body[data-theme="rainy-mood"] .top-stats-panel .compact-grid-lines,
+body[data-theme="rainy-mood"] .top-stats-panel .stat-lines,
+body[data-theme="rainy-mood"] .top-stats-panel .top-user-meter-list {
+  color: #f8fbfa !important;
+}
+
+body[data-theme="rainy-mood"] .top-stats-panel h2,
+body[data-theme="rainy-mood"] .top-stats-panel span,
+body[data-theme="rainy-mood"] .top-stats-panel .meter-label {
+  color: #dbe9ee !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="rainy-mood"] .top-stats-panel strong,
+body[data-theme="rainy-mood"] .top-stats-panel b,
+body[data-theme="rainy-mood"] .top-stats-panel .top-player-name-button {
+  color: #f8fbfa !important;
+  opacity: 1 !important;
+  text-shadow: 0 1px 1px rgba(23,36,49,0.36) !important;
+}
+
+body[data-theme="rainy-mood"] .top-player-name-button {
+  background:
+    linear-gradient(180deg, #6f8da0 0%, #334b5d 100%) !important;
+  border-color: rgba(248,251,250,0.34) !important;
+}
+
+body[data-theme="rainy-mood"] .main-nav.menu-grid .nav-item {
+  border: 1px solid rgba(46,73,88,0.22) !important;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255,255,255,0.54), transparent 2.6rem),
+    linear-gradient(180deg, rgba(248,251,250,0.96), rgba(220,233,238,0.88)) !important;
+  color: #243544 !important;
+}
+
+body[data-theme="rainy-mood"] .main-nav.menu-grid .nav-icon,
+body[data-theme="rainy-mood"] .main-nav.menu-grid .nav-label {
+  color: #334b5d !important;
+}
+
+body[data-theme="rainy-mood"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(243,199,127,0.52) !important;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255,255,255,0.72), transparent 2.6rem),
+    linear-gradient(135deg, #f8fbfa 0%, #ffe4aa 54%, #bed1da 100%) !important;
+  color: #1f2b35 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.76),
+    0 0 0 2px rgba(255,255,255,0.46),
+    0 12px 22px rgba(77,106,124,0.18) !important;
+}
+
+body[data-theme="rainy-mood"] .task-card button,
+body[data-theme="rainy-mood"] .care-button,
+body[data-theme="rainy-mood"] .secondary-button,
+body[data-theme="rainy-mood"] .chat-form button[type="submit"] {
+  border: 1px solid rgba(23,36,49,0.30) !important;
+  background: linear-gradient(180deg, #4d6a7c 0%, #243544 100%) !important;
+  color: #f8fbfa !important;
+  font-weight: 950 !important;
+  text-shadow: 0 1px 0 rgba(23,36,49,0.86) !important;
+}
+
+body[data-theme="rainy-mood"] .chat-toggle-button,
+body[data-theme="rainy-mood"] #chat-toggle-button {
+  border: 1px solid rgba(46,73,88,0.28) !important;
+  background: linear-gradient(180deg, #f8fbfa, #dce9ee) !important;
+  color: #243544 !important;
+  font-weight: 950 !important;
+}
+
+body[data-theme="rainy-mood"] .chat-tabs,
+body[data-theme="rainy-mood"] .emoji-picker-tabs {
+  border-bottom: 1px solid rgba(23,36,49,0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(51,75,93,0.98), rgba(23,36,49,0.98)),
+    radial-gradient(circle at 12% 0%, rgba(255,228,170,0.12), transparent 8rem) !important;
+}
+
+body[data-theme="rainy-mood"] .chat-tab,
+body[data-theme="rainy-mood"] .emoji-category-tab {
+  border: 1px solid rgba(248,251,250,0.20) !important;
+  background:
+    linear-gradient(180deg, rgba(248,251,250,0.14), rgba(23,36,49,0.22)) !important;
+  color: #f8fbfa !important;
+  text-shadow: 0 1px 0 rgba(23,36,49,0.76) !important;
+}
+
+body[data-theme="rainy-mood"] .chat-tab.active,
+body[data-theme="rainy-mood"] .emoji-category-tab.active {
+  border-color: rgba(248,251,250,0.42) !important;
+  background: linear-gradient(180deg, #f8fbfa, #f3c77f) !important;
+  color: #1f2b35 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="rainy-mood"] .chat-log {
+  background:
+    linear-gradient(180deg, rgba(255,252,246,0.84), rgba(248,251,250,0.78)),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 23px,
+      rgba(46,73,88,0.048) 23px 24px
+    ) !important;
+  color: #1f2b35 !important;
+}
+
+body[data-theme="rainy-mood"] .chat-message,
+body[data-theme="rainy-mood"] .chat-text,
+body[data-theme="rainy-mood"] .chat-log * {
+  color: #1f2b35 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="rainy-mood"] .chat-time {
+  color: #6d7f8b !important;
+}
+
+body[data-theme="rainy-mood"] .chat-player-name {
+  color: #334b5d !important;
+}
+
+body[data-theme="rainy-mood"] input,
+body[data-theme="rainy-mood"] select,
+body[data-theme="rainy-mood"] textarea,
+body[data-theme="rainy-mood"] .chat-form input {
+  border-color: rgba(46,73,88,0.26) !important;
+  background: rgba(255,255,255,0.82) !important;
+  color: #1f2b35 !important;
+}
+
+body[data-theme="rainy-mood"] #nami-message,
+body[data-theme="rainy-mood"] .nami-message,
+body[data-theme="rainy-mood"] .nami-message-log-card,
+body[data-theme="rainy-mood"] .nami-message-log,
+body[data-theme="rainy-mood"] #nami-message-log {
+  color: #1f2b35 !important;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255,255,255,0.56), transparent 7rem),
+    linear-gradient(180deg, rgba(248,251,250,0.96), rgba(220,233,238,0.88)) !important;
+  border-color: rgba(46,73,88,0.28) !important;
+}
+
+body[data-theme="rainy-mood"] .meter-track,
+body[data-theme="rainy-mood"] .stat-bar,
+body[data-theme="rainy-mood"] .bar,
+body[data-theme="rainy-mood"] .task-xp-bar {
+  border: 1px solid rgba(46,73,88,0.22) !important;
+  background: rgba(255,255,255,0.66) !important;
+}
+
+body[data-theme="rainy-mood"] .meter-fill,
+body[data-theme="rainy-mood"] .fill,
+body[data-theme="rainy-mood"] .stat-fill,
+body[data-theme="rainy-mood"] .task-xp-fill,
+body[data-theme="rainy-mood"] .care-button-progress-fill {
+  background: linear-gradient(90deg, #f3c77f, #7ca5b8, #334b5d) !important;
+  box-shadow: 0 0 10px rgba(77,106,124,0.14) !important;
+}
+
+body[data-theme="rainy-mood"] * {
+  scrollbar-color: #6f8da0 #dce9ee;
+}
+
+body[data-theme="rainy-mood"] *::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7ca5b8 0%, #334b5d 100%) !important;
+  border: 2px solid #dce9ee !important;
+  border-radius: 999px !important;
+}
+
+body[data-theme="rainy-mood"] *::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #f8fbfa 0%, #dce9ee 100%) !important;
+  border-radius: 999px !important;
+}

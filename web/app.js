@@ -114,6 +114,7 @@ const THEME_FILES = {
   "tokyo-night": "/themes/tokyo-night.css",
   "candy": "/themes/candy.css",
   "cafe": "/themes/cafe.css",
+  "rainy-mood": "/themes/rainy-mood.css",
 };
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
