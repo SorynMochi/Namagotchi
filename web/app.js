@@ -449,6 +449,9 @@ const EMOJI_CATEGORIES = {
     ],
   },
 };
+const PLAYDECK_ZONE_MAX_STREAK_STORAGE_KEY = "namigotchi_playdeck_zone_max_streaks";
+const TOP_RAIL_TICK_SECONDS = 5;
+
 let latestPlayerStatus = null;
 let forceTickButton = null;
 let resetPlaydeckStreakButton = null;
@@ -1064,6 +1067,97 @@ async function performCareAction(action) {
   }
 }
 
+
+function getPlaydeckZoneMaxStreaks() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(PLAYDECK_ZONE_MAX_STREAK_STORAGE_KEY) || "{}");
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
+  } catch {
+    return {};
+  }
+}
+
+function savePlaydeckZoneMaxStreaks(streaks) {
+  localStorage.setItem(PLAYDECK_ZONE_MAX_STREAK_STORAGE_KEY, JSON.stringify(streaks));
+}
+
+function getPlaydeckZoneStreakKey(status) {
+  const zoneID = status?.tick?.playdeckZoneId ?? status?.playdeck?.zone?.id ?? "unknown";
+  return String(zoneID || "unknown");
+}
+
+function getPlaydeckCurrentAndMaxStreak(status) {
+  const current = Math.max(0, Number(status?.tick?.playdeckStreak ?? 0));
+  const zoneKey = getPlaydeckZoneStreakKey(status);
+  const maxStreaks = getPlaydeckZoneMaxStreaks();
+  const previousMax = Math.max(0, Number(maxStreaks[zoneKey] ?? 0));
+  const nextMax = Math.max(previousMax, current);
+
+  if (nextMax !== previousMax) {
+    maxStreaks[zoneKey] = nextMax;
+    savePlaydeckZoneMaxStreaks(maxStreaks);
+  }
+
+  return {
+    current,
+    max: nextMax,
+  };
+}
+
+function syncTopRailTickPill(tick) {
+  const playerPill = document.querySelector(".top-player-name-button");
+  if (!playerPill) {
+    return;
+  }
+
+  const secondsUntilNextTick = Math.max(
+    0,
+    Math.min(TOP_RAIL_TICK_SECONDS, Number(tick?.secondsUntilNextTick ?? TOP_RAIL_TICK_SECONDS))
+  );
+
+  const progressPercent = Math.max(
+    0,
+    Math.min(100, ((TOP_RAIL_TICK_SECONDS - secondsUntilNextTick) / TOP_RAIL_TICK_SECONDS) * 100)
+  );
+
+  playerPill.classList.add("top-tick-pill");
+  playerPill.style.setProperty("--top-tick-progress", `${progressPercent}%`);
+  playerPill.style.setProperty("--top-tick-duration", `${Math.max(0.1, secondsUntilNextTick)}s`);
+  playerPill.title = `Next tick in ${Math.ceil(secondsUntilNextTick).toLocaleString()}s`;
+
+  playerPill.classList.remove("top-tick-pill-animating");
+  void playerPill.offsetWidth;
+  playerPill.classList.add("top-tick-pill-animating");
+}
+
+function syncTopPlayerTickPill(tick) {
+  const playerPill = document.querySelector(".top-player-name-button");
+
+  if (!playerPill) {
+    return;
+  }
+
+  const secondsUntilNextTick = Math.max(
+    0,
+    Math.min(TOP_RAIL_TICK_SECONDS, Number(tick?.secondsUntilNextTick ?? TOP_RAIL_TICK_SECONDS))
+  );
+
+  const progressPercent = Math.max(
+    0,
+    Math.min(100, ((TOP_RAIL_TICK_SECONDS - secondsUntilNextTick) / TOP_RAIL_TICK_SECONDS) * 100)
+  );
+
+  playerPill.classList.add("top-player-tick-pill");
+  playerPill.style.setProperty("--top-player-tick-progress", `${progressPercent}%`);
+  playerPill.style.setProperty("--top-player-tick-duration", `${Math.max(0.1, secondsUntilNextTick)}s`);
+  playerPill.title = `Next tick in ${Math.ceil(secondsUntilNextTick).toLocaleString()}s`;
+
+  playerPill.classList.remove("top-player-tick-pill-animating");
+  void playerPill.offsetWidth;
+  playerPill.classList.add("top-player-tick-pill-animating");
+}
 function renderPlayerStatus(status) {
   const player = status.player;
   const companion = status.companion;
@@ -1120,7 +1214,7 @@ function renderPlayerStatus(status) {
   );
   setWidthIfChanged(playdeckXpFill, `${xpPercent}%`);
 
-  setTextIfChanged(playdeckHpLabel, "HP: 100 / 100");
+  setTextIfChanged(playdeckHpLabel, "Sparkles: 100 / 100");
   setWidthIfChanged(playdeckHpFill, "100%");
 
   const progressActionName = tick.activeGatheringTask === "doom_scrolling"
@@ -1133,6 +1227,7 @@ function renderPlayerStatus(status) {
   );
 
   syncTickProgress(tick);
+  syncTopPlayerTickPill(tick);
   scheduleNextPlayerStatusRefresh(tick);
 
   renderCareStats(companion);
