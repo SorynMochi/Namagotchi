@@ -643,3 +643,269 @@ body[data-theme="cafe"] .cafe-piece.cafe-beans .bean-2 {
     opacity: 0;
   }
 }
+
+/* Cafe pass 2 safe contrast START */
+
+/* Contrast tokens used only by this repair pass. */
+body[data-theme="cafe"] {
+  --cafe-text-on-light: #3a2116;
+  --cafe-text-on-light-soft: #6f4936;
+  --cafe-text-on-dark: #fff3e6;
+  --cafe-text-on-dark-soft: #e9cdb8;
+  --cafe-border-soft: rgba(91, 55, 36, 0.24);
+  --cafe-scroll-thumb: #b56f3d;
+  --cafe-scroll-track: #ead4bf;
+}
+
+/* Top stats panel is a dark surface, so every stat label/value must be light. */
+body[data-theme="cafe"] .top-stats-panel,
+body[data-theme="cafe"] .top-stats-panel .collapse-body,
+body[data-theme="cafe"] .top-stats-panel .stat-group,
+body[data-theme="cafe"] .top-stats-panel .compact-grid-lines,
+body[data-theme="cafe"] .top-stats-panel .stat-lines,
+body[data-theme="cafe"] .top-stats-panel .top-user-meter-list {
+  color: var(--cafe-text-on-dark) !important;
+}
+
+body[data-theme="cafe"] .top-stats-panel .panel-title,
+body[data-theme="cafe"] .top-stats-panel h2,
+body[data-theme="cafe"] .top-stats-panel span,
+body[data-theme="cafe"] .top-stats-panel .meter-label {
+  color: var(--cafe-text-on-dark-soft) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .top-stats-panel strong,
+body[data-theme="cafe"] .top-stats-panel b,
+body[data-theme="cafe"] .top-stats-panel .top-player-name-button {
+  color: var(--cafe-text-on-dark) !important;
+  opacity: 1 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.32) !important;
+}
+
+body[data-theme="cafe"] .top-stats-panel .top-player-name-button {
+  background: linear-gradient(180deg, #9c6545 0%, #6a3d2a 100%) !important;
+  border-color: rgba(255, 243, 230, 0.36) !important;
+}
+
+/* Left menu server status is a light surface, so text must be espresso. */
+body[data-theme="cafe"] .menu-status-card,
+body[data-theme="cafe"] .menu-status-card p,
+body[data-theme="cafe"] .menu-status-card span,
+body[data-theme="cafe"] .menu-status-card strong,
+body[data-theme="cafe"] #server-time,
+body[data-theme="cafe"] #online-users {
+  color: var(--cafe-text-on-light) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .menu-status-card span {
+  color: var(--cafe-text-on-light-soft) !important;
+}
+
+/* Home/Nami log is a light card. Do not use white text here. */
+body[data-theme="cafe"] .nami-message-log-card,
+body[data-theme="cafe"] .nami-message-log,
+body[data-theme="cafe"] .nami-message-log p,
+body[data-theme="cafe"] .nami-message-log span,
+body[data-theme="cafe"] .nami-message-log strong,
+body[data-theme="cafe"] .nami-message-log .muted {
+  color: var(--cafe-text-on-light) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .nami-message-log span {
+  color: var(--cafe-text-on-light-soft) !important;
+}
+
+/* Playdeck zone cards are pale cards, so titles must be dark. */
+body[data-theme="cafe"] .zone-card,
+body[data-theme="cafe"] .zone-card * {
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .zone-card strong {
+  color: var(--cafe-text-on-light) !important;
+}
+
+body[data-theme="cafe"] .zone-card span,
+body[data-theme="cafe"] .zone-card small {
+  color: var(--cafe-text-on-light-soft) !important;
+}
+
+body[data-theme="cafe"] .zone-card.active {
+  border-color: rgba(81, 167, 202, 0.70) !important;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.74), transparent 7rem),
+    linear-gradient(135deg, #fff8ef 0%, #e9f6f8 100%) !important;
+}
+
+/* Work cards are light cards, so right-side values cannot be white. */
+body[data-theme="cafe"] .task-card,
+body[data-theme="cafe"] .task-card .task-meta,
+body[data-theme="cafe"] .task-card .task-meta p,
+body[data-theme="cafe"] .task-card .task-meta span,
+body[data-theme="cafe"] .task-card .task-meta strong {
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .task-card h2,
+body[data-theme="cafe"] .task-card .task-meta strong,
+body[data-theme="cafe"] .task-card .task-level,
+body[data-theme="cafe"] .task-card .task-xp,
+body[data-theme="cafe"] .task-card .task-generates {
+  color: var(--cafe-text-on-light) !important;
+}
+
+body[data-theme="cafe"] .task-card .task-meta span {
+  color: var(--cafe-text-on-light-soft) !important;
+}
+
+body[data-theme="cafe"] .task-card .task-status {
+  color: var(--cafe-text-on-light) !important;
+}
+
+body[data-theme="cafe"] .task-card.active .task-status {
+  color: var(--cafe-text-on-dark) !important;
+  background: linear-gradient(180deg, #7a4a32, #4b2b1d) !important;
+  border-color: rgba(255, 243, 230, 0.28) !important;
+}
+
+/* Right rail buffs are light cards. Use espresso text. */
+body[data-theme="cafe"] .right-buff-group,
+body[data-theme="cafe"] .right-buff-group h3,
+body[data-theme="cafe"] .buff-card,
+body[data-theme="cafe"] .buff-card strong,
+body[data-theme="cafe"] .buff-card span,
+body[data-theme="cafe"] .buff-card small {
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .right-buff-group h3,
+body[data-theme="cafe"] .buff-card strong {
+  color: var(--cafe-text-on-light) !important;
+}
+
+body[data-theme="cafe"] .buff-card span,
+body[data-theme="cafe"] .buff-card small {
+  color: var(--cafe-text-on-light-soft) !important;
+}
+
+body[data-theme="cafe"] .buff-card.muted-card strong {
+  color: #5b3827 !important;
+}
+
+body[data-theme="cafe"] .buff-card.muted-card span,
+body[data-theme="cafe"] .buff-card.muted-card small {
+  color: #7a5a48 !important;
+}
+
+/* Wardrobe current outfit cards are light. No pale labels on pale cards. */
+body[data-theme="cafe"] .wardrobe-equipment-panel,
+body[data-theme="cafe"] .equipment-card-grid,
+body[data-theme="cafe"] .equipment-card,
+body[data-theme="cafe"] .equipment-card * {
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .wardrobe-section-header .eyebrow,
+body[data-theme="cafe"] .wardrobe-section-header #wardrobe-inline-count,
+body[data-theme="cafe"] .wardrobe-panel-titlebar h2,
+body[data-theme="cafe"] .equipment-card strong {
+  color: var(--cafe-text-on-light) !important;
+}
+
+body[data-theme="cafe"] .equipment-card span,
+body[data-theme="cafe"] .equipment-card small,
+body[data-theme="cafe"] .equipment-card .muted,
+body[data-theme="cafe"] .equipment-slot-row span,
+body[data-theme="cafe"] .inventory-preview-row span {
+  color: var(--cafe-text-on-light-soft) !important;
+}
+
+body[data-theme="cafe"] .equipment-card.is-empty,
+body[data-theme="cafe"] .equipment-card.is-empty * {
+  color: var(--cafe-text-on-light-soft) !important;
+}
+
+/* Inventory rows are dark gray right now, so make their text light enough. */
+body[data-theme="cafe"] .inventory-preview-row,
+body[data-theme="cafe"] .inventory-preview-row *,
+body[data-theme="cafe"] .inventory-item-card,
+body[data-theme="cafe"] .inventory-item-card * {
+  opacity: 1 !important;
+}
+
+/* Chat text stays espresso on receipt paper. */
+body[data-theme="cafe"] .chat-log,
+body[data-theme="cafe"] .chat-message,
+body[data-theme="cafe"] .chat-message *,
+body[data-theme="cafe"] .chat-text {
+  color: var(--cafe-text-on-light) !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] .chat-time {
+  color: #8a6048 !important;
+}
+
+body[data-theme="cafe"] .chat-player-name {
+  color: #6b3d28 !important;
+}
+
+/* Chat scrollbar: caramel/latte, never blue. */
+body[data-theme="cafe"] .chat-log {
+  scrollbar-color: var(--cafe-scroll-thumb) var(--cafe-scroll-track) !important;
+}
+
+body[data-theme="cafe"] .chat-log::-webkit-scrollbar,
+body[data-theme="cafe"] .main-panel::-webkit-scrollbar {
+  width: 12px !important;
+}
+
+body[data-theme="cafe"] .chat-log::-webkit-scrollbar-track,
+body[data-theme="cafe"] .main-panel::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #f3e4d2, #e2c9ae) !important;
+  border-radius: 999px !important;
+}
+
+body[data-theme="cafe"] .chat-log::-webkit-scrollbar-thumb,
+body[data-theme="cafe"] .main-panel::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d79a5b, #a85f30) !important;
+  border: 2px solid #f3e4d2 !important;
+  border-radius: 999px !important;
+}
+
+/* Croissant polish: soft pastry scoring, no black scratch lines. */
+body[data-theme="cafe"] .cafe-piece.cafe-croissant .croissant-base {
+  background:
+    radial-gradient(ellipse at 50% 72%, rgba(255, 246, 226, 0.62) 0 20%, transparent 21%),
+    radial-gradient(ellipse at 32% 34%, rgba(255, 233, 185, 0.46), transparent 28%),
+    linear-gradient(180deg, #efbd68 0%, #d7923f 58%, #ad692f 100%) !important;
+  border-color: rgba(122, 74, 50, 0.14) !important;
+  box-shadow:
+    inset 0 3px 8px rgba(255, 237, 198, 0.28),
+    inset 0 -6px 9px rgba(123, 74, 50, 0.12) !important;
+}
+
+body[data-theme="cafe"] .cafe-piece.cafe-croissant .croissant-lines {
+  left: 18% !important;
+  top: 29% !important;
+  width: 64% !important;
+  height: 38% !important;
+  background:
+    radial-gradient(ellipse at 18% 56%, transparent 0 54%, rgba(139, 88, 43, 0.14) 55% 58%, transparent 59%),
+    radial-gradient(ellipse at 50% 48%, transparent 0 56%, rgba(139, 88, 43, 0.11) 57% 60%, transparent 61%),
+    radial-gradient(ellipse at 82% 56%, transparent 0 54%, rgba(139, 88, 43, 0.14) 55% 58%, transparent 59%) !important;
+  opacity: 0.95 !important;
+  filter: blur(0.2px);
+}
+
+/* Cafe pass 2 safe contrast END */
