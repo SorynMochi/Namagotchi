@@ -703,3 +703,53 @@ body[data-theme="rainy-mood"] .secondary-text {
 }
 
 /* Rainy Mood pass 2C END */
+
+/* Rainy Mood pass 2D START */
+
+/* Background-only override:
+   richer storm palette with darker blues, slate greys, and cold cloud layering */
+body[data-theme="rainy-mood"] {
+  background:
+    radial-gradient(58% 22% at 10% 10%, rgba(44, 60, 78, 0.72) 0%, rgba(44, 60, 78, 0.38) 42%, rgba(44, 60, 78, 0.00) 74%),
+    radial-gradient(48% 18% at 28% 9%, rgba(68, 86, 106, 0.68) 0%, rgba(68, 86, 106, 0.34) 44%, rgba(68, 86, 106, 0.00) 76%),
+    radial-gradient(52% 20% at 50% 12%, rgba(52, 70, 92, 0.74) 0%, rgba(52, 70, 92, 0.36) 44%, rgba(52, 70, 92, 0.00) 76%),
+    radial-gradient(46% 18% at 72% 10%, rgba(90, 106, 123, 0.62) 0%, rgba(90, 106, 123, 0.30) 44%, rgba(90, 106, 123, 0.00) 78%),
+    radial-gradient(42% 16% at 88% 8%, rgba(34, 47, 63, 0.74) 0%, rgba(34, 47, 63, 0.34) 42%, rgba(34, 47, 63, 0.00) 74%),
+    radial-gradient(90% 34% at 50% 20%, rgba(170, 184, 196, 0.18) 0%, rgba(170, 184, 196, 0.08) 38%, rgba(170, 184, 196, 0.00) 70%),
+    linear-gradient(
+      180deg,
+      #26384c 0%,
+      #31465d 12%,
+      #42586f 24%,
+      #53697a 38%,
+      #667c89 52%,
+      #7a8f99 66%,
+      #9aabb3 82%,
+      #c7d0d4 100%
+    ) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+}
+
+/* Slightly cooler glass tone so the rain reads better over the storm colors */
+body[data-theme="rainy-mood"] .rainy-mood-glass-canvas {
+  opacity: 0.50 !important;
+  filter: saturate(0.94) contrast(0.98) blur(0.18px) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body[data-theme="rainy-mood"] .rainy-mood-static-glass {
+  opacity: 0.24 !important;
+  filter: blur(0.25px) saturate(0.92) !important;
+}
+
+/* Subtle header tint so the whole theme stays in the same storm family */
+body[data-theme="rainy-mood"] .panel-title,
+body[data-theme="rainy-mood"] .collapse-toggle,
+body[data-theme="rainy-mood"] .chat-tabs,
+body[data-theme="rainy-mood"] .emoji-picker-tabs {
+  background:
+    linear-gradient(180deg, rgba(49, 67, 84, 0.42), rgba(36, 49, 63, 0.36)) !important;
+}
+
+/* Rainy Mood pass 2D END */
