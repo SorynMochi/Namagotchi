@@ -739,3 +739,72 @@ body[data-theme="rainy-mood"] {
 }
 
 /* Top user metric text polish END */
+
+/* Top user row rhythm START */
+
+/* Match the tighter vertical rhythm of Currency / Nami-Chan / Playdeck rows. */
+.top-user-info {
+  --top-user-row-font-size: 0.8rem;
+  --top-user-row-line-height: 1.08;
+  --top-user-row-gap: 2px;
+  --top-user-row-height: 16px;
+  --top-user-bar-height: 5px;
+  --top-user-pill-to-rows-gap: 6px;
+}
+
+/* Player pill stays intact, just leaves less dead air before the rows. */
+.top-user-info .top-player-name-button,
+.top-user-info .top-player-name-button.top-player-tick-pill {
+  margin-bottom: var(--top-user-pill-to-rows-gap) !important;
+}
+
+/* One shared parent grid, tighter rows. */
+.top-user-info .top-user-meter-list {
+  grid-auto-rows: var(--top-user-row-height) !important;
+  row-gap: var(--top-user-row-gap) !important;
+  align-items: center !important;
+}
+
+/* Kill leftover row minimums from older passes. */
+.top-user-info .top-user-meter-list .user-meter,
+.top-user-info .top-user-meter-list .tick-meter {
+  min-height: 0 !important;
+  height: auto !important;
+  align-items: center !important;
+}
+
+/* Match stat-row typography without XP ballooning. */
+.top-user-info .top-user-meter-list .meter-label,
+.top-user-info .top-user-meter-list .metric-name,
+.top-user-info .top-user-meter-list .metric-value {
+  font-size: var(--top-user-row-font-size) !important;
+  line-height: var(--top-user-row-line-height) !important;
+}
+
+/* Labels stay left, values stay right. */
+.top-user-info .top-user-meter-list .metric-name {
+  justify-self: start !important;
+  align-self: center !important;
+  text-align: left !important;
+}
+
+.top-user-info .top-user-meter-list .metric-value {
+  justify-self: end !important;
+  align-self: center !important;
+  text-align: right !important;
+}
+
+/* Bars are thinner and vertically centered on the same red-line rhythm. */
+.top-user-info .top-user-meter-list .meter-track {
+  height: var(--top-user-bar-height) !important;
+  align-self: center !important;
+}
+
+/* Keep fills from increasing row height. */
+.top-user-info .top-user-meter-list .fill,
+.top-user-info .top-user-meter-list .tick-fill {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* Top user row rhythm END */
