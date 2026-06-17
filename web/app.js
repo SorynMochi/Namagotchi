@@ -1,4 +1,4 @@
-﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -451,6 +451,7 @@ const EMOJI_CATEGORIES = {
 };
 let latestPlayerStatus = null;
 let forceTickButton = null;
+let resetPlaydeckStreakButton = null;
 let currentChatChannel = "lobby";
 let chatMessages = createEmptyChatStore();
 let namiMessages = [];
@@ -964,6 +965,42 @@ async function forceTick() {
   }
 }
 
+
+async function resetPlaydeckStreak() {
+  if (!resetPlaydeckStreakButton) {
+    return;
+  }
+
+  resetPlaydeckStreakButton.disabled = true;
+  resetPlaydeckStreakButton.textContent = "Resetting...";
+
+  if (forceTickButton) {
+    forceTickButton.disabled = true;
+  }
+
+  try {
+    const response = await fetch("/api/dev/reset-playdeck-streak", {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Reset streak failed: ${response.status}`);
+    }
+
+    addChatMessage("System", "Playdeck streak reset. Fresh slate deployed.", "system");
+    await loadPlayerStatus();
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Reset streak failed. The streak goblin refused to let go.", "system");
+  } finally {
+    resetPlaydeckStreakButton.disabled = false;
+    resetPlaydeckStreakButton.textContent = "Reset Streak";
+
+    if (forceTickButton) {
+      forceTickButton.disabled = false;
+    }
+  }
+}
 async function setGatheringTask(task) {
   try {
     const response = await fetch("/api/player/gathering", {
@@ -2025,18 +2062,50 @@ function updateGatheringCards(status) {
 
 function createForceTickButton() {
   const header = document.querySelector("#section-playdeck .section-header");
-  if (!header || document.querySelector("#force-tick-button")) {
+  if (!header) {
     return;
   }
 
-  forceTickButton = document.createElement("button");
-  forceTickButton.id = "force-tick-button";
-  forceTickButton.className = "secondary-button";
-  forceTickButton.type = "button";
-  forceTickButton.textContent = "Force Tick";
-  forceTickButton.addEventListener("click", forceTick);
+  let devActions = header.querySelector(".playdeck-dev-actions");
 
-  header.appendChild(forceTickButton);
+  if (!devActions) {
+    devActions = document.createElement("div");
+    devActions.className = "playdeck-dev-actions";
+    devActions.setAttribute("aria-label", "Playdeck developer actions");
+    header.appendChild(devActions);
+  }
+
+  forceTickButton = document.querySelector("#force-tick-button");
+
+  if (!forceTickButton) {
+    forceTickButton = document.createElement("button");
+    forceTickButton.id = "force-tick-button";
+    forceTickButton.type = "button";
+    forceTickButton.textContent = "Force Tick";
+    forceTickButton.addEventListener("click", forceTick);
+  }
+
+  forceTickButton.className = "secondary-button playdeck-dev-button";
+
+  if (forceTickButton.parentElement !== devActions) {
+    devActions.appendChild(forceTickButton);
+  }
+
+  resetPlaydeckStreakButton = document.querySelector("#reset-playdeck-streak-button");
+
+  if (!resetPlaydeckStreakButton) {
+    resetPlaydeckStreakButton = document.createElement("button");
+    resetPlaydeckStreakButton.id = "reset-playdeck-streak-button";
+    resetPlaydeckStreakButton.type = "button";
+    resetPlaydeckStreakButton.textContent = "Reset Streak";
+    resetPlaydeckStreakButton.addEventListener("click", resetPlaydeckStreak);
+  }
+
+  resetPlaydeckStreakButton.className = "secondary-button playdeck-dev-button";
+
+  if (resetPlaydeckStreakButton.parentElement !== devActions) {
+    devActions.appendChild(resetPlaydeckStreakButton);
+  }
 }
 
 function initializeNamiMessages() {

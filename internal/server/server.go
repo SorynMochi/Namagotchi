@@ -53,6 +53,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/health", s.HandleStatus)
 	mux.HandleFunc("/api/dev/seed-player", s.HandleSeedDevPlayer)
 	mux.HandleFunc("/api/dev/force-tick", s.HandleForceTick)
+	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.HandleResetPlaydeckStreak)
 	mux.HandleFunc("/api/dev/rewind-care-decay", s.HandleRewindCareDecay)
 	mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
 	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
@@ -175,6 +176,40 @@ func (s *Server) HandleForceTick(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, result)
 }
 
+
+func (s *Server) HandleResetPlaydeckStreak(w http.ResponseWriter, r *http.Request) {
+if r.Method != http.MethodPost && r.Method != http.MethodGet {
+writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+return
+}
+
+commandTag, err := s.Store.Pool.Exec(r.Context(), `
+update player_tick_state
+set playdeck_streak = 0,
+last_tick_at = now(),
+updated_at = now()
+where player_id = (
+select id
+from players
+where display_name = 'Soryn'
+)
+`)
+if err != nil {
+log.Printf("reset playdeck streak failed: %v", err)
+writeError(w, http.StatusInternalServerError, "failed to reset playdeck streak")
+return
+}
+
+if commandTag.RowsAffected() == 0 {
+writeError(w, http.StatusNotFound, "playdeck streak state not found")
+return
+}
+
+writeJSON(w, http.StatusOK, MessageResponse{
+OK:      true,
+Message: "Playdeck streak reset.",
+})
+}
 func (s *Server) HandleRewindCareDecay(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet && r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
