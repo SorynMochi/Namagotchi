@@ -1,0 +1,307 @@
+﻿/* Fancy theme-aware dropdowns
+   Loaded after the active theme stylesheet so these rules can polish all themes. */
+
+:root {
+  --dropdown-bg:
+    radial-gradient(circle at 14% 0%, rgba(255, 140, 204, 0.30), transparent 4.8rem),
+    linear-gradient(135deg, rgba(255, 140, 204, 0.24), rgba(73, 199, 255, 0.12)),
+    rgba(24, 10, 34, 0.88);
+  --dropdown-bg-hover:
+    radial-gradient(circle at 14% 0%, rgba(255, 140, 204, 0.42), transparent 5.2rem),
+    linear-gradient(135deg, rgba(255, 140, 204, 0.30), rgba(73, 199, 255, 0.18)),
+    rgba(24, 10, 34, 0.92);
+  --dropdown-border: rgba(255, 207, 234, 0.28);
+  --dropdown-border-hover: rgba(152, 221, 255, 0.48);
+  --dropdown-text: #fff6fb;
+  --dropdown-label: #f4d4e6;
+  --dropdown-muted: #caa1bb;
+  --dropdown-arrow: #ffd9ef;
+  --dropdown-accent: #ff8ccc;
+  --dropdown-focus: rgba(255, 140, 204, 0.52);
+  --dropdown-shadow: 0 12px 24px rgba(15, 5, 24, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --dropdown-option-bg: #23102f;
+  --dropdown-option-text: #fff6fb;
+}
+
+/* Default / Nami */
+body[data-theme="nami-default"] {
+  --dropdown-bg:
+    radial-gradient(circle at 16% 0%, rgba(255, 140, 204, 0.34), transparent 5rem),
+    linear-gradient(135deg, rgba(255, 140, 204, 0.26), rgba(73, 199, 255, 0.14)),
+    rgba(35, 16, 47, 0.92);
+  --dropdown-bg-hover:
+    radial-gradient(circle at 16% 0%, rgba(255, 140, 204, 0.46), transparent 5.4rem),
+    linear-gradient(135deg, rgba(255, 140, 204, 0.34), rgba(73, 199, 255, 0.20)),
+    rgba(35, 16, 47, 0.95);
+  --dropdown-border: rgba(255, 207, 234, 0.34);
+  --dropdown-border-hover: rgba(152, 221, 255, 0.54);
+  --dropdown-text: #fff6fb;
+  --dropdown-label: #ffd9ef;
+  --dropdown-arrow: #98ddff;
+  --dropdown-accent: #ff8ccc;
+  --dropdown-focus: rgba(255, 140, 204, 0.56);
+  --dropdown-option-bg: #23102f;
+  --dropdown-option-text: #fff6fb;
+}
+
+/* Midnight */
+body[data-theme="midnight"] {
+  --dropdown-bg:
+    radial-gradient(circle at 85% 0%, rgba(94, 169, 255, 0.22), transparent 5rem),
+    linear-gradient(135deg, rgba(22, 39, 64, 0.96), rgba(6, 12, 24, 0.94));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 85% 0%, rgba(94, 169, 255, 0.34), transparent 5.5rem),
+    linear-gradient(135deg, rgba(31, 55, 88, 0.98), rgba(8, 16, 30, 0.96));
+  --dropdown-border: rgba(126, 189, 255, 0.30);
+  --dropdown-border-hover: rgba(126, 189, 255, 0.58);
+  --dropdown-text: #edf7ff;
+  --dropdown-label: #b9dfff;
+  --dropdown-arrow: #7ecbff;
+  --dropdown-accent: #7ecbff;
+  --dropdown-focus: rgba(126, 203, 255, 0.48);
+  --dropdown-option-bg: #07101f;
+  --dropdown-option-text: #edf7ff;
+}
+
+/* Strawberry */
+body[data-theme="strawberry"] {
+  --dropdown-bg:
+    radial-gradient(circle at 16% 0%, rgba(255, 242, 247, 0.40), transparent 4.8rem),
+    linear-gradient(135deg, rgba(187, 50, 88, 0.92), rgba(120, 28, 58, 0.92));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 16% 0%, rgba(255, 242, 247, 0.56), transparent 5.2rem),
+    linear-gradient(135deg, rgba(206, 60, 104, 0.96), rgba(132, 34, 68, 0.94));
+  --dropdown-border: rgba(255, 220, 230, 0.46);
+  --dropdown-border-hover: rgba(255, 242, 247, 0.74);
+  --dropdown-text: #fff7fb;
+  --dropdown-label: #ffe2ec;
+  --dropdown-arrow: #fff7fb;
+  --dropdown-accent: #ffd4e3;
+  --dropdown-focus: rgba(255, 170, 198, 0.56);
+  --dropdown-option-bg: #8a2448;
+  --dropdown-option-text: #fff7fb;
+}
+
+/* Sakura Dark */
+body[data-theme="sakura-dark"] {
+  --dropdown-bg:
+    radial-gradient(circle at 18% 0%, rgba(255, 183, 213, 0.30), transparent 5rem),
+    linear-gradient(135deg, rgba(70, 29, 56, 0.94), rgba(26, 16, 38, 0.94));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 18% 0%, rgba(255, 183, 213, 0.44), transparent 5.3rem),
+    linear-gradient(135deg, rgba(88, 36, 68, 0.96), rgba(34, 20, 48, 0.96));
+  --dropdown-border: rgba(255, 198, 225, 0.34);
+  --dropdown-border-hover: rgba(255, 210, 232, 0.62);
+  --dropdown-text: #fff4fa;
+  --dropdown-label: #ffd7e9;
+  --dropdown-arrow: #ffd7e9;
+  --dropdown-accent: #ff9fc6;
+  --dropdown-focus: rgba(255, 159, 198, 0.52);
+  --dropdown-option-bg: #261026;
+  --dropdown-option-text: #fff4fa;
+}
+
+/* Sakura Light */
+body[data-theme="sakura-light"] {
+  --dropdown-bg:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.78), transparent 5rem),
+    linear-gradient(135deg, rgba(255, 239, 246, 0.94), rgba(244, 213, 226, 0.92));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.92), transparent 5rem),
+    linear-gradient(135deg, rgba(255, 246, 250, 0.98), rgba(239, 201, 218, 0.96));
+  --dropdown-border: rgba(127, 63, 94, 0.28);
+  --dropdown-border-hover: rgba(177, 82, 126, 0.50);
+  --dropdown-text: #432232;
+  --dropdown-label: #6b354e;
+  --dropdown-arrow: #9d416a;
+  --dropdown-accent: #b95882;
+  --dropdown-focus: rgba(177, 82, 126, 0.34);
+  --dropdown-shadow: 0 10px 22px rgba(127, 63, 94, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  --dropdown-option-bg: #fff1f6;
+  --dropdown-option-text: #432232;
+}
+
+/* Tokyo Night */
+body[data-theme="tokyo-night"] {
+  --dropdown-bg:
+    radial-gradient(circle at 18% 0%, rgba(255, 40, 180, 0.24), transparent 5rem),
+    radial-gradient(circle at 92% 10%, rgba(0, 229, 255, 0.22), transparent 5.6rem),
+    linear-gradient(135deg, rgba(18, 18, 48, 0.94), rgba(4, 7, 18, 0.96));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 18% 0%, rgba(255, 40, 180, 0.34), transparent 5.2rem),
+    radial-gradient(circle at 92% 10%, rgba(0, 229, 255, 0.34), transparent 5.8rem),
+    linear-gradient(135deg, rgba(28, 22, 64, 0.98), rgba(5, 8, 20, 0.98));
+  --dropdown-border: rgba(0, 229, 255, 0.34);
+  --dropdown-border-hover: rgba(255, 40, 180, 0.62);
+  --dropdown-text: #f4fbff;
+  --dropdown-label: #9cf2ff;
+  --dropdown-arrow: #ff3ccf;
+  --dropdown-accent: #00e5ff;
+  --dropdown-focus: rgba(0, 229, 255, 0.52);
+  --dropdown-shadow: 0 0 18px rgba(0, 229, 255, 0.16), 0 12px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+  --dropdown-option-bg: #080a18;
+  --dropdown-option-text: #f4fbff;
+}
+
+/* Candy */
+body[data-theme="candy"] {
+  --dropdown-bg:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.70), transparent 5rem),
+    linear-gradient(135deg, rgba(255, 188, 232, 0.92), rgba(157, 224, 255, 0.88), rgba(255, 226, 150, 0.88));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.88), transparent 5.2rem),
+    linear-gradient(135deg, rgba(255, 178, 228, 0.98), rgba(141, 219, 255, 0.96), rgba(255, 222, 135, 0.96));
+  --dropdown-border: rgba(119, 65, 128, 0.28);
+  --dropdown-border-hover: rgba(255, 92, 191, 0.50);
+  --dropdown-text: #432047;
+  --dropdown-label: #6c3b76;
+  --dropdown-arrow: #d94cae;
+  --dropdown-accent: #ff5cbf;
+  --dropdown-focus: rgba(255, 92, 191, 0.34);
+  --dropdown-shadow: 0 12px 24px rgba(91, 54, 118, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  --dropdown-option-bg: #fff4fb;
+  --dropdown-option-text: #432047;
+}
+
+/* Cafe */
+body[data-theme="cafe"] {
+  --dropdown-bg:
+    radial-gradient(circle at 16% 0%, rgba(255, 248, 238, 0.18), transparent 5rem),
+    linear-gradient(135deg, rgba(122, 74, 50, 0.96), rgba(68, 36, 22, 0.94));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 16% 0%, rgba(255, 248, 238, 0.28), transparent 5.3rem),
+    linear-gradient(135deg, rgba(143, 84, 54, 0.98), rgba(75, 39, 23, 0.96));
+  --dropdown-border: rgba(255, 243, 230, 0.30);
+  --dropdown-border-hover: rgba(213, 145, 76, 0.62);
+  --dropdown-text: #fff3e6;
+  --dropdown-label: #f3d2b8;
+  --dropdown-arrow: #f2c991;
+  --dropdown-accent: #d5914c;
+  --dropdown-focus: rgba(213, 145, 76, 0.48);
+  --dropdown-option-bg: #442416;
+  --dropdown-option-text: #fff3e6;
+}
+
+/* Rainy Mood */
+body[data-theme="rainy-mood"] {
+  --dropdown-bg:
+    radial-gradient(circle at 15% 0%, rgba(154, 195, 224, 0.12), transparent 5rem),
+    linear-gradient(135deg, rgba(23, 54, 82, 0.46), rgba(5, 16, 30, 0.42));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 15% 0%, rgba(154, 195, 224, 0.18), transparent 5.3rem),
+    linear-gradient(135deg, rgba(28, 67, 102, 0.54), rgba(5, 16, 30, 0.48));
+  --dropdown-border: rgba(154, 195, 224, 0.30);
+  --dropdown-border-hover: rgba(243, 199, 127, 0.42);
+  --dropdown-text: #f5fbff;
+  --dropdown-label: #c8d9e4;
+  --dropdown-arrow: #d6e9f5;
+  --dropdown-accent: #f0c575;
+  --dropdown-focus: rgba(154, 195, 224, 0.42);
+  --dropdown-shadow: 0 14px 30px rgba(2, 8, 18, 0.26), inset 0 1px 0 rgba(226,244,255,0.16);
+  --dropdown-option-bg: #07131f;
+  --dropdown-option-text: #f5fbff;
+}
+
+.settings-field:has(select) {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--dropdown-border) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    color-mix(in srgb, var(--dropdown-option-bg) 14%, transparent) !important;
+  box-shadow: var(--dropdown-shadow) !important;
+}
+
+.settings-field:has(select)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.72;
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--dropdown-accent) 36%, transparent), transparent);
+  transform: translateX(-78%);
+  transition: transform 260ms ease;
+}
+
+.settings-field:has(select):hover::before,
+.settings-field:has(select):focus-within::before {
+  transform: translateX(78%);
+}
+
+.settings-field:has(select)::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  bottom: 1.08rem;
+  width: 0.54rem;
+  height: 0.54rem;
+  pointer-events: none;
+  border-right: 2px solid var(--dropdown-arrow);
+  border-bottom: 2px solid var(--dropdown-arrow);
+  transform: rotate(45deg);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.32));
+}
+
+.settings-field:has(select) > span {
+  color: var(--dropdown-label) !important;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: none !important;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 42px;
+  border-radius: 16px;
+  border: 1px solid var(--dropdown-border) !important;
+  padding: 0.68rem 2.65rem 0.68rem 0.9rem;
+  color: var(--dropdown-text) !important;
+  background: var(--dropdown-bg) !important;
+  box-shadow: var(--dropdown-shadow) !important;
+  font: inherit;
+  font-weight: 950;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  outline: none;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.28);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    filter 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+select:hover {
+  border-color: var(--dropdown-border-hover) !important;
+  background: var(--dropdown-bg-hover) !important;
+  filter: saturate(1.06) brightness(1.03);
+  transform: translateY(-1px);
+}
+
+select:focus-visible {
+  border-color: var(--dropdown-border-hover) !important;
+  box-shadow:
+    0 0 0 3px var(--dropdown-focus),
+    var(--dropdown-shadow) !important;
+}
+
+select:active {
+  transform: translateY(0);
+}
+
+select option {
+  color: var(--dropdown-option-text);
+  background-color: var(--dropdown-option-bg);
+  font-weight: 800;
+}
+
+select optgroup {
+  color: var(--dropdown-label);
+  background-color: var(--dropdown-option-bg);
+  font-weight: 950;
+}
