@@ -849,3 +849,337 @@ body[data-theme="rainy-mood"] .theme-effects-rainy-mood::after {
 }
 
 /* Rainy Mood video rail-blue tint END */
+
+/* Rainy Mood pass 4 window room identity START */
+
+/* Identity tokens */
+body[data-theme="rainy-mood"] {
+  --rainy-window-line: rgba(180, 216, 238, 0.16);
+  --rainy-window-line-strong: rgba(205, 232, 246, 0.22);
+  --rainy-window-shadow: rgba(2, 8, 18, 0.42);
+  --rainy-room-warm: rgba(243, 185, 103, 0.18);
+  --rainy-room-warm-soft: rgba(243, 199, 127, 0.10);
+  --rainy-lightning-blue: rgba(180, 224, 255, 0.16);
+  --rainy-glass-scratch: rgba(229, 245, 255, 0.09);
+  --rainy-pane-blue: rgba(16, 54, 88, 0.14);
+}
+
+/* Big storm-window structure behind the whole app. */
+body[data-theme="rainy-mood"] .theme-effects-rainy-mood::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.82;
+  background:
+    /* outer frame */
+    linear-gradient(90deg, rgba(2, 8, 18, 0.48) 0 10px, transparent 10px calc(100% - 10px), rgba(2, 8, 18, 0.48) calc(100% - 10px) 100%),
+    linear-gradient(180deg, rgba(2, 8, 18, 0.40) 0 9px, transparent 9px calc(100% - 9px), rgba(2, 8, 18, 0.42) calc(100% - 9px) 100%),
+
+    /* major mullions */
+    linear-gradient(90deg, transparent 0 23.5%, var(--rainy-window-shadow) 23.8% 24.15%, var(--rainy-window-line) 24.20% 24.30%, transparent 24.65% 49.2%, var(--rainy-window-shadow) 49.45% 49.85%, var(--rainy-window-line-strong) 49.90% 50.02%, transparent 50.32% 75.2%, var(--rainy-window-shadow) 75.48% 75.86%, var(--rainy-window-line) 75.92% 76.02%, transparent 76.32% 100%),
+    linear-gradient(180deg, transparent 0 18.5%, var(--rainy-window-shadow) 18.8% 19.12%, var(--rainy-window-line) 19.17% 19.27%, transparent 19.56% 47.5%, rgba(2, 8, 18, 0.30) 47.82% 48.12%, var(--rainy-window-line) 48.16% 48.25%, transparent 48.55% 78.2%, rgba(2, 8, 18, 0.34) 78.48% 78.82%, var(--rainy-window-line) 78.86% 78.96%, transparent 79.24% 100%),
+
+    /* tiny glass scratches and drip trails */
+    linear-gradient(90deg, transparent 0 6%, var(--rainy-glass-scratch) 6.06% 6.13%, transparent 6.22% 38%, rgba(229,245,255,0.06) 38.04% 38.11%, transparent 38.2% 61%, rgba(229,245,255,0.07) 61.04% 61.10%, transparent 61.2% 88%, rgba(229,245,255,0.06) 88.04% 88.10%, transparent 88.2% 100%),
+
+    /* pane tint */
+    linear-gradient(135deg, rgba(255,255,255,0.025), transparent 38%, rgba(58,116,166,0.04) 68%, rgba(5,16,30,0.10));
+
+  mix-blend-mode: screen;
+}
+
+/* Warm room reflection, edge condensation, and rare storm-light bloom. */
+body[data-theme="rainy-mood"] .theme-effects-rainy-mood::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background:
+    /* warm lamp reflection, upper-left and lower-left */
+    radial-gradient(ellipse at 7% 18%, rgba(255, 207, 132, 0.18), rgba(255, 207, 132, 0.07) 22%, transparent 42%),
+    radial-gradient(ellipse at 18% 84%, rgba(255, 197, 120, 0.10), transparent 34%),
+
+    /* cold storm glow behind the rain */
+    radial-gradient(ellipse at 78% 18%, rgba(121, 180, 220, 0.12), transparent 40%),
+
+    /* condensation edge fog */
+    linear-gradient(90deg, rgba(226, 244, 255, 0.16), transparent 13%, transparent 87%, rgba(226, 244, 255, 0.14)),
+    linear-gradient(180deg, rgba(226, 244, 255, 0.08), transparent 18%, transparent 82%, rgba(4, 12, 24, 0.22)),
+
+    /* center vignette */
+    radial-gradient(ellipse at center, transparent 0%, transparent 48%, rgba(5, 16, 30, 0.28) 100%);
+  animation:
+    rainyMoodWindowBreath 9s ease-in-out infinite alternate,
+    rainyMoodStormGlow 17s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+/* Stronger cover for video if playback fails. */
+body[data-theme="rainy-mood"] .theme-effects-rainy-mood.rainy-mood-video-paused {
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(57, 88, 122, 0.55), transparent 22rem),
+    radial-gradient(ellipse at 82% 8%, rgba(17, 46, 80, 0.66), transparent 26rem),
+    linear-gradient(180deg, #0b2037, #06121f 70%, #030914) !important;
+}
+
+/* Push the video deeper into storm-window mood. */
+body[data-theme="rainy-mood"] .rainy-mood-video-bg {
+  filter:
+    brightness(0.66)
+    contrast(1.20)
+    saturate(1.18)
+    hue-rotate(-5deg) !important;
+}
+
+/* Veil becomes more like reflective glass than a plain tint. */
+body[data-theme="rainy-mood"] .rainy-mood-video-veil {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 203, 126, 0.08), transparent 18rem),
+    radial-gradient(circle at 84% 12%, rgba(58, 116, 166, 0.15), transparent 24rem),
+    radial-gradient(circle at 46% 46%, rgba(160, 213, 242, 0.045), transparent 26rem),
+    linear-gradient(
+      180deg,
+      rgba(5, 16, 30, 0.14) 0%,
+      rgba(5, 16, 30, 0.26) 48%,
+      rgba(5, 16, 30, 0.48) 100%
+    ) !important;
+}
+
+/* Give big panels a slightly clearer glass edge. */
+body[data-theme="rainy-mood"] .main-panel,
+body[data-theme="rainy-mood"] .chat-panel,
+body[data-theme="rainy-mood"] .top-stats-panel,
+body[data-theme="rainy-mood"] .nav-panel,
+body[data-theme="rainy-mood"] .right-buffs-panel {
+  box-shadow:
+    inset 0 1px 0 rgba(226, 244, 255, 0.22),
+    inset 0 -1px 0 rgba(3, 10, 20, 0.24),
+    0 18px 40px rgba(1, 8, 18, 0.30),
+    0 0 0 1px rgba(226, 244, 255, 0.05) !important;
+}
+
+/* Home: cozy window nook around Nami. */
+body[data-theme="rainy-mood"] #section-home .nami-card {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="rainy-mood"] #section-home .nami-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 18% 8%, rgba(255, 202, 128, 0.18), transparent 10rem),
+    linear-gradient(90deg, transparent 0 18%, rgba(226,244,255,0.08) 18.2% 18.4%, transparent 18.8% 70%, rgba(226,244,255,0.07) 70.2% 70.4%, transparent 70.8%);
+  opacity: 0.86;
+  mix-blend-mode: screen;
+}
+
+body[data-theme="rainy-mood"] #section-home .nami-card::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  width: 7rem;
+  height: 2.8rem;
+  pointer-events: none;
+  opacity: 0.22;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 219, 150, 0.38);
+  background:
+    radial-gradient(ellipse at 22% 55%, transparent 0 0.9rem, rgba(255, 219, 150, 0.44) 0.94rem 1.03rem, transparent 1.08rem),
+    linear-gradient(180deg, transparent 0 68%, rgba(255, 219, 150, 0.32) 70% 78%, transparent 80%);
+}
+
+/* Home status card becomes a rain-window readout. */
+body[data-theme="rainy-mood"] #section-home .care-card {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="rainy-mood"] #section-home .care-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.26;
+  background:
+    linear-gradient(90deg, transparent 0 16%, rgba(226,244,255,0.11) 16.2% 16.3%, transparent 16.6% 52%, rgba(226,244,255,0.08) 52.2% 52.3%, transparent 52.6% 100%),
+    linear-gradient(180deg, transparent 0 26%, rgba(226,244,255,0.08) 26.2% 26.3%, transparent 26.6% 66%, rgba(226,244,255,0.06) 66.2% 66.3%, transparent 66.6% 100%);
+}
+
+/* Playdeck: stormy game-night table glow. */
+body[data-theme="rainy-mood"] #section-playdeck .combat-panel,
+body[data-theme="rainy-mood"] #section-playdeck .zone-list {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="rainy-mood"] #section-playdeck .combat-panel::after,
+body[data-theme="rainy-mood"] #section-playdeck .zone-list::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  background:
+    radial-gradient(ellipse at 50% 110%, rgba(243,199,127,0.18), transparent 32rem),
+    linear-gradient(90deg, transparent 0 49.7%, rgba(226,244,255,0.08) 49.85% 50%, transparent 50.15% 100%);
+}
+
+/* Work: late-night laptop by the window. */
+body[data-theme="rainy-mood"] #section-gathering .task-card {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="rainy-mood"] #section-gathering .task-card::before {
+  content: "";
+  position: absolute;
+  left: 0.7rem;
+  top: 0.7rem;
+  bottom: 0.7rem;
+  width: 1px;
+  pointer-events: none;
+  opacity: 0.22;
+  background:
+    linear-gradient(180deg, transparent, rgba(226,244,255,0.40), transparent);
+}
+
+body[data-theme="rainy-mood"] #section-gathering .task-card.active {
+  background:
+    radial-gradient(ellipse at 8% 0%, rgba(243,199,127,0.12), transparent 9rem),
+    linear-gradient(135deg, rgba(18, 54, 88, 0.28), rgba(4, 13, 26, 0.20)) !important;
+  border-color: rgba(243,199,127,0.28) !important;
+}
+
+/* Wardrobe: rainy boutique mirror vibe. */
+body[data-theme="rainy-mood"] #section-inventory .wardrobe-panel,
+body[data-theme="rainy-mood"] #section-inventory .wardrobe-equipment-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="rainy-mood"] #section-inventory .wardrobe-panel::before,
+body[data-theme="rainy-mood"] #section-inventory .wardrobe-equipment-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.28;
+  background:
+    linear-gradient(110deg, transparent 0 18%, rgba(226,244,255,0.11) 19%, transparent 25% 58%, rgba(226,244,255,0.08) 60%, transparent 68%),
+    radial-gradient(ellipse at 70% 0%, rgba(255,255,255,0.08), transparent 12rem);
+}
+
+/* Buff rail: make buffs feel like notes on cold glass. */
+body[data-theme="rainy-mood"] .right-buff-group h3 {
+  border-bottom: 1px solid rgba(154, 195, 224, 0.16);
+  padding-bottom: 0.35rem;
+}
+
+body[data-theme="rainy-mood"] .buff-card {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="rainy-mood"] .buff-card::after {
+  content: "";
+  position: absolute;
+  right: 0.6rem;
+  top: 0.55rem;
+  width: 2.4rem;
+  height: 0.8rem;
+  pointer-events: none;
+  opacity: 0.14;
+  border-radius: 999px;
+  background: rgba(226, 244, 255, 0.58);
+  filter: blur(1px);
+}
+
+/* Settings: cold glass control panel. */
+body[data-theme="rainy-mood"] #section-settings .settings-card {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="rainy-mood"] #section-settings .settings-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.20;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 28px,
+      rgba(226,244,255,0.055) 28px 29px
+    );
+}
+
+/* Chat: rain-window message board. */
+body[data-theme="rainy-mood"] .chat-panel {
+  overflow: hidden;
+}
+
+body[data-theme="rainy-mood"] .chat-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.20;
+  background:
+    linear-gradient(90deg, transparent 0 14%, rgba(226,244,255,0.08) 14.2% 14.35%, transparent 14.7% 82%, rgba(226,244,255,0.07) 82.2% 82.35%, transparent 82.7%),
+    radial-gradient(ellipse at 20% 0%, rgba(243,199,127,0.08), transparent 16rem);
+}
+
+body[data-theme="rainy-mood"] .chat-form {
+  box-shadow:
+    inset 0 1px 0 rgba(226,244,255,0.14),
+    0 -12px 24px rgba(2, 8, 18, 0.16) !important;
+}
+
+/* Rare soft storm light, not visible bolts. */
+@keyframes rainyMoodWindowBreath {
+  from {
+    opacity: 0.82;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rainyMoodStormGlow {
+  0%, 73%, 100% {
+    filter: brightness(1);
+  }
+
+  75% {
+    filter: brightness(1.16);
+  }
+
+  76% {
+    filter: brightness(1.04);
+  }
+
+  78% {
+    filter: brightness(1.10);
+  }
+
+  81% {
+    filter: brightness(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-theme="rainy-mood"] .theme-effects-rainy-mood::after {
+    animation: none !important;
+  }
+}
+
+/* Rainy Mood pass 4 window room identity END */
