@@ -1210,3 +1210,127 @@ body[data-theme="cafe"] .chat-form {
 }
 
 /* Cafe pass 4 screen identity END */
+
+/* Cafe pass 5 playdeck polish START */
+
+/* Exact overlooked color fix: enemy name on light combat card. */
+body[data-theme="cafe"] #section-playdeck #combat-enemy-name {
+  color: #6b3e27 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-enemy-header .mini-label,
+body[data-theme="cafe"] #section-playdeck .combat-enemy-header span {
+  color: #7f5844 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* Tabletop card-game cafe polish, decorative only. */
+body[data-theme="cafe"] #section-playdeck .combat-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0.8rem;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.13;
+  border-radius: 1.2rem;
+  background:
+    radial-gradient(ellipse at 12% 88%, transparent 0 1.05rem, rgba(107, 62, 39, 0.56) 1.1rem 1.22rem, transparent 1.28rem),
+    radial-gradient(ellipse at 92% 12%, transparent 0 0.9rem, rgba(107, 62, 39, 0.42) 0.96rem 1.06rem, transparent 1.12rem),
+    linear-gradient(90deg, transparent 0 49%, rgba(107, 62, 39, 0.26) 49.4% 50%, transparent 50.4%);
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Combat status card gets a muted menu-board edge without changing text contrast. */
+body[data-theme="cafe"] #section-playdeck .combat-success {
+  border: 1px solid rgba(107, 62, 39, 0.20) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 10px 18px rgba(75, 39, 23, 0.10) !important;
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-success strong,
+body[data-theme="cafe"] #section-playdeck .combat-success p {
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* Enemy card feels like a cafe tabletop stat card. */
+body[data-theme="cafe"] #section-playdeck .combat-enemy-card {
+  border-color: rgba(107, 62, 39, 0.20) !important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(255, 255, 255, 0.34), transparent 5.8rem),
+    linear-gradient(180deg, rgba(255, 248, 238, 0.94), rgba(237, 217, 197, 0.88)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.64),
+    0 12px 22px rgba(75, 39, 23, 0.10) !important;
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-enemy-header {
+  border-bottom: 1px dashed rgba(107, 62, 39, 0.24);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+/* Give the enemy name a tiny coffee-label backing so it never melts into cream. */
+body[data-theme="cafe"] #section-playdeck #combat-enemy-name {
+  display: inline-block;
+  padding: 0.08rem 0.42rem;
+  border-radius: 0.65rem;
+  background: rgba(255, 248, 238, 0.74);
+  border: 1px solid rgba(107, 62, 39, 0.14);
+}
+
+/* Combat stat boxes remain light cards with espresso text. */
+body[data-theme="cafe"] #section-playdeck .combat-stat-grid p,
+body[data-theme="cafe"] #section-playdeck .combat-enemy-card .mini-stat-line {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 248, 238, 0.18)) !important;
+  border-color: rgba(107, 62, 39, 0.14) !important;
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-stat-grid span,
+body[data-theme="cafe"] #section-playdeck .combat-enemy-card .mini-stat-line span {
+  color: #7f5844 !important;
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-stat-grid strong,
+body[data-theme="cafe"] #section-playdeck .combat-enemy-card .mini-stat-line strong {
+  color: #3a2116 !important;
+}
+
+/* Combat log as a subtle receipt slip, not a color change. */
+body[data-theme="cafe"] #section-playdeck .combat-log {
+  border-color: rgba(107, 62, 39, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 252, 246, 0.86), rgba(255, 248, 239, 0.74)),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 22px,
+      rgba(107, 62, 39, 0.045) 22px 23px
+    ) !important;
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-log-header {
+  border-bottom: 1px dashed rgba(107, 62, 39, 0.22);
+}
+
+body[data-theme="cafe"] #section-playdeck .combat-log,
+body[data-theme="cafe"] #section-playdeck .combat-log * {
+  color: #3a2116 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* Cafe pass 5 playdeck polish END */
