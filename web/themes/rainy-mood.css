@@ -806,3 +806,46 @@ body[data-theme="rainy-mood"] *::-webkit-scrollbar-track {
 }
 
 /* Rainy Mood pass 3A storm glass UI END */
+
+/* Rainy Mood video rail-blue tint START */
+
+/* The bottom of the top rail uses this deep storm-blue family.
+   Use the same tone as the video tint anchor. */
+body[data-theme="rainy-mood"] {
+  --rainy-rail-bottom-blue: 5, 16, 30;
+}
+
+/* Let the video darken and cool down before the tint veil lands on top. */
+body[data-theme="rainy-mood"] .rainy-mood-video-bg {
+  filter:
+    brightness(0.70)
+    contrast(1.14)
+    saturate(1.08)
+    hue-rotate(-4deg) !important;
+}
+
+/* Rail-blue tint layer. This is the main color match. */
+body[data-theme="rainy-mood"] .rainy-mood-video-veil {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(243, 199, 127, 0.055), transparent 18rem),
+    radial-gradient(circle at 82% 14%, rgba(58, 116, 166, 0.13), transparent 24rem),
+    radial-gradient(circle at 50% 105%, rgba(var(--rainy-rail-bottom-blue), 0.42), transparent 34rem),
+    linear-gradient(
+      180deg,
+      rgba(var(--rainy-rail-bottom-blue), 0.16) 0%,
+      rgba(var(--rainy-rail-bottom-blue), 0.28) 46%,
+      rgba(var(--rainy-rail-bottom-blue), 0.46) 100%
+    ) !important;
+}
+
+/* A very soft edge vignette keeps the center readable while making the storm mood deeper. */
+body[data-theme="rainy-mood"] .theme-effects-rainy-mood::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 0%, transparent 48%, rgba(var(--rainy-rail-bottom-blue), 0.24) 100%);
+}
+
+/* Rainy Mood video rail-blue tint END */
