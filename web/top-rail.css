@@ -343,3 +343,94 @@ body[data-theme="rainy-mood"] {
 }
 
 /* Top user row vertical nudge END */
+
+/* Top user exact stat typography START */
+
+/* Exact match to the other top rail stat rows:
+   .stat-group.compact p      => font-size 0.72rem, line-height 1.2, normal weight
+   .stat-group.compact strong => font-size 0.74rem, font-weight 900 */
+.top-user-info .top-user-meter-list .metric-name {
+  color: var(--muted) !important;
+  font-family: inherit !important;
+  font-size: 0.72rem !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+}
+
+.top-user-info .top-user-meter-list .metric-value {
+  color: var(--text) !important;
+  font-family: inherit !important;
+  font-size: 0.74rem !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+  text-align: right !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+}
+
+/* Cafe inherits different global text tokens, so force it to match Cafe's own stat section colors. */
+body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-name {
+  color: var(--muted) !important;
+}
+
+body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-value {
+  color: var(--text) !important;
+}
+
+/* Keep XP from inheriting any old meter-label/player-meter styling. */
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-name,
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-value {
+  font-family: inherit !important;
+}
+
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-name {
+  font-size: 0.72rem !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+}
+
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-value {
+  font-size: 0.74rem !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+/* Top user exact stat typography END */
+
+/* Top user visual font correction START */
+
+/* The user section renders visually larger than the other compact stat sections,
+   so this block corrects the perceived size while preserving the same label/value weight pattern. */
+.top-user-info .top-user-meter-list .metric-name {
+  font-size: 0.66rem !important;
+  font-weight: 400 !important;
+  line-height: 1.15 !important;
+}
+
+.top-user-info .top-user-meter-list .metric-value {
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  line-height: 1.15 !important;
+}
+
+/* Prevent older XP-specific overrides from re-inflating XP. */
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-name {
+  font-size: 0.66rem !important;
+  font-weight: 400 !important;
+  line-height: 1.15 !important;
+}
+
+.top-user-info .top-user-meter-list #playdeck-xp-label .metric-value {
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  line-height: 1.15 !important;
+}
+
+/* Top user visual font correction END */
