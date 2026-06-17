@@ -5,6 +5,8 @@
   let activeLayer = null;
   let petalTimer = null;
   let lanternTimer = null;
+  let rainyMoodFx = null;
+  let rainyMoodResizeHandler = null;
 
   function randomBetween(min, max) {
     return Math.random() * (max - min) + min;
@@ -25,6 +27,10 @@
     return themeKey === "cafe";
   }
 
+  function isRainyMoodTheme(themeKey) {
+    return themeKey === "rainy-mood";
+  }
+
   function clearThemeEffects() {
     if (petalTimer) {
       window.clearInterval(petalTimer);
@@ -41,8 +47,8 @@
       activeLayer = null;
     }
 
-    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe");
-    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe");
+    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood");
+    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood");
     document.querySelectorAll(".tokyo-night-rail-signs, .tokyo-night-left-signs").forEach((node) => node.remove());
   }
 
@@ -63,6 +69,10 @@
     }
     if (isCafeTheme(themeKey)) {
       startCafeThemeEffect();
+    }
+
+    if (isRainyMoodTheme(themeKey)) {
+      startRainyMoodThemeEffect();
     }
   }
 
@@ -538,6 +548,191 @@
 
     document.body.append(layer);
     activeLayer = layer;
+  }
+
+  function getRaindropFXConstructor() {
+    return window.RaindropFX || window.RaindropFx || window.raindropFX || window.raindropFx;
+  }
+
+  function clearRainyMoodEffect() {
+    if (rainyMoodResizeHandler) {
+      window.removeEventListener("resize", rainyMoodResizeHandler);
+      rainyMoodResizeHandler = null;
+    }
+
+    if (rainyMoodFx) {
+      try {
+        rainyMoodFx.stop?.();
+        rainyMoodFx.dispose?.();
+        rainyMoodFx.destroy?.();
+      } catch {
+        // The vendored renderer does not guarantee a public teardown method.
+      }
+
+      rainyMoodFx = null;
+    }
+  }
+
+  function createRainyMoodBackgroundCanvas() {
+    const background = document.createElement("canvas");
+    background.width = 1280;
+    background.height = 720;
+
+    const ctx = background.getContext("2d");
+
+    if (!ctx) {
+      return background;
+    }
+
+    const sky = ctx.createLinearGradient(0, 0, 0, background.height);
+    sky.addColorStop(0, "#edf5f7");
+    sky.addColorStop(0.44, "#c8dae2");
+    sky.addColorStop(1, "#8fa7b5");
+
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, background.width, background.height);
+
+    const warmGlow = ctx.createRadialGradient(170, 120, 10, 170, 120, 420);
+    warmGlow.addColorStop(0, "rgba(255, 224, 160, 0.70)");
+    warmGlow.addColorStop(0.38, "rgba(255, 224, 160, 0.28)");
+    warmGlow.addColorStop(1, "rgba(255, 224, 160, 0)");
+
+    ctx.fillStyle = warmGlow;
+    ctx.fillRect(0, 0, background.width, background.height);
+
+    const coolGlow = ctx.createRadialGradient(1080, 120, 10, 1080, 120, 470);
+    coolGlow.addColorStop(0, "rgba(225, 244, 249, 0.82)");
+    coolGlow.addColorStop(0.42, "rgba(225, 244, 249, 0.30)");
+    coolGlow.addColorStop(1, "rgba(225, 244, 249, 0)");
+
+    ctx.fillStyle = coolGlow;
+    ctx.fillRect(0, 0, background.width, background.height);
+
+    ctx.fillStyle = "rgba(28, 42, 55, 0.12)";
+    for (let index = 0; index < 16; index += 1) {
+      const x = 80 + index * 84;
+      const h = 80 + (index % 5) * 34;
+      ctx.fillRect(x, background.height - h, 46, h);
+    }
+
+    ctx.fillStyle = "rgba(255, 236, 185, 0.26)";
+    for (let index = 0; index < 26; index += 1) {
+      const x = 86 + index * 46;
+      const y = 390 + (index % 4) * 32;
+      ctx.fillRect(x, y, 12, 16);
+    }
+
+    const mist = ctx.createLinearGradient(0, 0, background.width, 0);
+    mist.addColorStop(0, "rgba(255, 255, 255, 0.42)");
+    mist.addColorStop(0.50, "rgba(255, 255, 255, 0.18)");
+    mist.addColorStop(1, "rgba(255, 255, 255, 0.36)");
+
+    ctx.fillStyle = mist;
+    ctx.fillRect(0, 0, background.width, background.height);
+
+    return background;
+  }
+
+  function resizeRainyMoodCanvas(canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.max(1, Math.floor(rect.width));
+    const height = Math.max(1, Math.floor(rect.height));
+
+    canvas.width = width;
+    canvas.height = height;
+
+    try {
+      rainyMoodFx?.resize?.(width, height);
+    } catch {
+      // Resize failures should fall back visually instead of breaking the UI.
+    }
+  }
+
+  function startRainyMoodThemeEffect() {
+    document.documentElement.classList.add("theme-effect-rainy-mood");
+    document.body?.classList.add("theme-effect-rainy-mood");
+
+    const layer = document.createElement("div");
+    layer.className = "theme-effects-layer theme-effects-rainy-mood";
+    layer.setAttribute("aria-hidden", "true");
+
+    const canvas = document.createElement("canvas");
+    canvas.className = "rainy-mood-glass-canvas";
+
+    const fallback = document.createElement("div");
+    fallback.className = "rainy-mood-static-glass";
+
+    layer.append(canvas, fallback);
+    document.body.append(layer);
+    activeLayer = layer;
+
+    const RaindropFXConstructor = getRaindropFXConstructor();
+    const hasWebGL2 = Boolean(canvas.getContext("webgl2"));
+
+    if (reduceMotionQuery.matches || !RaindropFXConstructor || !hasWebGL2) {
+      layer.classList.add("rainy-mood-fallback");
+      return;
+    }
+
+    resizeRainyMoodCanvas(canvas);
+
+    try {
+      rainyMoodFx = new RaindropFXConstructor({
+        canvas,
+        background: createRainyMoodBackgroundCanvas(),
+        spawnSize: [18, 76],
+        spawnInterval: [0.12, 0.36],
+        spawnLimit: 520,
+        slipRate: 0.62,
+        motionInterval: [0.20, 0.70],
+        xShifting: [0, 0.032],
+        colliderSize: 0.88,
+        trailDropDensity: 0.18,
+        trailDropSize: [0.28, 0.48],
+        trailDistance: [24, 42],
+        trailSpread: 0.48,
+        initialSpread: 0.52,
+        shrinkRate: 0.014,
+        velocitySpread: 0.32,
+        evaporate: 18,
+        gravity: 1900,
+        backgroundBlurSteps: 3,
+        mist: true,
+        mistColor: [0.86, 0.93, 0.96, 0.22],
+        mistTime: 1.8,
+        mistBlurStep: 4,
+        dropletsPerSecond: 420,
+        dropletsPerSeconds: 420,
+        dropletSize: [8, 24],
+        smoothRaindrop: [0.96, 1.0],
+        refractBase: 0.30,
+        refractScale: 0.52,
+        raindropCompose: "smoother",
+        raindropLightPos: [-1, 1, 2, 0],
+        raindropDiffuseLight: [0.34, 0.38, 0.42],
+        raindropShadowOffset: 0.62,
+        raindropSpecularLight: [0.08, 0.08, 0.08],
+        raindropSpecularShininess: 64,
+        raindropLightBump: 0.55
+      });
+
+      const startResult = rainyMoodFx.start?.();
+
+      if (startResult?.catch) {
+        startResult.catch(() => {
+          layer.classList.add("rainy-mood-fallback");
+        });
+      }
+
+      rainyMoodResizeHandler = () => {
+        resizeRainyMoodCanvas(canvas);
+      };
+
+      window.addEventListener("resize", rainyMoodResizeHandler);
+    } catch {
+      rainyMoodFx = null;
+      layer.classList.add("rainy-mood-fallback");
+    }
   }
   window.NamigotchiThemeEffects = {
     setActiveThemeEffect,
