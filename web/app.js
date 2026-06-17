@@ -494,6 +494,34 @@ function setTextIfChanged(element, value) {
     element.textContent = nextValue;
   }
 }
+function setTopUserMetricLabel(element, label, value) {
+  if (!element) {
+    return;
+  }
+
+  const nextLabel = String(label ?? "");
+  const nextValue = String(value ?? "");
+
+  if (
+    element.dataset.metricLabel === nextLabel &&
+    element.dataset.metricValue === nextValue
+  ) {
+    return;
+  }
+
+  element.dataset.metricLabel = nextLabel;
+  element.dataset.metricValue = nextValue;
+
+  const labelSpan = document.createElement("span");
+  labelSpan.className = "metric-name";
+  labelSpan.textContent = nextLabel;
+
+  const valueStrong = document.createElement("strong");
+  valueStrong.className = "metric-value";
+  valueStrong.textContent = nextValue;
+
+  element.replaceChildren(labelSpan, valueStrong);
+}
 
 function setTitleIfChanged(element, value) {
   if (!element) {
@@ -1214,14 +1242,15 @@ function renderPlayerStatus(status) {
   );
   setWidthIfChanged(playdeckXpFill, `${xpPercent}%`);
 
-  setTextIfChanged(playdeckHpLabel, "Sparkles: 100 / 100");
+  setTopUserMetricLabel(playdeckHpLabel, "Sparkles:", "100 / 100");
   setWidthIfChanged(playdeckHpFill, "100%");
   const currentStreak = Math.max(0, Number(tick.playdeckStreak ?? 0));
   const maxStreak = Math.max(currentStreak, Number(tick.playdeckMaxStreak ?? currentStreak));
 
-  setTextIfChanged(
+  setTopUserMetricLabel(
     currentActionLabel,
-    `Current/Max Streak: ${currentStreak.toLocaleString()} / ${maxStreak.toLocaleString()}`
+    "Current/Max Streak:",
+    `${currentStreak.toLocaleString()} / ${maxStreak.toLocaleString()}`
   );
 
   syncTickProgress(tick);

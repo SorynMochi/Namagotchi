@@ -199,3 +199,117 @@ body[data-theme="rainy-mood"] {
 }
 
 /* Top rail current max streak label END */
+
+/* Top user metric text polish START */
+
+:root {
+  --top-user-metric-label: var(--muted);
+  --top-user-metric-value: var(--text);
+  --top-user-metric-shadow: none;
+  --top-user-meter-width: min(220px, 34%);
+}
+
+body[data-theme="nami-default"],
+body[data-theme="midnight"],
+body[data-theme="strawberry"],
+body[data-theme="sakura-dark"],
+body[data-theme="tokyo-night"] {
+  --top-user-metric-label: var(--muted);
+  --top-user-metric-value: var(--text);
+}
+
+body[data-theme="sakura-light"],
+body[data-theme="candy"] {
+  --top-user-metric-label: var(--muted);
+  --top-user-metric-value: var(--text);
+  --top-user-metric-shadow: none;
+}
+
+body[data-theme="cafe"] {
+  --top-user-metric-label: var(--theme-legacy-muted-blue-text-72, var(--muted));
+  --top-user-metric-value: var(--text);
+}
+
+body[data-theme="rainy-mood"] {
+  --top-user-metric-label: #c8d9e4;
+  --top-user-metric-value: #f5fbff;
+  --top-user-metric-shadow: none;
+}
+
+.top-user-info .top-user-meter-list {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+}
+
+.top-user-info .top-user-meter-list .user-meter {
+  width: 100%;
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--top-user-meter-width);
+  align-items: center;
+  column-gap: 16px;
+}
+
+.top-user-info .top-user-meter-list .tick-meter {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.top-user-info .top-user-meter-list .tick-meter .meter-label {
+  grid-column: 1 / -1;
+}
+
+.top-user-info .top-user-meter-list .meter-label {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 12px;
+  min-width: 0;
+  padding: 0 !important;
+  margin: 0;
+  color: var(--top-user-metric-label) !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  line-height: 1.22 !important;
+  letter-spacing: 0;
+  text-shadow: var(--top-user-metric-shadow) !important;
+}
+
+.top-user-info .top-user-meter-list .meter-label .metric-name {
+  min-width: 0;
+  color: var(--top-user-metric-label);
+  font: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-user-info .top-user-meter-list .meter-label .metric-value {
+  justify-self: end;
+  color: var(--top-user-metric-value);
+  font: inherit;
+  font-weight: 900;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.top-user-info .top-user-meter-list .meter-track {
+  justify-self: end;
+  width: 100%;
+  min-width: 120px;
+}
+
+@media (max-width: 900px) {
+  .top-user-info .top-user-meter-list .user-meter {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 4px;
+  }
+
+  .top-user-info .top-user-meter-list .meter-track {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Top user metric text polish END */
