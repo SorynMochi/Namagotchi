@@ -1216,14 +1216,12 @@ function renderPlayerStatus(status) {
 
   setTextIfChanged(playdeckHpLabel, "Sparkles: 100 / 100");
   setWidthIfChanged(playdeckHpFill, "100%");
-
-  const progressActionName = tick.activeGatheringTask === "doom_scrolling"
-    ? "Scrolling"
-    : tick.activeGatheringName;
+  const currentStreak = Math.max(0, Number(tick.playdeckStreak ?? 0));
+  const maxStreak = Math.max(currentStreak, Number(tick.playdeckMaxStreak ?? currentStreak));
 
   setTextIfChanged(
     currentActionLabel,
-    `Playdeck + ${progressActionName} [x${Number(tick.playdeckStreak ?? 0).toLocaleString()}]`
+    `Current/Max Streak: ${currentStreak.toLocaleString()} / ${maxStreak.toLocaleString()}`
   );
 
   syncTickProgress(tick);

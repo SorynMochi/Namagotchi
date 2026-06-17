@@ -161,3 +161,22 @@ body[data-theme="rainy-mood"] {
 }
 
 /* Top player tick pill END */
+
+/* Top rail current max streak label START */
+
+.top-user-info .tick-meter .meter-track {
+  display: none !important;
+}
+
+.top-user-info .tick-meter {
+  margin-top: 0.22rem;
+}
+
+.top-user-info .tick-meter .meter-label {
+  color: currentColor;
+  opacity: 0.96;
+  letter-spacing: 0.01em;
+  text-shadow: inherit;
+}
+
+/* Top rail current max streak label END */
