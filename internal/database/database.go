@@ -2087,47 +2087,7 @@ func (s *Store) GenerateDevPassiveNamiMessages(ctx context.Context) error {
 	}
 	defer tx.Rollback(ctx)
 
-	var playerID int64
-	var companion CompanionState
-
-	err = tx.QueryRow(ctx, `
-		select
-			p.id,
-			c.companion_name,
-			c.level,
-			c.total_xp,
-			c.xp_into_level,
-			c.mood_score::float8,
-			c.satiety,
-			c.connection,
-			c.energy,
-			c.comfort,
-			c.playfulness,
-			c.inspiration,
-			c.cleanliness,
-			c.status,
-			c.last_interaction_at
-		from players p
-		join companion_states c on c.player_id = p.id
-		where p.display_name = 'Soryn'
-		for update
-	`).Scan(
-		&playerID,
-		&companion.CompanionName,
-		&companion.Level,
-		&companion.TotalXP,
-		&companion.XPIntoLevel,
-		&companion.MoodScore,
-		&companion.Satiety,
-		&companion.Connection,
-		&companion.Energy,
-		&companion.Comfort,
-		&companion.Playfulness,
-		&companion.Inspiration,
-		&companion.Cleanliness,
-		&companion.Status,
-		&companion.LastInteractionAt,
-	)
+	playerID, companion, err := loadDevCompanionForUpdateTx(ctx, tx)
 	if err != nil {
 		return fmt.Errorf("load companion for passive nami messages: %w", err)
 	}

@@ -435,16 +435,22 @@ func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	messages, err := s.Store.GetRecentDevNamiMessages(r.Context(), 50)
+	accountID, err := accountIDForRequest(r)
+	if err != nil {
+		log.Printf("get account for nami messages failed: %v", err)
+		writeError(w, http.StatusUnauthorized, "login required")
+		return
+	}
+
+	messages, err := s.Store.GetRecentNamiMessagesForAccount(r.Context(), accountID, 50)
 	if err != nil {
 		log.Printf("get nami messages failed: %v", err)
-		writeError(w, http.StatusNotFound, "nami messages not found; visit /api/dev/seed-player first")
+		writeError(w, http.StatusNotFound, "nami messages not found")
 		return
 	}
 
 	writeJSON(w, http.StatusOK, messages)
 }
-
 func (s *Server) databaseStatus() string {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
