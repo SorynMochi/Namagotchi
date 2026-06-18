@@ -306,3 +306,17 @@ func constantTimeStringEqual(left string, right string) bool {
 
 	return subtle.ConstantTimeCompare(leftHash[:], rightHash[:]) == 1
 }
+
+func (s *Server) HandleDevLock(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	clearDevUnlockCookie(w, r)
+
+	writeJSON(w, http.StatusOK, devUnlockResponse{
+		OK:      true,
+		Message: "Dev console locked.",
+	})
+}

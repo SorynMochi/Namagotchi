@@ -60,6 +60,13 @@ const devConsoleHTML = `<!doctype html>
       background: #ff6b6b;
     }
 
+    button.secondary {
+      margin-bottom: 18px;
+      color: #fcefff;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
     pre {
       min-height: 220px;
       margin-top: 18px;
@@ -75,6 +82,7 @@ const devConsoleHTML = `<!doctype html>
 <body>
   <main>
     <p><a href="/">Back to game</a></p>
+    <button id="dev-lock-button" class="secondary" type="button">Lock Dev Console</button>
     <h1>Namigotchi Dev Console</h1>
     <p>This page is served only after the backend verifies your dev access.</p>
 
@@ -109,6 +117,7 @@ const devConsoleHTML = `<!doctype html>
 
   <script>
     const log = document.querySelector("#dev-log");
+    const lockButton = document.querySelector("#dev-lock-button");
 
     function writeLog(value) {
       if (typeof value === "string") {
@@ -117,6 +126,24 @@ const devConsoleHTML = `<!doctype html>
       }
 
       log.textContent = JSON.stringify(value, null, 2);
+    }
+
+    async function lockDevConsole() {
+      if (!lockButton) {
+        return;
+      }
+
+      const originalText = lockButton.textContent;
+      lockButton.disabled = true;
+      lockButton.textContent = "Locking...";
+
+      try {
+        await fetch("/api/dev/lock", { method: "POST" });
+      } finally {
+        lockButton.disabled = false;
+        lockButton.textContent = originalText;
+        window.location.reload();
+      }
     }
 
     async function runDevCommand(endpoint, button) {
@@ -156,6 +183,10 @@ const devConsoleHTML = `<!doctype html>
         button.disabled = false;
         button.textContent = originalText;
       }
+    }
+
+    if (lockButton) {
+      lockButton.addEventListener("click", lockDevConsole);
     }
 
     document.querySelectorAll("[data-endpoint]").forEach((button) => {

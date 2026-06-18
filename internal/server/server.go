@@ -78,6 +78,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/auth/google/callback", s.HandleAuthGoogleCallback)
 
 	mux.HandleFunc("/api/dev/unlock", s.requireDev(s.HandleDevUnlock))
+	mux.HandleFunc("/api/dev/lock", s.requireDev(s.HandleDevLock))
 	mux.HandleFunc("/api/dev/seed-player", s.requireDev(s.requireDevUnlock(s.withDevAudit("seed-player", s.HandleSeedDevPlayer))))
 	mux.HandleFunc("/api/dev/force-tick", s.requireDev(s.requireDevUnlock(s.withDevAudit("force-tick", s.HandleForceTick))))
 	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.requireDev(s.requireDevUnlock(s.withDevAudit("reset-playdeck-streak", s.HandleResetPlaydeckStreak))))
