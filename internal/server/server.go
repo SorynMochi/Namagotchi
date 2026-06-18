@@ -1,4 +1,4 @@
-﻿package server
+package server
 
 import (
 	"context"
@@ -69,7 +69,12 @@ func (s *Server) Routes() http.Handler {
 
 	mux.HandleFunc("/api/status", s.HandleStatus)
 	mux.HandleFunc("/health", s.HandleStatus)
-	mux.HandleFunc("/api/dev/seed-player", s.HandleSeedDevPlayer)
+mux.HandleFunc("/api/auth/register", s.HandleAuthRegister)
+mux.HandleFunc("/api/auth/login", s.HandleAuthLogin)
+mux.HandleFunc("/api/auth/logout", s.HandleAuthLogout)
+mux.HandleFunc("/api/auth/me", s.HandleAuthMe)
+mux.HandleFunc("/api/auth/google/start", s.HandleAuthGoogleStart)
+mux.HandleFunc("/api/auth/google/callback", s.HandleAuthGoogleCallback)	mux.HandleFunc("/api/dev/seed-player", s.HandleSeedDevPlayer)
 	mux.HandleFunc("/api/dev/force-tick", s.HandleForceTick)
 	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.HandleResetPlaydeckStreak)
 	mux.HandleFunc("/api/dev/rewind-care-decay", s.HandleRewindCareDecay)
