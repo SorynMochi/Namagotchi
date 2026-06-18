@@ -3052,7 +3052,7 @@ function namiCareMessage(result) {
   const caption = companion.caption || "";
 
   if (Number(result?.levelUps ?? 0) > 0) {
-    return `I leveled up! IÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢m level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
+    return `I leveled up! I am level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
   }
 
   switch (result?.action) {
