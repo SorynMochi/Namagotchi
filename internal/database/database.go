@@ -1043,7 +1043,12 @@ func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, Compani
 	var playerID int64
 	var companion CompanionState
 
-	err := tx.QueryRow(ctx, `
+	playerID, err := playerIDForContextTx(ctx, tx)
+	if err != nil {
+		return 0, CompanionState{}, err
+	}
+
+	err = tx.QueryRow(ctx, `
 		select
 			p.id,
 			c.companion_name,
@@ -1075,9 +1080,9 @@ coalesce(c.cleanliness_decay_remainder, 0)::float8,
 coalesce(c.sleep_energy_recovery_remainder, 0)::float8
 		from players p
 		join companion_states c on c.player_id = p.id
-		where p.display_name = 'Soryn'
+		where p.id = $1
 		for update
-	`).Scan(
+	`, playerID).Scan(
 		&playerID,
 		&companion.CompanionName,
 		&companion.Level,
