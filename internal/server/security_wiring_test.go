@@ -21,6 +21,7 @@ func TestSecuritySensitiveRouteWiring(t *testing.T) {
 		`mux.HandleFunc("/api/dev/lock", s.requireDev(s.requireCSRF(s.HandleDevLock)))`,
 		`mux.HandleFunc("/api/dev/force-tick", s.requireDev(s.requireDevUnlock(s.withDevAudit("force-tick", s.requireCSRF(s.HandleForceTick)))))`,
 		`mux.HandleFunc("/api/dev/audit-logs", s.requireDev(s.requireDevUnlock(s.HandleDevAuditLogs)))`,
+		`mux.HandleFunc("/api/dev/security-events", s.requireDev(s.requireDevUnlock(s.HandleDevSecurityEvents)))`,
 		`mux.HandleFunc("/api/player/sync", s.requireAuth(s.requireCSRF(s.HandlePlayerSync)))`,
 		`mux.HandleFunc("/api/player/gathering", s.requireAuth(s.requireCSRF(s.HandleGatheringTask)))`,
 		`mux.HandleFunc("/api/player/care", s.requireAuth(s.requireCSRF(s.HandleCareAction)))`,

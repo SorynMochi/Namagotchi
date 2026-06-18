@@ -86,6 +86,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/dev/rewind-care-decay", s.requireDev(s.requireDevUnlock(s.withDevAudit("rewind-care-decay", s.requireCSRF(s.HandleRewindCareDecay)))))
 	mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.requireDev(s.requireDevUnlock(s.withDevAudit("spawn-wardrobe-item", s.requireCSRF(s.HandleSpawnDevWardrobeItem)))))
 	mux.HandleFunc("/api/dev/audit-logs", s.requireDev(s.requireDevUnlock(s.HandleDevAuditLogs)))
+	mux.HandleFunc("/api/dev/security-events", s.requireDev(s.requireDevUnlock(s.HandleDevSecurityEvents)))
 	mux.HandleFunc("/dev", s.requireDev(s.HandleDevConsolePage))
 	mux.HandleFunc("/dev/", s.requireDev(s.HandleDevConsolePage))
 

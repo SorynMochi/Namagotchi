@@ -34,3 +34,19 @@ func (s *Server) recordSecurityEvent(r *http.Request, statusCode int, eventType 
 		log.Printf("record security event failed: %v", err)
 	}
 }
+
+func (s *Server) HandleDevSecurityEvents(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	logs, err := s.Store.RecentSecurityEventLogs(r.Context(), 100)
+	if err != nil {
+		log.Printf("get security event logs failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "failed to load security event logs")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, logs)
+}

@@ -110,6 +110,10 @@ const devConsoleHTML = `<!doctype html>
   <h2>Audit</h2>
   <button data-endpoint="/api/dev/audit-logs" data-method="GET">Refresh Audit Logs</button>
 </div>
+      <div class="card">
+        <h2>Security</h2>
+        <button data-endpoint="/api/dev/security-events" data-method="GET">Refresh Security Events</button>
+      </div>
     </section>
 
     <pre id="dev-log">Ready.</pre>
