@@ -234,10 +234,10 @@ func (s *Server) HandleWardrobeItemDetail(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	playerID, err := s.Store.DevPlayerID(r.Context())
+	playerID, err := s.playerIDForRequest(r)
 	if err != nil {
-		log.Printf("get dev player for wardrobe item failed: %v", err)
-		writeError(w, http.StatusNotFound, "player not found; visit /api/dev/seed-player first")
+		log.Printf("get player for wardrobe item failed: %v", err)
+		writeError(w, http.StatusNotFound, "player not found")
 		return
 	}
 
@@ -306,17 +306,20 @@ func (s *Server) HandleResetPlaydeckStreak(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	playerID, err := s.Store.DevPlayerID(r.Context())
+	if err != nil {
+		log.Printf("get dev player for reset playdeck streak failed: %v", err)
+		writeError(w, http.StatusNotFound, "player not found")
+		return
+	}
+
 	commandTag, err := s.Store.Pool.Exec(r.Context(), `
-update player_tick_state
-set playdeck_streak = 0,
-last_tick_at = now(),
-updated_at = now()
-where player_id = (
-select id
-from players
-where display_name = 'Soryn'
-)
-`)
+        update player_tick_state
+        set playdeck_streak = 0,
+            last_tick_at = now(),
+            updated_at = now()
+        where player_id = $1
+    `, playerID)
 	if err != nil {
 		log.Printf("reset playdeck streak failed: %v", err)
 		writeError(w, http.StatusInternalServerError, "failed to reset playdeck streak")
@@ -333,6 +336,7 @@ where display_name = 'Soryn'
 		Message: "Playdeck streak reset.",
 	})
 }
+
 func (s *Server) HandleRewindCareDecay(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
@@ -451,6 +455,7 @@ func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
 
 	writeJSON(w, http.StatusOK, messages)
 }
+
 func (s *Server) databaseStatus() string {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
@@ -496,10 +501,10 @@ func (s *Server) HandleEquipWardrobeItem(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	playerID, err := s.Store.DevPlayerID(r.Context())
+	playerID, err := s.playerIDForRequest(r)
 	if err != nil {
-		log.Printf("get dev player for equip failed: %v", err)
-		writeError(w, http.StatusNotFound, "player not found; visit /api/dev/seed-player first")
+		log.Printf("get player for equip failed: %v", err)
+		writeError(w, http.StatusNotFound, "player not found")
 		return
 	}
 
@@ -534,10 +539,10 @@ func (s *Server) HandleUnequipWardrobeItem(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	playerID, err := s.Store.DevPlayerID(r.Context())
+	playerID, err := s.playerIDForRequest(r)
 	if err != nil {
-		log.Printf("get dev player for unequip failed: %v", err)
-		writeError(w, http.StatusNotFound, "player not found; visit /api/dev/seed-player first")
+		log.Printf("get player for unequip failed: %v", err)
+		writeError(w, http.StatusNotFound, "player not found")
 		return
 	}
 

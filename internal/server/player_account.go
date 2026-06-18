@@ -15,3 +15,12 @@ func accountIDForRequest(r *http.Request) (int64, error) {
 
 	return accountID, nil
 }
+
+func (s *Server) playerIDForRequest(r *http.Request) (int64, error) {
+	accountID, err := accountIDForRequest(r)
+	if err != nil {
+		return 0, err
+	}
+
+	return s.Store.PlayerIDForAccount(r.Context(), accountID)
+}
