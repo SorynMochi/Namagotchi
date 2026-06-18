@@ -65,32 +65,36 @@ func New(store *database.Store, startedAt time.Time) *Server {
 }
 
 func (s *Server) Routes() http.Handler {
-	mux := http.NewServeMux()
+mux := http.NewServeMux()
 
-	mux.HandleFunc("/api/status", s.HandleStatus)
-	mux.HandleFunc("/health", s.HandleStatus)
+mux.HandleFunc("/api/status", s.HandleStatus)
+mux.HandleFunc("/health", s.HandleStatus)
+
 mux.HandleFunc("/api/auth/register", s.HandleAuthRegister)
 mux.HandleFunc("/api/auth/login", s.HandleAuthLogin)
 mux.HandleFunc("/api/auth/logout", s.HandleAuthLogout)
 mux.HandleFunc("/api/auth/me", s.HandleAuthMe)
 mux.HandleFunc("/api/auth/google/start", s.HandleAuthGoogleStart)
-mux.HandleFunc("/api/auth/google/callback", s.HandleAuthGoogleCallback)	mux.HandleFunc("/api/dev/seed-player", s.HandleSeedDevPlayer)
-	mux.HandleFunc("/api/dev/force-tick", s.HandleForceTick)
-	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.HandleResetPlaydeckStreak)
-	mux.HandleFunc("/api/dev/rewind-care-decay", s.HandleRewindCareDecay)
-	mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.HandleSpawnDevWardrobeItem)
-	mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
-	mux.HandleFunc("/api/player/wardrobe/item", s.HandleWardrobeItemDetail)
-	mux.HandleFunc("/api/player/wardrobe/equip", s.HandleEquipWardrobeItem)
-	mux.HandleFunc("/api/player/wardrobe/unequip", s.HandleUnequipWardrobeItem)
-	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
-	mux.HandleFunc("/api/player/gathering", s.HandleGatheringTask)
-	mux.HandleFunc("/api/player/care", s.HandleCareAction)
-	mux.HandleFunc("/api/nami/messages", s.HandleNamiMessages)
+mux.HandleFunc("/api/auth/google/callback", s.HandleAuthGoogleCallback)
 
-	mux.Handle("/", http.FileServer(http.Dir("web")))
+mux.HandleFunc("/api/dev/seed-player", s.HandleSeedDevPlayer)
+mux.HandleFunc("/api/dev/force-tick", s.HandleForceTick)
+mux.HandleFunc("/api/dev/reset-playdeck-streak", s.HandleResetPlaydeckStreak)
+mux.HandleFunc("/api/dev/rewind-care-decay", s.HandleRewindCareDecay)
+mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.HandleSpawnDevWardrobeItem)
 
-	return mux
+mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
+mux.HandleFunc("/api/player/wardrobe/item", s.HandleWardrobeItemDetail)
+mux.HandleFunc("/api/player/wardrobe/equip", s.HandleEquipWardrobeItem)
+mux.HandleFunc("/api/player/wardrobe/unequip", s.HandleUnequipWardrobeItem)
+mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
+mux.HandleFunc("/api/player/gathering", s.HandleGatheringTask)
+mux.HandleFunc("/api/player/care", s.HandleCareAction)
+mux.HandleFunc("/api/nami/messages", s.HandleNamiMessages)
+
+mux.Handle("/", http.FileServer(http.Dir("web")))
+
+return mux
 }
 
 func (s *Server) HandleStatus(w http.ResponseWriter, r *http.Request) {
