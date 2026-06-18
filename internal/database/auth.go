@@ -576,7 +576,6 @@ func reservedDisplayNameKey(displayName string) string {
 	replacer := strings.NewReplacer(
 		"0", "o",
 		"1", "i",
-		"!", "i",
 		"3", "e",
 		"4", "a",
 		"@", "a",
