@@ -4877,6 +4877,11 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 	var gatheringRemainder float64
 	var lastTickAt time.Time
 
+	playerID, err = s.DevPlayerID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	if err := tx.QueryRow(ctx, `
 		select
 			p.id,
@@ -4894,9 +4899,9 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 		from players p
 		join companion_states c on c.player_id = p.id
 		join player_tick_state t on t.player_id = p.id
-		where p.display_name = 'Soryn'
+		where p.id = $1
 		for update
-	`).Scan(
+	`, playerID).Scan(
 		&playerID,
 		&level,
 		&totalXP,
