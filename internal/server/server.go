@@ -65,37 +65,37 @@ func New(store *database.Store, startedAt time.Time) *Server {
 }
 
 func (s *Server) Routes() http.Handler {
-mux := http.NewServeMux()
+	mux := http.NewServeMux()
 
-mux.HandleFunc("/api/status", s.HandleStatus)
-mux.HandleFunc("/health", s.HandleStatus)
+	mux.HandleFunc("/api/status", s.HandleStatus)
+	mux.HandleFunc("/health", s.HandleStatus)
 
-mux.HandleFunc("/api/auth/register", s.HandleAuthRegister)
-mux.HandleFunc("/api/auth/login", s.HandleAuthLogin)
-mux.HandleFunc("/api/auth/logout", s.HandleAuthLogout)
-mux.HandleFunc("/api/auth/me", s.HandleAuthMe)
-mux.HandleFunc("/api/auth/google/start", s.HandleAuthGoogleStart)
-mux.HandleFunc("/api/auth/google/callback", s.HandleAuthGoogleCallback)
+	mux.HandleFunc("/api/auth/register", s.HandleAuthRegister)
+	mux.HandleFunc("/api/auth/login", s.HandleAuthLogin)
+	mux.HandleFunc("/api/auth/logout", s.HandleAuthLogout)
+	mux.HandleFunc("/api/auth/me", s.HandleAuthMe)
+	mux.HandleFunc("/api/auth/google/start", s.HandleAuthGoogleStart)
+	mux.HandleFunc("/api/auth/google/callback", s.HandleAuthGoogleCallback)
 
-mux.HandleFunc("/api/dev/seed-player", s.requireDev(s.HandleSeedDevPlayer))
-mux.HandleFunc("/api/dev/force-tick", s.requireDev(s.HandleForceTick))
-mux.HandleFunc("/api/dev/reset-playdeck-streak", s.requireDev(s.HandleResetPlaydeckStreak))
-mux.HandleFunc("/api/dev/rewind-care-decay", s.requireDev(s.HandleRewindCareDecay))
-mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.requireDev(s.HandleSpawnDevWardrobeItem))
+	mux.HandleFunc("/api/dev/seed-player", s.requireDev(s.HandleSeedDevPlayer))
+	mux.HandleFunc("/api/dev/force-tick", s.requireDev(s.HandleForceTick))
+	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.requireDev(s.HandleResetPlaydeckStreak))
+	mux.HandleFunc("/api/dev/rewind-care-decay", s.requireDev(s.HandleRewindCareDecay))
+	mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.requireDev(s.HandleSpawnDevWardrobeItem))
 
-mux.HandleFunc("/api/player/status", s.requireAuth(s.HandlePlayerStatus))
-mux.HandleFunc("/api/player/sync", s.requireAuth(s.HandlePlayerSync))
-mux.HandleFunc("/api/player/wardrobe/item", s.requireAuth(s.HandleWardrobeItemDetail))
-mux.HandleFunc("/api/player/wardrobe/equip", s.requireAuth(s.HandleEquipWardrobeItem))
-mux.HandleFunc("/api/player/wardrobe/unequip", s.requireAuth(s.HandleUnequipWardrobeItem))
-mux.HandleFunc("/api/player/settle-ticks", s.requireAuth(s.HandleSettleTicks))
-mux.HandleFunc("/api/player/gathering", s.requireAuth(s.HandleGatheringTask))
-mux.HandleFunc("/api/player/care", s.requireAuth(s.HandleCareAction))
-mux.HandleFunc("/api/nami/messages", s.requireAuth(s.HandleNamiMessages))
+	mux.HandleFunc("/api/player/status", s.requireAuth(s.HandlePlayerStatus))
+	mux.HandleFunc("/api/player/sync", s.requireAuth(s.HandlePlayerSync))
+	mux.HandleFunc("/api/player/wardrobe/item", s.requireAuth(s.HandleWardrobeItemDetail))
+	mux.HandleFunc("/api/player/wardrobe/equip", s.requireAuth(s.HandleEquipWardrobeItem))
+	mux.HandleFunc("/api/player/wardrobe/unequip", s.requireAuth(s.HandleUnequipWardrobeItem))
+	mux.HandleFunc("/api/player/settle-ticks", s.requireAuth(s.HandleSettleTicks))
+	mux.HandleFunc("/api/player/gathering", s.requireAuth(s.HandleGatheringTask))
+	mux.HandleFunc("/api/player/care", s.requireAuth(s.HandleCareAction))
+	mux.HandleFunc("/api/nami/messages", s.requireAuth(s.HandleNamiMessages))
 
-mux.Handle("/", http.FileServer(http.Dir("web")))
+	mux.Handle("/", http.FileServer(http.Dir("web")))
 
-return mux
+	return mux
 }
 
 func (s *Server) HandleStatus(w http.ResponseWriter, r *http.Request) {
@@ -156,61 +156,61 @@ func (s *Server) HandleSpawnDevWardrobeItem(w http.ResponseWriter, r *http.Reque
 }
 
 func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
-if r.Method != http.MethodGet {
-writeError(w, http.StatusMethodNotAllowed, "method not allowed")
-return
-}
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
 
-status, err := s.Store.GetDevPlayerStatus(r.Context())
-if err != nil {
-log.Printf("get player status failed: %v", err)
-writeError(w, http.StatusNotFound, "player status not found")
-return
-}
+	status, err := s.Store.GetDevPlayerStatus(r.Context())
+	if err != nil {
+		log.Printf("get player status failed: %v", err)
+		writeError(w, http.StatusNotFound, "player status not found")
+		return
+	}
 
-writeJSON(w, http.StatusOK, status)
+	writeJSON(w, http.StatusOK, status)
 }
 
 func (s *Server) HandlePlayerSync(w http.ResponseWriter, r *http.Request) {
-if r.Method != http.MethodPost {
-writeError(w, http.StatusMethodNotAllowed, "method not allowed")
-return
-}
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
 
-if err := s.syncPlayerState(r.Context()); err != nil {
-log.Printf("sync player state failed: %v", err)
-writeError(w, http.StatusInternalServerError, "player sync failed")
-return
-}
+	if err := s.syncPlayerState(r.Context()); err != nil {
+		log.Printf("sync player state failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "player sync failed")
+		return
+	}
 
-status, err := s.Store.GetDevPlayerStatus(r.Context())
-if err != nil {
-log.Printf("get player status after sync failed: %v", err)
-writeError(w, http.StatusNotFound, "player status not found")
-return
-}
+	status, err := s.Store.GetDevPlayerStatus(r.Context())
+	if err != nil {
+		log.Printf("get player status after sync failed: %v", err)
+		writeError(w, http.StatusNotFound, "player status not found")
+		return
+	}
 
-writeJSON(w, http.StatusOK, status)
+	writeJSON(w, http.StatusOK, status)
 }
 
 func (s *Server) syncPlayerState(ctx context.Context) error {
-if _, err := s.Store.SettleDevTicks(ctx, 0); err != nil {
-return err
-}
+	if _, err := s.Store.SettleDevTicks(ctx, 0); err != nil {
+		return err
+	}
 
-if err := s.Store.SettleDevCareActions(ctx); err != nil {
-return err
-}
+	if err := s.Store.SettleDevCareActions(ctx); err != nil {
+		return err
+	}
 
-if err := s.Store.SettleDevCareDecay(ctx); err != nil {
-return err
-}
+	if err := s.Store.SettleDevCareDecay(ctx); err != nil {
+		return err
+	}
 
-if err := s.Store.GenerateDevPassiveNamiMessages(ctx); err != nil {
-return err
-}
+	if err := s.Store.GenerateDevPassiveNamiMessages(ctx); err != nil {
+		return err
+	}
 
-return nil
+	return nil
 }
 
 func (s *Server) HandleWardrobeItemDetail(w http.ResponseWriter, r *http.Request) {
@@ -420,7 +420,7 @@ func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	messages, err := s.Store.GetRecentDevNamiMessages(r.Context(), 100)
+	messages, err := s.Store.GetRecentDevNamiMessages(r.Context(), 50)
 	if err != nil {
 		log.Printf("get nami messages failed: %v", err)
 		writeError(w, http.StatusNotFound, "nami messages not found; visit /api/dev/seed-player first")
@@ -556,4 +556,3 @@ func decodeWardrobeItemActionRequest(r *http.Request) (WardrobeItemActionRequest
 
 	return request, nil
 }
-

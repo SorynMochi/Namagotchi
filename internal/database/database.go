@@ -16,10 +16,11 @@ import (
 )
 
 const (
-	TickSeconds       = 5
-	SyncXPPerTick     = int64(10)
-	ActivityXPPerTick = int64(10)
-	MaxOfflineTicks   = int64(8640)
+	TickSeconds             = 5
+	SyncXPPerTick           = int64(10)
+	ActivityXPPerTick       = int64(10)
+	MaxOfflineTicks         = int64(8640)
+	NamiMessageStorageLimit = 50
 
 	CareDecayMinimumSeconds      = 5 * 60
 	SleepEnergyRecoveryPerHour   = 10.0
@@ -357,26 +358,26 @@ func usefulCareXP(current int, delta int) int64 {
 }
 
 func (s *Store) DevPlayerID(ctx context.Context) (int64, error) {
-if accountID, ok := AuthAccountIDFromContext(ctx); ok {
-playerID, err := s.PlayerIDForAccount(ctx, accountID)
-if err != nil {
-return 0, fmt.Errorf("get account player id: %w", err)
-}
+	if accountID, ok := AuthAccountIDFromContext(ctx); ok {
+		playerID, err := s.PlayerIDForAccount(ctx, accountID)
+		if err != nil {
+			return 0, fmt.Errorf("get account player id: %w", err)
+		}
 
-return playerID, nil
-}
+		return playerID, nil
+	}
 
-var playerID int64
+	var playerID int64
 
-if err := s.Pool.QueryRow(ctx, `
+	if err := s.Pool.QueryRow(ctx, `
 select id
 from players
 where display_name = 'Soryn'
 `).Scan(&playerID); err != nil {
-return 0, fmt.Errorf("get dev player id: %w", err)
-}
+		return 0, fmt.Errorf("get dev player id: %w", err)
+	}
 
-return playerID, nil
+	return playerID, nil
 }
 
 func (s *Store) RewindDevCareDecay(ctx context.Context, duration time.Duration) error {
@@ -465,6 +466,10 @@ func (s *Store) CreateNamiMessage(ctx context.Context, playerID int64, draft Nam
 		return nil, fmt.Errorf("create nami message: %w", err)
 	}
 
+	if err := s.PruneNamiMessages(ctx, playerID); err != nil {
+		return nil, err
+	}
+
 	return &message, nil
 }
 
@@ -482,8 +487,8 @@ func (s *Store) GetRecentNamiMessages(ctx context.Context, playerID int64, limit
 		limit = 1
 	}
 
-	if limit > 100 {
-		limit = 100
+	if limit > NamiMessageStorageLimit {
+		limit = NamiMessageStorageLimit
 	}
 
 	rows, err := s.Pool.Query(ctx, `
@@ -541,13 +546,54 @@ func (s *Store) GetRecentNamiMessages(ctx context.Context, playerID int64, limit
 	return messages, nil
 }
 
+func pruneNamiMessagesTx(ctx context.Context, tx pgx.Tx, playerID int64) error {
+	_, err := tx.Exec(ctx, `
+with ranked_messages as (
+select
+id,
+row_number() over (
+partition by player_id
+order by created_at desc, id desc
+) as message_rank
+from nami_messages
+where player_id = $1
+)
+delete from nami_messages message
+using ranked_messages ranked
+where message.id = ranked.id
+and ranked.message_rank > $2
+`, playerID, NamiMessageStorageLimit)
+	if err != nil {
+		return fmt.Errorf("prune nami messages: %w", err)
+	}
+
+	return nil
+}
+
+func (s *Store) PruneNamiMessages(ctx context.Context, playerID int64) error {
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin prune nami messages: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	if err := pruneNamiMessagesTx(ctx, tx, playerID); err != nil {
+		return err
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("commit prune nami messages: %w", err)
+	}
+
+	return nil
+}
 func loadRecentNamiMessagesTx(ctx context.Context, tx pgx.Tx, playerID int64, limit int) ([]NamiMessage, error) {
 	if limit < 1 {
 		limit = 1
 	}
 
-	if limit > 100 {
-		limit = 100
+	if limit > NamiMessageStorageLimit {
+		limit = NamiMessageStorageLimit
 	}
 
 	rows, err := tx.Query(ctx, `
