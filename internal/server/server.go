@@ -386,7 +386,14 @@ func (s *Server) HandleGatheringTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	request.Task = strings.TrimSpace(strings.ToLower(request.Task))
-	if err := s.Store.SetDevGatheringTask(r.Context(), request.Task); err != nil {
+	accountID, err := accountIDForRequest(r)
+	if err != nil {
+		log.Printf("get account for gathering task failed: %v", err)
+		writeError(w, http.StatusUnauthorized, "login required")
+		return
+	}
+
+	if err := s.Store.SetGatheringTaskForAccount(r.Context(), accountID, request.Task); err != nil {
 		log.Printf("set gathering task failed: %v", err)
 		writeError(w, http.StatusBadRequest, "invalid gathering task")
 		return
