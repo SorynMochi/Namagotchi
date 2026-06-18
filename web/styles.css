@@ -8344,3 +8344,68 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Wardrobe modal compact header correction */
+
+.wardrobe-item-modal-close {
+  display: none !important;
+}
+
+.wardrobe-item-modal-header {
+  position: relative;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: start !important;
+  gap: 16px !important;
+  min-height: 0 !important;
+  padding: 18px 28px 14px !important;
+  padding-right: 28px !important;
+}
+
+.wardrobe-item-modal-header > div:first-child {
+  min-width: 0;
+}
+
+.wardrobe-item-modal-header .wardrobe-item-actions {
+  position: static !important;
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+  justify-self: end !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 8px !important;
+  max-width: 260px !important;
+  padding: 0 !important;
+  margin: 6px 0 0 !important;
+}
+
+.wardrobe-item-action-button {
+  min-height: 24px !important;
+  padding: 3px 11px !important;
+  font-size: 0.68rem !important;
+  line-height: 1 !important;
+}
+
+.wardrobe-item-modal-body {
+  padding-top: 20px !important;
+}
+
+@media (max-width: 560px) {
+  .wardrobe-item-modal-header {
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 14px 12px !important;
+  }
+
+  .wardrobe-item-modal-header .wardrobe-item-actions {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    justify-self: stretch !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    max-width: none !important;
+    margin-top: 10px !important;
+  }
+}
