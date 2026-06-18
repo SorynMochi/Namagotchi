@@ -1,4 +1,4 @@
-﻿package database
+package database
 
 import (
 "context"
@@ -72,9 +72,10 @@ return account, "", err
 }
 
 err = tx.QueryRow(ctx, `
-select account_id
-from auth_credentials
-where email_normalized = $1
+select id
+from auth_accounts
+where lower(email) = lower($1)
+and email <> ''
 `, email).Scan(&existingID)
 if err == nil {
 return account, "", ErrAuthEmailTaken
@@ -217,6 +218,47 @@ return account, token, nil
 }
 if err != nil && !errors.Is(err, pgx.ErrNoRows) {
 return account, "", err
+}
+
+if email != "" {
+err = s.Pool.QueryRow(ctx, `
+select id, display_name, email, avatar_url, created_at, updated_at, last_login_at
+from auth_accounts
+where lower(email) = lower($1)
+and email <> ''
+`, email).Scan(
+&account.ID,
+&account.DisplayName,
+&account.Email,
+&account.AvatarURL,
+&account.CreatedAt,
+&account.UpdatedAt,
+&account.LastLoginAt,
+)
+if err == nil {
+_, err = s.Pool.Exec(ctx, `
+insert into auth_identities (account_id, provider, provider_user_id, email, display_name, avatar_url, last_login_at)
+values ($1, $2, $3, $4, $5, $6, now())
+on conflict (provider, provider_user_id) do nothing
+`, account.ID, provider, providerUserID, email, displayName, avatarURL)
+if err != nil {
+return account, "", err
+}
+
+token, sessionErr := s.CreateAuthSession(ctx, account.ID)
+if sessionErr != nil {
+return account, "", sessionErr
+}
+
+if loginErr := s.touchAuthLogin(ctx, account.ID, provider, providerUserID); loginErr != nil {
+return account, "", loginErr
+}
+
+return account, token, nil
+}
+if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+return account, "", err
+}
 }
 
 if displayName == "" {
@@ -476,4 +518,29 @@ displayName = displayName[:32]
 }
 
 return displayName
+}
+
+func (s *Store) AuthAccountHasVerifiedProviderEmail(ctx context.Context, accountID int64, provider, email string) (bool, error) {
+provider = strings.TrimSpace(strings.ToLower(provider))
+email = normalizeAuthEmail(email)
+
+if accountID < 1 || provider == "" || email == "" {
+return false, nil
+}
+
+var allowed bool
+err := s.Pool.QueryRow(ctx, `
+select exists (
+select 1
+from auth_identities
+where account_id = $1
+and provider = $2
+and lower(email) = lower($3)
+)
+`, accountID, provider, email).Scan(&allowed)
+if err != nil {
+return false, err
+}
+
+return allowed, nil
 }

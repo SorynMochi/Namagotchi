@@ -1,4 +1,4 @@
-﻿package server
+package server
 
 import (
 "encoding/json"
@@ -276,6 +276,11 @@ return
 
 if tokenInfo.Aud != clientID || tokenInfo.Sub == "" {
 writeError(w, http.StatusUnauthorized, "google login verification failed")
+return
+}
+
+if !strings.EqualFold(strings.TrimSpace(tokenInfo.EmailVerified), "true") || strings.TrimSpace(tokenInfo.Email) == "" {
+writeError(w, http.StatusUnauthorized, "google email is not verified")
 return
 }
 
