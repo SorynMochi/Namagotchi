@@ -70,15 +70,15 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/status", s.HandleStatus)
 	mux.HandleFunc("/health", s.HandleStatus)
 
-	mux.HandleFunc("/api/auth/register", s.HandleAuthRegister)
-	mux.HandleFunc("/api/auth/login", s.HandleAuthLogin)
+	mux.HandleFunc("/api/auth/register", s.requireRateLimit("auth_register", 8, 10*time.Minute, s.HandleAuthRegister))
+	mux.HandleFunc("/api/auth/login", s.requireRateLimit("auth_login", 10, 10*time.Minute, s.HandleAuthLogin))
 	mux.HandleFunc("/api/auth/logout", s.requireCSRF(s.HandleAuthLogout))
 	mux.HandleFunc("/api/auth/me", s.HandleAuthMe)
 	mux.HandleFunc("/api/auth/csrf", s.HandleCSRFToken)
 	mux.HandleFunc("/api/auth/google/start", s.HandleAuthGoogleStart)
 	mux.HandleFunc("/api/auth/google/callback", s.HandleAuthGoogleCallback)
 
-	mux.HandleFunc("/api/dev/unlock", s.requireDev(s.requireCSRF(s.HandleDevUnlock)))
+	mux.HandleFunc("/api/dev/unlock", s.requireDev(s.requireCSRF(s.requireRateLimit("dev_unlock", 6, 10*time.Minute, s.HandleDevUnlock))))
 	mux.HandleFunc("/api/dev/lock", s.requireDev(s.requireCSRF(s.HandleDevLock)))
 	mux.HandleFunc("/api/dev/seed-player", s.requireDev(s.requireDevUnlock(s.withDevAudit("seed-player", s.requireCSRF(s.HandleSeedDevPlayer)))))
 	mux.HandleFunc("/api/dev/force-tick", s.requireDev(s.requireDevUnlock(s.withDevAudit("force-tick", s.requireCSRF(s.HandleForceTick)))))

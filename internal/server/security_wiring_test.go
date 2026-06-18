@@ -17,7 +17,7 @@ func TestSecuritySensitiveRouteWiring(t *testing.T) {
 	requiredSnippets := []string{
 		`mux.HandleFunc("/api/auth/csrf", s.HandleCSRFToken)`,
 		`mux.HandleFunc("/api/auth/logout", s.requireCSRF(s.HandleAuthLogout))`,
-		`mux.HandleFunc("/api/dev/unlock", s.requireDev(s.requireCSRF(s.HandleDevUnlock)))`,
+		`mux.HandleFunc("/api/dev/unlock", s.requireDev(s.requireCSRF(s.requireRateLimit("dev_unlock", 6, 10*time.Minute, s.HandleDevUnlock))))`,
 		`mux.HandleFunc("/api/dev/lock", s.requireDev(s.requireCSRF(s.HandleDevLock)))`,
 		`mux.HandleFunc("/api/dev/force-tick", s.requireDev(s.requireDevUnlock(s.withDevAudit("force-tick", s.requireCSRF(s.HandleForceTick)))))`,
 		`mux.HandleFunc("/api/dev/audit-logs", s.requireDev(s.requireDevUnlock(s.HandleDevAuditLogs)))`,
