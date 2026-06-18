@@ -82,6 +82,8 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.requireDev(s.HandleResetPlaydeckStreak))
 	mux.HandleFunc("/api/dev/rewind-care-decay", s.requireDev(s.HandleRewindCareDecay))
 	mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.requireDev(s.HandleSpawnDevWardrobeItem))
+	mux.HandleFunc("/dev", s.requireDev(s.HandleDevConsolePage))
+	mux.HandleFunc("/dev/", s.requireDev(s.HandleDevConsolePage))
 
 	mux.HandleFunc("/api/player/status", s.requireAuth(s.HandlePlayerStatus))
 	mux.HandleFunc("/api/player/sync", s.requireAuth(s.HandlePlayerSync))
