@@ -1,4 +1,4 @@
-﻿create table if not exists auth_oauth_states (
+create table if not exists auth_oauth_states (
   state_hash text primary key,
   provider text not null,
   redirect_path text not null default '/',

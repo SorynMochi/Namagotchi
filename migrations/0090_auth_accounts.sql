@@ -1,4 +1,4 @@
-﻿create table if not exists auth_accounts (
+create table if not exists auth_accounts (
   id bigserial primary key,
   display_name text not null,
   email text not null default '',

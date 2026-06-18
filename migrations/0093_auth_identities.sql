@@ -1,4 +1,4 @@
-﻿create table if not exists auth_identities (
+create table if not exists auth_identities (
   id bigserial primary key,
   account_id bigint not null references auth_accounts(id) on delete cascade,
   provider text not null,
