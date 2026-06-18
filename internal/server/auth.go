@@ -93,6 +93,8 @@ func (s *Server) HandleAuthRegister(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case errors.Is(err, database.ErrAuthDisplayNameTaken):
 			writeError(w, http.StatusConflict, "display name is already taken")
+		case errors.Is(err, database.ErrAuthDisplayNameReserved):
+			writeError(w, http.StatusBadRequest, "display name is reserved")
 		case errors.Is(err, database.ErrAuthEmailTaken):
 			writeError(w, http.StatusConflict, "email is already registered")
 		default:
