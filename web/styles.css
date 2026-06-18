@@ -8536,3 +8536,57 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
     grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
   }
 }
+
+/* Wardrobe accessory compare titlebar */
+
+.wardrobe-compare-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.wardrobe-compare-titlebar h3 {
+  margin: 0 !important;
+}
+
+.wardrobe-compare-titlebar .wardrobe-accessory-compare {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.wardrobe-compare-titlebar .wardrobe-accessory-compare.hidden {
+  display: none;
+}
+
+.wardrobe-compare-titlebar .wardrobe-accessory-compare-button {
+  min-height: 22px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .wardrobe-compare-titlebar {
+    display: grid;
+    gap: 8px;
+  }
+
+  .wardrobe-compare-titlebar .wardrobe-accessory-compare {
+    justify-content: stretch;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wardrobe-compare-titlebar .wardrobe-accessory-compare-button {
+    width: 100%;
+  }
+}

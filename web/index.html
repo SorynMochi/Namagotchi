@@ -594,8 +594,6 @@
       </div>
     </header>
 
-    <div class="wardrobe-accessory-compare hidden" id="wardrobe-accessory-compare" aria-label="Accessory compare slot"></div>
-
     <div class="wardrobe-item-modal-body">
       <section class="wardrobe-item-modal-section">
         <h3>Stats</h3>
@@ -604,8 +602,11 @@
         </div>
       </section>
 
-      <section class="wardrobe-item-modal-section">
-        <h3>Compare</h3>
+      <section class="wardrobe-item-modal-section wardrobe-compare-section">
+        <div class="wardrobe-compare-titlebar">
+          <h3>Compare</h3>
+          <div class="wardrobe-accessory-compare hidden" id="wardrobe-accessory-compare" aria-label="Accessory compare slot"></div>
+        </div>
         <p class="wardrobe-compare-target" id="wardrobe-compare-target">No equipped item in this slot.</p>
         <div class="wardrobe-comparison-list" id="wardrobe-comparison-list">
           <p class="muted">Nothing to compare yet.</p>
@@ -733,6 +734,7 @@
   <script src="/app.js"></script>
 </body>
 </html>
+
 
 
 
