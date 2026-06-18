@@ -126,7 +126,8 @@ const devConsoleHTML = `<!doctype html>
       button.textContent = "Running...";
 
       try {
-        const response = await fetch(endpoint, { method: "POST" });
+        const method = button.dataset.method || "POST";
+        const response = await fetch(endpoint, { method });
         const text = await response.text();
 
         let payload = text;
