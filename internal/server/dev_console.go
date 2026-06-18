@@ -183,6 +183,13 @@ func (s *Server) HandleDevConsolePage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !s.requestHasDevUnlock(r) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.Header().Set("Cache-Control", "no-store")
+		_, _ = w.Write([]byte(devConsoleUnlockHTML))
+		return
+	}
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-store")
 	_, _ = w.Write([]byte(devConsoleHTML))
