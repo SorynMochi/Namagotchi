@@ -131,6 +131,8 @@ const THEME_FILES = {
 
 let activeWardrobeModalItemId = 0;
 let activeWardrobeModalCompareSlot = "";
+let activeWardrobeModalDetail = null;
+let activeWardrobeModalReadOnly = false;
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
   "/images/backgrounds/Living_Room_00.webp",
@@ -4633,3 +4635,518 @@ setInterval(loadStatus, 10000);
 
 
 
+
+/* Wardrobe item sharing override layer */
+
+function submitChatMessage(event) {
+  event.preventDefault();
+
+  const text = normalizeChatText(serializeChatInput());
+  if (!text) {
+    return;
+  }
+
+  if (currentChatChannel === "system") {
+    addChatMessage("System", "System chat is read-only. Tiny velvet rope deployed.", "system");
+    clearChatInput();
+    return;
+  }
+
+  handleChatInput(text);
+  clearChatInput();
+}
+
+function switchChatChannel(channel) {
+  if (!CHAT_CHANNELS.includes(channel)) {
+    return;
+  }
+
+  currentChatChannel = channel;
+  localStorage.setItem(CHAT_CHANNEL_KEY, channel);
+  unreadChannels.delete(channel);
+
+  chatTabs.forEach((button) => {
+    const isActive = button.dataset.chatChannel === channel;
+    button.classList.toggle("active", isActive);
+    button.classList.toggle("has-unread", unreadChannels.has(button.dataset.chatChannel));
+  });
+
+  setChatInputPlaceholder(`Message [${CHAT_LABELS[channel]}]...`);
+  setChatInputDisabled(channel === "system");
+
+  if (channel === "system") {
+    setChatInputPlaceholder("System messages are read-only.");
+  }
+
+  if (channel === "whispers" && lastWhisperName && !getChatInputPlainText().trim()) {
+    setChatInputPlainText(`/w ${lastWhisperName} `);
+    setChatCursorToEnd();
+  }
+
+  renderChatChannel();
+}
+
+async function openWardrobeItemDetail(itemID, compareSlot = "", options = {}) {
+  const safeItemID = Number(itemID);
+
+  if (!safeItemID || safeItemID < 1) {
+    return;
+  }
+
+  activeWardrobeModalItemId = safeItemID;
+
+  try {
+    const params = new URLSearchParams({
+      id: String(safeItemID),
+    });
+
+    if (compareSlot) {
+      params.set("compareSlot", compareSlot);
+    }
+
+    const response = await fetch(`/api/player/wardrobe/item?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Item detail failed: ${response.status}`);
+    }
+
+    const detail = await response.json();
+    renderWardrobeItemModal(detail, options);
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not load item details. The wardrobe gremlin misplaced the tag.", "system");
+  }
+}
+
+function renderWardrobeItemModal(detail, options = {}) {
+  if (!wardrobeItemModal) {
+    return;
+  }
+
+  const item = detail?.item || {};
+  const isReadOnly = Boolean(options.readOnly);
+
+  activeWardrobeModalItemId = Number(item.id ?? activeWardrobeModalItemId ?? 0);
+  activeWardrobeModalCompareSlot = detail?.compareSlot || defaultCompareSlotForWardrobeItem(item);
+  activeWardrobeModalDetail = detail;
+  activeWardrobeModalReadOnly = isReadOnly;
+
+  const rarity = formatWardrobeRarity(item.rarity || "basic");
+  const slot = formatWardrobeSlot(item.equipmentSlot || "item");
+  const level = Number(item.powerLevel ?? 1).toLocaleString();
+
+  setTextIfChanged(wardrobeItemModalTitle, item.name || "Unknown Item");
+  setTextIfChanged(wardrobeItemModalSlot, `${slot} | ${rarity}`);
+  setTextIfChanged(
+    wardrobeItemModalMeta,
+    `Item Level ${level} | T: ${formatTailoringPoints(item)}`
+  );
+
+  wardrobeItemModal.classList.toggle("is-read-only-item-preview", isReadOnly);
+
+  const shareButton = document.querySelector("#wardrobe-item-share-button");
+  shareButton?.classList.toggle("hidden", isReadOnly || !Number(item.id ?? 0));
+
+  renderWardrobeAccessoryCompare(detail);
+  renderWardrobeItemActions(detail, { readOnly: isReadOnly });
+  renderWardrobeStatLines(detail?.item?.statLines || []);
+  renderWardrobeComparison(detail);
+
+  wardrobeItemModal.classList.remove("hidden");
+  wardrobeItemModal.setAttribute("aria-hidden", "false");
+}
+
+function renderWardrobeAccessoryCompare(detail) {
+  if (!wardrobeAccessoryCompare) {
+    return;
+  }
+
+  wardrobeAccessoryCompare.replaceChildren();
+
+  const slots = Array.isArray(detail?.accessoryCompareSlots) ? detail.accessoryCompareSlots : [];
+  wardrobeAccessoryCompare.classList.toggle("hidden", slots.length === 0);
+
+  slots.forEach((slot) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `wardrobe-accessory-compare-button${slot.selected ? " active" : ""}`;
+    button.textContent = slot.displayName;
+    button.addEventListener("click", () => {
+      openWardrobeItemDetail(activeWardrobeModalItemId, slot.slotKey, {
+        readOnly: activeWardrobeModalReadOnly,
+      });
+    });
+
+    wardrobeAccessoryCompare.appendChild(button);
+  });
+}
+
+function renderWardrobeItemActions(detail, options = {}) {
+  if (!wardrobeItemActions) {
+    return;
+  }
+
+  wardrobeItemActions.replaceChildren();
+  wardrobeItemActions.classList.toggle("hidden", Boolean(options.readOnly));
+
+  if (options.readOnly) {
+    return;
+  }
+
+  const item = detail?.item || {};
+  const itemID = Number(item.id ?? item.itemId ?? 0);
+  const itemSlot = normalizeWardrobeInventoryGroupKey(item.equipmentSlot || item.itemType || "");
+  const equippedSlot = String(item.equippedSlot || "").trim().toLowerCase();
+
+  const primaryActions = document.createElement("div");
+  primaryActions.className = "wardrobe-item-action-row wardrobe-item-primary-actions";
+
+  const utilityActions = document.createElement("div");
+  utilityActions.className = "wardrobe-item-action-row wardrobe-item-utility-actions";
+
+  if (!itemID || !itemSlot) {
+    const empty = document.createElement("p");
+    empty.className = "muted";
+    empty.textContent = "This item cannot be worn.";
+    wardrobeItemActions.appendChild(empty);
+    return;
+  }
+
+  if (itemSlot === "accessory") {
+    [
+      { slotKey: "accessory_1", label: "A1" },
+      { slotKey: "accessory_2", label: "A2" },
+    ].forEach((slot) => {
+      const isWearingHere = equippedSlot === slot.slotKey;
+      primaryActions.appendChild(
+        createWardrobeActionButton(
+          isWearingHere ? `Wearing ${slot.label}` : `Wear ${slot.label}`,
+          () => equipWardrobeItem(itemID, slot.slotKey),
+          isWearingHere,
+          `${isWearingHere ? "Already worn in" : "Wear in"} ${formatWardrobeSlot(slot.slotKey)}`
+        )
+      );
+    });
+  } else {
+    const targetSlot = detail?.compareSlot || defaultCompareSlotForWardrobeItem(item);
+    const isWearingHere = equippedSlot === targetSlot;
+
+    primaryActions.appendChild(
+      createWardrobeActionButton(
+        isWearingHere ? "Wearing" : "Wear",
+        () => equipWardrobeItem(itemID, targetSlot),
+        isWearingHere,
+        isWearingHere ? "Nami-Chan is already wearing this." : `Wear in ${formatWardrobeSlot(targetSlot)}`
+      )
+    );
+  }
+
+  if (equippedSlot) {
+    primaryActions.appendChild(
+      createWardrobeActionButton(
+        "Take Off",
+        () => unequipWardrobeItem(itemID, equippedSlot),
+        false,
+        `Remove from ${formatWardrobeSlot(equippedSlot)}`,
+        "danger"
+      )
+    );
+  }
+
+  ["Recycle", "Sell", "Beautify"].forEach((label) => {
+    utilityActions.appendChild(
+      createWardrobeActionButton(
+        label,
+        null,
+        true,
+        `${label} will be added later.`,
+        "utility"
+      )
+    );
+  });
+
+  wardrobeItemActions.append(primaryActions, utilityActions);
+}
+
+function appendFormattedChatText(parent, text) {
+  const source = String(text);
+  const pattern = /(\[\[item:\d+\|[a-z0-9_-]+\|[a-z0-9_-]*\|[^\]]+\]\]|\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|@[A-Za-z0-9_-]{2,32})/g;
+
+  let lastIndex = 0;
+
+  source.replace(pattern, (match, _ignored, offset) => {
+    appendPlainChatText(parent, source.slice(lastIndex, offset));
+
+    if (match.startsWith("[[item:")) {
+      const tokenInfo = parseChatItemToken(match);
+
+      if (tokenInfo) {
+        parent.appendChild(createChatItemLink(tokenInfo));
+      } else {
+        appendPlainChatText(parent, match);
+      }
+    } else if (match.startsWith("@")) {
+      appendMention(parent, match);
+    } else if (match.startsWith("***") && match.endsWith("***")) {
+      const strong = document.createElement("strong");
+      const em = document.createElement("em");
+      em.textContent = match.slice(3, -3);
+      strong.appendChild(em);
+      parent.appendChild(strong);
+    } else if (match.startsWith("**") && match.endsWith("**")) {
+      const strong = document.createElement("strong");
+      strong.textContent = match.slice(2, -2);
+      parent.appendChild(strong);
+    } else if (match.startsWith("*") && match.endsWith("*")) {
+      const em = document.createElement("em");
+      em.textContent = match.slice(1, -1);
+      parent.appendChild(em);
+    }
+
+    lastIndex = offset + match.length;
+    return match;
+  });
+
+  appendPlainChatText(parent, source.slice(lastIndex));
+}
+
+function shareActiveWardrobeItemToChat() {
+  const item = activeWardrobeModalDetail?.item;
+
+  if (!item || !Number(item.id ?? 0)) {
+    return;
+  }
+
+  insertChatItemChip(item, activeWardrobeModalCompareSlot || defaultCompareSlotForWardrobeItem(item));
+}
+
+function createChatItemToken(item, compareSlot = "") {
+  const id = Number(item?.id ?? item?.itemId ?? 0);
+  const rarity = normalizeWardrobeRarity(item?.rarity || "basic");
+  const slot = String(compareSlot || "").trim().toLowerCase();
+  const name = encodeURIComponent(String(item?.name || "Unknown Item"));
+
+  return `[[item:${id}|${rarity}|${slot}|${name}]]`;
+}
+
+function parseChatItemToken(token) {
+  const match = String(token || "").match(/^\[\[item:(\d+)\|([a-z0-9_-]+)\|([a-z0-9_-]*)\|([^\]]+)\]\]$/);
+
+  if (!match) {
+    return null;
+  }
+
+  return {
+    itemId: Number(match[1]),
+    rarity: normalizeWardrobeRarity(match[2]),
+    compareSlot: match[3] || "",
+    name: decodeURIComponent(match[4] || "Unknown Item"),
+  };
+}
+
+function insertChatItemChip(item, compareSlot = "") {
+  if (!chatInput) {
+    return;
+  }
+
+  const chip = createChatItemInputChip(item, compareSlot);
+
+  if (!chatInput.isContentEditable) {
+    insertIntoChatInput(`[${item?.name || "Unknown Item"}] `);
+    return;
+  }
+
+  chatInput.appendChild(chip);
+  chatInput.appendChild(document.createTextNode(" "));
+  chatInput.focus();
+  setChatCursorToEnd();
+}
+
+function createChatItemInputChip(item, compareSlot = "") {
+  const chip = document.createElement("span");
+  chip.className = `chat-item-token rarity-${normalizeWardrobeRarity(item?.rarity || "basic")}`;
+  chip.contentEditable = "false";
+  chip.dataset.itemId = String(Number(item?.id ?? item?.itemId ?? 0));
+  chip.dataset.itemName = item?.name || "Unknown Item";
+  chip.dataset.rarity = normalizeWardrobeRarity(item?.rarity || "basic");
+  chip.dataset.compareSlot = compareSlot || "";
+
+  const open = document.createElement("span");
+  open.className = "chat-item-bracket";
+  open.textContent = "[";
+
+  const name = document.createElement("span");
+  name.className = "chat-item-name";
+  name.textContent = item?.name || "Unknown Item";
+
+  const close = document.createElement("span");
+  close.className = "chat-item-bracket";
+  close.textContent = "]";
+
+  chip.append(open, name, close);
+  return chip;
+}
+
+function serializeChatInput() {
+  if (!chatInput) {
+    return "";
+  }
+
+  if (!chatInput.isContentEditable) {
+    return chatInput.value || "";
+  }
+
+  let output = "";
+
+  chatInput.childNodes.forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      output += node.textContent || "";
+      return;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return;
+    }
+
+    if (node.classList.contains("chat-item-token")) {
+      output += createChatItemToken({
+        id: node.dataset.itemId,
+        name: node.dataset.itemName,
+        rarity: node.dataset.rarity,
+      }, node.dataset.compareSlot || "");
+      return;
+    }
+
+    output += node.textContent || "";
+  });
+
+  return output;
+}
+
+function getChatInputPlainText() {
+  if (!chatInput) {
+    return "";
+  }
+
+  return chatInput.isContentEditable ? chatInput.textContent || "" : chatInput.value || "";
+}
+
+function setChatInputPlainText(text) {
+  if (!chatInput) {
+    return;
+  }
+
+  if (chatInput.isContentEditable) {
+    chatInput.replaceChildren(document.createTextNode(String(text || "")));
+  } else {
+    chatInput.value = String(text || "");
+  }
+}
+
+function clearChatInput() {
+  if (!chatInput) {
+    return;
+  }
+
+  if (chatInput.isContentEditable) {
+    chatInput.replaceChildren();
+  } else {
+    chatInput.value = "";
+  }
+}
+
+function setChatInputPlaceholder(text) {
+  if (!chatInput) {
+    return;
+  }
+
+  if (chatInput.isContentEditable) {
+    chatInput.dataset.placeholder = text;
+  } else {
+    chatInput.placeholder = text;
+  }
+}
+
+function setChatInputDisabled(disabled) {
+  if (!chatInput) {
+    return;
+  }
+
+  if (chatInput.isContentEditable || chatInput.classList.contains("chat-input")) {
+    chatInput.contentEditable = disabled ? "false" : "true";
+    chatInput.classList.toggle("is-disabled", disabled);
+    chatInput.setAttribute("aria-disabled", String(disabled));
+  } else {
+    chatInput.disabled = disabled;
+  }
+}
+
+function insertIntoChatInput(text) {
+  if (chatInput.isContentEditable) {
+    chatInput.appendChild(document.createTextNode(String(text || "")));
+  } else {
+    chatInput.value = `${chatInput.value}${text}`;
+  }
+
+  chatInput.focus();
+  setChatCursorToEnd();
+}
+
+function setChatCursorToEnd() {
+  if (!chatInput) {
+    return;
+  }
+
+  if (!chatInput.isContentEditable) {
+    const end = chatInput.value.length;
+    chatInput.setSelectionRange(end, end);
+    return;
+  }
+
+  const range = document.createRange();
+  range.selectNodeContents(chatInput);
+  range.collapse(false);
+
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+function createChatItemLink(tokenInfo) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `chat-item-link rarity-${tokenInfo.rarity}`;
+  button.title = `View ${tokenInfo.name}`;
+
+  const open = document.createElement("span");
+  open.className = "chat-item-bracket";
+  open.textContent = "[";
+
+  const name = document.createElement("span");
+  name.className = "chat-item-name";
+  name.textContent = tokenInfo.name;
+
+  const close = document.createElement("span");
+  close.className = "chat-item-bracket";
+  close.textContent = "]";
+
+  button.append(open, name, close);
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    openWardrobeItemDetail(tokenInfo.itemId, tokenInfo.compareSlot || "", { readOnly: true });
+  });
+
+  return button;
+}
+
+function handleChatInputEnterKey(event) {
+  if (event.key !== "Enter" || event.shiftKey) {
+    return;
+  }
+
+  event.preventDefault();
+  chatForm.requestSubmit();
+}
+
+document.querySelector("#wardrobe-item-share-button")?.addEventListener("click", shareActiveWardrobeItemToChat);
+chatInput?.addEventListener("keydown", handleChatInputEnterKey);

@@ -8590,3 +8590,142 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
     width: 100%;
   }
 }
+
+/* Wardrobe chat item share links */
+
+.wardrobe-item-modal-card {
+  position: relative;
+}
+
+.wardrobe-modal-share-button {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--theme-button-secondary-border, rgba(255, 104, 183, 0.34));
+  border-radius: 999px;
+  background: var(--theme-button-secondary-bg, rgba(255, 104, 183, 0.12));
+  color: var(--theme-button-secondary-text, var(--pink-soft));
+  cursor: pointer;
+}
+
+.wardrobe-modal-share-button .material-symbols-rounded {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.wardrobe-modal-share-button:hover,
+.wardrobe-modal-share-button:focus-visible {
+  border-color: var(--theme-cyan-hover-border-42, rgba(73, 199, 255, 0.42));
+  color: var(--cyan-soft);
+}
+
+.wardrobe-modal-share-button.hidden,
+.wardrobe-item-modal-card.is-read-only-item-preview .wardrobe-modal-share-button {
+  display: none !important;
+}
+
+.wardrobe-item-actions.hidden {
+  display: none !important;
+}
+
+.chat-input {
+  min-width: 0;
+  min-height: 30px;
+  max-height: 92px;
+  overflow-y: auto;
+  border: 1px solid var(--theme-chat-input-border, rgba(255, 143, 199, 0.18));
+  border-radius: 999px;
+  background: var(--theme-chat-input-bg, rgba(0, 0, 0, 0.22));
+  color: var(--text);
+  padding: 7px 12px;
+  font: inherit;
+  line-height: 1.2;
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.chat-input:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.chat-input:focus {
+  border-color: var(--theme-chat-input-focus-border, rgba(73, 199, 255, 0.42));
+}
+
+.chat-input.is-disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.chat-item-token,
+.chat-item-link {
+  display: inline;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text-soft);
+  font: inherit;
+  font-weight: 850;
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
+.chat-item-token {
+  user-select: all;
+}
+
+.chat-item-link {
+  cursor: pointer;
+}
+
+.chat-item-link:hover .chat-item-name,
+.chat-item-link:focus-visible .chat-item-name {
+  text-decoration: underline;
+}
+
+.chat-item-bracket {
+  color: var(--text-soft);
+}
+
+.chat-item-token.rarity-basic .chat-item-name,
+.chat-item-link.rarity-basic .chat-item-name {
+  color: var(--wardrobe-rarity-basic, #A8B0BA);
+}
+
+.chat-item-token.rarity-cute .chat-item-name,
+.chat-item-link.rarity-cute .chat-item-name {
+  color: var(--wardrobe-rarity-cute, #FF8FC7);
+}
+
+.chat-item-token.rarity-chic .chat-item-name,
+.chat-item-link.rarity-chic .chat-item-name {
+  color: var(--wardrobe-rarity-chic, #9B7CFF);
+}
+
+.chat-item-token.rarity-trendy .chat-item-name,
+.chat-item-link.rarity-trendy .chat-item-name {
+  color: var(--wardrobe-rarity-trendy, #35C8FF);
+}
+
+.chat-item-token.rarity-glam .chat-item-name,
+.chat-item-link.rarity-glam .chat-item-name {
+  color: var(--wardrobe-rarity-glam, #FFD166);
+}
+
+.chat-item-token.rarity-iconic .chat-item-name,
+.chat-item-link.rarity-iconic .chat-item-name {
+  color: var(--wardrobe-rarity-iconic, #FF8A3D);
+}
+
+.chat-item-token.rarity-devastating .chat-item-name,
+.chat-item-link.rarity-devastating .chat-item-name {
+  color: var(--wardrobe-rarity-devastating, #FF2D75);
+}

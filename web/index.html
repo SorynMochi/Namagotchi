@@ -585,6 +585,9 @@
 </section>
 <div class="wardrobe-item-modal-backdrop hidden" id="wardrobe-item-modal" aria-hidden="true">
   <section class="wardrobe-item-modal-card" role="dialog" aria-modal="true" aria-labelledby="wardrobe-item-modal-title">
+    <button class="wardrobe-modal-share-button hidden" id="wardrobe-item-share-button" type="button" aria-label="Share item" title="Share item">
+      <span class="material-symbols-rounded" aria-hidden="true">ios_share</span>
+    </button>
     <header class="wardrobe-item-modal-header">
       <div>
         <p class="eyebrow" id="wardrobe-item-modal-slot">Wardrobe Item</p>
@@ -676,7 +679,7 @@
     <div id="emoji-picker" class="emoji-picker hidden" aria-label="Emoji picker"></div>
   </div>
 
-  <input id="chat-input" maxlength="255" autocomplete="off" placeholder="Message [LOBBY]..." />
+  <div id="chat-input" class="chat-input" contenteditable="true" role="textbox" aria-label="Chat message" data-placeholder="Message [LOBBY]..."></div>
 
   <button type="submit">Send</button>
   <button id="chat-toggle-button" class="chat-toggle-button" type="button" aria-pressed="false">Hide Chat</button>
@@ -734,6 +737,7 @@
   <script src="/app.js"></script>
 </body>
 </html>
+
 
 
 
