@@ -68,6 +68,7 @@ remote_addr,
 user_agent,
 created_at
 from dev_audit_logs
+where command <> 'audit-logs'
 order by created_at desc, id desc
 limit $1
 `, limit)
