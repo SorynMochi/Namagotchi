@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -576,6 +576,37 @@
     </section>
   </div>
 </section>
+<div class="wardrobe-item-modal-backdrop hidden" id="wardrobe-item-modal" aria-hidden="true">
+  <section class="wardrobe-item-modal-card" role="dialog" aria-modal="true" aria-labelledby="wardrobe-item-modal-title">
+    <header class="wardrobe-item-modal-header">
+      <div>
+        <p class="eyebrow" id="wardrobe-item-modal-slot">Wardrobe Item</p>
+        <h2 id="wardrobe-item-modal-title">Item Details</h2>
+        <p class="wardrobe-item-modal-meta" id="wardrobe-item-modal-meta">Loading...</p>
+      </div>
+      <button class="wardrobe-item-modal-close" id="wardrobe-item-modal-close" type="button" aria-label="Close item details">×</button>
+    </header>
+
+    <div class="wardrobe-accessory-compare hidden" id="wardrobe-accessory-compare" aria-label="Accessory compare slot"></div>
+
+    <div class="wardrobe-item-modal-body">
+      <section class="wardrobe-item-modal-section">
+        <h3>Stats</h3>
+        <div class="wardrobe-stat-line-list" id="wardrobe-item-stat-lines">
+          <p class="muted">No stat lines yet.</p>
+        </div>
+      </section>
+
+      <section class="wardrobe-item-modal-section">
+        <h3>Compare</h3>
+        <p class="wardrobe-compare-target" id="wardrobe-compare-target">No equipped item in this slot.</p>
+        <div class="wardrobe-comparison-list" id="wardrobe-comparison-list">
+          <p class="muted">Nothing to compare yet.</p>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>
         <section class="content-section" id="section-market"><div class="placeholder-copy">Player-controlled Market shell. Buy and sell everything here.</div></section>
         <section class="content-section" id="section-home-shop"><div class="placeholder-copy">House upgrades shell. Spend Nibbles on upgrades, comforts, and useful little home improvements.</div></section>
         <section class="content-section" id="section-club"><div class="placeholder-copy">Club shell. This will be the guild/social section.</div></section>

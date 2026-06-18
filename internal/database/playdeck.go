@@ -53,31 +53,37 @@ type PlaydeckEnemyStatus struct {
 }
 
 type EquipmentSlotStatus struct {
-	SlotKey      string `json:"slotKey"`
-	DisplayName  string `json:"displayName"`
-	AcceptsSlot  string `json:"acceptsSlot"`
-	ItemID       int64  `json:"itemId"`
-	ItemName     string `json:"itemName"`
-	Rarity       string `json:"rarity"`
-	PowerLevel   int    `json:"powerLevel"`
-	AttackBonus  int    `json:"attackBonus"`
-	DefenseBonus int    `json:"defenseBonus"`
-	MaxHPBonus   int    `json:"maxHpBonus"`
+	SlotKey          string             `json:"slotKey"`
+	DisplayName      string             `json:"displayName"`
+	AcceptsSlot      string             `json:"acceptsSlot"`
+	ItemID           int64              `json:"itemId"`
+	ItemName         string             `json:"itemName"`
+	Rarity           string             `json:"rarity"`
+	PowerLevel       int                `json:"powerLevel"`
+	AttackBonus      int                `json:"attackBonus"`
+	DefenseBonus     int                `json:"defenseBonus"`
+	MaxHPBonus       int                `json:"maxHpBonus"`
+	TailoringCurrent int                `json:"tailoringCurrent"`
+	TailoringMax     int                `json:"tailoringMax"`
+	StatLines        []WardrobeStatLine `json:"statLines"`
 }
 
 type InventoryItemStatus struct {
-	ID            int64  `json:"id"`
-	ItemKey       string `json:"itemKey"`
-	Name          string `json:"name"`
-	ItemType      string `json:"itemType"`
-	Rarity        string `json:"rarity"`
-	EquipmentSlot string `json:"equipmentSlot"`
-	Quantity      int    `json:"quantity"`
-	EquippedSlot  string `json:"equippedSlot"`
-	PowerLevel    int    `json:"powerLevel"`
-	AttackBonus   int    `json:"attackBonus"`
-	DefenseBonus  int    `json:"defenseBonus"`
-	MaxHPBonus    int    `json:"maxHpBonus"`
+	ID               int64              `json:"id"`
+	ItemKey          string             `json:"itemKey"`
+	Name             string             `json:"name"`
+	ItemType         string             `json:"itemType"`
+	Rarity           string             `json:"rarity"`
+	EquipmentSlot    string             `json:"equipmentSlot"`
+	Quantity         int                `json:"quantity"`
+	EquippedSlot     string             `json:"equippedSlot"`
+	PowerLevel       int                `json:"powerLevel"`
+	AttackBonus      int                `json:"attackBonus"`
+	DefenseBonus     int                `json:"defenseBonus"`
+	MaxHPBonus       int                `json:"maxHpBonus"`
+	TailoringCurrent int                `json:"tailoringCurrent"`
+	TailoringMax     int                `json:"tailoringMax"`
+	StatLines        []WardrobeStatLine `json:"statLines"`
 }
 
 type PlaydeckCombatLogStatus struct {
@@ -340,7 +346,9 @@ func loadEquipmentSlotsTx(ctx context.Context, tx pgx.Tx, playerID int64) ([]Equ
 			coalesce(d.power_level, 0),
 			coalesce(d.attack_bonus, 0),
 			coalesce(d.defense_bonus, 0),
-			coalesce(d.max_hp_bonus, 0)
+			coalesce(d.max_hp_bonus, 0),
+			coalesce(i.tailoring_current, 0),
+			coalesce(i.tailoring_max, 0)
 		from playdeck_equipment_slots s
 		left join player_inventory_items i
 			on i.player_id = $1
@@ -367,6 +375,8 @@ func loadEquipmentSlotsTx(ctx context.Context, tx pgx.Tx, playerID int64) ([]Equ
 			&slot.AttackBonus,
 			&slot.DefenseBonus,
 			&slot.MaxHPBonus,
+			&slot.TailoringCurrent,
+			&slot.TailoringMax,
 		); err != nil {
 			return nil, fmt.Errorf("scan equipment slot: %w", err)
 		}
@@ -376,6 +386,22 @@ func loadEquipmentSlotsTx(ctx context.Context, tx pgx.Tx, playerID int64) ([]Equ
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("iterate equipment slots: %w", err)
+	}
+
+	itemIDs := make([]int64, 0, len(slots))
+	for _, slot := range slots {
+		if slot.ItemID > 0 {
+			itemIDs = append(itemIDs, slot.ItemID)
+		}
+	}
+
+	statLinesByItemID, err := loadWardrobeStatLinesForItemsTx(ctx, tx, itemIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	for index := range slots {
+		slots[index].StatLines = statLinesByItemID[slots[index].ItemID]
 	}
 
 	return slots, nil
@@ -399,7 +425,9 @@ func loadWardrobePreviewTx(ctx context.Context, tx pgx.Tx, playerID int64, limit
 			d.power_level,
 			d.attack_bonus,
 			d.defense_bonus,
-			d.max_hp_bonus
+			d.max_hp_bonus,
+			i.tailoring_current,
+			i.tailoring_max
 		from player_inventory_items i
 		join item_definitions d on d.id = i.item_definition_id
 		where i.player_id = $1
@@ -442,6 +470,8 @@ func loadWardrobePreviewTx(ctx context.Context, tx pgx.Tx, playerID int64, limit
 			&item.AttackBonus,
 			&item.DefenseBonus,
 			&item.MaxHPBonus,
+			&item.TailoringCurrent,
+			&item.TailoringMax,
 		); err != nil {
 			return nil, fmt.Errorf("scan wardrobe preview: %w", err)
 		}
@@ -451,6 +481,22 @@ func loadWardrobePreviewTx(ctx context.Context, tx pgx.Tx, playerID int64, limit
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("iterate wardrobe preview: %w", err)
+	}
+
+	itemIDs := make([]int64, 0, len(items))
+	for _, item := range items {
+		if item.ID > 0 {
+			itemIDs = append(itemIDs, item.ID)
+		}
+	}
+
+	statLinesByItemID, err := loadWardrobeStatLinesForItemsTx(ctx, tx, itemIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	for index := range items {
+		items[index].StatLines = statLinesByItemID[items[index].ID]
 	}
 
 	return items, nil

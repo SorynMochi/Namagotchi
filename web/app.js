@@ -49,6 +49,16 @@ const equipmentSlotList = document.querySelector("#equipment-slot-list");
 const wardrobeBonusesList = document.querySelector("#wardrobe-bonuses-list");
 const inventoryPreviewList = document.querySelector("#inventory-preview-list");
 
+const wardrobeItemModal = document.querySelector("#wardrobe-item-modal");
+const wardrobeItemModalClose = document.querySelector("#wardrobe-item-modal-close");
+const wardrobeItemModalTitle = document.querySelector("#wardrobe-item-modal-title");
+const wardrobeItemModalSlot = document.querySelector("#wardrobe-item-modal-slot");
+const wardrobeItemModalMeta = document.querySelector("#wardrobe-item-modal-meta");
+const wardrobeItemStatLines = document.querySelector("#wardrobe-item-stat-lines");
+const wardrobeCompareTarget = document.querySelector("#wardrobe-compare-target");
+const wardrobeComparisonList = document.querySelector("#wardrobe-comparison-list");
+const wardrobeAccessoryCompare = document.querySelector("#wardrobe-accessory-compare");
+
 const resFans = document.querySelector("#res-fans");
 const resMemes = document.querySelector("#res-memes");
 const resLostItems = document.querySelector("#res-lost-items");
@@ -116,6 +126,8 @@ const THEME_FILES = {
   "cafe": "/themes/cafe.css",
   "rainy-mood": "/themes/rainy-mood.css",
 };
+
+let activeWardrobeModalItemId = 0;
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
   "/images/backgrounds/Living_Room_00.webp",
@@ -1594,9 +1606,25 @@ function createEquipmentSlotCard() {
 function updateEquipmentSlotCard(card, entry) {
   const { definition, slot } = entry;
   const hasItem = Number(slot.itemId ?? 0) > 0;
+  const itemID = Number(slot.itemId ?? 0);
   const rarity = normalizeWardrobeRarity(slot.rarity || "basic");
 
   setClassNameIfChanged(card, `equipment-card ${hasItem ? wardrobeRarityClass(rarity) : "is-empty"}`);
+  toggleClassIfChanged(card, "wardrobe-item-clickable", hasItem);
+
+if (hasItem) {
+  card.dataset.wardrobeItemId = String(itemID);
+  card.dataset.wardrobeCompareSlot = definition.slotKey;
+  card.setAttribute("role", "button");
+  card.tabIndex = 0;
+  setTitleIfChanged(card, `View ${slot.itemName || "item"} details`);
+} else {
+  delete card.dataset.wardrobeItemId;
+  delete card.dataset.wardrobeCompareSlot;
+  card.removeAttribute("role");
+  card.removeAttribute("tabindex");
+  card.removeAttribute("title");
+}
   setTextIfChanged(card.querySelector(".equipment-slot-label"), definition.label);
 
   const levelTag = card.querySelector(".gear-level-tag");
@@ -1718,9 +1746,25 @@ function updateInventoryItemElement(element, entry) {
   }
 
   const item = entry.item;
+  const itemID = Number(item.id ?? item.itemId ?? item.inventoryId ?? 0);
   const rarity = normalizeWardrobeRarity(item.rarity || "basic");
 
   setClassNameIfChanged(element, `inventory-item-card ${wardrobeRarityClass(rarity)}`);
+  toggleClassIfChanged(element, "wardrobe-item-clickable", itemID > 0);
+
+if (itemID > 0) {
+  element.dataset.wardrobeItemId = String(itemID);
+  element.dataset.wardrobeCompareSlot = defaultCompareSlotForWardrobeItem(item);
+  element.setAttribute("role", "button");
+  element.tabIndex = 0;
+  setTitleIfChanged(element, `View ${item.name || "item"} details`);
+} else {
+  delete element.dataset.wardrobeItemId;
+  delete element.dataset.wardrobeCompareSlot;
+  element.removeAttribute("role");
+  element.removeAttribute("tabindex");
+  element.removeAttribute("title");
+}
   setTextIfChanged(element.querySelector(".gear-level-tag"), Number(item.powerLevel ?? 1).toLocaleString());
   setTextIfChanged(element.querySelector(".gear-card-name"), item.name || "Unknown Item");
   setTextIfChanged(element.querySelector(".gear-tailoring-tag"), `T: ${formatTailoringPoints(item)}`);
@@ -1858,6 +1902,277 @@ function formatWardrobeSlot(value) {
     default:
       return capitalize(String(value || "Item").replace(/_/g, " "));
   }
+}
+
+function defaultCompareSlotForWardrobeItem(item) {
+  const slot = normalizeWardrobeInventoryGroupKey(item?.equipmentSlot || item?.itemType || "");
+
+  if (slot === "accessory") {
+    return "accessory_1";
+  }
+
+  return slot;
+}
+
+function initializeWardrobeItemModal() {
+  [equipmentSlotList, inventoryPreviewList].forEach((container) => {
+    if (!container) {
+      return;
+    }
+
+    container.addEventListener("click", handleWardrobeItemClick);
+    container.addEventListener("keydown", handleWardrobeItemKeydown);
+  });
+
+  wardrobeItemModalClose?.addEventListener("click", closeWardrobeItemModal);
+
+  wardrobeItemModal?.addEventListener("click", (event) => {
+    if (event.target === wardrobeItemModal) {
+      closeWardrobeItemModal();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && wardrobeItemModal && !wardrobeItemModal.classList.contains("hidden")) {
+      closeWardrobeItemModal();
+    }
+  });
+}
+
+function handleWardrobeItemClick(event) {
+  const target = event.target.closest(".wardrobe-item-clickable");
+
+  if (!target) {
+    return;
+  }
+
+  openWardrobeItemDetail(target.dataset.wardrobeItemId, target.dataset.wardrobeCompareSlot || "");
+}
+
+function handleWardrobeItemKeydown(event) {
+  if (event.key !== "Enter" && event.key !== " ") {
+    return;
+  }
+
+  const target = event.target.closest(".wardrobe-item-clickable");
+  if (!target) {
+    return;
+  }
+
+  event.preventDefault();
+  openWardrobeItemDetail(target.dataset.wardrobeItemId, target.dataset.wardrobeCompareSlot || "");
+}
+
+async function openWardrobeItemDetail(itemID, compareSlot = "") {
+  const safeItemID = Number(itemID);
+
+  if (!safeItemID || safeItemID < 1) {
+    return;
+  }
+
+  activeWardrobeModalItemId = safeItemID;
+
+  try {
+    const params = new URLSearchParams({
+      id: String(safeItemID),
+    });
+
+    if (compareSlot) {
+      params.set("compareSlot", compareSlot);
+    }
+
+    const response = await fetch(`/api/player/wardrobe/item?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Item detail failed: ${response.status}`);
+    }
+
+    const detail = await response.json();
+    renderWardrobeItemModal(detail);
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not load item details. The wardrobe gremlin misplaced the tag.", "system");
+  }
+}
+
+function closeWardrobeItemModal() {
+  if (!wardrobeItemModal) {
+    return;
+  }
+
+  wardrobeItemModal.classList.add("hidden");
+  wardrobeItemModal.setAttribute("aria-hidden", "true");
+  activeWardrobeModalItemId = 0;
+}
+
+function renderWardrobeItemModal(detail) {
+  if (!wardrobeItemModal) {
+    return;
+  }
+
+  const item = detail?.item || {};
+  const rarity = formatWardrobeRarity(item.rarity || "basic");
+  const slot = formatWardrobeSlot(item.equipmentSlot || "item");
+  const level = Number(item.powerLevel ?? 1).toLocaleString();
+
+  setTextIfChanged(wardrobeItemModalTitle, item.name || "Unknown Item");
+  setTextIfChanged(wardrobeItemModalSlot, `${slot} · ${rarity}`);
+  setTextIfChanged(
+    wardrobeItemModalMeta,
+    `Item Level ${level} · T: ${formatTailoringPoints(item)}`
+  );
+
+  renderWardrobeAccessoryCompare(detail);
+  renderWardrobeStatLines(detail?.item?.statLines || []);
+  renderWardrobeComparison(detail);
+
+  wardrobeItemModal.classList.remove("hidden");
+  wardrobeItemModal.setAttribute("aria-hidden", "false");
+}
+
+function renderWardrobeAccessoryCompare(detail) {
+  if (!wardrobeAccessoryCompare) {
+    return;
+  }
+
+  wardrobeAccessoryCompare.replaceChildren();
+
+  const slots = Array.isArray(detail?.accessoryCompareSlots) ? detail.accessoryCompareSlots : [];
+  wardrobeAccessoryCompare.classList.toggle("hidden", slots.length === 0);
+
+  slots.forEach((slot) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `wardrobe-accessory-compare-button${slot.selected ? " active" : ""}`;
+    button.textContent = slot.displayName;
+    button.addEventListener("click", () => {
+      openWardrobeItemDetail(activeWardrobeModalItemId, slot.slotKey);
+    });
+
+    wardrobeAccessoryCompare.appendChild(button);
+  });
+}
+
+function renderWardrobeStatLines(lines) {
+  if (!wardrobeItemStatLines) {
+    return;
+  }
+
+  wardrobeItemStatLines.replaceChildren();
+
+  if (!Array.isArray(lines) || lines.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted";
+    empty.textContent = "No stat lines yet.";
+    wardrobeItemStatLines.appendChild(empty);
+    return;
+  }
+
+  lines.forEach((line) => {
+    const row = document.createElement("div");
+    row.className = `wardrobe-stat-line wardrobe-stat-source-${line.source || "unknown"}`;
+    row.title = line.tooltip || "";
+
+    const label = document.createElement("span");
+    label.textContent = `${formatWardrobeStatSource(line.source)} · ${line.displayName || line.statKey}`;
+
+    const value = document.createElement("strong");
+    value.textContent = formatWardrobeStatValue(line.value, line.valueKind);
+
+    row.append(label, value);
+    wardrobeItemStatLines.appendChild(row);
+  });
+}
+
+function renderWardrobeComparison(detail) {
+  if (!wardrobeCompareTarget || !wardrobeComparisonList) {
+    return;
+  }
+
+  const compareItem = detail?.compareItem;
+  setTextIfChanged(
+    wardrobeCompareTarget,
+    compareItem
+      ? `Compared against ${compareItem.name || "equipped item"} in ${formatWardrobeSlot(detail.compareSlot)}.`
+      : `No equipped item in ${formatWardrobeSlot(detail?.compareSlot || "this slot")}.`
+  );
+
+  wardrobeComparisonList.replaceChildren();
+
+  const comparisons = Array.isArray(detail?.comparisons) ? detail.comparisons : [];
+  if (comparisons.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "muted";
+    empty.textContent = "Nothing to compare yet.";
+    wardrobeComparisonList.appendChild(empty);
+    return;
+  }
+
+  comparisons.forEach((comparison) => {
+    const row = document.createElement("div");
+    const delta = Number(comparison.delta ?? 0);
+
+    row.className = "wardrobe-comparison-row";
+    row.classList.toggle("positive", delta > 0);
+    row.classList.toggle("negative", delta < 0);
+    row.title = comparison.tooltip || "";
+
+    const label = document.createElement("span");
+    label.textContent = comparison.displayName || comparison.statKey;
+
+    const values = document.createElement("strong");
+    values.textContent = `${formatWardrobeStatValue(comparison.itemValue, comparison.valueKind)} (${formatWardrobeDelta(delta, comparison.valueKind)})`;
+
+    row.append(label, values);
+    wardrobeComparisonList.appendChild(row);
+  });
+}
+
+function formatWardrobeStatSource(source) {
+  switch (String(source || "").toLowerCase()) {
+    case "implicit":
+      return "Implicit";
+    case "prefix":
+      return "Prefix";
+    case "suffix":
+      return "Suffix";
+    case "devastating_implicit":
+      return "Devastating";
+    default:
+      return "Stat";
+  }
+}
+
+function formatWardrobeStatValue(value, valueKind) {
+  const number = Number(value ?? 0);
+  const prefix = number > 0 ? "+" : "";
+
+  if (String(valueKind).toLowerCase() === "percent") {
+    return `${prefix}${trimStatDecimals(number)}%`;
+  }
+
+  return `${prefix}${trimStatDecimals(number)}`;
+}
+
+function formatWardrobeDelta(value, valueKind) {
+  const number = Number(value ?? 0);
+
+  if (number === 0) {
+    return String(valueKind).toLowerCase() === "percent" ? "±0%" : "±0";
+  }
+
+  return formatWardrobeStatValue(number, valueKind);
+}
+
+function trimStatDecimals(value) {
+  const number = Number(value ?? 0);
+
+  if (Number.isInteger(number)) {
+    return number.toLocaleString();
+  }
+
+  return number.toLocaleString(undefined, {
+    maximumFractionDigits: 2,
+  });
 }
 
 function formatOutcome(outcome) {
@@ -3964,6 +4279,7 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
+initializeWardrobeItemModal();
 initializeTheme();
 loadStatus();
 loadPlayerStatus();

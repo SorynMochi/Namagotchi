@@ -56,6 +56,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.HandleResetPlaydeckStreak)
 	mux.HandleFunc("/api/dev/rewind-care-decay", s.HandleRewindCareDecay)
 	mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
+	mux.HandleFunc("/api/player/wardrobe/item", s.HandleWardrobeItemDetail)
 	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
 	mux.HandleFunc("/api/player/gathering", s.HandleGatheringTask)
 	mux.HandleFunc("/api/player/care", s.HandleCareAction)
@@ -130,6 +131,41 @@ func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, status)
+}
+
+func (s *Server) HandleWardrobeItemDetail(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	rawItemID := strings.TrimSpace(r.URL.Query().Get("id"))
+	itemID, err := strconv.ParseInt(rawItemID, 10, 64)
+	if err != nil || itemID < 1 {
+		writeError(w, http.StatusBadRequest, "id must be a positive whole number")
+		return
+	}
+
+	playerID, err := s.Store.DevPlayerID(r.Context())
+	if err != nil {
+		log.Printf("get dev player for wardrobe item failed: %v", err)
+		writeError(w, http.StatusNotFound, "player not found; visit /api/dev/seed-player first")
+		return
+	}
+
+	detail, err := s.Store.GetWardrobeItemDetail(
+		r.Context(),
+		playerID,
+		itemID,
+		r.URL.Query().Get("compareSlot"),
+	)
+	if err != nil {
+		log.Printf("get wardrobe item detail failed: %v", err)
+		writeError(w, http.StatusNotFound, "wardrobe item not found")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, detail)
 }
 
 func (s *Server) HandleSettleTicks(w http.ResponseWriter, r *http.Request) {
