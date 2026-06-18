@@ -1,4 +1,4 @@
-package server
+﻿package server
 
 import (
 	"context"
@@ -518,3 +518,4 @@ func decodeWardrobeItemActionRequest(r *http.Request) (WardrobeItemActionRequest
 
 	return request, nil
 }
+
