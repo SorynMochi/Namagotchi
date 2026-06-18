@@ -2725,6 +2725,75 @@ function updateGatheringCards(status) {
   });
 }
 
+async function setGatheringTask(task) {
+  const safeTask = String(task || "").trim().toLowerCase();
+
+  if (!safeTask) {
+    return;
+  }
+
+  try {
+    const response = await csrfFetch("/api/player/gathering", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        task: safeTask,
+      }),
+    });
+
+    const payload = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      throw new Error(payload?.message || `Gathering request failed: ${response.status}`);
+    }
+
+    addChatMessage("System", payload?.message || `Gathering task set to ${labelForTask(safeTask)}.`, "system");
+    await loadPlayerStatus();
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not change gathering task. The task clipboard ran away.", "system");
+  }
+}
+
+async function performCareAction(buttonAction) {
+  const action = resolveCareActionForRequest(buttonAction, latestPlayerStatus);
+
+  if (!action) {
+    return;
+  }
+
+  try {
+    const response = await csrfFetch("/api/player/care", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        action,
+      }),
+    });
+
+    const payload = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      throw new Error(payload?.message || `Care action failed: ${response.status}`);
+    }
+
+    if (payload?.ok) {
+      addNamiMessage(namiCareMessage(payload), {
+        kind: Number(payload?.levelUps ?? 0) > 0 ? "level-up" : "normal",
+      });
+    }
+
+    await loadPlayerStatus();
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not perform that care action. Nami-chan's tiny schedule book snapped shut.", "system");
+  }
+}
+
 function createForceTickButton() {
   // Dev controls are server-gated at /dev.
 }
