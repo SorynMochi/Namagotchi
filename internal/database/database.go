@@ -1040,50 +1040,46 @@ func (s *Store) StartOrQueueDevCareAction(ctx context.Context, action string) (*
 }
 
 func loadDevCompanionForUpdateTx(ctx context.Context, tx pgx.Tx) (int64, CompanionState, error) {
-	var playerID int64
-	var companion CompanionState
-
 	playerID, err := playerIDForContextTx(ctx, tx)
 	if err != nil {
 		return 0, CompanionState{}, err
 	}
 
+	var companion CompanionState
+
 	err = tx.QueryRow(ctx, `
-		select
-			p.id,
-			c.companion_name,
-			c.level,
-			c.total_xp,
-			c.xp_into_level,
-			c.mood_score::float8,
-			c.satiety,
-			c.connection,
-			c.energy,
-			c.comfort,
-			c.playfulness,
-			c.inspiration,
-			c.cleanliness,
-			c.status,
-			c.last_interaction_at,
-			c.last_xp_gained,
-			c.last_action,
-			coalesce(c.sleep_started_at, '0001-01-01 00:00:00+00'::timestamptz),
-coalesce(c.energy_at_sleep_start, 0),
-c.last_decay_at,
-coalesce(c.satiety_decay_remainder, 0)::float8,
-coalesce(c.connection_decay_remainder, 0)::float8,
-coalesce(c.energy_decay_remainder, 0)::float8,
-coalesce(c.comfort_decay_remainder, 0)::float8,
-coalesce(c.playfulness_decay_remainder, 0)::float8,
-coalesce(c.inspiration_decay_remainder, 0)::float8,
-coalesce(c.cleanliness_decay_remainder, 0)::float8,
-coalesce(c.sleep_energy_recovery_remainder, 0)::float8
-		from players p
-		join companion_states c on c.player_id = p.id
-		where p.id = $1
-		for update
-	`, playerID).Scan(
-		&playerID,
+        select
+            c.companion_name,
+            c.level,
+            c.total_xp,
+            c.xp_into_level,
+            c.mood_score::float8,
+            c.satiety,
+            c.connection,
+            c.energy,
+            c.comfort,
+            c.playfulness,
+            c.inspiration,
+            c.cleanliness,
+            c.status,
+            c.last_interaction_at,
+            c.last_xp_gained,
+            c.last_action,
+            coalesce(c.sleep_started_at, '0001-01-01 00:00:00+00'::timestamptz),
+            coalesce(c.energy_at_sleep_start, 0),
+            c.last_decay_at,
+            coalesce(c.satiety_decay_remainder, 0)::float8,
+            coalesce(c.connection_decay_remainder, 0)::float8,
+            coalesce(c.energy_decay_remainder, 0)::float8,
+            coalesce(c.comfort_decay_remainder, 0)::float8,
+            coalesce(c.playfulness_decay_remainder, 0)::float8,
+            coalesce(c.inspiration_decay_remainder, 0)::float8,
+            coalesce(c.cleanliness_decay_remainder, 0)::float8,
+            coalesce(c.sleep_energy_recovery_remainder, 0)::float8
+        from companion_states c
+        where c.player_id = $1
+        for update
+    `, playerID).Scan(
 		&companion.CompanionName,
 		&companion.Level,
 		&companion.TotalXP,
@@ -1114,7 +1110,7 @@ coalesce(c.sleep_energy_recovery_remainder, 0)::float8
 	)
 
 	if err != nil {
-		return 0, CompanionState{}, fmt.Errorf("load dev companion for update: %w", err)
+		return 0, CompanionState{}, fmt.Errorf("load companion for update: %w", err)
 	}
 
 	companion.MoodScore = NamiMoodScore(companion)
@@ -1126,7 +1122,6 @@ coalesce(c.sleep_energy_recovery_remainder, 0)::float8
 
 	return playerID, companion, nil
 }
-
 func findQueuedCareAction(queued []CareActionState, actionKey string) (CareActionState, bool) {
 	for _, action := range queued {
 		if action.Action == actionKey {

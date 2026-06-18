@@ -16,10 +16,10 @@ func (s *Store) PlayerIDForAccount(ctx context.Context, accountID int64) (int64,
 	var playerID int64
 
 	err := s.Pool.QueryRow(ctx, `
-select id
-from players
-where account_id = $1
-`, accountID).Scan(&playerID)
+        select id
+        from players
+        where account_id = $1
+    `, accountID).Scan(&playerID)
 	if err == nil {
 		return playerID, nil
 	}
@@ -28,19 +28,19 @@ where account_id = $1
 	}
 
 	err = s.Pool.QueryRow(ctx, `
-update players
-set account_id = $1
-where id = (
-select id
-from players
-where account_id is null
-order by
-case when display_name = 'Soryn' then 0 else 1 end,
-id
-limit 1
-)
-returning id
-`, accountID).Scan(&playerID)
+        update players
+        set account_id = $1
+        where id = (
+            select id
+            from players
+            where account_id is null
+            order by
+                case when display_name = 'Soryn' then 0 else 1 end,
+                id
+            limit 1
+        )
+        returning id
+    `, accountID).Scan(&playerID)
 	if err == nil {
 		return playerID, nil
 	}
@@ -60,11 +60,11 @@ func playerIDForContextTx(ctx context.Context, tx pgx.Tx) (int64, error) {
 		var playerID int64
 
 		err := tx.QueryRow(ctx, `
-select id
-from players
-where account_id = $1
-for update
-`, accountID).Scan(&playerID)
+            select id
+            from players
+            where account_id = $1
+            for update
+        `, accountID).Scan(&playerID)
 		if err == nil {
 			return playerID, nil
 		}
@@ -73,19 +73,19 @@ for update
 		}
 
 		err = tx.QueryRow(ctx, `
-update players
-set account_id = $1
-where id = (
-select id
-from players
-where account_id is null
-order by
-case when display_name = 'Soryn' then 0 else 1 end,
-id
-limit 1
-)
-returning id
-`, accountID).Scan(&playerID)
+            update players
+            set account_id = $1
+            where id = (
+                select id
+                from players
+                where account_id is null
+                order by
+                    case when display_name = 'Soryn' then 0 else 1 end,
+                    id
+                limit 1
+            )
+            returning id
+        `, accountID).Scan(&playerID)
 		if err == nil {
 			return playerID, nil
 		}
@@ -99,11 +99,11 @@ returning id
 	var playerID int64
 
 	if err := tx.QueryRow(ctx, `
-select id
-from players
-where display_name = 'Soryn'
-for update
-`).Scan(&playerID); err != nil {
+        select id
+        from players
+        where display_name = 'Soryn'
+        for update
+    `).Scan(&playerID); err != nil {
 		return 0, fmt.Errorf("get dev player id in tx: %w", err)
 	}
 
