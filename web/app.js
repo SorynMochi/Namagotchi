@@ -2229,6 +2229,12 @@ function renderWardrobeItemActions(detail) {
   const itemSlot = normalizeWardrobeInventoryGroupKey(item.equipmentSlot || item.itemType || "");
   const equippedSlot = String(item.equippedSlot || "").trim().toLowerCase();
 
+  const primaryActions = document.createElement("div");
+  primaryActions.className = "wardrobe-item-action-row wardrobe-item-primary-actions";
+
+  const utilityActions = document.createElement("div");
+  utilityActions.className = "wardrobe-item-action-row wardrobe-item-utility-actions";
+
   if (!itemID || !itemSlot) {
     const empty = document.createElement("p");
     empty.className = "muted";
@@ -2243,7 +2249,7 @@ function renderWardrobeItemActions(detail) {
       { slotKey: "accessory_2", label: "A2" },
     ].forEach((slot) => {
       const isWearingHere = equippedSlot === slot.slotKey;
-      wardrobeItemActions.appendChild(
+      primaryActions.appendChild(
         createWardrobeActionButton(
           isWearingHere ? `Wearing ${slot.label}` : `Wear ${slot.label}`,
           () => equipWardrobeItem(itemID, slot.slotKey),
@@ -2256,7 +2262,7 @@ function renderWardrobeItemActions(detail) {
     const targetSlot = detail?.compareSlot || defaultCompareSlotForWardrobeItem(item);
     const isWearingHere = equippedSlot === targetSlot;
 
-    wardrobeItemActions.appendChild(
+    primaryActions.appendChild(
       createWardrobeActionButton(
         isWearingHere ? "Wearing" : "Wear",
         () => equipWardrobeItem(itemID, targetSlot),
@@ -2267,7 +2273,7 @@ function renderWardrobeItemActions(detail) {
   }
 
   if (equippedSlot) {
-    wardrobeItemActions.appendChild(
+    primaryActions.appendChild(
       createWardrobeActionButton(
         "Take Off",
         () => unequipWardrobeItem(itemID, equippedSlot),
@@ -2277,6 +2283,20 @@ function renderWardrobeItemActions(detail) {
       )
     );
   }
+
+  ["Recycle", "Sell", "Beautify"].forEach((label) => {
+    utilityActions.appendChild(
+      createWardrobeActionButton(
+        label,
+        null,
+        true,
+        `${label} will be added later.`,
+        "utility"
+      )
+    );
+  });
+
+  wardrobeItemActions.append(primaryActions, utilityActions);
 }
 
 function createWardrobeActionButton(label, action, disabled = false, title = "", tone = "") {
@@ -4608,6 +4628,7 @@ loadPlayerStatus();
 setInterval(updateLiveServerClock, 1000);
 setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
+
 
 
 
