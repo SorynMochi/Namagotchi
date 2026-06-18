@@ -38,6 +38,17 @@ type DevWardrobeSpawnResponse struct {
 	Detail  database.WardrobeItemDetail `json:"detail"`
 }
 
+type WardrobeItemActionRequest struct {
+	ItemID  int64  `json:"itemId"`
+	SlotKey string `json:"slotKey"`
+}
+
+type WardrobeItemActionResponse struct {
+	OK      bool                        `json:"ok"`
+	Message string                      `json:"message"`
+	Detail  database.WardrobeItemDetail `json:"detail"`
+}
+
 type GatheringRequest struct {
 	Task string `json:"task"`
 }
@@ -65,6 +76,8 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.HandleSpawnDevWardrobeItem)
 	mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
 	mux.HandleFunc("/api/player/wardrobe/item", s.HandleWardrobeItemDetail)
+	mux.HandleFunc("/api/player/wardrobe/equip", s.HandleEquipWardrobeItem)
+	mux.HandleFunc("/api/player/wardrobe/unequip", s.HandleUnequipWardrobeItem)
 	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
 	mux.HandleFunc("/api/player/gathering", s.HandleGatheringTask)
 	mux.HandleFunc("/api/player/care", s.HandleCareAction)
@@ -405,4 +418,103 @@ func writeError(w http.ResponseWriter, statusCode int, message string) {
 		OK:      false,
 		Message: message,
 	})
+}
+
+func (s *Server) HandleEquipWardrobeItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	request, err := decodeWardrobeItemActionRequest(r)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid wardrobe equip request")
+		return
+	}
+
+	if request.ItemID < 1 {
+		writeError(w, http.StatusBadRequest, "itemId must be a positive whole number")
+		return
+	}
+
+	playerID, err := s.Store.DevPlayerID(r.Context())
+	if err != nil {
+		log.Printf("get dev player for equip failed: %v", err)
+		writeError(w, http.StatusNotFound, "player not found; visit /api/dev/seed-player first")
+		return
+	}
+
+	detail, err := s.Store.EquipWardrobeItem(r.Context(), playerID, request.ItemID, request.SlotKey)
+	if err != nil {
+		log.Printf("equip wardrobe item failed: %v", err)
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	writeJSON(w, http.StatusOK, WardrobeItemActionResponse{
+		OK:      true,
+		Message: "Wardrobe item equipped.",
+		Detail:  detail,
+	})
+}
+
+func (s *Server) HandleUnequipWardrobeItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	request, err := decodeWardrobeItemActionRequest(r)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid wardrobe unequip request")
+		return
+	}
+
+	if request.ItemID < 1 {
+		writeError(w, http.StatusBadRequest, "itemId must be a positive whole number")
+		return
+	}
+
+	playerID, err := s.Store.DevPlayerID(r.Context())
+	if err != nil {
+		log.Printf("get dev player for unequip failed: %v", err)
+		writeError(w, http.StatusNotFound, "player not found; visit /api/dev/seed-player first")
+		return
+	}
+
+	detail, err := s.Store.UnequipWardrobeItem(r.Context(), playerID, request.ItemID, request.SlotKey)
+	if err != nil {
+		log.Printf("unequip wardrobe item failed: %v", err)
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	writeJSON(w, http.StatusOK, WardrobeItemActionResponse{
+		OK:      true,
+		Message: "Wardrobe item removed.",
+		Detail:  detail,
+	})
+}
+
+func decodeWardrobeItemActionRequest(r *http.Request) (WardrobeItemActionRequest, error) {
+	var request WardrobeItemActionRequest
+
+	if r.Body != nil && r.ContentLength != 0 {
+		defer r.Body.Close()
+
+		if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+			return request, err
+		}
+	}
+
+	if request.ItemID == 0 {
+		itemID, _ := strconv.ParseInt(strings.TrimSpace(r.URL.Query().Get("itemId")), 10, 64)
+		request.ItemID = itemID
+	}
+
+	if request.SlotKey == "" {
+		request.SlotKey = strings.TrimSpace(r.URL.Query().Get("slotKey"))
+	}
+
+	return request, nil
 }

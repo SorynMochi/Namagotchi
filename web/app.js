@@ -1,4 +1,4 @@
-const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -59,6 +59,7 @@ const wardrobeItemStatLines = document.querySelector("#wardrobe-item-stat-lines"
 const wardrobeCompareTarget = document.querySelector("#wardrobe-compare-target");
 const wardrobeComparisonList = document.querySelector("#wardrobe-comparison-list");
 const wardrobeAccessoryCompare = document.querySelector("#wardrobe-accessory-compare");
+const wardrobeItemActions = document.querySelector("#wardrobe-item-actions");
 
 const resFans = document.querySelector("#res-fans");
 const resMemes = document.querySelector("#res-memes");
@@ -129,6 +130,7 @@ const THEME_FILES = {
 };
 
 let activeWardrobeModalItemId = 0;
+let activeWardrobeModalCompareSlot = "";
 
 const NAMI_ROOM_BACKGROUND_PATHS = [
   "/images/backgrounds/Living_Room_00.webp",
@@ -2054,18 +2056,21 @@ function renderWardrobeItemModal(detail) {
   }
 
   const item = detail?.item || {};
+  activeWardrobeModalItemId = Number(item.id ?? activeWardrobeModalItemId ?? 0);
+  activeWardrobeModalCompareSlot = detail?.compareSlot || defaultCompareSlotForWardrobeItem(item);
   const rarity = formatWardrobeRarity(item.rarity || "basic");
   const slot = formatWardrobeSlot(item.equipmentSlot || "item");
   const level = Number(item.powerLevel ?? 1).toLocaleString();
 
   setTextIfChanged(wardrobeItemModalTitle, item.name || "Unknown Item");
-  setTextIfChanged(wardrobeItemModalSlot, `${slot} · ${rarity}`);
+  setTextIfChanged(wardrobeItemModalSlot, `${slot} Â· ${rarity}`);
   setTextIfChanged(
     wardrobeItemModalMeta,
-    `Item Level ${level} · T: ${formatTailoringPoints(item)}`
+    `Item Level ${level} Â· T: ${formatTailoringPoints(item)}`
   );
 
   renderWardrobeAccessoryCompare(detail);
+  renderWardrobeItemActions(detail);
   renderWardrobeStatLines(detail?.item?.statLines || []);
   renderWardrobeComparison(detail);
 
@@ -2096,6 +2101,154 @@ function renderWardrobeAccessoryCompare(detail) {
   });
 }
 
+
+function renderWardrobeItemActions(detail) {
+  if (!wardrobeItemActions) {
+    return;
+  }
+
+  wardrobeItemActions.replaceChildren();
+
+  const item = detail?.item || {};
+  const itemID = Number(item.id ?? item.itemId ?? 0);
+  const itemSlot = normalizeWardrobeInventoryGroupKey(item.equipmentSlot || item.itemType || "");
+  const equippedSlot = String(item.equippedSlot || "").trim().toLowerCase();
+
+  if (!itemID || !itemSlot) {
+    const empty = document.createElement("p");
+    empty.className = "muted";
+    empty.textContent = "This item cannot be worn.";
+    wardrobeItemActions.appendChild(empty);
+    return;
+  }
+
+  if (itemSlot === "accessory") {
+    [
+      { slotKey: "accessory_1", label: "A1" },
+      { slotKey: "accessory_2", label: "A2" },
+    ].forEach((slot) => {
+      const isWearingHere = equippedSlot === slot.slotKey;
+      wardrobeItemActions.appendChild(
+        createWardrobeActionButton(
+          isWearingHere ? `Wearing ${slot.label}` : `Wear ${slot.label}`,
+          () => equipWardrobeItem(itemID, slot.slotKey),
+          isWearingHere,
+          `${isWearingHere ? "Already worn in" : "Wear in"} ${formatWardrobeSlot(slot.slotKey)}`
+        )
+      );
+    });
+  } else {
+    const targetSlot = detail?.compareSlot || defaultCompareSlotForWardrobeItem(item);
+    const isWearingHere = equippedSlot === targetSlot;
+
+    wardrobeItemActions.appendChild(
+      createWardrobeActionButton(
+        isWearingHere ? "Wearing" : "Wear",
+        () => equipWardrobeItem(itemID, targetSlot),
+        isWearingHere,
+        isWearingHere ? "Nami-Chan is already wearing this." : `Wear in ${formatWardrobeSlot(targetSlot)}`
+      )
+    );
+  }
+
+  if (equippedSlot) {
+    wardrobeItemActions.appendChild(
+      createWardrobeActionButton(
+        "Take Off",
+        () => unequipWardrobeItem(itemID, equippedSlot),
+        false,
+        `Remove from ${formatWardrobeSlot(equippedSlot)}`,
+        "danger"
+      )
+    );
+  }
+}
+
+function createWardrobeActionButton(label, action, disabled = false, title = "", tone = "") {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `wardrobe-item-action-button${tone ? ` ${tone}` : ""}`;
+  button.textContent = label;
+  button.disabled = disabled;
+  button.title = title;
+
+  if (!disabled) {
+    button.addEventListener("click", action);
+  }
+
+  return button;
+}
+
+async function equipWardrobeItem(itemID, slotKey = "") {
+  try {
+    const response = await fetch("/api/player/wardrobe/equip", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        itemId: Number(itemID),
+        slotKey,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Equip wardrobe item failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    await loadPlayerStatus();
+
+    if (result?.detail) {
+      renderWardrobeItemModal(result.detail);
+    } else {
+      await openWardrobeItemDetail(itemID, slotKey || activeWardrobeModalCompareSlot);
+    }
+
+    const itemName = result?.detail?.item?.name || "Item";
+    addChatMessage("System", `${itemName} equipped. Nami-Chan is now officially more stylish.`, "system");
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not equip that item. The wardrobe clasp fought back.", "system");
+  }
+}
+
+async function unequipWardrobeItem(itemID, slotKey = "") {
+  try {
+    const response = await fetch("/api/player/wardrobe/unequip", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        itemId: Number(itemID),
+        slotKey,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Unequip wardrobe item failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    await loadPlayerStatus();
+
+    if (result?.detail) {
+      renderWardrobeItemModal(result.detail);
+    } else {
+      await openWardrobeItemDetail(itemID, slotKey || activeWardrobeModalCompareSlot);
+    }
+
+    const itemName = result?.detail?.item?.name || "Item";
+    addChatMessage("System", `${itemName} removed from Nami-Chan's outfit.`, "system");
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not remove that item. The fashion tape is too powerful.", "system");
+  }
+}
+
 function renderWardrobeStatLines(lines) {
   if (!wardrobeItemStatLines) {
     return;
@@ -2117,7 +2270,7 @@ function renderWardrobeStatLines(lines) {
     row.title = line.tooltip || "";
 
     const label = document.createElement("span");
-    label.textContent = `${formatWardrobeStatSource(line.source)} · ${line.displayName || line.statKey}`;
+    label.textContent = `${formatWardrobeStatSource(line.source)} Â· ${line.displayName || line.statKey}`;
 
     const value = document.createElement("strong");
     value.textContent = formatWardrobeStatValue(line.value, line.valueKind);
@@ -2201,7 +2354,7 @@ function formatWardrobeDelta(value, valueKind) {
   const number = Number(value ?? 0);
 
   if (number === 0) {
-    return String(valueKind).toLowerCase() === "percent" ? "±0%" : "±0";
+    return String(valueKind).toLowerCase() === "percent" ? "Â±0%" : "Â±0";
   }
 
   return formatWardrobeStatValue(number, valueKind);
@@ -2773,7 +2926,7 @@ function namiCareMessage(result) {
   const caption = companion.caption || "";
 
   if (Number(result?.levelUps ?? 0) > 0) {
-    return `I leveled up! Iâ€™m level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
+    return `I leveled up! IÃ¢â‚¬â„¢m level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
   }
 
   switch (result?.action) {
@@ -2800,9 +2953,9 @@ function namiCareMessage(result) {
     case "freshen_up":
       return "Freshened up. Presentation stat restored.";
     case "put_to_bed":
-      return "Iâ€™m going to sleep now. Keep the room cozy, okay?";
+      return "IÃ¢â‚¬â„¢m going to sleep now. Keep the room cozy, okay?";
     case "wake_up":
-      return "Iâ€™m awake. Soft, sleepy, and accepting tribute.";
+      return "IÃ¢â‚¬â„¢m awake. Soft, sleepy, and accepting tribute.";
     default:
       return caption || `${actionName} complete.`;
   }
