@@ -103,7 +103,7 @@ func (s *Server) Routes() http.Handler {
 
 	mux.Handle("/", http.FileServer(http.Dir("web")))
 
-	return mux
+	return s.withSecurityHeaders(mux)
 }
 
 func (s *Server) HandleStatus(w http.ResponseWriter, r *http.Request) {
