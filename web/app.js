@@ -1,4 +1,4 @@
-const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -1561,15 +1561,7 @@ function renderWardrobeStatus(status) {
   }
 
   if (wardrobeBonusesList) {
-    const bonusRows = [
-      { key: "equipment-power", label: "Equipment Power", value: Number(playdeck.equipmentPower ?? 0).toLocaleString() },
-      { key: "attack", label: "Attack", value: Number(playdeck.attack ?? 0).toLocaleString() },
-      { key: "defense", label: "Defense", value: Number(playdeck.defense ?? 0).toLocaleString() },
-      { key: "max-hp", label: "Max HP", value: Number(playdeck.playerMaxHp ?? 0).toLocaleString() },
-      { key: "current-hp", label: "Current HP", value: Number(playdeck.playerHp ?? 0).toLocaleString() },
-      { key: "slots-filled", label: "Slots Filled", value: `${filledSlots.toLocaleString()} / ${WARDROBE_EQUIP_SLOT_ORDER.length.toLocaleString()}` },
-    ];
-
+    const bonusRows = buildEquippedWardrobeBonusRows(equipment);
     syncKeyedChildren(wardrobeBonusesList, bonusRows, createWardrobeBonusRow, updateWardrobeBonusRow);
   }
 
@@ -1641,6 +1633,74 @@ if (hasItem) {
   const tailoring = card.querySelector(".gear-tailoring-tag");
   setTextIfChanged(tailoring, hasItem ? `T: ${formatTailoringPoints(slot)}` : "");
   toggleClassIfChanged(tailoring, "is-hidden", !hasItem);
+}
+
+
+function buildEquippedWardrobeBonusRows(equipment) {
+  const totals = new Map();
+
+  (Array.isArray(equipment) ? equipment : []).forEach((slot) => {
+    if (Number(slot?.itemId ?? 0) <= 0 || !Array.isArray(slot?.statLines)) {
+      return;
+    }
+
+    slot.statLines.forEach((line) => {
+      const statKey = String(line?.statKey || "").trim();
+
+      if (!statKey) {
+        return;
+      }
+
+      const value = Number(line?.value ?? 0);
+
+      if (!Number.isFinite(value) || value === 0) {
+        return;
+      }
+
+      const current = totals.get(statKey) || {
+        key: statKey,
+        label: line.displayName || statKey,
+        valueKind: line.valueKind || "flat",
+        rawValue: 0,
+        tooltip: line.tooltip || "",
+        sortOrder: Number(line.sortOrder ?? 9999),
+      };
+
+      current.rawValue += value;
+      current.sortOrder = Math.min(current.sortOrder, Number(line.sortOrder ?? 9999));
+      totals.set(statKey, current);
+    });
+  });
+
+  const rows = [...totals.values()]
+    .filter((row) => Math.abs(Number(row.rawValue ?? 0)) > 0.0001)
+    .sort((a, b) => {
+      const sortDelta = Number(a.sortOrder ?? 9999) - Number(b.sortOrder ?? 9999);
+
+      if (sortDelta !== 0) {
+        return sortDelta;
+      }
+
+      return String(a.label || "").localeCompare(String(b.label || ""));
+    })
+    .map((row) => ({
+      key: row.key,
+      label: row.label,
+      value: formatWardrobeStatValue(row.rawValue, row.valueKind),
+      tooltip: row.tooltip,
+    }));
+
+  if (rows.length === 0) {
+    return [{
+      key: "__empty__",
+      empty: true,
+      label: "No equipped gear bonuses yet.",
+      value: "",
+      tooltip: "",
+    }];
+  }
+
+  return rows;
 }
 
 function createWardrobeBonusRow() {
@@ -2087,10 +2147,10 @@ function renderWardrobeItemModal(detail) {
   const level = Number(item.powerLevel ?? 1).toLocaleString();
 
   setTextIfChanged(wardrobeItemModalTitle, item.name || "Unknown Item");
-  setTextIfChanged(wardrobeItemModalSlot, `${slot} Â· ${rarity}`);
+  setTextIfChanged(wardrobeItemModalSlot, `${slot} Ã‚Â· ${rarity}`);
   setTextIfChanged(
     wardrobeItemModalMeta,
-    `Item Level ${level} Â· T: ${formatTailoringPoints(item)}`
+    `Item Level ${level} Ã‚Â· T: ${formatTailoringPoints(item)}`
   );
 
   renderWardrobeAccessoryCompare(detail);
@@ -2294,7 +2354,7 @@ function renderWardrobeStatLines(lines) {
     row.title = line.tooltip || "";
 
     const label = document.createElement("span");
-    label.textContent = `${formatWardrobeStatSource(line.source)} Â· ${line.displayName || line.statKey}`;
+    label.textContent = `${formatWardrobeStatSource(line.source)} Ã‚Â· ${line.displayName || line.statKey}`;
 
     const value = document.createElement("strong");
     value.textContent = formatWardrobeStatValue(line.value, line.valueKind);
@@ -2378,7 +2438,7 @@ function formatWardrobeDelta(value, valueKind) {
   const number = Number(value ?? 0);
 
   if (number === 0) {
-    return String(valueKind).toLowerCase() === "percent" ? "Â±0%" : "Â±0";
+    return String(valueKind).toLowerCase() === "percent" ? "Ã‚Â±0%" : "Ã‚Â±0";
   }
 
   return formatWardrobeStatValue(number, valueKind);
@@ -2950,7 +3010,7 @@ function namiCareMessage(result) {
   const caption = companion.caption || "";
 
   if (Number(result?.levelUps ?? 0) > 0) {
-    return `I leveled up! IÃ¢â‚¬â„¢m level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
+    return `I leveled up! IÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢m level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
   }
 
   switch (result?.action) {
@@ -2977,9 +3037,9 @@ function namiCareMessage(result) {
     case "freshen_up":
       return "Freshened up. Presentation stat restored.";
     case "put_to_bed":
-      return "IÃ¢â‚¬â„¢m going to sleep now. Keep the room cozy, okay?";
+      return "IÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢m going to sleep now. Keep the room cozy, okay?";
     case "wake_up":
-      return "IÃ¢â‚¬â„¢m awake. Soft, sleepy, and accepting tribute.";
+      return "IÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢m awake. Soft, sleepy, and accepting tribute.";
     default:
       return caption || `${actionName} complete.`;
   }
@@ -4509,3 +4569,4 @@ loadPlayerStatus();
 setInterval(updateLiveServerClock, 1000);
 setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
+

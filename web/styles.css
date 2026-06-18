@@ -7864,3 +7864,20 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
     overflow-y: auto !important;
   }
 }
+
+/* Wardrobe gear-only bonuses */
+
+#section-inventory .wardrobe-bonus-row.is-empty {
+  justify-content: center;
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+}
+
+#section-inventory .wardrobe-bonus-row.is-empty .wardrobe-bonus-label {
+  width: 100%;
+}
+
+#section-inventory .wardrobe-bonus-row .wardrobe-bonus-value.is-hidden {
+  display: none;
+}
