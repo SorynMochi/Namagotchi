@@ -168,7 +168,7 @@ func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	status, err := s.Store.GetDevPlayerStatus(r.Context())
+	status, err := s.playerStatusForRequest(r)
 	if err != nil {
 		log.Printf("get player status failed: %v", err)
 		writeError(w, http.StatusNotFound, "player status not found")
@@ -190,7 +190,7 @@ func (s *Server) HandlePlayerSync(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	status, err := s.Store.GetDevPlayerStatus(r.Context())
+	status, err := s.playerStatusForRequest(r)
 	if err != nil {
 		log.Printf("get player status after sync failed: %v", err)
 		writeError(w, http.StatusNotFound, "player status not found")
@@ -363,7 +363,7 @@ func (s *Server) HandleRewindCareDecay(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	status, err := s.Store.GetDevPlayerStatus(r.Context())
+	status, err := s.playerStatusForRequest(r)
 	if err != nil {
 		log.Printf("get player status after care decay rewind failed: %v", err)
 		writeError(w, http.StatusInternalServerError, "player status failed")
