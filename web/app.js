@@ -102,8 +102,7 @@ const themeStylesheet = document.querySelector("#theme-stylesheet");
 const themeSelect = document.querySelector("#theme-select");
 
 const MAX_CHAT_MESSAGES = 100;
-const MAX_NAMI_MESSAGES = 100;
-const NAMI_MESSAGE_STORAGE_KEY = "namigotchi_nami_messages_v1";
+const MAX_NAMI_MESSAGES = 50;
 const CHAT_STORAGE_KEY = "namigotchi_chat_store_v1";
 const CHAT_CHANNEL_KEY = "namigotchi_chat_active_channel_v1";
 const CHAT_HIDDEN_KEY = "namigotchi_chat_hidden_v1";
@@ -2950,10 +2949,6 @@ function addNamiMessage(text, options = {}) {
     namiMessages.shift();
   }
 
-  if (options.save ?? true) {
-    saveNamiMessages();
-  }
-
   if (options.render ?? true) {
     renderNamiMessages();
   }
@@ -3044,27 +3039,11 @@ function updateNamiMessageElement(row, entry) {
 }
 
 function loadNamiMessages() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(NAMI_MESSAGE_STORAGE_KEY));
-
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed.slice(-MAX_NAMI_MESSAGES).map((message) => {
-      return {
-        text: normalizeChatText(message.text ?? "", 280),
-        timestamp: normalizeChatText(message.timestamp ?? getChatTimestamp(), 12),
-        kind: normalizeChatText(message.kind ?? "normal", 20),
-      };
-    });
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 function saveNamiMessages() {
-  localStorage.setItem(NAMI_MESSAGE_STORAGE_KEY, JSON.stringify(namiMessages));
+  // Nami messages are backend-backed now.
 }
 
 function namiCareMessage(result) {
@@ -3100,9 +3079,9 @@ function namiCareMessage(result) {
     case "freshen_up":
       return "Freshened up. Presentation stat restored.";
     case "put_to_bed":
-      return "IÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢m going to sleep now. Keep the room cozy, okay?";
+      return "I am going to sleep now. Keep the room cozy, okay?";
     case "wake_up":
-      return "IÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢m awake. Soft, sleepy, and accepting tribute.";
+      return "I am awake. Soft, sleepy, and accepting tribute.";
     default:
       return caption || `${actionName} complete.`;
   }
