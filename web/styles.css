@@ -7881,3 +7881,59 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
 #section-inventory .wardrobe-bonus-row .wardrobe-bonus-value.is-hidden {
   display: none;
 }
+
+/* Wardrobe compact bonus stat list */
+
+#section-inventory .wardrobe-bonus-list {
+  display: grid;
+  gap: 1px;
+  align-content: start;
+}
+
+#section-inventory .wardrobe-bonus-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 0;
+  padding: 1px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-soft);
+  font-size: 0.62rem;
+  font-weight: 850;
+  line-height: 1.12;
+}
+
+#section-inventory .wardrobe-bonus-row + .wardrobe-bonus-row {
+  border-top: 1px solid var(--theme-white-border-045, rgba(255, 255, 255, 0.045));
+}
+
+#section-inventory .wardrobe-bonus-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#section-inventory .wardrobe-bonus-row strong,
+#section-inventory .wardrobe-bonus-value {
+  color: var(--pink-soft);
+  font-size: 0.62rem;
+  font-weight: 950;
+  line-height: 1.12;
+  text-align: right;
+  white-space: nowrap;
+}
+
+#section-inventory .wardrobe-bonus-row.is-empty {
+  display: block;
+  padding: 2px 0;
+  border-top: 0;
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-style: italic;
+  text-align: left;
+}

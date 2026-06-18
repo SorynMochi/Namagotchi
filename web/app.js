@@ -230,6 +230,31 @@ const WARDROBE_INVENTORY_GROUPS = [
   { key: "necklace", label: "Necklace", family: "necklace" },
   { key: "accessory", label: "Accessory", family: "accessory" },
 ];
+const WARDROBE_BONUS_DISPLAY_ORDER = [
+  "max_health_percent",
+  "beauty",
+  "attack_percent",
+  "targeting_percent",
+  "attack_speed_percent",
+  "dodge_percent",
+  "crit_rate_percent",
+  "crit_damage_percent",
+  "glamor",
+  "recovery",
+  "charm",
+  "humor",
+  "playdeck_xp_percent",
+  "work_xp_percent",
+  "global_xp_percent",
+  "work_resources_percent",
+  "ingredient_quality_percent",
+  "credit_rate_percent",
+  "drop_rate_percent",
+];
+
+const WARDROBE_BONUS_DISPLAY_RANK = new Map(
+  WARDROBE_BONUS_DISPLAY_ORDER.map((statKey, index) => [statKey, index])
+);
 
 const CARE_STAT_DEFINITIONS = [
   { key: "satiety", label: "Satiety" },
@@ -1636,6 +1661,11 @@ if (hasItem) {
 }
 
 
+
+function wardrobeBonusDisplayRank(statKey) {
+  return WARDROBE_BONUS_DISPLAY_RANK.get(String(statKey || "")) ?? 9999;
+}
+
 function buildEquippedWardrobeBonusRows(equipment) {
   const totals = new Map();
 
@@ -1675,10 +1705,10 @@ function buildEquippedWardrobeBonusRows(equipment) {
   const rows = [...totals.values()]
     .filter((row) => Math.abs(Number(row.rawValue ?? 0)) > 0.0001)
     .sort((a, b) => {
-      const sortDelta = Number(a.sortOrder ?? 9999) - Number(b.sortOrder ?? 9999);
+      const rankDelta = wardrobeBonusDisplayRank(a.key) - wardrobeBonusDisplayRank(b.key);
 
-      if (sortDelta !== 0) {
-        return sortDelta;
+      if (rankDelta !== 0) {
+        return rankDelta;
       }
 
       return String(a.label || "").localeCompare(String(b.label || ""));
@@ -4569,4 +4599,5 @@ loadPlayerStatus();
 setInterval(updateLiveServerClock, 1000);
 setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
+
 
