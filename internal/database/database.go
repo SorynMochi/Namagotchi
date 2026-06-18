@@ -2682,15 +2682,15 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 	switch {
 	case context.TriggerKey == "nami_level_up":
 		if context.Level > 0 {
-			return fmt.Sprintf("(Nami level up: Lv %d âœ¨)", context.Level)
+			return fmt.Sprintf("(Nami level up: Lv %d ✨)", context.Level)
 		}
-		return "(Nami level up âœ¨)"
+		return "(Nami level up ✨)"
 
 	case context.TriggerKey == "playdeck_level_up":
 		if context.Level > 0 {
-			return fmt.Sprintf("(Playdeck level up: Lv %d âœ¦)", context.Level)
+			return fmt.Sprintf("(Playdeck level up: Lv %d ✦)", context.Level)
 		}
-		return "(Playdeck level up âœ¦)"
+		return "(Playdeck level up ✦)"
 
 	case context.TriggerKey == "activity_level_up":
 		activityName := strings.TrimSpace(context.ActivityName)
@@ -2699,13 +2699,13 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 		}
 
 		if context.Level > 0 {
-			return fmt.Sprintf("(%s level up: Lv %d âœ¦)", activityName, context.Level)
+			return fmt.Sprintf("(%s level up: Lv %d ✦)", activityName, context.Level)
 		}
 
-		return fmt.Sprintf("(%s level up âœ¦)", activityName)
+		return fmt.Sprintf("(%s level up ✦)", activityName)
 
 	case context.TriggerKey == "user_online":
-		return "(player arrived â™¡)"
+		return "(player arrived ♡)"
 
 	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
 		statName := strings.TrimSpace(context.ResourceName)
@@ -2713,16 +2713,16 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 			statName = titleNamiLabel(strings.TrimPrefix(context.TriggerKey, "care_stat_low_"))
 		}
 
-		return fmt.Sprintf("(low care stat: %s ðŸ«§)", statName)
+		return fmt.Sprintf("(low care stat: %s 🫧)", statName)
 
 	case context.TriggerKey == "random_mood":
-		return "(just because â™¡)"
+		return "(just because ♡)"
 
 	case context.TriggerKey == "playdeck_death":
-		return "(Playdeck defeat ðŸ©¹)"
+		return "(Playdeck defeat 🩹)"
 
 	case context.TriggerKey == "daily_orders_complete":
-		return "(daily orders complete â™¡)"
+		return "(daily orders complete ♡)"
 
 	case namiContextIsCareAction(context):
 		actionName := strings.TrimSpace(context.ActionName)
@@ -2730,7 +2730,7 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 			actionName = titleNamiLabel(strings.TrimPrefix(context.TriggerKey, "care_"))
 		}
 
-		return fmt.Sprintf("(care: %s â™¡)", actionName)
+		return fmt.Sprintf("(care: %s ♡)", actionName)
 
 	default:
 		return ""
@@ -2831,7 +2831,7 @@ func pickNamiMessagePartAvoiding(options []string, seed string, recentFragments 
 
 func normalizeNamiFragment(value string) string {
 	value = strings.TrimSpace(strings.ToLower(value))
-	value = strings.ReplaceAll(value, "â€™", "'")
+	value = strings.ReplaceAll(value, "'", "'")
 	value = strings.Join(strings.Fields(value), " ")
 
 	return value
@@ -3729,7 +3729,7 @@ func namiActionMessagePool(context NamiProceduralContext) []string {
 		}
 	case "put_to_bed":
 		return []string{
-			"Iâ€™m going to sleep now. Keep the room cozy, okay?",
+			"I'm going to sleep now. Keep the room cozy, okay?",
 			"Bedtime accepted. I will be brave and extremely small.",
 			"Tuck-in successful. I am entering blanket mode.",
 			"I am going to sleep. Please keep the moon from being weird.",
@@ -3742,7 +3742,7 @@ func namiActionMessagePool(context NamiProceduralContext) []string {
 		}
 	case "wake_up":
 		return []string{
-			"Iâ€™m awake. Soft, sleepy, and accepting tribute.",
+			"I'm awake. Soft, sleepy, and accepting tribute.",
 			"Good morning. I have returned from the blanket dimension.",
 			"I am awake, though my face is still negotiating.",
 			"Waking complete. Please speak gently to the tiny creature.",
@@ -5467,7 +5467,7 @@ func ZoneName(zoneID int) string {
 	case 1:
 		return "Starter Deck"
 	case 2:
-		return "Cozy LAN CafÃ©"
+		return "Cozy LAN Cafe"
 	case 3:
 		return "Neon Mall Net"
 	default:
