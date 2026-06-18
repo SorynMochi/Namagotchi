@@ -8502,3 +8502,37 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
     width: 100%;
   }
 }
+
+/* Wardrobe modal full-width action grid */
+
+.wardrobe-item-modal-header .wardrobe-item-actions {
+  width: 100% !important;
+  max-width: none !important;
+  display: grid !important;
+  grid-template-rows: auto auto !important;
+  gap: 5px !important;
+  justify-content: stretch !important;
+  justify-items: stretch !important;
+  align-items: stretch !important;
+}
+
+.wardrobe-item-action-row {
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
+  gap: 5px !important;
+  align-items: stretch !important;
+}
+
+.wardrobe-item-action-button {
+  width: 100% !important;
+  min-width: 0 !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+@media (max-width: 560px) {
+  .wardrobe-item-action-row {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
+  }
+}
