@@ -1,4 +1,4 @@
-﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -2178,10 +2178,10 @@ function renderWardrobeItemModal(detail) {
   const level = Number(item.powerLevel ?? 1).toLocaleString();
 
   setTextIfChanged(wardrobeItemModalTitle, item.name || "Unknown Item");
-  setTextIfChanged(wardrobeItemModalSlot, `${slot} Ã‚Â· ${rarity}`);
+  setTextIfChanged(wardrobeItemModalSlot, `${slot} | ${rarity}`);
   setTextIfChanged(
     wardrobeItemModalMeta,
-    `Item Level ${level} Ã‚Â· T: ${formatTailoringPoints(item)}`
+    `Item Level ${level} | T: ${formatTailoringPoints(item)}`
   );
 
   renderWardrobeAccessoryCompare(detail);
@@ -2385,7 +2385,7 @@ function renderWardrobeStatLines(lines) {
     row.title = line.tooltip || "";
 
     const label = document.createElement("span");
-    label.textContent = `${formatWardrobeStatSource(line.source)} Ã‚Â· ${line.displayName || line.statKey}`;
+    label.textContent = `${formatWardrobeStatSource(line.source)}: ${line.displayName || line.statKey}`;
 
     const value = document.createElement("strong");
     value.textContent = formatWardrobeStatValue(line.value, line.valueKind);
@@ -2469,7 +2469,7 @@ function formatWardrobeDelta(value, valueKind) {
   const number = Number(value ?? 0);
 
   if (number === 0) {
-    return String(valueKind).toLowerCase() === "percent" ? "Ã‚Â±0%" : "Ã‚Â±0";
+    return String(valueKind).toLowerCase() === "percent" ? "0%" : "0";
   }
 
   return formatWardrobeStatValue(number, valueKind);
