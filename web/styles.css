@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: dark;
 
   --font-ui:
@@ -2632,7 +2632,7 @@ body > .emoji-picker-floating .emoji-option:hover {
 }
 
 .nav-item.premium::before {
-  content: "Ã¢Ëœâ€¦";
+  content: "ÃƒÂ¢Ã‹Å“Ã¢â‚¬Â¦";
   color: var(--yellow);
 }
 
@@ -4064,7 +4064,7 @@ h3 {
 }
 
 .nav-item::before {
-  content: "Ã¢â„¢Â¡";
+  content: "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¡";
   margin-right: 5px;
   color: var(--theme-residual-nav-icon-text);
 }
@@ -7814,5 +7814,53 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
   #section-inventory .inventory-card-grid {
     max-height: none;
     overflow: visible;
+  }
+}
+/* Wardrobe main-panel scrollbar removal:
+   The center panel should not scroll just because Inventory is tall.
+   Inventory owns its own scrollbar.
+   Left outfit/bonuses side only scrolls when it truly overflows.
+*/
+
+@media (min-width: 981px) {
+  .main-panel:has(#section-inventory.active) {
+    overflow: hidden !important;
+  }
+
+  #section-inventory.active {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 100%;
+    min-height: 0;
+    overflow: hidden !important;
+  }
+
+  #section-inventory.active .wardrobe-studio-layout {
+    min-height: 0;
+    overflow: hidden !important;
+  }
+
+  #section-inventory.active .wardrobe-equipped-scroll {
+    min-height: 0;
+    max-height: 100%;
+    overflow-y: auto;
+    scrollbar-gutter: auto;
+  }
+
+  #section-inventory.active .wardrobe-equipped-scroll:not(.can-scroll) {
+    overflow-y: hidden !important;
+    padding-right: 0 !important;
+  }
+
+  #section-inventory.active .wardrobe-inventory-panel {
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden !important;
+  }
+
+  #section-inventory.active .inventory-card-grid {
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto !important;
   }
 }
