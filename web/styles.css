@@ -8051,3 +8051,75 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
   border-color: rgba(255, 45, 117, 0.78);
   color: var(--wardrobe-rarity-devastating);
 }
+
+/* Compact wardrobe modal stat and compare lists */
+
+.wardrobe-stat-line-list,
+.wardrobe-comparison-list {
+  display: grid;
+  gap: 1px;
+  align-content: start;
+}
+
+.wardrobe-stat-line,
+.wardrobe-comparison-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10px;
+  min-height: 0;
+  padding: 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  font-weight: 850;
+  line-height: 1.15;
+}
+
+.wardrobe-stat-line + .wardrobe-stat-line,
+.wardrobe-comparison-row + .wardrobe-comparison-row {
+  border-top: 1px solid var(--theme-white-border-045, rgba(255, 255, 255, 0.045));
+}
+
+.wardrobe-stat-line span,
+.wardrobe-comparison-row span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wardrobe-stat-line strong,
+.wardrobe-comparison-row strong {
+  font-size: 0.86rem;
+  font-weight: 950;
+  line-height: 1.15;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.wardrobe-stat-source-implicit strong,
+.wardrobe-stat-source-suffix strong,
+.wardrobe-stat-source-prefix strong,
+.wardrobe-comparison-row strong {
+  color: var(--pink-soft);
+}
+
+.wardrobe-comparison-row.positive strong {
+  color: var(--theme-success-text, #a8ffc4);
+}
+
+.wardrobe-comparison-row.negative strong {
+  color: var(--theme-danger-text, #ff6f9f);
+}
+
+.wardrobe-item-modal-section {
+  padding-block: 18px;
+}
+
+.wardrobe-item-modal-section h3 {
+  margin-bottom: 10px;
+}

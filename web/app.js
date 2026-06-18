@@ -1,4 +1,4 @@
-const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -2410,7 +2410,15 @@ function renderWardrobeComparison(detail) {
 
   wardrobeComparisonList.replaceChildren();
 
-  const comparisons = Array.isArray(detail?.comparisons) ? detail.comparisons : [];
+  const comparisons = (Array.isArray(detail?.comparisons) ? [...detail.comparisons] : []).sort((a, b) => {
+    const rankDelta = wardrobeBonusDisplayRank(a.statKey) - wardrobeBonusDisplayRank(b.statKey);
+
+    if (rankDelta !== 0) {
+      return rankDelta;
+    }
+
+    return String(a.displayName || a.statKey || "").localeCompare(String(b.displayName || b.statKey || ""));
+  });
   if (comparisons.length === 0) {
     const empty = document.createElement("p");
     empty.className = "muted";
@@ -3041,7 +3049,7 @@ function namiCareMessage(result) {
   const caption = companion.caption || "";
 
   if (Number(result?.levelUps ?? 0) > 0) {
-    return `I leveled up! IÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢m level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
+    return `I leveled up! IÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢m level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
   }
 
   switch (result?.action) {
@@ -3068,9 +3076,9 @@ function namiCareMessage(result) {
     case "freshen_up":
       return "Freshened up. Presentation stat restored.";
     case "put_to_bed":
-      return "IÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢m going to sleep now. Keep the room cozy, okay?";
+      return "IÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢m going to sleep now. Keep the room cozy, okay?";
     case "wake_up":
-      return "IÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢m awake. Soft, sleepy, and accepting tribute.";
+      return "IÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢m awake. Soft, sleepy, and accepting tribute.";
     default:
       return caption || `${actionName} complete.`;
   }
@@ -4600,6 +4608,7 @@ loadPlayerStatus();
 setInterval(updateLiveServerClock, 1000);
 setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
+
 
 
 
