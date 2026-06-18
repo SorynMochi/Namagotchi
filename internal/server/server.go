@@ -84,6 +84,7 @@ mux.HandleFunc("/api/dev/rewind-care-decay", s.requireDev(s.HandleRewindCareDeca
 mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.requireDev(s.HandleSpawnDevWardrobeItem))
 
 mux.HandleFunc("/api/player/status", s.requireAuth(s.HandlePlayerStatus))
+mux.HandleFunc("/api/player/sync", s.requireAuth(s.HandlePlayerSync))
 mux.HandleFunc("/api/player/wardrobe/item", s.requireAuth(s.HandleWardrobeItemDetail))
 mux.HandleFunc("/api/player/wardrobe/equip", s.requireAuth(s.HandleEquipWardrobeItem))
 mux.HandleFunc("/api/player/wardrobe/unequip", s.requireAuth(s.HandleUnequipWardrobeItem))
@@ -155,33 +156,61 @@ func (s *Server) HandleSpawnDevWardrobeItem(w http.ResponseWriter, r *http.Reque
 }
 
 func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
-		return
-	}
+if r.Method != http.MethodGet {
+writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+return
+}
 
-	_, _ = s.Store.SettleDevTicks(r.Context(), 0)
+status, err := s.Store.GetDevPlayerStatus(r.Context())
+if err != nil {
+log.Printf("get player status failed: %v", err)
+writeError(w, http.StatusNotFound, "player status not found")
+return
+}
 
-	if err := s.Store.SettleDevCareActions(r.Context()); err != nil {
-		log.Printf("settle dev care actions failed: %v", err)
-	}
+writeJSON(w, http.StatusOK, status)
+}
 
-	if err := s.Store.SettleDevCareDecay(r.Context()); err != nil {
-		log.Printf("settle dev care decay failed: %v", err)
-	}
+func (s *Server) HandlePlayerSync(w http.ResponseWriter, r *http.Request) {
+if r.Method != http.MethodPost {
+writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+return
+}
 
-	if err := s.Store.GenerateDevPassiveNamiMessages(r.Context()); err != nil {
-		log.Printf("generate passive nami messages failed: %v", err)
-	}
+if err := s.syncPlayerState(r.Context()); err != nil {
+log.Printf("sync player state failed: %v", err)
+writeError(w, http.StatusInternalServerError, "player sync failed")
+return
+}
 
-	status, err := s.Store.GetDevPlayerStatus(r.Context())
-	if err != nil {
-		log.Printf("get player status failed: %v", err)
-		writeError(w, http.StatusNotFound, "player status not found; visit /api/dev/seed-player first")
-		return
-	}
+status, err := s.Store.GetDevPlayerStatus(r.Context())
+if err != nil {
+log.Printf("get player status after sync failed: %v", err)
+writeError(w, http.StatusNotFound, "player status not found")
+return
+}
 
-	writeJSON(w, http.StatusOK, status)
+writeJSON(w, http.StatusOK, status)
+}
+
+func (s *Server) syncPlayerState(ctx context.Context) error {
+if _, err := s.Store.SettleDevTicks(ctx, 0); err != nil {
+return err
+}
+
+if err := s.Store.SettleDevCareActions(ctx); err != nil {
+return err
+}
+
+if err := s.Store.SettleDevCareDecay(ctx); err != nil {
+return err
+}
+
+if err := s.Store.GenerateDevPassiveNamiMessages(ctx); err != nil {
+return err
+}
+
+return nil
 }
 
 func (s *Server) HandleWardrobeItemDetail(w http.ResponseWriter, r *http.Request) {

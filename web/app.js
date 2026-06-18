@@ -1,4 +1,4 @@
-﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -991,10 +991,12 @@ onlineUsers.textContent = status.onlineUsers ?? 1;
 
 async function loadPlayerStatus() {
   try {
-    const response = await fetch("/api/player/status");
+    const response = await fetch("/api/player/sync", {
+      method: "POST",
+    });
 
     if (!response.ok) {
-      careStats.innerHTML = `<p class="muted">Dev player not found. Visit /api/dev/seed-player once.</p>`;
+      careStats.innerHTML = `<p class="muted">Could not sync player status. Please log in again.</p>`;
       return;
     }
 
