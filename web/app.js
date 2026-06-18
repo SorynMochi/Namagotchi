@@ -1545,7 +1545,8 @@ function renderWardrobeStatus(status) {
   const wardrobe = status.wardrobe || { used: 0, capacity: 100 };
   const playdeck = status.playdeck || {};
   const equipment = Array.isArray(playdeck.equipment) ? playdeck.equipment : [];
-  const items = Array.isArray(playdeck.inventoryPreview) ? playdeck.inventoryPreview : [];
+  const rawInventoryItems = Array.isArray(playdeck.inventoryPreview) ? playdeck.inventoryPreview : [];
+  const items = rawInventoryItems.filter((item) => !String(item?.equippedSlot || "").trim());
 
   const equipmentByKey = new Map(
     equipment.map((slot) => [String(slot.slotKey || "").toLowerCase(), slot])
@@ -4599,5 +4600,6 @@ loadPlayerStatus();
 setInterval(updateLiveServerClock, 1000);
 setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
+
 
 
