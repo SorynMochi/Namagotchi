@@ -1010,134 +1010,8 @@ async function loadPlayerStatus() {
 }
 
 async function forceTick() {
-  if (!forceTickButton) {
-    return;
-  }
-
-  forceTickButton.disabled = true;
-  forceTickButton.textContent = "Processing...";
-
-  try {
-    const response = await fetch("/api/dev/force-tick", {
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      throw new Error(`Force tick failed: ${response.status}`);
-    }
-
-    const result = await response.json();
-    addChatMessage("System", tickResultMessage(result), "system");
-    await loadPlayerStatus();
-    await loadNamiMessagesFromServer();
-  } catch (error) {
-    console.error(error);
-    addChatMessage("System", "Force tick failed. The tick goblin dropped its tiny clipboard.", "system");
-  } finally {
-    forceTickButton.disabled = false;
-    forceTickButton.textContent = "Force Tick";
-  }
+  // Dev controls are server-gated at /dev.
 }
-
-
-async function resetPlaydeckStreak() {
-  if (!resetPlaydeckStreakButton) {
-    return;
-  }
-
-  resetPlaydeckStreakButton.disabled = true;
-  resetPlaydeckStreakButton.textContent = "Resetting...";
-
-  if (forceTickButton) {
-    forceTickButton.disabled = true;
-  }
-
-  try {
-    const response = await fetch("/api/dev/reset-playdeck-streak", {
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      throw new Error(`Reset streak failed: ${response.status}`);
-    }
-
-    addChatMessage("System", "Playdeck streak reset. Fresh slate deployed.", "system");
-    await loadPlayerStatus();
-  } catch (error) {
-    console.error(error);
-    addChatMessage("System", "Reset streak failed. The streak goblin refused to let go.", "system");
-  } finally {
-    resetPlaydeckStreakButton.disabled = false;
-    resetPlaydeckStreakButton.textContent = "Reset Streak";
-
-    if (forceTickButton) {
-      forceTickButton.disabled = false;
-    }
-  }
-}
-async function setGatheringTask(task) {
-  try {
-    const response = await fetch("/api/player/gathering", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ task }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Set gathering task failed: ${response.status}`);
-    }
-
-    await loadPlayerStatus();
-    addChatMessage("System", `Gathering task changed to ${labelForTask(task)}.`, "system");
-  } catch (error) {
-    console.error(error);
-    addChatMessage("System", "Could not change gathering task.", "system");
-  }
-}
-
-async function performCareAction(action) {
-  const resolvedAction = resolveCareActionForRequest(action, latestPlayerStatus);
-
-  if (!resolvedAction) {
-    addChatMessage("System", "That care action is not available right now.", "system");
-    return;
-  }
-
-  try {
-    const response = await fetch("/api/player/care", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ action: resolvedAction }),
-    });
-
-    if (!response.ok) {
-      let message = `Care action failed: ${response.status}`;
-
-      try {
-        const errorBody = await response.json();
-        message = errorBody.message || message;
-      } catch {
-        // Keep the default message.
-      }
-
-      throw new Error(message);
-    }
-
-    const result = await response.json();
-
-    addChatMessage("System", careActionMessage(result), "system");
-    await loadPlayerStatus();
-    await loadNamiMessagesFromServer();
-  } catch (error) {
-    console.error(error);
-    addChatMessage("System", error.message || "Care action failed. Nami-chan hid the button under a blanket.", "system");
-  }
-}
-
 
 function getPlaydeckZoneMaxStreaks() {
   try {
@@ -2061,46 +1935,7 @@ function initializeWardrobeItemModal() {
 }
 
 function initializeDevWardrobeSpawner() {
-  devSpawnWardrobeItemButton?.addEventListener("click", spawnDevWardrobeItem);
-}
-
-async function spawnDevWardrobeItem() {
-  if (!devSpawnWardrobeItemButton) {
-    return;
-  }
-
-  devSpawnWardrobeItemButton.disabled = true;
-  devSpawnWardrobeItemButton.textContent = "Rolling...";
-
-  try {
-    const response = await fetch("/api/dev/spawn-wardrobe-item", {
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      throw new Error(`Spawn wardrobe item failed: ${response.status}`);
-    }
-
-    const result = await response.json();
-
-    await loadPlayerStatus();
-
-    if (result?.detail) {
-      renderWardrobeItemModal(result.detail);
-    } else if (result?.itemId) {
-      await openWardrobeItemDetail(result.itemId);
-    }
-
-    const itemName = result?.detail?.item?.name || "Random wardrobe item";
-    const rarity = formatWardrobeRarity(result?.detail?.item?.rarity || "basic");
-    addChatMessage("System", `${rarity} ${itemName} spawned into the Wardrobe.`, "system");
-  } catch (error) {
-    console.error(error);
-    addChatMessage("System", "Could not spawn a wardrobe item. The fashion goblin ate the pattern.", "system");
-  } finally {
-    devSpawnWardrobeItemButton.disabled = false;
-    devSpawnWardrobeItemButton.textContent = "+ Random Item";
-  }
+  // Dev controls are server-gated at /dev.
 }
 
 function handleWardrobeItemClick(event) {
@@ -2841,51 +2676,7 @@ function updateGatheringCards(status) {
 }
 
 function createForceTickButton() {
-  const header = document.querySelector("#section-playdeck .section-header");
-  if (!header) {
-    return;
-  }
-
-  let devActions = header.querySelector(".playdeck-dev-actions");
-
-  if (!devActions) {
-    devActions = document.createElement("div");
-    devActions.className = "playdeck-dev-actions";
-    devActions.setAttribute("aria-label", "Playdeck developer actions");
-    header.appendChild(devActions);
-  }
-
-  forceTickButton = document.querySelector("#force-tick-button");
-
-  if (!forceTickButton) {
-    forceTickButton = document.createElement("button");
-    forceTickButton.id = "force-tick-button";
-    forceTickButton.type = "button";
-    forceTickButton.textContent = "Force Tick";
-    forceTickButton.addEventListener("click", forceTick);
-  }
-
-  forceTickButton.className = "secondary-button playdeck-dev-button";
-
-  if (forceTickButton.parentElement !== devActions) {
-    devActions.appendChild(forceTickButton);
-  }
-
-  resetPlaydeckStreakButton = document.querySelector("#reset-playdeck-streak-button");
-
-  if (!resetPlaydeckStreakButton) {
-    resetPlaydeckStreakButton = document.createElement("button");
-    resetPlaydeckStreakButton.id = "reset-playdeck-streak-button";
-    resetPlaydeckStreakButton.type = "button";
-    resetPlaydeckStreakButton.textContent = "Reset Streak";
-    resetPlaydeckStreakButton.addEventListener("click", resetPlaydeckStreak);
-  }
-
-  resetPlaydeckStreakButton.className = "secondary-button playdeck-dev-button";
-
-  if (resetPlaydeckStreakButton.parentElement !== devActions) {
-    devActions.appendChild(resetPlaydeckStreakButton);
-  }
+  // Dev controls are server-gated at /dev.
 }
 
 function initializeNamiMessages() {
