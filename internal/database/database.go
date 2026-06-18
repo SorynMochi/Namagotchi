@@ -4618,6 +4618,26 @@ primary key (player_id, zone_id)
 	return nil
 }
 
+func (s *Store) GetPlaydeckZoneMaxStreak(ctx context.Context, playerID int64, zoneID int) (int64, error) {
+	zoneID = normalizePlaydeckZoneID(zoneID)
+
+	var maxStreak int64
+
+	err := s.Pool.QueryRow(ctx, `
+select max_streak
+from player_playdeck_zone_records
+where player_id = $1
+and zone_id = $2
+`, playerID, zoneID).Scan(&maxStreak)
+	if err == pgx.ErrNoRows {
+		return 0, nil
+	}
+	if err != nil {
+		return 0, fmt.Errorf("get playdeck zone max streak: %w", err)
+	}
+
+	return normalizePlaydeckStreak(maxStreak), nil
+}
 func (s *Store) UpdateAndGetPlaydeckZoneMaxStreak(ctx context.Context, playerID int64, zoneID int, streak int64) (int64, error) {
 	zoneID = normalizePlaydeckZoneID(zoneID)
 	streak = normalizePlaydeckStreak(streak)
@@ -4776,7 +4796,7 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 
 	status.Playdeck = playdeckStatus
 
-	playdeckMaxStreak, err := s.UpdateAndGetPlaydeckZoneMaxStreak(ctx, status.Player.ID, status.Tick.PlaydeckZoneID, status.Tick.PlaydeckStreak)
+	playdeckMaxStreak, err := s.GetPlaydeckZoneMaxStreak(ctx, status.Player.ID, status.Tick.PlaydeckZoneID)
 	if err != nil {
 		return nil, err
 	}
@@ -4850,6 +4870,7 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 	var xpIntoLevel int64
 	var moodScore float64
 	var playdeckEnabled bool
+	var playdeckZoneID int
 	var playdeckStreak int64
 	var playdeckTimeoutTicks int
 	var activeGatheringTask string
@@ -4864,7 +4885,8 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 			p.xp_into_level,
 			c.mood_score::float8,
 			t.playdeck_enabled,
-			t.playdeck_streak,
+				.playdeck_zone_id,
+				.playdeck_streak,
 			t.playdeck_timeout_ticks,
 			t.active_gathering_task,
 			t.gathering_remainder,
@@ -4881,6 +4903,7 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 		&xpIntoLevel,
 		&moodScore,
 		&playdeckEnabled,
+		&playdeckZoneID,
 		&playdeckStreak,
 		&playdeckTimeoutTicks,
 		&activeGatheringTask,
@@ -5046,6 +5069,21 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 		where player_id = $5
 	`, playdeckStreak, playdeckTimeoutTicks, gatheringRemainder, newLastTickAt, playerID); err != nil {
 		return nil, fmt.Errorf("update tick state: %w", err)
+	}
+	if playdeckEnabled {
+		if _, err := tx.Exec(ctx, `
+            insert into player_playdeck_zone_records (
+                player_id,
+                zone_id,
+                max_streak
+            )
+            values ($1, $2, $3)
+            on conflict (player_id, zone_id) do update
+            set max_streak = greatest(player_playdeck_zone_records.max_streak, excluded.max_streak),
+                updated_at = now()
+        `, playerID, normalizePlaydeckZoneID(playdeckZoneID), normalizePlaydeckStreak(playdeckStreak)); err != nil {
+			return nil, fmt.Errorf("update playdeck zone max streak: %w", err)
+		}
 	}
 
 	if result.TicksProcessed > 0 {
