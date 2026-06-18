@@ -1,4 +1,4 @@
-﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -1916,6 +1916,30 @@ function defaultCompareSlotForWardrobeItem(item) {
 
   return slot;
 }
+
+function updateWardrobeScrollState() {
+  const wardrobeSection = document.querySelector("#section-inventory");
+  const equippedScroll = document.querySelector("#section-inventory .wardrobe-equipped-scroll");
+
+  if (!wardrobeSection || !equippedScroll) {
+    return;
+  }
+
+  const wardrobeIsActive = wardrobeSection.classList.contains("active");
+  document.body.classList.toggle("is-wardrobe-active", wardrobeIsActive);
+
+  if (!wardrobeIsActive) {
+    equippedScroll.classList.remove("can-scroll");
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    const hasOverflow = equippedScroll.scrollHeight > equippedScroll.clientHeight + 2;
+    equippedScroll.classList.toggle("can-scroll", hasOverflow);
+  });
+}
+
+window.addEventListener("resize", updateWardrobeScrollState);
 
 function initializeWardrobeItemModal() {
   [equipmentSlotList, inventoryPreviewList].forEach((container) => {
