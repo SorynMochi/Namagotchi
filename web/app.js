@@ -5150,3 +5150,50 @@ function handleChatInputEnterKey(event) {
 
 document.querySelector("#wardrobe-item-share-button")?.addEventListener("click", shareActiveWardrobeItemToChat);
 chatInput?.addEventListener("keydown", handleChatInputEnterKey);
+
+/* Wardrobe modal close after wear or share */
+
+async function equipWardrobeItem(itemID, slotKey = "") {
+  try {
+    const response = await fetch("/api/player/wardrobe/equip", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        itemId: Number(itemID),
+        slotKey,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Equip wardrobe item failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    await loadPlayerStatus();
+
+    const itemName = result?.detail?.item?.name || "Item";
+    addChatMessage("System", `${itemName} equipped. Nami-Chan is now officially more stylish.`, "system");
+
+    closeWardrobeItemModal();
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not equip that item. The wardrobe clasp fought back.", "system");
+  }
+}
+
+function shareActiveWardrobeItemToChat() {
+  const item = activeWardrobeModalDetail?.item;
+
+  if (!item || !Number(item.id ?? 0)) {
+    return;
+  }
+
+  insertChatItemChip(item, activeWardrobeModalCompareSlot || defaultCompareSlotForWardrobeItem(item));
+  closeWardrobeItemModal();
+
+  chatInput?.focus();
+  setChatCursorToEnd();
+}
