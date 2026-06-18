@@ -410,12 +410,7 @@ func googleOAuthConfig(r *http.Request) (clientID, clientSecret, redirectURI str
 		if baseURL != "" {
 			redirectURI = baseURL + "/api/auth/google/callback"
 		} else if r != nil {
-			scheme := "http"
-			if r.TLS != nil {
-				scheme = "https"
-			}
-
-			redirectURI = fmt.Sprintf("%s://%s/api/auth/google/callback", scheme, r.Host)
+			redirectURI = fmt.Sprintf("%s://%s/api/auth/google/callback", publicRequestScheme(r), r.Host)
 		}
 	}
 
@@ -458,11 +453,62 @@ func clearAuthSessionCookie(w http.ResponseWriter, r *http.Request) {
 }
 
 func authCookieShouldBeSecure(r *http.Request) bool {
-	if strings.TrimSpace(os.Getenv("AUTH_SECURE_COOKIE")) == "1" {
+	secureCookieSetting := strings.TrimSpace(strings.ToLower(os.Getenv("AUTH_SECURE_COOKIE")))
+
+	switch secureCookieSetting {
+	case "1", "true", "yes", "on":
 		return true
+	case "0", "false", "no", "off":
+		return false
 	}
 
-	return r != nil && r.TLS != nil
+	return publicRequestScheme(r) == "https"
+}
+
+func publicRequestScheme(r *http.Request) string {
+	if r == nil {
+		return "http"
+	}
+
+	if r.TLS != nil {
+		return "https"
+	}
+
+	if trustedProxyHeadersEnabled() {
+		forwardedProto := strings.ToLower(firstForwardedHeaderValue(r.Header.Get("X-Forwarded-Proto")))
+		if forwardedProto == "https" {
+			return "https"
+		}
+
+		if forwardedProto == "http" {
+			return "http"
+		}
+	}
+
+	return "http"
+}
+
+func trustedProxyHeadersEnabled() bool {
+	value := strings.TrimSpace(strings.ToLower(os.Getenv("TRUST_PROXY_HEADERS")))
+
+	return value == "1" ||
+		value == "true" ||
+		value == "yes" ||
+		value == "on"
+}
+
+func firstForwardedHeaderValue(value string) string {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return ""
+	}
+
+	parts := strings.Split(value, ",")
+	if len(parts) == 0 {
+		return ""
+	}
+
+	return strings.TrimSpace(parts[0])
 }
 
 func looksLikeEmail(email string) bool {
