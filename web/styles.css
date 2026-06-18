@@ -8293,3 +8293,54 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Wardrobe modal header actions no close button */
+
+.wardrobe-item-modal-close {
+  display: none !important;
+}
+
+.wardrobe-item-modal-header {
+  position: relative;
+  display: block;
+  padding-right: 260px;
+  min-height: 132px;
+}
+
+.wardrobe-item-modal-header .wardrobe-item-actions {
+  position: absolute;
+  right: 28px;
+  bottom: 24px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  max-width: 240px;
+  padding: 0;
+  margin: 0;
+}
+
+.wardrobe-item-action-button {
+  min-height: 24px;
+  padding: 3px 11px;
+  font-size: 0.68rem;
+  line-height: 1;
+}
+
+@media (max-width: 560px) {
+  .wardrobe-item-modal-header {
+    padding-right: 12px;
+    padding-bottom: 48px;
+  }
+
+  .wardrobe-item-modal-header .wardrobe-item-actions {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    max-width: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
