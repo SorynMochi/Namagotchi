@@ -98,6 +98,10 @@ const devConsoleHTML = `<!doctype html>
         <h2>Wardrobe</h2>
         <button data-endpoint="/api/dev/spawn-wardrobe-item">Spawn Random Item</button>
       </div>
+      <div class="card">
+  <h2>Audit</h2>
+  <button data-endpoint="/api/dev/audit-logs" data-method="GET">Refresh Audit Logs</button>
+</div>
     </section>
 
     <pre id="dev-log">Ready.</pre>
