@@ -19,6 +19,7 @@ type CSRFTokenResponse struct {
 
 func (s *Server) HandleCSRFToken(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
+		s.recordSecurityEvent(r, http.StatusMethodNotAllowed, "csrf", "csrf token method not allowed")
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
@@ -40,6 +41,7 @@ func (s *Server) requireCSRF(next http.HandlerFunc) http.HandlerFunc {
 
 		cookie, err := r.Cookie(csrfCookieName)
 		if err != nil {
+			s.recordSecurityEvent(r, http.StatusForbidden, "csrf", "csrf token required")
 			writeError(w, http.StatusForbidden, "csrf token required")
 			return
 		}
@@ -48,6 +50,7 @@ func (s *Server) requireCSRF(next http.HandlerFunc) http.HandlerFunc {
 		headerToken := r.Header.Get(csrfHeaderName)
 
 		if cookieToken == "" || headerToken == "" || !constantTimeStringEqual(cookieToken, headerToken) {
+			s.recordSecurityEvent(r, http.StatusForbidden, "csrf", "csrf token invalid")
 			writeError(w, http.StatusForbidden, "csrf token invalid")
 			return
 		}
