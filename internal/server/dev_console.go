@@ -111,6 +111,10 @@ const devConsoleHTML = `<!doctype html>
   <button data-endpoint="/api/dev/audit-logs" data-method="GET">Refresh Audit Logs</button>
 </div>
       <div class="card">
+        <h2>Care Testing</h2>
+        <button data-endpoint="/api/dev/finish-care" data-method="POST">Finish Care</button>
+      </div>
+      <div class="card">
         <h2>Security</h2>
         <button data-endpoint="/api/dev/security-events" data-method="GET">Refresh Security Events</button>
       </div>

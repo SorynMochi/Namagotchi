@@ -84,6 +84,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/dev/force-tick", s.requireDev(s.requireDevUnlock(s.withDevAudit("force-tick", s.requireCSRF(s.HandleForceTick)))))
 	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.requireDev(s.requireDevUnlock(s.withDevAudit("reset-playdeck-streak", s.requireCSRF(s.HandleResetPlaydeckStreak)))))
 	mux.HandleFunc("/api/dev/rewind-care-decay", s.requireDev(s.requireDevUnlock(s.withDevAudit("rewind-care-decay", s.requireCSRF(s.HandleRewindCareDecay)))))
+	mux.HandleFunc("/api/dev/finish-care", s.requireDev(s.requireDevUnlock(s.withDevAudit("finish-care", s.requireCSRF(s.HandleFinishCareAction)))))
 	mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.requireDev(s.requireDevUnlock(s.withDevAudit("spawn-wardrobe-item", s.requireCSRF(s.HandleSpawnDevWardrobeItem)))))
 	mux.HandleFunc("/api/dev/audit-logs", s.requireDev(s.requireDevUnlock(s.HandleDevAuditLogs)))
 	mux.HandleFunc("/api/dev/security-events", s.requireDev(s.requireDevUnlock(s.HandleDevSecurityEvents)))
