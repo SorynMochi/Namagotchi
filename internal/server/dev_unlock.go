@@ -125,6 +125,56 @@ const devConsoleUnlockHTML = `<!doctype html>
     const form = document.querySelector("#dev-unlock-form");
     const input = document.querySelector("#dev-unlock-passphrase");
     const error = document.querySelector("#dev-unlock-error");
+    const CSRF_COOKIE_NAME = "namigotchi_csrf";
+    const CSRF_HEADER_NAME = "X-CSRF-Token";
+    let csrfTokenPromise = null;
+
+    function readCookieValue(name) {
+      return document.cookie
+        .split(";")
+        .map((part) => part.trim())
+        .find((part) => part.startsWith(name + "="))
+        ?.slice(name.length + 1) || "";
+    }
+
+    async function ensureCSRFToken() {
+      const existingToken = readCookieValue(CSRF_COOKIE_NAME);
+      if (existingToken) {
+        return existingToken;
+      }
+
+      if (!csrfTokenPromise) {
+        csrfTokenPromise = fetch("/api/auth/csrf")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("CSRF token request failed: " + response.status);
+            }
+
+            return response.json();
+          })
+          .then((payload) => payload.csrfToken || readCookieValue(CSRF_COOKIE_NAME))
+          .finally(() => {
+            csrfTokenPromise = null;
+          });
+      }
+
+      return csrfTokenPromise;
+    }
+
+    async function csrfFetch(input, options = {}) {
+      const requestOptions = { ...options };
+      const method = String(requestOptions.method || "GET").toUpperCase();
+      const headers = new Headers(requestOptions.headers || {});
+
+      if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
+        const token = await ensureCSRFToken();
+        headers.set(CSRF_HEADER_NAME, token);
+      }
+
+      requestOptions.headers = headers;
+
+      return fetch(input, requestOptions);
+    }
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -132,7 +182,7 @@ const devConsoleUnlockHTML = `<!doctype html>
       error.textContent = "";
 
       try {
-        const response = await fetch("/api/dev/unlock", {
+        const response = await csrfFetch("/api/dev/unlock", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

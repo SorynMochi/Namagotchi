@@ -118,6 +118,56 @@ const devConsoleHTML = `<!doctype html>
   <script>
     const log = document.querySelector("#dev-log");
     const lockButton = document.querySelector("#dev-lock-button");
+    const CSRF_COOKIE_NAME = "namigotchi_csrf";
+    const CSRF_HEADER_NAME = "X-CSRF-Token";
+    let csrfTokenPromise = null;
+
+    function readCookieValue(name) {
+      return document.cookie
+        .split(";")
+        .map((part) => part.trim())
+        .find((part) => part.startsWith(name + "="))
+        ?.slice(name.length + 1) || "";
+    }
+
+    async function ensureCSRFToken() {
+      const existingToken = readCookieValue(CSRF_COOKIE_NAME);
+      if (existingToken) {
+        return existingToken;
+      }
+
+      if (!csrfTokenPromise) {
+        csrfTokenPromise = fetch("/api/auth/csrf")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("CSRF token request failed: " + response.status);
+            }
+
+            return response.json();
+          })
+          .then((payload) => payload.csrfToken || readCookieValue(CSRF_COOKIE_NAME))
+          .finally(() => {
+            csrfTokenPromise = null;
+          });
+      }
+
+      return csrfTokenPromise;
+    }
+
+    async function csrfFetch(input, options = {}) {
+      const requestOptions = { ...options };
+      const method = String(requestOptions.method || "GET").toUpperCase();
+      const headers = new Headers(requestOptions.headers || {});
+
+      if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
+        const token = await ensureCSRFToken();
+        headers.set(CSRF_HEADER_NAME, token);
+      }
+
+      requestOptions.headers = headers;
+
+      return fetch(input, requestOptions);
+    }
 
     function writeLog(value) {
       if (typeof value === "string") {
@@ -138,7 +188,7 @@ const devConsoleHTML = `<!doctype html>
       lockButton.textContent = "Locking...";
 
       try {
-        await fetch("/api/dev/lock", { method: "POST" });
+        await csrfFetch("/api/dev/lock", { method: "POST" });
       } finally {
         lockButton.disabled = false;
         lockButton.textContent = originalText;
@@ -154,7 +204,7 @@ const devConsoleHTML = `<!doctype html>
 
       try {
         const method = button.dataset.method || "POST";
-        const response = await fetch(endpoint, { method });
+        const response = await csrfFetch(endpoint, { method });
         const text = await response.text();
 
         let payload = text;

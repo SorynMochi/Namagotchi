@@ -155,6 +155,56 @@ const NAMI_IDLE_VIDEO_SRC = "/images/animations/Nami_Idle_01.webm";
 const NAMI_SLEEP_VIDEO_SRC = "/images/animations/Nami_Sleep_01.webm";
 
 const CURRENT_PLAYER_NAME = "Soryn";
+const CSRF_COOKIE_NAME = "namigotchi_csrf";
+const CSRF_HEADER_NAME = "X-CSRF-Token";
+let csrfTokenPromise = null;
+
+function readCookieValue(name) {
+  return document.cookie
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(name + "="))
+    ?.slice(name.length + 1) || "";
+}
+
+async function ensureCSRFToken() {
+  const existingToken = readCookieValue(CSRF_COOKIE_NAME);
+  if (existingToken) {
+    return existingToken;
+  }
+
+  if (!csrfTokenPromise) {
+    csrfTokenPromise = fetch("/api/auth/csrf")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("CSRF token request failed: " + response.status);
+        }
+
+        return response.json();
+      })
+      .then((payload) => payload.csrfToken || readCookieValue(CSRF_COOKIE_NAME))
+      .finally(() => {
+        csrfTokenPromise = null;
+      });
+  }
+
+  return csrfTokenPromise;
+}
+
+async function csrfFetch(input, options = {}) {
+  const requestOptions = { ...options };
+  const method = String(requestOptions.method || "GET").toUpperCase();
+  const headers = new Headers(requestOptions.headers || {});
+
+  if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
+    const token = await ensureCSRFToken();
+    headers.set(CSRF_HEADER_NAME, token);
+  }
+
+  requestOptions.headers = headers;
+
+  return fetch(input, requestOptions);
+}
 function setTheme(themeKey) {
   const normalizedThemeKey = themeKey === "sakura" ? "sakura-dark" : themeKey;
   const safeThemeKey = Object.hasOwn(THEME_FILES, normalizedThemeKey) ? normalizedThemeKey : "nami-default";
@@ -990,7 +1040,7 @@ onlineUsers.textContent = status.onlineUsers ?? 1;
 
 async function loadPlayerStatus() {
   try {
-    const response = await fetch("/api/player/sync", {
+    const response = await csrfFetch("/api/player/sync", {
       method: "POST",
     });
 
@@ -2154,7 +2204,7 @@ function createWardrobeActionButton(label, action, disabled = false, title = "",
 
 async function equipWardrobeItem(itemID, slotKey = "") {
   try {
-    const response = await fetch("/api/player/wardrobe/equip", {
+    const response = await csrfFetch("/api/player/wardrobe/equip", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -2189,7 +2239,7 @@ async function equipWardrobeItem(itemID, slotKey = "") {
 
 async function unequipWardrobeItem(itemID, slotKey = "") {
   try {
-    const response = await fetch("/api/player/wardrobe/unequip", {
+    const response = await csrfFetch("/api/player/wardrobe/unequip", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -4927,7 +4977,7 @@ chatInput?.addEventListener("keydown", handleChatInputEnterKey);
 
 async function equipWardrobeItem(itemID, slotKey = "") {
   try {
-    const response = await fetch("/api/player/wardrobe/equip", {
+    const response = await csrfFetch("/api/player/wardrobe/equip", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
