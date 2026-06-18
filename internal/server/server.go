@@ -121,7 +121,7 @@ func (s *Server) HandleStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) HandleSeedDevPlayer(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet && r.Method != http.MethodPost {
+	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
@@ -139,7 +139,7 @@ func (s *Server) HandleSeedDevPlayer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) HandleSpawnDevWardrobeItem(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
@@ -269,7 +269,7 @@ func (s *Server) HandleSettleTicks(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) HandleForceTick(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
@@ -297,7 +297,7 @@ func (s *Server) HandleForceTick(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) HandleResetPlaydeckStreak(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
@@ -330,7 +330,7 @@ where display_name = 'Soryn'
 	})
 }
 func (s *Server) HandleRewindCareDecay(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet && r.Method != http.MethodPost {
+	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
