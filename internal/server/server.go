@@ -31,6 +31,13 @@ type MessageResponse struct {
 	Message string `json:"message"`
 }
 
+type DevWardrobeSpawnResponse struct {
+	OK      bool                        `json:"ok"`
+	Message string                      `json:"message"`
+	ItemID  int64                       `json:"itemId"`
+	Detail  database.WardrobeItemDetail `json:"detail"`
+}
+
 type GatheringRequest struct {
 	Task string `json:"task"`
 }
@@ -55,6 +62,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/dev/force-tick", s.HandleForceTick)
 	mux.HandleFunc("/api/dev/reset-playdeck-streak", s.HandleResetPlaydeckStreak)
 	mux.HandleFunc("/api/dev/rewind-care-decay", s.HandleRewindCareDecay)
+	mux.HandleFunc("/api/dev/spawn-wardrobe-item", s.HandleSpawnDevWardrobeItem)
 	mux.HandleFunc("/api/player/status", s.HandlePlayerStatus)
 	mux.HandleFunc("/api/player/wardrobe/item", s.HandleWardrobeItemDetail)
 	mux.HandleFunc("/api/player/settle-ticks", s.HandleSettleTicks)
@@ -100,6 +108,27 @@ func (s *Server) HandleSeedDevPlayer(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, MessageResponse{
 		OK:      true,
 		Message: "Dev player Soryn and Nami-chan are ready.",
+	})
+}
+
+func (s *Server) HandleSpawnDevWardrobeItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	result, err := s.Store.SpawnDevRandomWardrobeItem(r.Context())
+	if err != nil {
+		log.Printf("spawn dev wardrobe item failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "failed to spawn wardrobe item")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, DevWardrobeSpawnResponse{
+		OK:      true,
+		Message: "Random wardrobe item spawned.",
+		ItemID:  result.ItemID,
+		Detail:  result.Detail,
 	})
 }
 

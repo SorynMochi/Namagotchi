@@ -48,6 +48,7 @@ const inventoryCountLabel = document.querySelector("#inventory-count-label");
 const equipmentSlotList = document.querySelector("#equipment-slot-list");
 const wardrobeBonusesList = document.querySelector("#wardrobe-bonuses-list");
 const inventoryPreviewList = document.querySelector("#inventory-preview-list");
+const devSpawnWardrobeItemButton = document.querySelector("#dev-spawn-wardrobe-item-button");
 
 const wardrobeItemModal = document.querySelector("#wardrobe-item-modal");
 const wardrobeItemModalClose = document.querySelector("#wardrobe-item-modal-close");
@@ -1937,6 +1938,49 @@ function initializeWardrobeItemModal() {
       closeWardrobeItemModal();
     }
   });
+}
+
+function initializeDevWardrobeSpawner() {
+  devSpawnWardrobeItemButton?.addEventListener("click", spawnDevWardrobeItem);
+}
+
+async function spawnDevWardrobeItem() {
+  if (!devSpawnWardrobeItemButton) {
+    return;
+  }
+
+  devSpawnWardrobeItemButton.disabled = true;
+  devSpawnWardrobeItemButton.textContent = "Rolling...";
+
+  try {
+    const response = await fetch("/api/dev/spawn-wardrobe-item", {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Spawn wardrobe item failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    await loadPlayerStatus();
+
+    if (result?.detail) {
+      renderWardrobeItemModal(result.detail);
+    } else if (result?.itemId) {
+      await openWardrobeItemDetail(result.itemId);
+    }
+
+    const itemName = result?.detail?.item?.name || "Random wardrobe item";
+    const rarity = formatWardrobeRarity(result?.detail?.item?.rarity || "basic");
+    addChatMessage("System", `${rarity} ${itemName} spawned into the Wardrobe.`, "system");
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not spawn a wardrobe item. The fashion goblin ate the pattern.", "system");
+  } finally {
+    devSpawnWardrobeItemButton.disabled = false;
+    devSpawnWardrobeItemButton.textContent = "+ Random Item";
+  }
 }
 
 function handleWardrobeItemClick(event) {
@@ -4280,6 +4324,7 @@ function escapeHTML(value) {
 }
 
 initializeWardrobeItemModal();
+initializeDevWardrobeSpawner();
 initializeTheme();
 loadStatus();
 loadPlayerStatus();

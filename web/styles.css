@@ -7644,3 +7644,39 @@ html[data-theme="tokyo-night"] body[data-theme="tokyo-night"] .right-rail > .tok
     gap: 3px;
   }
 }
+
+.wardrobe-dev-spawn-button {
+  min-height: 24px;
+  padding: 3px 9px;
+  border: 1px solid var(--theme-button-secondary-border, rgba(255, 104, 183, 0.34));
+  border-radius: 999px;
+  background: var(--theme-button-secondary-bg, rgba(255, 104, 183, 0.12));
+  color: var(--theme-button-secondary-text, var(--pink-soft));
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.wardrobe-dev-spawn-button:hover:not(:disabled),
+.wardrobe-dev-spawn-button:focus-visible:not(:disabled) {
+  border-color: var(--theme-cyan-hover-border-42, rgba(73, 199, 255, 0.42));
+  color: var(--cyan-soft);
+}
+
+.wardrobe-dev-spawn-button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+@media (max-width: 560px) {
+  #section-inventory .wardrobe-panel-titlebar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wardrobe-dev-spawn-button {
+    width: 100%;
+  }
+}
