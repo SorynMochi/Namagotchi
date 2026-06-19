@@ -20,13 +20,21 @@
 <body>
   <main class="auth-landing hidden" id="auth-landing" aria-hidden="true">
     <div class="auth-sparkle-layer" id="auth-sparkle-layer" aria-hidden="true"></div>
+    <div class="auth-prelanding-blur" id="auth-prelanding-blur" aria-hidden="true"></div>
     <button class="auth-music-toggle" id="auth-music-toggle" type="button" aria-label="Toggle landing music" title="Mute landing music">
       <span class="material-symbols-rounded" id="auth-music-toggle-icon" aria-hidden="true">volume_up</span>
     </button>
     <audio id="auth-landing-music" src="/audio/01_Namigotchi_Landing.ogg" preload="auto" loop></audio>
     <div class="auth-landing-stack">
       <img class="auth-logo" src="/images/logo_landing.webp" alt="Namigotchi Idle" />
-    <section class="auth-card" aria-labelledby="auth-landing-title">
+      <section class="auth-card auth-prelanding-card" id="auth-prelanding-card" aria-labelledby="auth-prelanding-title" role="button" tabindex="0">
+        <p class="eyebrow">A cozy little world is waiting</p>
+        <h1 id="auth-prelanding-title">Tap to wake<br />Nami-chan</h1>
+        <p class="auth-copy">Step inside, start the sparkle loop,<br />and settle into your adorable idle chaos.</p>
+        <div class="auth-enter-pill"><span class="material-symbols-rounded" aria-hidden="true">favorite</span><span>Enter Namigotchi</span></div>
+        <p class="auth-note">Cute chaos, cozy vibes, and little sparkles await inside.</p>
+      </section>
+    <section class="auth-card auth-login-card" id="auth-login-card" aria-labelledby="auth-landing-title">
       <p class="eyebrow">Namigotchi Idle</p>
       <h1 id="auth-landing-title">Welcome Home!</h1>
       <p class="auth-copy">Sign in with Google to care for Nami-chan,<br />collect resources, build your wardrobe,<br />and keep your cozy little idle empire alive.</p>

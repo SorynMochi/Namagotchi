@@ -101,6 +101,8 @@ const gameShell = document.querySelector(".game-shell");
 const themeStylesheet = document.querySelector("#theme-stylesheet");
 const themeSelect = document.querySelector("#theme-select");
 const authLanding = document.querySelector("#auth-landing");
+const authPrelandingCard = document.querySelector("#auth-prelanding-card");
+const authLoginCard = document.querySelector("#auth-login-card");
 const authSparkleLayer = document.querySelector("#auth-sparkle-layer");
 const authLandingMessage = document.querySelector("#auth-landing-message");
 const googleLoginButton = document.querySelector("#google-login-button");
@@ -118,6 +120,7 @@ const CHAT_PREVIOUS_HEIGHT_KEY = "namigotchi_chat_previous_height_v1";
 const ACTIVE_SECTION_KEY = "namigotchi_active_section_v1";
 const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
 let authLandingMusicAutoplayBlocked = false;
+let authPrelandingDismissed = false;
 let themeBeforeAuthLanding = null;
 const EMOJI_USAGE_KEY = "namigotchi_emoji_usage_v2";
 const EMOJI_CATEGORY_KEY = "namigotchi_emoji_category_v1";
@@ -1099,6 +1102,55 @@ function randomNumber(min, max) {
   return min + Math.random() * (max - min);
 }
 
+function initializeAuthPrelanding() {
+  if (!authPrelandingCard) {
+    return;
+  }
+
+  authPrelandingCard.addEventListener("click", dismissAuthPrelanding);
+  authPrelandingCard.addEventListener("keydown", handleAuthPrelandingKeydown);
+}
+
+function showAuthPrelanding() {
+  if (!authPrelandingCard || !authLoginCard) {
+    authPrelandingDismissed = true;
+    return;
+  }
+
+  authPrelandingDismissed = false;
+  document.body.classList.add("auth-prelanding-active");
+  authPrelandingCard.setAttribute("aria-hidden", "false");
+  authLoginCard.setAttribute("aria-hidden", "true");
+}
+
+async function dismissAuthPrelanding() {
+  if (authPrelandingDismissed) {
+    return;
+  }
+
+  authPrelandingDismissed = true;
+  document.body.classList.remove("auth-prelanding-active");
+
+  if (authPrelandingCard) {
+    authPrelandingCard.setAttribute("aria-hidden", "true");
+  }
+
+  if (authLoginCard) {
+    authLoginCard.setAttribute("aria-hidden", "false");
+  }
+
+  await startAuthLandingMusic();
+}
+
+function handleAuthPrelandingKeydown(event) {
+  if (event.key !== "Enter" && event.key !== " ") {
+    return;
+  }
+
+  event.preventDefault();
+  dismissAuthPrelanding();
+}
+
 function initializeAuthMusic() {
   if (!authLandingMusic || !authMusicToggle) {
     return;
@@ -1202,6 +1254,7 @@ function updateAuthMusicToggle() {
 }
 
 function initializeAuthLanding() {
+  initializeAuthPrelanding();
   initializeAuthMusic();
   initializeAuthSparkles();
   if (!googleLoginButton) {
@@ -1246,7 +1299,11 @@ function showAuthLanding(message) {
   document.body.classList.add("auth-logged-out");
   document.body.dataset.theme = "auth-landing";
 
-  startAuthLandingMusic();
+  showAuthPrelanding();
+
+  if (authPrelandingDismissed) {
+    startAuthLandingMusic();
+  }
 
   if (themeStylesheet) {
     themeStylesheet.disabled = true;
@@ -1266,6 +1323,8 @@ function hideAuthLanding() {
   document.body.classList.remove("auth-logged-out");
 
   stopAuthLandingMusic();
+  authPrelandingDismissed = false;
+  document.body.classList.remove("auth-prelanding-active");
 
   if (themeStylesheet) {
     themeStylesheet.disabled = false;
