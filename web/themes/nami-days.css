@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: light;
 
   --bg-0: #fff4ed;
@@ -313,3 +313,291 @@ body[data-theme="nami-days"] .placeholder-copy {
 body[data-theme="nami-days"] a {
   color: #d84c94;
 }
+
+/* Nami Days readability pass START */
+/* Contrast pass: keeps the cozy pastel room, but gives the UI ink, edges, and readable hierarchy. */
+
+body[data-theme="nami-days"] {
+  --text: #3f1f35;
+  --text-soft: #5c2e49;
+  --muted: #7a4960;
+
+  --pink: #e94f9d;
+  --pink-soft: #ffd3e8;
+  --violet: #9a63df;
+  --cyan: #39aeca;
+  --cyan-deep: #237f99;
+
+  --theme-chat-text: #4f2941;
+  --theme-chat-name: #b93677;
+  --theme-nami-message-text: #69314f;
+  --theme-button-primary-text: #3f1f35;
+  --theme-care-button-text: #4b253c;
+  --theme-pill-text: #6a3b52;
+  --theme-meter-label-text: #3f1f35;
+}
+
+/* Give large glass panels enough milk-glass density to separate them from the background art. */
+body[data-theme="nami-days"] .panel,
+body[data-theme="nami-days"] .main-panel,
+body[data-theme="nami-days"] .chat-panel,
+body[data-theme="nami-days"] .top-stats-panel,
+body[data-theme="nami-days"] .nav-panel,
+body[data-theme="nami-days"] .right-buffs-panel,
+body[data-theme="nami-days"] .nami-card,
+body[data-theme="nami-days"] .care-card,
+body[data-theme="nami-days"] .zone-list,
+body[data-theme="nami-days"] .combat-panel,
+body[data-theme="nami-days"] .task-card,
+body[data-theme="nami-days"] .placeholder-copy,
+body[data-theme="nami-days"] .settings-card,
+body[data-theme="nami-days"] .wardrobe-panel,
+body[data-theme="nami-days"] .equipment-card,
+body[data-theme="nami-days"] .inventory-item-card,
+body[data-theme="nami-days"] .right-buff-group {
+  border-color: rgba(214, 82, 142, 0.44) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.96), transparent 12rem),
+    linear-gradient(180deg, rgba(255, 250, 253, 0.93), rgba(255, 233, 242, 0.89)) !important;
+  color: var(--text) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    0 18px 46px rgba(94, 42, 66, 0.20),
+    0 0 28px rgba(233, 79, 157, 0.10) !important;
+}
+
+/* Inner cards: stop the white-on-white marshmallow fog. */
+body[data-theme="nami-days"] .top-stats-compact,
+body[data-theme="nami-days"] .menu-status-card,
+body[data-theme="nami-days"] .buff-card,
+body[data-theme="nami-days"] .stat-lines,
+body[data-theme="nami-days"] .compact-grid-lines,
+body[data-theme="nami-days"] .nami-message,
+body[data-theme="nami-days"] .chat-form,
+body[data-theme="nami-days"] .chat-log,
+body[data-theme="nami-days"] .equipment-slot,
+body[data-theme="nami-days"] .wardrobe-bonus-card,
+body[data-theme="nami-days"] .inventory-item-card,
+body[data-theme="nami-days"] .zone-card,
+body[data-theme="nami-days"] .combat-status,
+body[data-theme="nami-days"] .combat-status-card {
+  background: rgba(255, 250, 253, 0.74) !important;
+  border-color: rgba(194, 71, 125, 0.26) !important;
+  color: var(--text-soft) !important;
+}
+
+/* Shared text hierarchy. */
+body[data-theme="nami-days"] .panel-title,
+body[data-theme="nami-days"] .eyebrow,
+body[data-theme="nami-days"] h2,
+body[data-theme="nami-days"] h3,
+body[data-theme="nami-days"] strong,
+body[data-theme="nami-days"] .metric-value,
+body[data-theme="nami-days"] .stat-lines strong,
+body[data-theme="nami-days"] .compact-grid-lines strong {
+  color: #3f1f35 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .muted,
+body[data-theme="nami-days"] .muted-card,
+body[data-theme="nami-days"] small,
+body[data-theme="nami-days"] .placeholder-copy,
+body[data-theme="nami-days"] .stat-lines span,
+body[data-theme="nami-days"] .compact-grid-lines span,
+body[data-theme="nami-days"] .metric-name,
+body[data-theme="nami-days"] .meter-label {
+  color: #74465c !important;
+  text-shadow: none !important;
+}
+
+/* Top rail meter labels should feel like the rest of the stat labels. */
+body[data-theme="nami-days"] .top-user-meter-list .meter-label,
+body[data-theme="nami-days"] .user-meter .meter-label,
+body[data-theme="nami-days"] .user-meter .metric-name {
+  color: #74465c !important;
+  font-weight: 800 !important;
+}
+
+body[data-theme="nami-days"] .user-meter .metric-value {
+  color: #3f1f35 !important;
+  font-weight: 900 !important;
+}
+
+/* Care buttons: remove the blurred/washed disabled look while still reading as inactive. */
+body[data-theme="nami-days"] .care-button,
+body[data-theme="nami-days"] .care-button:disabled,
+body[data-theme="nami-days"] button:disabled {
+  color: #5a2c47 !important;
+  text-shadow: none !important;
+  filter: none !important;
+  opacity: 0.86 !important;
+}
+
+body[data-theme="nami-days"] .care-button:not(:disabled),
+body[data-theme="nami-days"] .task-card button:not(:disabled),
+body[data-theme="nami-days"] .primary-button:not(:disabled),
+body[data-theme="nami-days"] .chat-form button[type="submit"]:not(:disabled) {
+  color: #3f1f35 !important;
+  font-weight: 900 !important;
+}
+
+/* Left rail glyphs need ink. */
+body[data-theme="nami-days"] .main-nav.menu-grid .nav-item {
+  color: #67354f !important;
+}
+
+body[data-theme="nami-days"] .main-nav.menu-grid .nav-item .material-symbols-rounded,
+body[data-theme="nami-days"] .main-nav.menu-grid .nav-item .nav-icon {
+  color: #a7346f !important;
+  opacity: 0.95 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .main-nav.menu-grid .nav-item.active .material-symbols-rounded,
+body[data-theme="nami-days"] .main-nav.menu-grid .nav-item.active .nav-icon {
+  color: #6d2a55 !important;
+}
+
+/* Chat readability: timestamps and player names should be distinct, not cotton-candy ghost text. */
+body[data-theme="nami-days"] #chat-log,
+body[data-theme="nami-days"] .chat-log,
+body[data-theme="nami-days"] .chat-message,
+body[data-theme="nami-days"] .chat-line {
+  color: #4f2941 !important;
+}
+
+body[data-theme="nami-days"] .chat-time,
+body[data-theme="nami-days"] .chat-timestamp,
+body[data-theme="nami-days"] .message-time,
+body[data-theme="nami-days"] #chat-log time {
+  color: #b93677 !important;
+  font-weight: 800 !important;
+}
+
+body[data-theme="nami-days"] .chat-name,
+body[data-theme="nami-days"] .chat-author,
+body[data-theme="nami-days"] .chat-username,
+body[data-theme="nami-days"] .message-author,
+body[data-theme="nami-days"] .message-name,
+body[data-theme="nami-days"] #chat-log strong {
+  color: #b93677 !important;
+  font-weight: 900 !important;
+}
+
+/* Nami message log: no more glowing lemon text on a bright panel. */
+body[data-theme="nami-days"] #nami-message,
+body[data-theme="nami-days"] #nami-message-log,
+body[data-theme="nami-days"] #nami-message-log *,
+body[data-theme="nami-days"] .nami-message,
+body[data-theme="nami-days"] .nami-message * {
+  color: #69314f !important;
+  text-shadow: none !important;
+}
+
+/* Playdeck combat: HP labels, enemy values, zone names, and status box. */
+body[data-theme="nami-days"] #combat-status-title,
+body[data-theme="nami-days"] #combat-status-copy,
+body[data-theme="nami-days"] #combat-enemy-name,
+body[data-theme="nami-days"] #combat-enemy-level,
+body[data-theme="nami-days"] #combat-enemy-hp-label,
+body[data-theme="nami-days"] #combat-player-hp-label,
+body[data-theme="nami-days"] #combat-player-attack,
+body[data-theme="nami-days"] #combat-player-defense,
+body[data-theme="nami-days"] #combat-win-loss {
+  color: #3f1f35 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .combat-status,
+body[data-theme="nami-days"] .combat-status-card,
+body[data-theme="nami-days"] .combat-status-copy {
+  background:
+    linear-gradient(180deg, rgba(255, 246, 251, 0.92), rgba(255, 222, 238, 0.82)) !important;
+  border-color: rgba(185, 54, 119, 0.30) !important;
+}
+
+body[data-theme="nami-days"] .zone-name,
+body[data-theme="nami-days"] .zone-title,
+body[data-theme="nami-days"] .zone-card h3,
+body[data-theme="nami-days"] .zone-list h3,
+body[data-theme="nami-days"] .zone-list button,
+body[data-theme="nami-days"] [data-zone] {
+  color: #4f2941 !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
+
+/* Wardrobe: item names and slot names need to read as headings, not faded stickers. */
+body[data-theme="nami-days"] .inventory-item-card h3,
+body[data-theme="nami-days"] .inventory-item-card strong,
+body[data-theme="nami-days"] .equipment-card h3,
+body[data-theme="nami-days"] .equipment-card strong,
+body[data-theme="nami-days"] .equipment-slot strong,
+body[data-theme="nami-days"] .equipment-slot .slot-name,
+body[data-theme="nami-days"] .equipment-slot-name,
+body[data-theme="nami-days"] .wardrobe-item-name,
+body[data-theme="nami-days"] .wardrobe-item-title,
+body[data-theme="nami-days"] .inventory-item-title,
+body[data-theme="nami-days"] .item-name,
+body[data-theme="nami-days"] .item-title,
+body[data-theme="nami-days"] .item-card-title {
+  color: #3f1f35 !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .wardrobe-bonus-card span,
+body[data-theme="nami-days"] .wardrobe-bonus-card strong,
+body[data-theme="nami-days"] .wardrobe-comparison-list strong,
+body[data-theme="nami-days"] .wardrobe-item-stat-lines strong,
+body[data-theme="nami-days"] .stat-value,
+body[data-theme="nami-days"] .bonus-value {
+  color: #8b2f66 !important;
+  font-weight: 900 !important;
+}
+
+/* Right rail buffs: buff names and values should pop. */
+body[data-theme="nami-days"] .right-buffs-panel .buff-card strong,
+body[data-theme="nami-days"] .right-buff-group .buff-card strong {
+  color: #8b2f66 !important;
+  font-weight: 900 !important;
+}
+
+body[data-theme="nami-days"] .right-buffs-panel .buff-card span,
+body[data-theme="nami-days"] .right-buff-group .buff-card span {
+  color: #b93677 !important;
+  font-weight: 900 !important;
+}
+
+body[data-theme="nami-days"] .right-buffs-panel .buff-card small,
+body[data-theme="nami-days"] .right-buff-group .buff-card small {
+  color: #74465c !important;
+  font-weight: 800 !important;
+}
+
+/* Inputs and select fields. */
+body[data-theme="nami-days"] .chat-input,
+body[data-theme="nami-days"] #chat-input,
+body[data-theme="nami-days"] .settings-field select,
+body[data-theme="nami-days"] input,
+body[data-theme="nami-days"] textarea,
+body[data-theme="nami-days"] select {
+  background: rgba(255, 250, 253, 0.86) !important;
+  border-color: rgba(185, 54, 119, 0.28) !important;
+  color: #3f1f35 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] ::placeholder {
+  color: #8b5a70 !important;
+  opacity: 1 !important;
+}
+
+/* Keep pink accents playful, but darker than bubblegum mist. */
+body[data-theme="nami-days"] a,
+body[data-theme="nami-days"] .eyebrow {
+  color: #c43d82 !important;
+}
+/* Nami Days readability pass END */
+
