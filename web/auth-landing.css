@@ -242,3 +242,42 @@ body.auth-logged-out .auth-card::after {
     padding: 22px 24px 20px !important;
   }
 }
+/* Google sign-in SVG button cleanup START */
+.auth-google-button {
+  width: min(320px, 100%) !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  display: block !important;
+  cursor: pointer !important;
+  overflow: visible !important;
+  filter: none !important;
+}
+
+.auth-google-button:hover {
+  transform: translateY(-1px) !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.auth-google-button:active {
+  transform: translateY(0) !important;
+}
+
+.auth-google-signin-image {
+  width: min(320px, 100%) !important;
+  height: auto !important;
+  max-height: 52px !important;
+  display: block !important;
+  margin: 0 auto !important;
+  object-fit: contain !important;
+  pointer-events: none !important;
+  filter:
+    drop-shadow(0 10px 20px rgba(122, 72, 98, 0.16)) !important;
+}
+/* Google sign-in SVG button cleanup END */
