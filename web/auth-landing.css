@@ -304,3 +304,147 @@ body.auth-logged-out .auth-landing-stack {
   }
 }
 /* Landing stack true viewport centering END */
+/* Landing stack upward nudge START */
+body.auth-logged-out .auth-landing-stack {
+  transform: translateY(-10vh) !important;
+}
+
+@media (max-width: 640px) {
+  body.auth-logged-out .auth-landing-stack {
+    transform: translateY(-7vh) !important;
+  }
+}
+
+@media (max-height: 760px) {
+  body.auth-logged-out .auth-landing-stack {
+    transform: translateY(-6vh) !important;
+  }
+}
+/* Landing stack upward nudge END */
+/* Landing final polish START */
+body.auth-logged-out .auth-landing-stack {
+  width: min(520px, 100%) !important;
+  gap: 14px !important;
+  transform: translateY(-8vh) !important;
+}
+
+.auth-logo,
+.auth-landing-logo {
+  width: min(385px, 82vw) !important;
+  filter:
+    drop-shadow(0 7px 16px rgba(255, 142, 194, 0.26))
+    drop-shadow(0 16px 30px rgba(113, 66, 89, 0.15)) !important;
+}
+
+.auth-card {
+  width: min(490px, 100%) !important;
+  padding: 26px 28px 24px !important;
+  border-radius: 24px !important;
+  border-color: rgba(255, 166, 205, 0.70) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 1), transparent 12rem),
+    linear-gradient(180deg, rgba(255, 252, 254, 0.94), rgba(255, 233, 242, 0.90)) !important;
+  box-shadow:
+    0 20px 52px rgba(166, 94, 128, 0.20),
+    0 8px 22px rgba(255, 158, 204, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
+}
+
+.auth-card h1 {
+  font-size: clamp(1.95rem, 7vw, 2.85rem) !important;
+  margin-bottom: 10px !important;
+}
+
+.auth-copy {
+  margin-bottom: 18px !important;
+  font-size: 0.96rem !important;
+  line-height: 1.55 !important;
+}
+
+.auth-note {
+  margin-top: 14px !important;
+  font-size: 0.80rem !important;
+  line-height: 1.42 !important;
+}
+
+.auth-google-button {
+  width: min(300px, 100%) !important;
+}
+
+.auth-google-signin-image {
+  max-width: 300px !important;
+  max-height: 49px !important;
+}
+
+.auth-version {
+  position: fixed !important;
+  right: max(16px, env(safe-area-inset-right)) !important;
+  bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  z-index: 10001 !important;
+  margin: 0 !important;
+  padding: 5px 10px !important;
+  border: 1px solid rgba(255, 166, 205, 0.62) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 252, 254, 0.72) !important;
+  color: #8b5571 !important;
+  box-shadow:
+    0 8px 20px rgba(120, 70, 94, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+  backdrop-filter: blur(10px) saturate(1.08) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.08) !important;
+  font-family:
+    "Nunito",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif !important;
+  font-size: 0.74rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+@media (max-width: 640px) {
+  body.auth-logged-out .auth-landing-stack {
+    width: min(460px, 100%) !important;
+    gap: 12px !important;
+    transform: translateY(-5vh) !important;
+  }
+
+  .auth-card {
+    width: min(430px, 100%) !important;
+    padding: 22px 18px 20px !important;
+  }
+
+  .auth-logo,
+  .auth-landing-logo {
+    width: min(330px, 80vw) !important;
+  }
+
+  .auth-version {
+    right: 10px !important;
+    bottom: 10px !important;
+    font-size: 0.68rem !important;
+  }
+}
+
+@media (max-height: 760px) {
+  body.auth-logged-out .auth-landing-stack {
+    gap: 10px !important;
+    transform: translateY(-4vh) !important;
+  }
+
+  .auth-logo,
+  .auth-landing-logo {
+    width: min(310px, 74vw) !important;
+  }
+
+  .auth-card {
+    padding: 20px 22px 18px !important;
+  }
+}
+/* Landing final polish END */
