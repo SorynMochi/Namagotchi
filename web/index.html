@@ -17,6 +17,15 @@
   <link id="tokyo-night-fonts" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Noto+Sans+JP:wght@400;700;900&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+  <main class="auth-landing hidden" id="auth-landing" aria-hidden="true">
+    <section class="auth-card" aria-labelledby="auth-landing-title">
+      <p class="eyebrow">Namigotchi Idle</p>
+      <h1 id="auth-landing-title">Welcome home</h1>
+      <p class="auth-copy">Sign in with Google to care for Nami-chan, collect resources, build your wardrobe, and keep your cozy little idle empire alive.</p>
+      <button id="google-login-button" class="auth-google-button" type="button">Continue with Google</button>
+      <p class="auth-note" id="auth-landing-message">Player accounts use Google sign-in. New accounts will choose a display name during onboarding.</p>
+    </section>
+  </main>
   <div class="game-shell">
   <section class="panel top-stats-panel">
     <button class="panel-title collapse-toggle top-panel-toggle" data-collapse="top-stats-body" data-label="KEY INFORMATION" type="button">
@@ -30,21 +39,21 @@
 
   <div class="top-user-meter-list">
     <div class="user-meter tick-meter">
-      <div class="meter-label" id="current-action-label">Playdeck + Work [x0]</div>
+      <div class="meter-label" id="current-action-label"><span class="metric-name">Streak:</span><span class="metric-value">0 / 0</span></div>
       <div class="meter-track">
         <div class="meter-fill tick-fill" id="tick-fill"></div>
       </div>
     </div>
 
     <div class="user-meter">
-      <div class="meter-label" id="playdeck-hp-label">HP: 100 / 100</div>
+      <div class="meter-label" id="playdeck-hp-label"><span class="metric-name">Sparkles:</span><span class="metric-value">100 / 100</span></div>
       <div class="meter-track">
         <div class="meter-fill hp-fill" id="playdeck-hp-fill" style="width: 100%"></div>
       </div>
     </div>
 
     <div class="user-meter">
-      <div class="meter-label" id="playdeck-xp-label">XP: 0 / 720</div>
+      <div class="meter-label" id="playdeck-xp-label"><span class="metric-name">XP:</span><span class="metric-value">0 / 720</span></div>
       <div class="meter-track">
         <div class="meter-fill xp-fill" id="playdeck-xp-fill" style="width: 0%"></div>
       </div>

@@ -100,6 +100,9 @@ const railToggleButtons = document.querySelectorAll("[data-rail-toggle]");
 const gameShell = document.querySelector(".game-shell");
 const themeStylesheet = document.querySelector("#theme-stylesheet");
 const themeSelect = document.querySelector("#theme-select");
+const authLanding = document.querySelector("#auth-landing");
+const authLandingMessage = document.querySelector("#auth-landing-message");
+const googleLoginButton = document.querySelector("#google-login-button");
 const logoutButton = document.querySelector("#logout-button");
 
 const MAX_CHAT_MESSAGES = 100;
@@ -1020,6 +1023,63 @@ function showSection(sectionName, options = {}) {
 
 showSection(localStorage.getItem(ACTIVE_SECTION_KEY) || "home", { save: false });
 
+function initializeAuthLanding() {
+  if (!googleLoginButton) {
+    return;
+  }
+
+  googleLoginButton.addEventListener("click", () => {
+    window.location.href = "/api/auth/google/start";
+  });
+}
+
+async function initializeAuthGate() {
+  try {
+    const response = await fetch("/api/auth/me", {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Auth check failed: ${response.status}`);
+    }
+
+    const auth = await response.json();
+
+    if (!auth.loggedIn) {
+      showAuthLanding("Player accounts use Google sign-in. New accounts will choose a display name during onboarding.");
+      return;
+    }
+
+    hideAuthLanding();
+    await loadPlayerStatus();
+  } catch (error) {
+    console.error(error);
+    showAuthLanding("Could not check your login yet. Try refreshing, or continue with Google.");
+  }
+}
+
+function showAuthLanding(message) {
+  document.body.classList.add("auth-logged-out");
+
+  if (authLanding) {
+    authLanding.classList.remove("hidden");
+    authLanding.setAttribute("aria-hidden", "false");
+  }
+
+  if (authLandingMessage && message) {
+    setTextIfChanged(authLandingMessage, message);
+  }
+}
+
+function hideAuthLanding() {
+  document.body.classList.remove("auth-logged-out");
+
+  if (authLanding) {
+    authLanding.classList.add("hidden");
+    authLanding.setAttribute("aria-hidden", "true");
+  }
+}
+
 async function loadStatus() {
   try {
     const response = await fetch("/api/status");
@@ -1046,6 +1106,11 @@ async function loadPlayerStatus() {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        showAuthLanding("Please sign in with Google to keep taking care of Nami-chan.");
+        return;
+      }
+
       careStats.innerHTML = `<p class="muted">Could not sync player status. Please log in again.</p>`;
       return;
     }
@@ -4552,9 +4617,10 @@ function escapeHTML(value) {
 initializeWardrobeItemModal();
 initializeDevWardrobeSpawner();
 initializeTheme();
+initializeAuthLanding();
 initializeLogoutButton();
 loadStatus();
-loadPlayerStatus();
+initializeAuthGate();
 
 setInterval(updateLiveServerClock, 250);
 setInterval(updateTickProgressBar, 100);
