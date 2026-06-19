@@ -1047,7 +1047,7 @@ async function initializeAuthGate() {
     const auth = await response.json();
 
     if (!auth.loggedIn) {
-      showAuthLanding("Player accounts only use Google sign-in.`nNew accounts will choose a display name.");
+      showAuthLanding("Player accounts only use Google sign-in.\nNew accounts will choose a display name.");
       return;
     }
 
