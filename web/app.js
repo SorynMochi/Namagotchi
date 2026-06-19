@@ -4335,7 +4335,7 @@ function updateLiveServerClock() {
     return;
   }
 
-  serverTime.textContent = formatDateTime(Date.now() + serverClockOffsetMs);
+  setTextIfChanged(serverTime, formatDateTime(Date.now() + serverClockOffsetMs));
 }
 
 function formatDateTime(value) {
@@ -4526,7 +4526,7 @@ initializeTheme();
 loadStatus();
 loadPlayerStatus();
 
-setInterval(updateLiveServerClock, 1000);
+setInterval(updateLiveServerClock, 250);
 setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
 
