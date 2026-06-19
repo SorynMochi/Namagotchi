@@ -74,6 +74,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/auth/login", s.requireRateLimit("auth_login", 10, 10*time.Minute, s.HandleAuthLogin))
 	mux.HandleFunc("/api/auth/logout", s.requireCSRF(s.HandleAuthLogout))
 	mux.HandleFunc("/api/auth/me", s.HandleAuthMe)
+	mux.HandleFunc("/api/auth/display-name", s.requireAuth(s.requireCSRF(s.HandleAuthDisplayName)))
 	mux.HandleFunc("/api/auth/csrf", s.HandleCSRFToken)
 	mux.HandleFunc("/api/auth/google/start", s.HandleAuthGoogleStart)
 	mux.HandleFunc("/api/auth/google/callback", s.HandleAuthGoogleCallback)
