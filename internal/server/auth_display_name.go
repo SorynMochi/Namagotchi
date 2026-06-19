@@ -33,6 +33,11 @@ func (s *Server) HandleAuthDisplayName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !displayNameChangeAllowedDuringOnboarding(currentAccount, request.DisplayName) {
+		writeError(w, http.StatusForbidden, "display name is already set. Name changes will be available later.")
+		return
+	}
+
 	allowReservedName := reservedDisplayNameAllowedForAccount(currentAccount)
 
 	account, err := s.Store.SetAuthDisplayNameForAccountAllowReserved(
@@ -62,6 +67,49 @@ func (s *Server) HandleAuthDisplayName(w http.ResponseWriter, r *http.Request) {
 		Account:  &account,
 		Message:  "Display name updated.",
 	})
+}
+
+func displayNameChangeAllowedDuringOnboarding(account database.AuthAccount, requestedDisplayName string) bool {
+	if isOnboardingPlaceholderDisplayName(account.DisplayName) {
+		return true
+	}
+
+	return strings.EqualFold(
+		strings.TrimSpace(account.DisplayName),
+		strings.TrimSpace(requestedDisplayName),
+	)
+}
+
+func isOnboardingPlaceholderDisplayName(displayName string) bool {
+	name := strings.TrimSpace(displayName)
+	if name == "" {
+		return true
+	}
+
+	lowerName := strings.ToLower(name)
+	if lowerName == "player" {
+		return true
+	}
+
+	if strings.HasPrefix(lowerName, "player_") {
+		return isASCIIDigits(lowerName[len("player_"):])
+	}
+
+	if strings.HasPrefix(lowerName, "namifan") {
+		return isASCIIDigits(lowerName[len("namifan"):])
+	}
+
+	return false
+}
+
+func isASCIIDigits(value string) bool {
+	for _, r := range value {
+		if r < '0' || r > '9' {
+			return false
+		}
+	}
+
+	return true
 }
 
 func reservedDisplayNameAllowedForAccount(account database.AuthAccount) bool {
