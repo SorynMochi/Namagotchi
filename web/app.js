@@ -1163,6 +1163,8 @@ function renderPlayerStatus(status) {
   const bonus = getMoodBonus(companion.moodScore);
   const namiXpPercent = percent(companion.xpIntoLevel, companion.xpToNext);
 
+  updateTopPlayerName(player);
+
   setTextIfChanged(namiLevel, Number(companion.level ?? 1).toLocaleString());
   setTextIfChanged(
     namiXpLabel,
