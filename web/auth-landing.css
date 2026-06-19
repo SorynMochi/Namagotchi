@@ -281,3 +281,26 @@ body.auth-logged-out .auth-card::after {
     drop-shadow(0 10px 20px rgba(122, 72, 98, 0.16)) !important;
 }
 /* Google sign-in SVG button cleanup END */
+/* Landing stack true viewport centering START */
+body.auth-logged-out .auth-landing {
+  align-items: center !important;
+  justify-items: center !important;
+  place-items: center !important;
+}
+
+body.auth-logged-out .auth-landing-stack {
+  transform: translateY(0) !important;
+}
+
+@media (max-width: 640px) {
+  body.auth-logged-out .auth-landing-stack {
+    transform: translateY(0) !important;
+  }
+}
+
+@media (max-height: 760px) {
+  body.auth-logged-out .auth-landing-stack {
+    transform: translateY(0) !important;
+  }
+}
+/* Landing stack true viewport centering END */
