@@ -112,6 +112,7 @@ const CHAT_CHANNEL_KEY = "namigotchi_chat_active_channel_v1";
 const CHAT_HIDDEN_KEY = "namigotchi_chat_hidden_v1";
 const CHAT_PREVIOUS_HEIGHT_KEY = "namigotchi_chat_previous_height_v1";
 const ACTIVE_SECTION_KEY = "namigotchi_active_section_v1";
+let themeBeforeAuthLanding = null;
 const EMOJI_USAGE_KEY = "namigotchi_emoji_usage_v2";
 const EMOJI_CATEGORY_KEY = "namigotchi_emoji_category_v1";
 const RECENT_EMOJI_LIMIT = 70;
@@ -1059,7 +1060,16 @@ async function initializeAuthGate() {
 }
 
 function showAuthLanding(message) {
+  if (themeBeforeAuthLanding === null) {
+    themeBeforeAuthLanding = document.body.dataset.theme || "";
+  }
+
   document.body.classList.add("auth-logged-out");
+  document.body.dataset.theme = "auth-landing";
+
+  if (themeStylesheet) {
+    themeStylesheet.disabled = true;
+  }
 
   if (authLanding) {
     authLanding.classList.remove("hidden");
@@ -1073,6 +1083,20 @@ function showAuthLanding(message) {
 
 function hideAuthLanding() {
   document.body.classList.remove("auth-logged-out");
+
+  if (themeStylesheet) {
+    themeStylesheet.disabled = false;
+  }
+
+  if (themeBeforeAuthLanding !== null) {
+    if (themeBeforeAuthLanding) {
+      document.body.dataset.theme = themeBeforeAuthLanding;
+    } else {
+      delete document.body.dataset.theme;
+    }
+
+    themeBeforeAuthLanding = null;
+  }
 
   if (authLanding) {
     authLanding.classList.add("hidden");
