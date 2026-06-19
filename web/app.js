@@ -119,6 +119,7 @@ const CHAT_HIDDEN_KEY = "namigotchi_chat_hidden_v1";
 const CHAT_PREVIOUS_HEIGHT_KEY = "namigotchi_chat_previous_height_v1";
 const ACTIVE_SECTION_KEY = "namigotchi_active_section_v1";
 const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
+const AUTH_LANDING_SKIP_PRELANDING_KEY = "namigotchi_auth_skip_prelanding_once_v1";
 let authLandingMusicAutoplayBlocked = false;
 let authPrelandingDismissed = false;
 let themeBeforeAuthLanding = null;
@@ -1102,6 +1103,47 @@ function randomNumber(min, max) {
   return min + Math.random() * (max - min);
 }
 
+function initializeAuthLogoutMusicBridge() {
+  if (!logoutButton) {
+    return;
+  }
+
+  logoutButton.addEventListener("click", prepareAuthLandingAfterLogout, { capture: true });
+}
+
+function prepareAuthLandingAfterLogout() {
+  sessionStorage.setItem(AUTH_LANDING_SKIP_PRELANDING_KEY, "true");
+  authPrelandingDismissed = true;
+  document.body.classList.remove("auth-prelanding-active");
+
+  if (!isAuthLandingMusicMuted()) {
+    startAuthLandingMusic();
+  }
+}
+
+function shouldSkipAuthPrelandingOnce() {
+  const shouldSkip = sessionStorage.getItem(AUTH_LANDING_SKIP_PRELANDING_KEY) === "true";
+
+  if (shouldSkip) {
+    sessionStorage.removeItem(AUTH_LANDING_SKIP_PRELANDING_KEY);
+  }
+
+  return shouldSkip;
+}
+
+function showAuthLoginCardWithoutPrelanding() {
+  authPrelandingDismissed = true;
+  document.body.classList.remove("auth-prelanding-active");
+
+  if (authPrelandingCard) {
+    authPrelandingCard.setAttribute("aria-hidden", "true");
+  }
+
+  if (authLoginCard) {
+    authLoginCard.setAttribute("aria-hidden", "false");
+  }
+}
+
 function initializeAuthPrelanding() {
   if (!authPrelandingCard) {
     return;
@@ -1254,6 +1296,7 @@ function updateAuthMusicToggle() {
 }
 
 function initializeAuthLanding() {
+  initializeAuthLogoutMusicBridge();
   initializeAuthPrelanding();
   initializeAuthMusic();
   initializeAuthSparkles();
@@ -1299,10 +1342,15 @@ function showAuthLanding(message) {
   document.body.classList.add("auth-logged-out");
   document.body.dataset.theme = "auth-landing";
 
-  showAuthPrelanding();
-
-  if (authPrelandingDismissed) {
+  if (shouldSkipAuthPrelandingOnce()) {
+    showAuthLoginCardWithoutPrelanding();
     startAuthLandingMusic();
+  } else {
+    showAuthPrelanding();
+
+    if (authPrelandingDismissed) {
+      startAuthLandingMusic();
+    }
   }
 
   if (themeStylesheet) {
