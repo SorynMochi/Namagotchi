@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color-scheme: light;
 
   --bg-0: #fff4ed;
@@ -885,3 +885,52 @@ body[data-theme="nami-days"] .chat-tab.active {
 }
 /* Nami Days buff headers and chat tabs END */
 
+/* Nami Days inactive work peach polish START */
+/* Work page: inactive/idle task cards use peach, active/running cards keep their existing pink treatment. */
+
+body[data-theme="nami-days"] #section-gathering .task-card:not(.active) {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.78), transparent 12rem),
+    linear-gradient(180deg, rgba(255, 235, 218, 0.96), rgba(255, 210, 197, 0.90)) !important;
+  border-color: rgba(214, 111, 143, 0.34) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 10px 24px rgba(148, 66, 92, 0.10) !important;
+}
+
+body[data-theme="nami-days"] #section-gathering .task-card:not(.active) .task-status,
+body[data-theme="nami-days"] #section-gathering .task-card:not(.active) button,
+body[data-theme="nami-days"] #section-gathering .task-card:not(.active) .secondary-button,
+body[data-theme="nami-days"] #section-gathering .task-card:not(.active) .primary-button {
+  background:
+    linear-gradient(180deg, rgba(255, 248, 241, 0.94), rgba(255, 218, 208, 0.88)) !important;
+  border-color: rgba(180, 87, 124, 0.30) !important;
+  color: #74465c !important;
+  -webkit-text-fill-color: #74465c !important;
+  text-shadow: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.66),
+    0 6px 14px rgba(148, 66, 92, 0.08) !important;
+}
+
+body[data-theme="nami-days"] #section-gathering .task-card:not(.active) h2 {
+  color: #a25f90 !important;
+  -webkit-text-fill-color: #a25f90 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] #section-gathering .task-card:not(.active) .task-meta span {
+  color: #74465c !important;
+  -webkit-text-fill-color: #74465c !important;
+}
+
+body[data-theme="nami-days"] #section-gathering .task-card:not(.active) .task-meta strong {
+  color: #3f1f35 !important;
+  -webkit-text-fill-color: #3f1f35 !important;
+}
+
+/* Explicitly protect the active card from the idle peach rules. */
+body[data-theme="nami-days"] #section-gathering .task-card.active {
+  border-color: var(--theme-work-active-border) !important;
+}
+/* Nami Days inactive work peach polish END */
