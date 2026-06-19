@@ -601,3 +601,165 @@ body[data-theme="nami-days"] .eyebrow {
 }
 /* Nami Days readability pass END */
 
+/* Nami Days precision contrast pass START */
+/* Fix the remaining pastel-on-pastel spots without touching other themes. */
+
+/* Wardrobe header count, e.g. 69 / 100 */
+body[data-theme="nami-days"] #wardrobe-inline-count,
+body[data-theme="nami-days"] #wardrobe-capacity-label {
+  color: #c43d82 !important;
+  -webkit-text-fill-color: #c43d82 !important;
+  font-weight: 900 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* Current outfit slot labels, e.g. TOP, BOTTOM, DRESS */
+body[data-theme="nami-days"] .equipment-slot .eyebrow,
+body[data-theme="nami-days"] .equipment-slot .slot-label,
+body[data-theme="nami-days"] .equipment-slot-label,
+body[data-theme="nami-days"] .wardrobe-slot-label,
+body[data-theme="nami-days"] .current-outfit-slot-label,
+body[data-theme="nami-days"] [data-slot] .eyebrow,
+body[data-theme="nami-days"] [data-slot] .slot-label {
+  color: #c43d82 !important;
+  -webkit-text-fill-color: #c43d82 !important;
+  font-weight: 900 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* Top rail player name and XP label should not turn ghost-white. */
+body[data-theme="nami-days"] .top-player-name-button,
+body[data-theme="nami-days"] .top-player-name-button *,
+body[data-theme="nami-days"] #playdeck-xp-label,
+body[data-theme="nami-days"] #playdeck-xp-label *,
+body[data-theme="nami-days"] #nami-xp-label,
+body[data-theme="nami-days"] #nami-xp-label * {
+  color: #74465c !important;
+  -webkit-text-fill-color: #74465c !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+body[data-theme="nami-days"] #playdeck-xp-label .metric-name,
+body[data-theme="nami-days"] #nami-xp-label .metric-name {
+  color: #74465c !important;
+  -webkit-text-fill-color: #74465c !important;
+  font-weight: 800 !important;
+}
+
+body[data-theme="nami-days"] #playdeck-xp-label .metric-value,
+body[data-theme="nami-days"] #nami-xp-label .metric-value {
+  color: #3f1f35 !important;
+  -webkit-text-fill-color: #3f1f35 !important;
+  font-weight: 900 !important;
+}
+
+/* Care buttons: remove the blurry faded look on active and inactive buttons. */
+body[data-theme="nami-days"] .care-button,
+body[data-theme="nami-days"] .care-button *,
+body[data-theme="nami-days"] [data-care-action],
+body[data-theme="nami-days"] [data-care-action] *,
+body[data-theme="nami-days"] #sleep-toggle-button,
+body[data-theme="nami-days"] #sleep-toggle-button *,
+body[data-theme="nami-days"] .care-card button,
+body[data-theme="nami-days"] .care-card button *,
+body[data-theme="nami-days"] .care-card button:disabled,
+body[data-theme="nami-days"] .care-card button:disabled * {
+  color: #5a2c47 !important;
+  -webkit-text-fill-color: #5a2c47 !important;
+  font-weight: 900 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  text-shadow: none !important;
+  text-rendering: geometricPrecision !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+body[data-theme="nami-days"] .care-button:not(:disabled),
+body[data-theme="nami-days"] [data-care-action]:not(:disabled),
+body[data-theme="nami-days"] #sleep-toggle-button:not(:disabled) {
+  background: linear-gradient(180deg, #ff7fbd, #ffacd2) !important;
+  border-color: rgba(185, 54, 119, 0.30) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 8px 18px rgba(185, 54, 119, 0.16) !important;
+}
+
+body[data-theme="nami-days"] .care-button:disabled,
+body[data-theme="nami-days"] [data-care-action]:disabled,
+body[data-theme="nami-days"] #sleep-toggle-button:disabled {
+  background: linear-gradient(180deg, rgba(255, 214, 234, 0.94), rgba(255, 190, 222, 0.88)) !important;
+  border-color: rgba(185, 54, 119, 0.18) !important;
+}
+
+/* Playdeck: replace muted green/gray status blocks with pink glass. */
+body[data-theme="nami-days"] .combat-status,
+body[data-theme="nami-days"] .combat-status-card,
+body[data-theme="nami-days"] .combat-status-panel,
+body[data-theme="nami-days"] .combat-status-banner,
+body[data-theme="nami-days"] .playdeck-status,
+body[data-theme="nami-days"] .status-card,
+body[data-theme="nami-days"] .status-banner,
+body[data-theme="nami-days"] *:has(> #combat-status-title),
+body[data-theme="nami-days"] *:has(> #combat-status-copy) {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.80), transparent 13rem),
+    linear-gradient(180deg, rgba(255, 235, 245, 0.96), rgba(255, 199, 226, 0.84)) !important;
+  border-color: rgba(185, 54, 119, 0.34) !important;
+  color: #3f1f35 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 12px 26px rgba(185, 54, 119, 0.12) !important;
+}
+
+body[data-theme="nami-days"] #combat-status-title,
+body[data-theme="nami-days"] #combat-status-copy,
+body[data-theme="nami-days"] #combat-status-title *,
+body[data-theme="nami-days"] #combat-status-copy * {
+  color: #3f1f35 !important;
+  -webkit-text-fill-color: #3f1f35 !important;
+  text-shadow: none !important;
+}
+
+/* Combat log: pink background, black text as requested. */
+body[data-theme="nami-days"] #combat-log-list,
+body[data-theme="nami-days"] #combat-log-list *,
+body[data-theme="nami-days"] .combat-log,
+body[data-theme="nami-days"] .combat-log *,
+body[data-theme="nami-days"] .combat-log-list,
+body[data-theme="nami-days"] .combat-log-list *,
+body[data-theme="nami-days"] .combat-log-card,
+body[data-theme="nami-days"] .combat-log-card * {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] #combat-log-list,
+body[data-theme="nami-days"] .combat-log,
+body[data-theme="nami-days"] .combat-log-list,
+body[data-theme="nami-days"] .combat-log-card {
+  background:
+    linear-gradient(180deg, rgba(255, 240, 248, 0.96), rgba(255, 211, 232, 0.90)) !important;
+  border-color: rgba(185, 54, 119, 0.28) !important;
+}
+
+/* Make sure player names anywhere stubborn do not stay white. */
+body[data-theme="nami-days"] .player-name,
+body[data-theme="nami-days"] .top-player-name,
+body[data-theme="nami-days"] .user-name,
+body[data-theme="nami-days"] .chat-name,
+body[data-theme="nami-days"] .chat-author,
+body[data-theme="nami-days"] .chat-username,
+body[data-theme="nami-days"] .message-author,
+body[data-theme="nami-days"] .message-name {
+  color: #b93677 !important;
+  -webkit-text-fill-color: #b93677 !important;
+  font-weight: 900 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+/* Nami Days precision contrast pass END */
+
