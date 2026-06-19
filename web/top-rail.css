@@ -676,3 +676,421 @@ body[data-theme="nami-days"] {
 }
 /* Unified top rail metric typography END */
 
+/* Top rail grid blueprint START */
+/*
+  Top rail structural layout:
+  Row 1: Player tick bar | Currency | Nami-Chan | Playdeck | Resources | Work Levels
+  Rows 2-4: aligned stat rows.
+
+  This block intentionally lives at the end of top-rail.css so it wins over the older
+  top-user nudge/rebalance/visual-correction blocks above it.
+*/
+
+:root {
+  --top-rail-header-row-height: 22px;
+  --top-rail-stat-row-height: 18px;
+  --top-rail-row-gap: 2px;
+  --top-rail-section-pad-x: 14px;
+  --top-rail-section-pad-y: 8px;
+
+  --top-rail-user-label-col: minmax(54px, 0.85fr);
+  --top-rail-user-value-col: minmax(82px, auto);
+  --top-rail-user-bar-col: minmax(70px, 0.75fr);
+
+  --top-rail-compact-label-color: var(--muted);
+  --top-rail-compact-value-color: var(--text);
+  --top-rail-compact-label-size: 0.72rem;
+  --top-rail-compact-value-size: 0.74rem;
+  --top-rail-compact-line-height: 1.2;
+}
+
+body[data-theme="nami-days"] {
+  --top-rail-compact-label-color: #74465c;
+  --top-rail-compact-value-color: #3f1f35;
+}
+
+/* Main six-column rail layout. */
+.top-stats-compact {
+  display: grid !important;
+  grid-template-columns:
+    minmax(260px, 1.18fr)
+    minmax(148px, 0.82fr)
+    minmax(168px, 0.90fr)
+    minmax(148px, 0.82fr)
+    minmax(265px, 1.35fr)
+    minmax(265px, 1.35fr) !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  overflow: hidden !important;
+}
+
+/* Every top rail section uses the same internal row skeleton. */
+.top-stats-compact > .stat-group.compact {
+  display: grid !important;
+  grid-template-rows:
+    var(--top-rail-header-row-height)
+    repeat(3, var(--top-rail-stat-row-height)) !important;
+  align-content: start !important;
+  row-gap: var(--top-rail-row-gap) !important;
+  min-width: 0 !important;
+  min-height: calc(
+    var(--top-rail-header-row-height) +
+    (var(--top-rail-stat-row-height) * 3) +
+    (var(--top-rail-row-gap) * 3)
+  ) !important;
+  padding: var(--top-rail-section-pad-y) var(--top-rail-section-pad-x) !important;
+  box-sizing: border-box !important;
+}
+
+/* Keep each section pinned to the intended column. */
+.top-stats-compact > .stat-group.compact:nth-child(1) { grid-column: 1 !important; }
+.top-stats-compact > .stat-group.compact:nth-child(2) { grid-column: 2 !important; }
+.top-stats-compact > .stat-group.compact:nth-child(3) { grid-column: 3 !important; }
+.top-stats-compact > .stat-group.compact:nth-child(4) { grid-column: 4 !important; }
+.top-stats-compact > .stat-group.compact:nth-child(5) { grid-column: 5 !important; }
+.top-stats-compact > .stat-group.compact:nth-child(6) { grid-column: 6 !important; }
+
+/* Standard section headers. */
+.top-stats-compact > .stat-group.compact > h2 {
+  grid-row: 1 !important;
+  align-self: center !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+  line-height: 1 !important;
+}
+
+/* Normal one-pair stat sections: Currency, Nami-Chan, Playdeck. */
+.top-stats-compact > .stat-group.compact > .stat-lines {
+  grid-row: 2 / 5 !important;
+  display: grid !important;
+  grid-template-rows: repeat(3, var(--top-rail-stat-row-height)) !important;
+  row-gap: var(--top-rail-row-gap) !important;
+  align-content: start !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .stat-lines > p {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  column-gap: 10px !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Two-pair stat sections: Resources and Work Levels. */
+.top-stats-compact > .stat-group.compact > .compact-grid-lines {
+  grid-row: 2 / 5 !important;
+  display: grid !important;
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto
+    minmax(0, 1fr)
+    auto !important;
+  grid-template-rows: repeat(3, var(--top-rail-stat-row-height)) !important;
+  column-gap: 10px !important;
+  row-gap: var(--top-rail-row-gap) !important;
+  align-content: start !important;
+  align-items: center !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p {
+  display: contents !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(1) > span,
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(1) > strong {
+  grid-row: 1 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(2) > span,
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(2) > strong {
+  grid-row: 2 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(3) > span,
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(3) > strong {
+  grid-row: 3 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(4) > span,
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(4) > strong {
+  grid-row: 1 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(5) > span,
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(5) > strong {
+  grid-row: 2 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(6) > span,
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(6) > strong {
+  grid-row: 3 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(-n+3) > span {
+  grid-column: 1 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(-n+3) > strong {
+  grid-column: 2 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(n+4) > span {
+  grid-column: 3 !important;
+}
+
+.top-stats-compact > .stat-group.compact > .compact-grid-lines > p:nth-child(n+4) > strong {
+  grid-column: 4 !important;
+}
+
+/* Unified label/value styling for every non-user top rail stat. */
+.top-stats-panel .stat-group.compact .stat-lines span,
+.top-stats-panel .stat-group.compact .compact-grid-lines span {
+  min-width: 0 !important;
+  color: var(--top-rail-compact-label-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-label-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-label-size) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.top-stats-panel .stat-group.compact .stat-lines strong,
+.top-stats-panel .stat-group.compact .compact-grid-lines strong {
+  min-width: 0 !important;
+  color: var(--top-rail-compact-value-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-value-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-value-size) !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: right !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  white-space: nowrap !important;
+}
+
+/* User section: player tick bar occupies the header row. */
+.top-stats-compact > .top-user-info {
+  display: grid !important;
+  grid-template-rows:
+    var(--top-rail-header-row-height)
+    repeat(3, var(--top-rail-stat-row-height)) !important;
+  row-gap: var(--top-rail-row-gap) !important;
+  padding: var(--top-rail-section-pad-y) var(--top-rail-section-pad-x) !important;
+  overflow: hidden !important;
+}
+
+.top-user-info .top-player-name-button,
+.top-user-info .top-player-name-button.top-player-tick-pill {
+  grid-row: 1 !important;
+  align-self: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: 16px !important;
+  min-height: 16px !important;
+  margin: 0 !important;
+  padding: 0 10px !important;
+  box-sizing: border-box !important;
+  border-radius: 999px !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* User stat rows: label | value | bar */
+.top-user-info .top-user-meter-list {
+  grid-row: 2 / 5 !important;
+  display: grid !important;
+  grid-template-columns:
+    var(--top-rail-user-label-col)
+    var(--top-rail-user-value-col)
+    var(--top-rail-user-bar-col) !important;
+  grid-template-rows: repeat(3, var(--top-rail-stat-row-height)) !important;
+  column-gap: 10px !important;
+  row-gap: var(--top-rail-row-gap) !important;
+  align-content: start !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+}
+
+.top-user-info .top-user-meter-list .user-meter,
+.top-user-info .top-user-meter-list .tick-meter {
+  display: contents !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.top-user-info .top-user-meter-list .meter-label {
+  display: contents !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: inherit !important;
+  font: inherit !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+}
+
+.top-user-info .top-user-meter-list .metric-name {
+  grid-column: 1 !important;
+  justify-self: start !important;
+  align-self: center !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+
+  color: var(--top-rail-compact-label-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-label-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-label-size) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.top-user-info .top-user-meter-list .metric-value {
+  grid-column: 2 !important;
+  justify-self: end !important;
+  align-self: center !important;
+  min-width: 0 !important;
+
+  color: var(--top-rail-compact-value-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-value-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-value-size) !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: right !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+
+  white-space: nowrap !important;
+}
+
+.top-user-info .top-user-meter-list .meter-track {
+  grid-column: 3 !important;
+  justify-self: stretch !important;
+  align-self: center !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: 5px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.top-user-info .top-user-meter-list .fill,
+.top-user-info .top-user-meter-list .meter-fill,
+.top-user-info .top-user-meter-list .tick-fill {
+  height: 100% !important;
+  min-height: 0 !important;
+  border-radius: inherit !important;
+}
+
+/* Explicit row placement for Streak, Sparkles, XP. */
+.top-user-info .top-user-meter-list .user-meter:nth-child(1) .metric-name,
+.top-user-info .top-user-meter-list .user-meter:nth-child(1) .metric-value,
+.top-user-info .top-user-meter-list .user-meter:nth-child(1) .meter-track {
+  grid-row: 1 !important;
+}
+
+.top-user-info .top-user-meter-list .user-meter:nth-child(2) .metric-name,
+.top-user-info .top-user-meter-list .user-meter:nth-child(2) .metric-value,
+.top-user-info .top-user-meter-list .user-meter:nth-child(2) .meter-track {
+  grid-row: 2 !important;
+}
+
+.top-user-info .top-user-meter-list .user-meter:nth-child(3) .metric-name,
+.top-user-info .top-user-meter-list .user-meter:nth-child(3) .metric-value,
+.top-user-info .top-user-meter-list .user-meter:nth-child(3) .meter-track {
+  grid-row: 3 !important;
+}
+
+/* Responsive fallback keeps the same conceptual order without forcing tiny unreadable columns. */
+@media (max-width: 1600px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .top-stats-compact > .stat-group.compact {
+    grid-column: auto !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .top-stats-compact {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .top-stats-compact > .stat-group.compact {
+    grid-column: auto !important;
+  }
+
+  .top-user-info .top-user-meter-list {
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto !important;
+  }
+
+  .top-user-info .top-user-meter-list .meter-track {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+/* Top rail grid blueprint END */
+
