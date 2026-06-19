@@ -10,6 +10,18 @@ const (
 )
 
 func ValidateAuthDisplayName(displayName string) error {
+	if err := ValidateAuthDisplayNameSyntax(displayName); err != nil {
+		return err
+	}
+
+	if IsReservedAuthDisplayName(displayName) {
+		return ErrAuthDisplayNameReserved
+	}
+
+	return nil
+}
+
+func ValidateAuthDisplayNameSyntax(displayName string) error {
 	displayName = cleanAuthDisplayName(displayName)
 
 	if len(displayName) < AuthDisplayNameMinLength || len(displayName) > AuthDisplayNameMaxLength {
@@ -31,10 +43,6 @@ func ValidateAuthDisplayName(displayName string) error {
 		}
 
 		return ErrAuthDisplayNameInvalid
-	}
-
-	if IsReservedAuthDisplayName(displayName) {
-		return ErrAuthDisplayNameReserved
 	}
 
 	return nil
