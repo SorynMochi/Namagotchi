@@ -100,6 +100,7 @@ const railToggleButtons = document.querySelectorAll("[data-rail-toggle]");
 const gameShell = document.querySelector(".game-shell");
 const themeStylesheet = document.querySelector("#theme-stylesheet");
 const themeSelect = document.querySelector("#theme-select");
+const logoutButton = document.querySelector("#logout-button");
 
 const MAX_CHAT_MESSAGES = 100;
 const MAX_NAMI_MESSAGES = 50;
@@ -4502,6 +4503,30 @@ function labelForTask(task) {
   }
 }
 
+function initializeLogoutButton() {
+  if (!logoutButton) {
+    return;
+  }
+
+  logoutButton.addEventListener("click", logoutCurrentAccount);
+}
+
+async function logoutCurrentAccount() {
+  try {
+    const response = await csrfFetch("/api/auth/logout", {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Logout failed: ${response.status}`);
+    }
+
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+    addChatMessage("System", "Could not log out. The door got stuck.", "system");
+  }
+}
 function percent(value, max) {
   if (!max || max <= 0) {
     return 0;
@@ -4527,6 +4552,7 @@ function escapeHTML(value) {
 initializeWardrobeItemModal();
 initializeDevWardrobeSpawner();
 initializeTheme();
+initializeLogoutButton();
 loadStatus();
 loadPlayerStatus();
 
