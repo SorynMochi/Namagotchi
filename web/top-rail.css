@@ -1,4 +1,4 @@
-
+﻿
 
 /* Top player tick pill START */
 
@@ -582,3 +582,97 @@ body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-value {
 }
 
 /* Top rail section width rebalance END */
+
+/* Unified top rail metric typography START */
+/*
+  This block intentionally lives in top-rail.css because this file loads after theme CSS.
+  It prevents Streak / Sparkles / XP from drifting away from the other compact top-rail stat rows.
+*/
+
+:root {
+  --top-rail-compact-label-color: var(--muted);
+  --top-rail-compact-value-color: var(--text);
+  --top-rail-compact-label-size: 0.72rem;
+  --top-rail-compact-value-size: 0.74rem;
+  --top-rail-compact-line-height: 1.2;
+}
+
+body[data-theme="nami-days"] {
+  --top-rail-compact-label-color: #74465c;
+  --top-rail-compact-value-color: #3f1f35;
+}
+
+/* Normal compact stat rows: Credits, Nibbles, NamiCoins, etc. */
+.top-stats-panel .stat-group.compact .stat-lines span,
+.top-stats-panel .stat-group.compact .compact-grid-lines span {
+  color: var(--top-rail-compact-label-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-label-color) !important;
+  font-size: var(--top-rail-compact-label-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+}
+
+.top-stats-panel .stat-group.compact .stat-lines strong,
+.top-stats-panel .stat-group.compact .compact-grid-lines strong {
+  color: var(--top-rail-compact-value-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-value-color) !important;
+  font-size: var(--top-rail-compact-value-size) !important;
+  font-weight: 900 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+}
+
+/* User metric rows: Streak, Sparkles, XP. These must match the rows above exactly. */
+.top-stats-panel .top-user-info .top-user-meter-list .metric-name,
+.top-stats-panel .top-user-info #current-action-label .metric-name,
+.top-stats-panel .top-user-info #playdeck-hp-label .metric-name,
+.top-stats-panel .top-user-info #playdeck-xp-label .metric-name,
+.top-stats-panel .top-user-info #nami-xp-label .metric-name {
+  color: var(--top-rail-compact-label-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-label-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-label-size) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.top-stats-panel .top-user-info .top-user-meter-list .metric-value,
+.top-stats-panel .top-user-info #current-action-label .metric-value,
+.top-stats-panel .top-user-info #playdeck-hp-label .metric-value,
+.top-stats-panel .top-user-info #playdeck-xp-label .metric-value,
+.top-stats-panel .top-user-info #nami-xp-label .metric-value {
+  color: var(--top-rail-compact-value-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-value-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-value-size) !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: right !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* Belt-and-suspenders XP fix: this wins over the older XP-specific rules in this same file. */
+.top-stats-panel .top-user-info .top-user-meter-list #playdeck-xp-label,
+.top-stats-panel .top-user-info .top-user-meter-list #playdeck-xp-label *,
+.top-stats-panel .top-user-info .top-user-meter-list #nami-xp-label,
+.top-stats-panel .top-user-info .top-user-meter-list #nami-xp-label * {
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+/* Unified top rail metric typography END */
+

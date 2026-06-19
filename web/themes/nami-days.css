@@ -807,3 +807,39 @@ body[data-theme="nami-days"] .inventory-section .item-count {
 }
 /* Nami Days wardrobe inventory polish END */
 
+/* Nami Days rail and top category polish START */
+/* Rail headers: Menu / Key Information / Buffs */
+body[data-theme="nami-days"] .rail-toggle,
+body[data-theme="nami-days"] .rail-toggle .collapse-label,
+body[data-theme="nami-days"] .rail-toggle .collapse-glyph,
+body[data-theme="nami-days"] .top-panel-toggle,
+body[data-theme="nami-days"] .top-panel-toggle .collapse-label,
+body[data-theme="nami-days"] .top-panel-toggle .collapse-glyph,
+body[data-theme="nami-days"] .panel-title,
+body[data-theme="nami-days"] .panel-title .collapse-label,
+body[data-theme="nami-days"] .panel-title .collapse-glyph {
+  color: #a25f90 !important;
+  -webkit-text-fill-color: #a25f90 !important;
+  text-shadow: none !important;
+}
+
+/* Top rail category names: Currency / Nami-Chan / Playdeck / Resources / Work Levels */
+body[data-theme="nami-days"] .top-stats-panel .stat-group.compact:not(.top-user-info) h2 {
+  color: #ff2aa3 !important;
+  -webkit-text-fill-color: #ff2aa3 !important;
+  font-weight: 900 !important;
+  text-shadow:
+    0 0 8px rgba(255, 42, 163, 0.22),
+    0 1px 0 rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Keep the top panel title itself mauve, not neon pink. */
+body[data-theme="nami-days"] .top-stats-panel > .panel-title,
+body[data-theme="nami-days"] .top-stats-panel > .panel-title .collapse-label,
+body[data-theme="nami-days"] .top-stats-panel > .panel-title .collapse-glyph {
+  color: #a25f90 !important;
+  -webkit-text-fill-color: #a25f90 !important;
+  text-shadow: none !important;
+}
+/* Nami Days rail and top category polish END */
+
