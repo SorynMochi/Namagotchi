@@ -1186,13 +1186,19 @@ function updateAuthMusicToggle() {
     return;
   }
 
-  const mutedOrPaused = isAuthLandingMusicMuted() || authLandingMusic.paused || authLandingMusicAutoplayBlocked;
-  const label = mutedOrPaused ? "Play landing music" : "Mute landing music";
+  const mutedByPreference = isAuthLandingMusicMuted();
+  const waitingForClick = !mutedByPreference && (authLandingMusic.paused || authLandingMusicAutoplayBlocked);
+  const label = mutedByPreference
+    ? "Play landing music"
+    : waitingForClick
+      ? "Click to start landing music"
+      : "Mute landing music";
 
-  setTextIfChanged(authMusicToggleIcon, mutedOrPaused ? "volume_off" : "volume_up");
+  setTextIfChanged(authMusicToggleIcon, mutedByPreference ? "volume_off" : "volume_up");
   authMusicToggle.setAttribute("aria-label", label);
   authMusicToggle.title = label;
-  authMusicToggle.classList.toggle("muted", mutedOrPaused);
+  authMusicToggle.classList.toggle("muted", mutedByPreference);
+  authMusicToggle.classList.toggle("blocked", waitingForClick);
 }
 
 function initializeAuthLanding() {
