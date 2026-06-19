@@ -127,6 +127,8 @@ body[data-theme="rainy-mood"] {
   background: var(--top-player-tick-fill);
   opacity: 0.78;
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.12);
+  transition: width 120ms linear;
+  will-change: width;
 }
 
 .top-player-name-button.top-player-tick-pill.top-player-tick-pill-animating::before {
