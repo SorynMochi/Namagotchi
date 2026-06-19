@@ -1,3 +1,9 @@
 :root {
   /* Nami Default intentionally inherits the base tokens from styles.css. */
 }
+
+body[data-theme="nami-default"] {
+  background:
+    linear-gradient(rgba(5, 8, 18, 0.18), rgba(5, 8, 18, 0.34)),
+    url("/images/nami_nights.webp") center center / cover no-repeat fixed;
+}
