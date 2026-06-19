@@ -763,3 +763,47 @@ body[data-theme="nami-days"] .message-name {
 }
 /* Nami Days precision contrast pass END */
 
+/* Nami Days wardrobe inventory polish START */
+/* Inventory section panels: swap the cool gray for a soft pink glass. */
+body[data-theme="nami-days"] #inventory-preview-list > *,
+body[data-theme="nami-days"] .inventory-panel #inventory-preview-list > *,
+body[data-theme="nami-days"] .inventory-preview-group,
+body[data-theme="nami-days"] .inventory-group,
+body[data-theme="nami-days"] .inventory-section {
+  background:
+    linear-gradient(180deg, rgba(255, 236, 245, 0.92), rgba(249, 222, 236, 0.88)) !important;
+  border-color: rgba(196, 104, 151, 0.26) !important;
+}
+
+/* Inventory category labels: TOP / BOTTOM / DRESS etc. from cyan -> mauve. */
+body[data-theme="nami-days"] #inventory-preview-list > * h3,
+body[data-theme="nami-days"] #inventory-preview-list > * .eyebrow,
+body[data-theme="nami-days"] .inventory-preview-group h3,
+body[data-theme="nami-days"] .inventory-preview-group .eyebrow,
+body[data-theme="nami-days"] .inventory-group h3,
+body[data-theme="nami-days"] .inventory-group .eyebrow,
+body[data-theme="nami-days"] .inventory-section h3,
+body[data-theme="nami-days"] .inventory-section .eyebrow,
+body[data-theme="nami-days"] .inventory-slot-label,
+body[data-theme="nami-days"] .inventory-group-label,
+body[data-theme="nami-days"] .inventory-section-label {
+  color: #a25f90 !important;
+  -webkit-text-fill-color: #a25f90 !important;
+  text-shadow: none !important;
+  font-weight: 900 !important;
+}
+
+/* Keep the item-count number on the right readable and on-theme. */
+body[data-theme="nami-days"] #inventory-preview-list > * .count,
+body[data-theme="nami-days"] #inventory-preview-list > * .item-count,
+body[data-theme="nami-days"] .inventory-preview-group .count,
+body[data-theme="nami-days"] .inventory-preview-group .item-count,
+body[data-theme="nami-days"] .inventory-group .count,
+body[data-theme="nami-days"] .inventory-group .item-count,
+body[data-theme="nami-days"] .inventory-section .count,
+body[data-theme="nami-days"] .inventory-section .item-count {
+  color: #5c2e49 !important;
+  -webkit-text-fill-color: #5c2e49 !important;
+}
+/* Nami Days wardrobe inventory polish END */
+
