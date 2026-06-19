@@ -516,3 +516,167 @@ body.auth-logged-out .auth-landing-stack {
   }
 }
 /* Landing note and logo scale polish END */
+/* Landing sparkle layer START */
+.auth-sparkle-layer {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  contain: layout paint style !important;
+}
+
+.auth-landing-stack {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.auth-sparkle {
+  position: absolute !important;
+  left: var(--sparkle-x) !important;
+  top: var(--sparkle-y) !important;
+  width: var(--sparkle-size) !important;
+  height: var(--sparkle-size) !important;
+  color: var(--sparkle-color) !important;
+  opacity: 0 !important;
+  transform-origin: center !important;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 255, 255, 0.72))
+    drop-shadow(0 0 10px rgba(255, 147, 205, 0.34)) !important;
+  animation:
+    authSparkleDrift var(--sparkle-duration) ease-in-out var(--sparkle-delay) infinite,
+    authSparkleWink var(--sparkle-duration) ease-in-out var(--sparkle-delay) infinite !important;
+  will-change: transform, opacity !important;
+}
+
+.auth-sparkle--dot,
+.auth-sparkle--soft {
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle, #ffffff 0 14%, currentColor 34%, rgba(255, 255, 255, 0.28) 58%, transparent 72%) !important;
+}
+
+.auth-sparkle--soft {
+  opacity: 0 !important;
+  filter:
+    blur(0.25px)
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.70))
+    drop-shadow(0 0 14px rgba(255, 166, 214, 0.32)) !important;
+}
+
+.auth-sparkle--diamond {
+  background:
+    radial-gradient(circle at 50% 50%, #ffffff 0 12%, currentColor 42%, transparent 72%) !important;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%) !important;
+}
+
+.auth-sparkle--plus::before,
+.auth-sparkle--plus::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  border-radius: 999px !important;
+  background: currentColor !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.72) !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.auth-sparkle--plus::before {
+  width: 100% !important;
+  height: 28% !important;
+}
+
+.auth-sparkle--plus::after {
+  width: 28% !important;
+  height: 100% !important;
+}
+
+.auth-sparkle--star {
+  background:
+    radial-gradient(circle at 50% 50%, #ffffff 0 9%, currentColor 34%, transparent 72%) !important;
+  clip-path: polygon(
+    50% 0%,
+    61% 34%,
+    96% 34%,
+    67% 53%,
+    79% 90%,
+    50% 66%,
+    21% 90%,
+    33% 53%,
+    4% 34%,
+    39% 34%
+  ) !important;
+}
+
+@keyframes authSparkleDrift {
+  0% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(0.72)
+      rotate(0deg);
+  }
+
+  48% {
+    transform:
+      translate3d(
+        calc(var(--sparkle-drift-x) * 0.55),
+        calc(var(--sparkle-drift-y) * 0.55),
+        0
+      )
+      scale(1.04)
+      rotate(calc(var(--sparkle-rotation) * 0.55));
+  }
+
+  100% {
+    transform:
+      translate3d(var(--sparkle-drift-x), var(--sparkle-drift-y), 0)
+      scale(0.78)
+      rotate(var(--sparkle-rotation));
+  }
+}
+
+@keyframes authSparkleWink {
+  0%,
+  100% {
+    opacity: 0.04;
+  }
+
+  18% {
+    opacity: 0.72;
+  }
+
+  42% {
+    opacity: 0.22;
+  }
+
+  58% {
+    opacity: 0.90;
+  }
+
+  78% {
+    opacity: 0.16;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-sparkle {
+    animation: none !important;
+    opacity: 0.38 !important;
+    transform: none !important;
+  }
+}
+/* Landing sparkle layer END */
+/* Sparkle visibility safety START */
+body.auth-logged-out .auth-sparkle-layer {
+  z-index: 1 !important;
+}
+
+body.auth-logged-out .auth-landing-stack {
+  z-index: 2 !important;
+}
+
+body.auth-logged-out .auth-sparkle {
+  opacity: 0.22;
+}
+/* Sparkle visibility safety END */

@@ -101,6 +101,7 @@ const gameShell = document.querySelector(".game-shell");
 const themeStylesheet = document.querySelector("#theme-stylesheet");
 const themeSelect = document.querySelector("#theme-select");
 const authLanding = document.querySelector("#auth-landing");
+const authSparkleLayer = document.querySelector("#auth-sparkle-layer");
 const authLandingMessage = document.querySelector("#auth-landing-message");
 const googleLoginButton = document.querySelector("#google-login-button");
 const logoutButton = document.querySelector("#logout-button");
@@ -1024,7 +1025,52 @@ function showSection(sectionName, options = {}) {
 
 showSection(localStorage.getItem(ACTIVE_SECTION_KEY) || "home", { save: false });
 
+function initializeAuthSparkles() {
+  if (!authSparkleLayer || authSparkleLayer.dataset.ready === "true") {
+    return;
+  }
+
+  authSparkleLayer.dataset.ready = "true";
+  authSparkleLayer.innerHTML = "";
+
+  const sparkleShapes = ["dot", "diamond", "plus", "star", "soft"];
+  const sparkleColors = ["#fff8fc", "#ffd4ea", "#ff9fd0", "#fff0b6", "#bfefff", "#d8c4ff"];
+  const sparkleCount = 46;
+
+  for (let index = 0; index < sparkleCount; index += 1) {
+    const sparkle = document.createElement("span");
+    const shape = sparkleShapes[Math.floor(Math.random() * sparkleShapes.length)];
+    const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+    const size = randomNumber(3, 8.5);
+    const x = randomNumber(4, 96);
+    const y = randomNumber(5, 94);
+    const driftX = randomNumber(-34, 34);
+    const driftY = randomNumber(-26, 26);
+    const duration = randomNumber(9, 18);
+    const delay = randomNumber(-18, 0);
+    const rotation = randomNumber(-90, 120);
+
+    sparkle.className = `auth-sparkle auth-sparkle--${shape}`;
+    sparkle.style.setProperty("--sparkle-size", `${size.toFixed(2)}px`);
+    sparkle.style.setProperty("--sparkle-x", `${x.toFixed(2)}%`);
+    sparkle.style.setProperty("--sparkle-y", `${y.toFixed(2)}%`);
+    sparkle.style.setProperty("--sparkle-drift-x", `${driftX.toFixed(2)}px`);
+    sparkle.style.setProperty("--sparkle-drift-y", `${driftY.toFixed(2)}px`);
+    sparkle.style.setProperty("--sparkle-duration", `${duration.toFixed(2)}s`);
+    sparkle.style.setProperty("--sparkle-delay", `${delay.toFixed(2)}s`);
+    sparkle.style.setProperty("--sparkle-rotation", `${rotation.toFixed(2)}deg`);
+    sparkle.style.setProperty("--sparkle-color", color);
+
+    authSparkleLayer.appendChild(sparkle);
+  }
+}
+
+function randomNumber(min, max) {
+  return min + Math.random() * (max - min);
+}
+
 function initializeAuthLanding() {
+  initializeAuthSparkles();
   if (!googleLoginButton) {
     return;
   }
