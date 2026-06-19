@@ -1101,6 +1101,14 @@ function getPlaydeckCurrentAndMaxStreak(status) {
   };
 }
 
+function updateTopPlayerName(player) {
+  if (!topPlayerNameButton) {
+    return;
+  }
+
+  const displayName = String(player?.displayName || CURRENT_PLAYER_NAME || "Player").trim() || "Player";
+  setTextIfChanged(topPlayerNameButton, `💎 ${displayName}`);
+}
 function syncTopRailTickPill(tick) {
   const playerPill = document.querySelector(".top-player-name-button");
   if (!playerPill) {
