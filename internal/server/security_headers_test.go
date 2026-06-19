@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -96,5 +97,41 @@ func TestSecurityHeadersSetHSTSForHTTPS(t *testing.T) {
 
 	if got := response.Header.Get("Strict-Transport-Security"); got != "max-age=31536000; includeSubDomains" {
 		t.Fatalf("expected HSTS header for HTTPS request, got %q", got)
+	}
+}
+
+func TestSecurityHeadersSetCSPReportOnly(t *testing.T) {
+	server := &Server{}
+
+	handler := server.withSecurityHeaders(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+
+	request := httptest.NewRequest(http.MethodGet, "/", nil)
+	recorder := httptest.NewRecorder()
+
+	handler.ServeHTTP(recorder, request)
+
+	response := recorder.Result()
+	defer response.Body.Close()
+
+	got := response.Header.Get("Content-Security-Policy-Report-Only")
+	if got == "" {
+		t.Fatal("expected CSP report-only header")
+	}
+
+	requiredParts := []string{
+		"default-src 'self'",
+		"script-src 'self'",
+		"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+		"font-src 'self' https://fonts.gstatic.com data:",
+		"object-src 'none'",
+		"frame-ancestors 'none'",
+	}
+
+	for _, part := range requiredParts {
+		if !strings.Contains(got, part) {
+			t.Fatalf("expected CSP report-only header to contain %q, got %q", part, got)
+		}
 	}
 }
