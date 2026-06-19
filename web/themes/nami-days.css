@@ -843,3 +843,45 @@ body[data-theme="nami-days"] .top-stats-panel > .panel-title .collapse-glyph {
 }
 /* Nami Days rail and top category polish END */
 
+/* Nami Days buff headers and chat tabs START */
+/* Right rail buff group headers: Global Buffs / Personal Buffs */
+body[data-theme="nami-days"] .right-buff-group h3 {
+  color: #ff2aa3 !important;
+  -webkit-text-fill-color: #ff2aa3 !important;
+  font-weight: 900 !important;
+  text-shadow:
+    0 0 8px rgba(255, 42, 163, 0.20),
+    0 1px 0 rgba(255, 255, 255, 0.70) !important;
+}
+
+/* Chat channel bar: replace the dark strip with soft peach glass. */
+body[data-theme="nami-days"] .chat-tabs {
+  background:
+    linear-gradient(180deg, rgba(255, 228, 208, 0.96), rgba(255, 204, 190, 0.90)) !important;
+  border-color: rgba(214, 111, 143, 0.34) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 6px 16px rgba(148, 66, 92, 0.10) !important;
+}
+
+body[data-theme="nami-days"] .chat-tab {
+  border-color: rgba(180, 87, 124, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 241, 0.92), rgba(255, 218, 208, 0.86)) !important;
+  color: #74465c !important;
+  -webkit-text-fill-color: #74465c !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .chat-tab.active {
+  border-color: rgba(255, 42, 163, 0.44) !important;
+  background:
+    linear-gradient(90deg, rgba(255, 122, 183, 0.95), rgba(255, 210, 164, 0.95)) !important;
+  color: #3f1f35 !important;
+  -webkit-text-fill-color: #3f1f35 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 0 12px rgba(255, 42, 163, 0.14) !important;
+}
+/* Nami Days buff headers and chat tabs END */
+

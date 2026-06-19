@@ -1094,3 +1094,24 @@ body[data-theme="nami-days"] {
 }
 /* Top rail grid blueprint END */
 
+/* Nami Days tick pill shadow cleanup START */
+/* Nami Days only: remove the heavy tick pill shadow. */
+body[data-theme="nami-days"] {
+  --top-player-tick-shadow: none;
+}
+
+body[data-theme="nami-days"] .top-player-name-button.top-player-tick-pill {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .top-player-name-button.top-player-tick-pill::before {
+  box-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .top-player-name-button.top-player-tick-pill::after {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 62%) !important;
+}
+/* Nami Days tick pill shadow cleanup END */
+
