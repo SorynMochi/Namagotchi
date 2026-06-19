@@ -1102,12 +1102,13 @@ function getPlaydeckCurrentAndMaxStreak(status) {
 }
 
 function updateTopPlayerName(player) {
-  if (!topPlayerNameButton) {
+  const playerPill = document.querySelector(".top-player-name-button");
+  if (!playerPill) {
     return;
   }
 
   const displayName = String(player?.displayName || CURRENT_PLAYER_NAME || "Player").trim() || "Player";
-  setTextIfChanged(topPlayerNameButton, `💎 ${displayName}`);
+  setTextIfChanged(playerPill, `💎 ${displayName}`);
 }
 function syncTopRailTickPill(tick) {
   const playerPill = document.querySelector(".top-player-name-button");
@@ -1142,24 +1143,18 @@ function syncTopPlayerTickPill(tick) {
     return;
   }
 
-  const secondsUntilNextTick = Math.max(
-    0,
-    Math.min(TOP_RAIL_TICK_SECONDS, Number(tick?.secondsUntilNextTick ?? TOP_RAIL_TICK_SECONDS))
-  );
+  const nextStartMs = Date.parse(tick?.lastTickAt);
+  const nextEndMs = Date.parse(tick?.nextTickAt);
 
-  const progressPercent = Math.max(
-    0,
-    Math.min(100, ((TOP_RAIL_TICK_SECONDS - secondsUntilNextTick) / TOP_RAIL_TICK_SECONDS) * 100)
-  );
+  if (!Number.isNaN(nextStartMs) && !Number.isNaN(nextEndMs) && nextEndMs > nextStartMs) {
+    tickStartMs = nextStartMs;
+    tickEndMs = nextEndMs;
+  }
 
   playerPill.classList.add("top-player-tick-pill");
-  playerPill.style.setProperty("--top-player-tick-progress", `${progressPercent}%`);
-  playerPill.style.setProperty("--top-player-tick-duration", `${Math.max(0.1, secondsUntilNextTick)}s`);
-  playerPill.title = `Next tick in ${Math.ceil(secondsUntilNextTick).toLocaleString()}s`;
-
   playerPill.classList.remove("top-player-tick-pill-animating");
-  void playerPill.offsetWidth;
-  playerPill.classList.add("top-player-tick-pill-animating");
+
+  updateTickProgressBar();
 }
 function renderPlayerStatus(status) {
   const player = status.player;
@@ -4290,15 +4285,22 @@ function syncTickProgress(tick) {
 }
 
 function updateTickProgressBar() {
-  if (!tickFill || !tickStartMs || !tickEndMs) {
+  if (!tickStartMs || !tickEndMs) {
     return;
   }
 
   const now = Date.now() + serverClockOffsetMs;
   const duration = Math.max(1, tickEndMs - tickStartMs);
   const progress = Math.max(0, Math.min(1, (now - tickStartMs) / duration));
+  const secondsRemaining = Math.max(0, (tickEndMs - now) / 1000);
+  const playerPill = document.querySelector(".top-player-name-button");
 
-  tickFill.style.width = `${progress * 100}%`;
+  if (playerPill) {
+    playerPill.style.setProperty("--top-player-tick-progress", `${progress * 100}%`);
+    playerPill.title = secondsRemaining > 0
+      ? `Next tick in ${Math.ceil(secondsRemaining).toLocaleString()}s`
+      : "Tick ready. Syncing...";
+  }
 }
 
 function scheduleNextPlayerStatusRefresh(tick) {
