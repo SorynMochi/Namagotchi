@@ -104,6 +104,9 @@ const authLanding = document.querySelector("#auth-landing");
 const authSparkleLayer = document.querySelector("#auth-sparkle-layer");
 const authLandingMessage = document.querySelector("#auth-landing-message");
 const googleLoginButton = document.querySelector("#google-login-button");
+const authLandingMusic = document.querySelector("#auth-landing-music");
+const authMusicToggle = document.querySelector("#auth-music-toggle");
+const authMusicToggleIcon = document.querySelector("#auth-music-toggle-icon");
 const logoutButton = document.querySelector("#logout-button");
 
 const MAX_CHAT_MESSAGES = 100;
@@ -113,6 +116,8 @@ const CHAT_CHANNEL_KEY = "namigotchi_chat_active_channel_v1";
 const CHAT_HIDDEN_KEY = "namigotchi_chat_hidden_v1";
 const CHAT_PREVIOUS_HEIGHT_KEY = "namigotchi_chat_previous_height_v1";
 const ACTIVE_SECTION_KEY = "namigotchi_active_section_v1";
+const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
+let authLandingMusicAutoplayBlocked = false;
 let themeBeforeAuthLanding = null;
 const EMOJI_USAGE_KEY = "namigotchi_emoji_usage_v2";
 const EMOJI_CATEGORY_KEY = "namigotchi_emoji_category_v1";
@@ -1094,7 +1099,104 @@ function randomNumber(min, max) {
   return min + Math.random() * (max - min);
 }
 
+function initializeAuthMusic() {
+  if (!authLandingMusic || !authMusicToggle) {
+    return;
+  }
+
+  authLandingMusic.loop = true;
+  authLandingMusic.volume = 0.36;
+  authLandingMusic.muted = isAuthLandingMusicMuted();
+  updateAuthMusicToggle();
+
+  authMusicToggle.addEventListener("click", toggleAuthLandingMusic);
+}
+
+function isAuthLandingMusicMuted() {
+  return localStorage.getItem(AUTH_LANDING_MUSIC_MUTED_KEY) === "true";
+}
+
+function setAuthLandingMusicMuted(muted) {
+  localStorage.setItem(AUTH_LANDING_MUSIC_MUTED_KEY, muted ? "true" : "false");
+
+  if (authLandingMusic) {
+    authLandingMusic.muted = muted;
+  }
+
+  updateAuthMusicToggle();
+}
+
+async function startAuthLandingMusic() {
+  if (!authLandingMusic) {
+    return;
+  }
+
+  authLandingMusic.volume = 0.36;
+  authLandingMusic.loop = true;
+  authLandingMusic.muted = isAuthLandingMusicMuted();
+
+  try {
+    await authLandingMusic.play();
+    authLandingMusicAutoplayBlocked = false;
+  } catch {
+    authLandingMusicAutoplayBlocked = true;
+  }
+
+  updateAuthMusicToggle();
+}
+
+function stopAuthLandingMusic() {
+  if (!authLandingMusic) {
+    return;
+  }
+
+  authLandingMusic.pause();
+  authLandingMusic.currentTime = 0;
+  authLandingMusicAutoplayBlocked = false;
+  updateAuthMusicToggle();
+}
+
+async function toggleAuthLandingMusic() {
+  if (!authLandingMusic) {
+    return;
+  }
+
+  const muted = isAuthLandingMusicMuted();
+
+  if (muted || authLandingMusic.paused || authLandingMusicAutoplayBlocked) {
+    setAuthLandingMusicMuted(false);
+
+    try {
+      await authLandingMusic.play();
+      authLandingMusicAutoplayBlocked = false;
+    } catch {
+      authLandingMusicAutoplayBlocked = true;
+    }
+  } else {
+    setAuthLandingMusicMuted(true);
+    authLandingMusic.pause();
+    authLandingMusicAutoplayBlocked = false;
+  }
+
+  updateAuthMusicToggle();
+}
+
+function updateAuthMusicToggle() {
+  if (!authMusicToggle || !authMusicToggleIcon || !authLandingMusic) {
+    return;
+  }
+
+  const mutedOrPaused = isAuthLandingMusicMuted() || authLandingMusic.paused || authLandingMusicAutoplayBlocked;
+  const label = mutedOrPaused ? "Play landing music" : "Mute landing music";
+
+  setTextIfChanged(authMusicToggleIcon, mutedOrPaused ? "volume_off" : "volume_up");
+  authMusicToggle.setAttribute("aria-label", label);
+  authMusicToggle.title = label;
+  authMusicToggle.classList.toggle("muted", mutedOrPaused);
+}
+
 function initializeAuthLanding() {
+  initializeAuthMusic();
   initializeAuthSparkles();
   if (!googleLoginButton) {
     return;
@@ -1138,6 +1240,8 @@ function showAuthLanding(message) {
   document.body.classList.add("auth-logged-out");
   document.body.dataset.theme = "auth-landing";
 
+  startAuthLandingMusic();
+
   if (themeStylesheet) {
     themeStylesheet.disabled = true;
   }
@@ -1154,6 +1258,8 @@ function showAuthLanding(message) {
 
 function hideAuthLanding() {
   document.body.classList.remove("auth-logged-out");
+
+  stopAuthLandingMusic();
 
   if (themeStylesheet) {
     themeStylesheet.disabled = false;

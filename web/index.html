@@ -20,6 +20,10 @@
 <body>
   <main class="auth-landing hidden" id="auth-landing" aria-hidden="true">
     <div class="auth-sparkle-layer" id="auth-sparkle-layer" aria-hidden="true"></div>
+    <button class="auth-music-toggle" id="auth-music-toggle" type="button" aria-label="Toggle landing music" title="Mute landing music">
+      <span class="material-symbols-rounded" id="auth-music-toggle-icon" aria-hidden="true">volume_up</span>
+    </button>
+    <audio id="auth-landing-music" src="/audio/01_Namigotchi_Landing.ogg" preload="auto" loop></audio>
     <div class="auth-landing-stack">
       <img class="auth-logo" src="/images/logo_landing.webp" alt="Namigotchi Idle" />
     <section class="auth-card" aria-labelledby="auth-landing-title">

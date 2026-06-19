@@ -688,3 +688,74 @@ body.auth-logged-out .auth-sparkle--star {
   min-height: 3px;
 }
 /* Sparkle visibility fix END */
+/* Landing music toggle START */
+.auth-music-toggle {
+  position: fixed !important;
+  top: max(14px, env(safe-area-inset-top)) !important;
+  right: max(16px, env(safe-area-inset-right)) !important;
+  z-index: 10001 !important;
+  width: 42px !important;
+  height: 42px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid rgba(255, 166, 205, 0.62) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 252, 254, 0.74) !important;
+  color: #8b5571 !important;
+  box-shadow:
+    0 8px 20px rgba(120, 70, 94, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+  backdrop-filter: blur(10px) saturate(1.08) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.08) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition:
+    transform 120ms ease,
+    filter 120ms ease,
+    box-shadow 120ms ease !important;
+}
+
+.auth-music-toggle:hover {
+  transform: translateY(-1px) !important;
+  filter: brightness(1.04) saturate(1.04) !important;
+  box-shadow:
+    0 12px 26px rgba(120, 70, 94, 0.17),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+}
+
+.auth-music-toggle:active {
+  transform: translateY(0) !important;
+}
+
+.auth-music-toggle:focus-visible {
+  outline: 3px solid rgba(255, 132, 194, 0.72) !important;
+  outline-offset: 4px !important;
+}
+
+.auth-music-toggle .material-symbols-rounded {
+  font-size: 24px !important;
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 700,
+    "GRAD" 0,
+    "opsz" 24 !important;
+}
+
+.auth-music-toggle.muted {
+  color: #ad7891 !important;
+  background: rgba(255, 246, 250, 0.62) !important;
+}
+
+@media (max-width: 640px) {
+  .auth-music-toggle {
+    top: 10px !important;
+    right: 10px !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .auth-music-toggle .material-symbols-rounded {
+    font-size: 22px !important;
+  }
+}
+/* Landing music toggle END */
