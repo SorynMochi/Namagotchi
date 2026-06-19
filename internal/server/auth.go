@@ -68,8 +68,13 @@ func (s *Server) HandleAuthRegister(w http.ResponseWriter, r *http.Request) {
 	request.DisplayName = strings.TrimSpace(request.DisplayName)
 	request.Email = strings.TrimSpace(request.Email)
 
-	if len(request.DisplayName) < 2 || len(request.DisplayName) > 32 {
-		writeError(w, http.StatusBadRequest, "display name must be 2 to 32 characters")
+	if err := database.ValidateAuthDisplayName(request.DisplayName); err != nil {
+		switch {
+		case errors.Is(err, database.ErrAuthDisplayNameReserved):
+			writeError(w, http.StatusBadRequest, "display name is reserved")
+		default:
+			writeError(w, http.StatusBadRequest, "display name must be 3 to 15 characters and may only use letters, numbers, underscores, or hyphens")
+		}
 		return
 	}
 

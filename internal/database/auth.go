@@ -44,12 +44,12 @@ func (s *Store) RegisterGameAccount(ctx context.Context, displayName, email, pas
 	displayName = cleanAuthDisplayName(displayName)
 	email = normalizeAuthEmail(email)
 
-	if displayName == "" || email == "" || password == "" {
-		return account, "", ErrAuthInvalidCredentials
+	if err := ValidateAuthDisplayName(displayName); err != nil {
+		return account, "", err
 	}
 
-	if IsReservedAuthDisplayName(displayName) {
-		return account, "", ErrAuthDisplayNameReserved
+	if email == "" || password == "" {
+		return account, "", ErrAuthInvalidCredentials
 	}
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
