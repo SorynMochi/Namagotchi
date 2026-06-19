@@ -1,0 +1,315 @@
+:root {
+  color-scheme: light;
+
+  --bg-0: #fff4ed;
+  --bg-1: #ffe2ec;
+  --bg-2: #ffd1e3;
+
+  --panel: rgba(255, 248, 252, 0.84);
+  --panel-soft: rgba(255, 235, 244, 0.76);
+  --panel-deep: rgba(255, 224, 237, 0.82);
+
+  --line: rgba(255, 130, 184, 0.48);
+  --line-bright: rgba(255, 189, 217, 0.78);
+
+  --text: #4f2941;
+  --text-soft: #71415a;
+  --muted: #966179;
+
+  --cyan: #86dff3;
+  --cyan-deep: #46b6d5;
+  --cyan-soft: #def8ff;
+  --pink: #ff73b7;
+  --pink-soft: #ffd5e9;
+  --violet: #ba87ff;
+  --violet-soft: #eadcff;
+  --green: #a8d88f;
+  --yellow: #ffd978;
+  --orange: #ffb07c;
+  --danger: #ff5f86;
+  --cream: #fff5d8;
+
+  --rose-shadow: rgba(255, 115, 183, 0.20);
+  --blue-shadow: rgba(134, 223, 243, 0.16);
+
+  --theme-page-glow-pink: rgba(255, 115, 183, 0.34);
+  --theme-page-glow-cyan: rgba(134, 223, 243, 0.24);
+  --theme-page-glow-violet: rgba(186, 135, 255, 0.20);
+  --theme-page-gradient-top: #fff7f0;
+  --theme-page-gradient-bottom: #ffdce9;
+
+  --theme-panel-overlay: rgba(255, 255, 255, 0.38);
+  --theme-panel-border-sheen-pink: rgba(255, 115, 183, 0.42);
+  --theme-panel-border-sheen-cyan: rgba(134, 223, 243, 0.32);
+  --theme-panel-title-bg: rgba(255, 115, 183, 0.11);
+
+  --theme-card-border-cyan: rgba(134, 223, 243, 0.34);
+  --theme-card-bg-overlay: rgba(255, 255, 255, 0.34);
+  --theme-card-bg-deep: rgba(255, 248, 252, 0.80);
+  --theme-card-bg-deep-solid: rgba(255, 248, 252, 0.92);
+  --theme-card-inner-highlight: rgba(255, 255, 255, 0.62);
+
+  --theme-work-active-border: rgba(255, 115, 183, 0.58);
+  --theme-work-active-glow: rgba(255, 115, 183, 0.24);
+  --theme-work-active-bg: rgba(255, 231, 241, 0.90);
+  --theme-work-active-pill-bg: linear-gradient(90deg, #ff73b7, #ffbe8f, #86dff3);
+  --theme-work-active-pill-text: #4f2941;
+  --theme-work-active-button-bg: linear-gradient(180deg, #ff73b7, #ff9fcf);
+  --theme-work-active-button-border: rgba(255, 255, 255, 0.58);
+  --theme-work-active-button-text: #4f2941;
+  --theme-work-active-button-shadow: 0 10px 24px rgba(255, 115, 183, 0.22);
+
+  --shadow:
+    0 18px 44px rgba(124, 71, 96, 0.20),
+    0 0 30px rgba(255, 115, 183, 0.10),
+    0 0 28px rgba(134, 223, 243, 0.08);
+
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+
+  --theme-focus-outline: #ff73b7;
+
+  --theme-progress-track-border: rgba(113, 65, 90, 0.16);
+  --theme-progress-track-bg: rgba(255, 255, 255, 0.66);
+  --theme-progress-fill-shadow: 0 0 14px rgba(255, 115, 183, 0.26), 0 0 16px rgba(134, 223, 243, 0.14);
+  --theme-progress-xp-fill: linear-gradient(90deg, #ff73b7, #ffd978, #86dff3);
+  --theme-progress-stat-fill: linear-gradient(90deg, #ba87ff, #ff73b7, #86dff3);
+  --theme-progress-chat-handle-fill: linear-gradient(90deg, #ff73b7, #86dff3);
+
+  --theme-button-primary-border: rgba(255, 255, 255, 0.62);
+  --theme-button-primary-bg: linear-gradient(180deg, #ff7fbd, #ffafd3);
+  --theme-button-primary-text: #4f2941;
+  --theme-button-primary-shadow: 0 10px 24px rgba(255, 115, 183, 0.22);
+
+  --theme-button-secondary-border: rgba(255, 130, 184, 0.42);
+  --theme-button-secondary-bg: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,219,233,0.88));
+  --theme-button-secondary-text: #6a3653;
+  --theme-button-secondary-shadow: 0 8px 18px rgba(124, 71, 96, 0.12);
+
+  --theme-care-button-border: rgba(255, 130, 184, 0.46);
+  --theme-care-button-bg: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,213,233,0.90));
+  --theme-care-button-text: #6a3653;
+  --theme-care-button-shadow: 0 8px 18px rgba(255, 115, 183, 0.12);
+
+  --theme-pill-border: rgba(255, 130, 184, 0.30);
+  --theme-pill-bg: rgba(255, 255, 255, 0.52);
+  --theme-pill-text: #966179;
+  --theme-pill-active-bg: linear-gradient(90deg, #ff73b7, #ffd978, #86dff3);
+  --theme-pill-active-text: #4f2941;
+
+  --theme-nav-hover-border: rgba(134, 223, 243, 0.64);
+  --theme-nav-hover-bg: rgba(134, 223, 243, 0.18);
+  --theme-nav-hover-text: #4f2941;
+  --theme-nav-active-border: rgba(255, 115, 183, 0.78);
+  --theme-nav-active-bg: linear-gradient(135deg, rgba(255, 115, 183, 0.34), rgba(255, 217, 120, 0.24), rgba(134, 223, 243, 0.24));
+  --theme-nav-active-text: #4f2941;
+  --theme-nav-active-shadow: 0 0 22px rgba(255, 115, 183, 0.22), 0 0 20px rgba(134, 223, 243, 0.10);
+
+  --theme-chat-text: #5b3048;
+  --theme-chat-name: #d84c94;
+  --theme-chat-form-bg: rgba(255, 248, 252, 0.82);
+  --theme-chat-input-border: rgba(255, 130, 184, 0.38);
+  --theme-chat-input-bg: rgba(255, 255, 255, 0.74);
+  --theme-chat-input-placeholder: rgba(113, 65, 90, 0.58);
+  --theme-chat-submit-bg: #ff73b7;
+  --theme-chat-submit-text: #4f2941;
+
+  --theme-side-link-text: #71415a;
+  --theme-side-link-hover-text: #d84c94;
+  --theme-buff-divider: rgba(255, 130, 184, 0.20);
+
+  --theme-scrollbar-color: rgba(255, 115, 183, 0.90);
+  --theme-scrollbar-color-main: rgba(134, 223, 243, 0.86);
+  --theme-scrollbar-track: rgba(255, 255, 255, 0.32);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #ff73b7, #ffd978, #86dff3);
+
+  --theme-nami-placeholder-glow-cyan: rgba(134, 223, 243, 0.22);
+  --theme-nami-slot-glow-pink: rgba(255, 115, 183, 0.22);
+  --theme-nami-slot-glow-cyan: rgba(134, 223, 243, 0.18);
+  --theme-nami-room-stage-bg: #ffe9f2;
+  --theme-nami-message-bg: rgba(255, 248, 252, 0.72);
+  --theme-nami-message-text: #5b3048;
+
+  --theme-zone-active-bg: rgba(255, 115, 183, 0.12);
+  --theme-zone-active-shadow: 0 0 24px rgba(255, 115, 183, 0.12);
+
+  --theme-meter-label-text: #4f2941;
+  --theme-meter-label-shadow: 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 8px rgba(255, 255, 255, 0.34);
+  --theme-tick-fill: linear-gradient(90deg, #ff73b7, #ffd978, #86dff3, #ba87ff);
+  --theme-hp-fill: linear-gradient(90deg, #8dca70, #ffd978, #ff73b7);
+}
+
+body[data-theme="nami-days"] {
+  background:
+    linear-gradient(180deg, rgba(255, 248, 252, 0.18), rgba(255, 222, 235, 0.30)),
+    url("/images/nami_days.webp") center center / cover no-repeat fixed;
+  color: var(--text);
+}
+
+body[data-theme="nami-days"]::before {
+  background:
+    radial-gradient(circle at 13% 9%, rgba(255, 115, 183, 0.20), transparent 18rem),
+    radial-gradient(circle at 87% 12%, rgba(134, 223, 243, 0.18), transparent 20rem),
+    radial-gradient(circle at 50% 90%, rgba(255, 217, 120, 0.16), transparent 22rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 48%, rgba(255, 115, 183, 0.06));
+  opacity: 1;
+}
+
+body[data-theme="nami-days"] .panel,
+body[data-theme="nami-days"] .main-panel,
+body[data-theme="nami-days"] .chat-panel,
+body[data-theme="nami-days"] .top-stats-panel,
+body[data-theme="nami-days"] .nav-panel,
+body[data-theme="nami-days"] .right-buffs-panel,
+body[data-theme="nami-days"] .nami-card,
+body[data-theme="nami-days"] .care-card,
+body[data-theme="nami-days"] .zone-list,
+body[data-theme="nami-days"] .combat-panel,
+body[data-theme="nami-days"] .task-card,
+body[data-theme="nami-days"] .placeholder-copy,
+body[data-theme="nami-days"] .settings-card,
+body[data-theme="nami-days"] .wardrobe-panel,
+body[data-theme="nami-days"] .equipment-card,
+body[data-theme="nami-days"] .inventory-item-card,
+body[data-theme="nami-days"] .right-buff-group {
+  border-color: rgba(255, 173, 208, 0.58) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.84), transparent 12rem),
+    linear-gradient(180deg, rgba(255, 252, 254, 0.82), rgba(255, 232, 241, 0.72)) !important;
+  color: var(--text) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 18px 46px rgba(124, 71, 96, 0.18),
+    0 0 28px rgba(255, 115, 183, 0.10),
+    0 0 24px rgba(134, 223, 243, 0.07) !important;
+  backdrop-filter: blur(14px) saturate(1.12);
+  -webkit-backdrop-filter: blur(14px) saturate(1.12);
+}
+
+body[data-theme="nami-days"] .panel-title,
+body[data-theme="nami-days"] .eyebrow,
+body[data-theme="nami-days"] h2,
+body[data-theme="nami-days"] h3,
+body[data-theme="nami-days"] .top-stats-panel h2,
+body[data-theme="nami-days"] .stat-group.compact h2 {
+  color: #6a3653 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+body[data-theme="nami-days"] .eyebrow {
+  color: #ff5aaa !important;
+}
+
+body[data-theme="nami-days"] .top-stats-compact,
+body[data-theme="nami-days"] .menu-status-card,
+body[data-theme="nami-days"] .buff-card,
+body[data-theme="nami-days"] .stat-lines,
+body[data-theme="nami-days"] .compact-grid-lines,
+body[data-theme="nami-days"] .nami-message,
+body[data-theme="nami-days"] .chat-form,
+body[data-theme="nami-days"] .chat-log,
+body[data-theme="nami-days"] .equipment-slot,
+body[data-theme="nami-days"] .wardrobe-bonus-card {
+  background: rgba(255, 255, 255, 0.46) !important;
+  border-color: rgba(255, 173, 208, 0.34) !important;
+  color: var(--text-soft) !important;
+}
+
+body[data-theme="nami-days"] .main-nav.menu-grid .nav-item {
+  border-color: rgba(255, 173, 208, 0.42) !important;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.72), transparent 2.4rem),
+    linear-gradient(135deg, rgba(255, 252, 254, 0.78), rgba(255, 218, 234, 0.74)) !important;
+  color: #71415a !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 8px 18px rgba(124, 71, 96, 0.10) !important;
+}
+
+body[data-theme="nami-days"] .main-nav.menu-grid .nav-item:hover {
+  color: #4f2941 !important;
+}
+
+body[data-theme="nami-days"] .main-nav.menu-grid .nav-item.active {
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.82), transparent 2.7rem),
+    linear-gradient(135deg, rgba(255, 115, 183, 0.42), rgba(255, 217, 120, 0.26), rgba(134, 223, 243, 0.26)) !important;
+  color: #4f2941 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    0 0 18px rgba(255, 115, 183, 0.24),
+    0 0 18px rgba(134, 223, 243, 0.12) !important;
+}
+
+body[data-theme="nami-days"] button,
+body[data-theme="nami-days"] select,
+body[data-theme="nami-days"] input,
+body[data-theme="nami-days"] textarea {
+  color: inherit;
+}
+
+body[data-theme="nami-days"] .task-card button,
+body[data-theme="nami-days"] .care-button,
+body[data-theme="nami-days"] .chat-form button[type="submit"],
+body[data-theme="nami-days"] .primary-button {
+  border-color: rgba(255, 255, 255, 0.62) !important;
+  background: linear-gradient(180deg, #ff7fbd, #ffafd3) !important;
+  color: #4f2941 !important;
+  box-shadow: 0 10px 24px rgba(255, 115, 183, 0.22) !important;
+}
+
+body[data-theme="nami-days"] .secondary-button,
+body[data-theme="nami-days"] .theme-picker-button,
+body[data-theme="nami-days"] .chat-tab,
+body[data-theme="nami-days"] .pill {
+  border-color: rgba(255, 130, 184, 0.38) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,219,233,0.84)) !important;
+  color: #6a3653 !important;
+}
+
+body[data-theme="nami-days"] .chat-tab.active,
+body[data-theme="nami-days"] .pill.active {
+  background: linear-gradient(90deg, #ff73b7, #ffd978, #86dff3) !important;
+  color: #4f2941 !important;
+}
+
+body[data-theme="nami-days"] .chat-input,
+body[data-theme="nami-days"] #chat-input,
+body[data-theme="nami-days"] .settings-field select {
+  border-color: rgba(255, 130, 184, 0.42) !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  color: #4f2941 !important;
+}
+
+body[data-theme="nami-days"] .meter-track,
+body[data-theme="nami-days"] .progress-track {
+  background: rgba(255, 255, 255, 0.66) !important;
+  border-color: rgba(113, 65, 90, 0.16) !important;
+}
+
+body[data-theme="nami-days"] .meter-fill,
+body[data-theme="nami-days"] .xp-fill,
+body[data-theme="nami-days"] .tick-fill {
+  box-shadow: var(--theme-progress-fill-shadow) !important;
+}
+
+body[data-theme="nami-days"] .hp-fill {
+  background: var(--theme-hp-fill) !important;
+}
+
+body[data-theme="nami-days"] .nami-room-stage {
+  background: linear-gradient(180deg, rgba(255, 237, 246, 0.9), rgba(255, 220, 235, 0.9)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.44),
+    0 14px 34px rgba(124, 71, 96, 0.18) !important;
+}
+
+body[data-theme="nami-days"] .muted,
+body[data-theme="nami-days"] .muted-card,
+body[data-theme="nami-days"] small,
+body[data-theme="nami-days"] .placeholder-copy {
+  color: #966179 !important;
+}
+
+body[data-theme="nami-days"] a {
+  color: #d84c94;
+}
