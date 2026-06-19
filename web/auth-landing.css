@@ -21,7 +21,7 @@ body.auth-logged-out::after {
   content: none !important;
   display: none !important;
   background: none !important;
-  opacity: 0 !important;
+  opacity: 0;
 }
 
 body.auth-logged-out .game-shell {
@@ -538,7 +538,7 @@ body.auth-logged-out .auth-landing-stack {
   width: var(--sparkle-size) !important;
   height: var(--sparkle-size) !important;
   color: var(--sparkle-color) !important;
-  opacity: 0 !important;
+  opacity: 0;
   transform-origin: center !important;
   filter:
     drop-shadow(0 0 5px rgba(255, 255, 255, 0.72))
@@ -549,7 +549,6 @@ body.auth-logged-out .auth-landing-stack {
   will-change: transform, opacity !important;
 }
 
-.auth-sparkle--dot,
 .auth-sparkle--soft {
   border-radius: 999px !important;
   background:
@@ -557,7 +556,7 @@ body.auth-logged-out .auth-landing-stack {
 }
 
 .auth-sparkle--soft {
-  opacity: 0 !important;
+  opacity: 0;
   filter:
     blur(0.25px)
     drop-shadow(0 0 8px rgba(255, 255, 255, 0.70))
@@ -617,22 +616,18 @@ body.auth-logged-out .auth-landing-stack {
       rotate(0deg);
   }
 
-  48% {
+  50% {
     transform:
-      translate3d(
-        calc(var(--sparkle-drift-x) * 0.55),
-        calc(var(--sparkle-drift-y) * 0.55),
-        0
-      )
+      translate3d(var(--sparkle-drift-x), var(--sparkle-drift-y), 0)
       scale(1.04)
-      rotate(calc(var(--sparkle-rotation) * 0.55));
+      rotate(var(--sparkle-rotation));
   }
 
   100% {
     transform:
-      translate3d(var(--sparkle-drift-x), var(--sparkle-drift-y), 0)
+      translate3d(0, 0, 0)
       scale(0.78)
-      rotate(var(--sparkle-rotation));
+      rotate(0deg);
   }
 }
 
@@ -680,3 +675,16 @@ body.auth-logged-out .auth-sparkle {
   opacity: 0.22;
 }
 /* Sparkle visibility safety END */
+/* Sparkle visibility fix START */
+body.auth-logged-out .auth-sparkle {
+  opacity: 0;
+}
+
+body.auth-logged-out,
+body.auth-logged-out .auth-sparkle--soft,
+body.auth-logged-out .auth-sparkle--diamond,
+body.auth-logged-out .auth-sparkle--star {
+  min-width: 3px;
+  min-height: 3px;
+}
+/* Sparkle visibility fix END */

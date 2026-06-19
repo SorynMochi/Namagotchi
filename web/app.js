@@ -1,4 +1,4 @@
-const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -1033,15 +1033,15 @@ function initializeAuthSparkles() {
   authSparkleLayer.dataset.ready = "true";
   authSparkleLayer.innerHTML = "";
 
-  const sparkleShapes = ["dot", "diamond", "plus", "star", "soft"];
+  const sparkleShapes = ["diamond", "plus", "star", "soft"];
   const sparkleColors = ["#fff8fc", "#ffd4ea", "#ff9fd0", "#fff0b6", "#bfefff", "#d8c4ff"];
-  const sparkleCount = 46;
+  const sparkleCount = 500;
 
   for (let index = 0; index < sparkleCount; index += 1) {
     const sparkle = document.createElement("span");
     const shape = sparkleShapes[Math.floor(Math.random() * sparkleShapes.length)];
     const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
-    const size = randomNumber(3, 8.5);
+    const size = randomNumber(6, 15);
     const x = randomNumber(4, 96);
     const y = randomNumber(5, 94);
     const driftX = randomNumber(-34, 34);
