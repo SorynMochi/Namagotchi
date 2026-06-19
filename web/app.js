@@ -1,4 +1,4 @@
-const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -132,6 +132,7 @@ const CHAT_OFFLINE_WHISPERS_KEY = "namigotchi_offline_whispers_v1";
 
 const THEME_STORAGE_KEY = "namigotchi_theme_v1";
 const THEME_FILES = {
+  "nami-days": "/themes/nami-days.css",
   "nami-default": "/themes/nami-default.css",
   midnight: "/themes/midnight.css",
   strawberry: "/themes/strawberry.css",
