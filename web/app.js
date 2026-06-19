@@ -1,4 +1,4 @@
-﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -1035,7 +1035,7 @@ function initializeAuthSparkles() {
 
   const sparkleShapes = ["diamond", "plus", "star", "soft"];
   const sparkleColors = ["#fff8fc", "#ffd4ea", "#ff9fd0", "#fff0b6", "#bfefff", "#d8c4ff"];
-  const sparkleCount = 500;
+  const sparkleCount = getAuthSparkleCount(500);
 
   for (let index = 0; index < sparkleCount; index += 1) {
     const sparkle = document.createElement("span");
@@ -1065,6 +1065,31 @@ function initializeAuthSparkles() {
   }
 }
 
+function getAuthSparkleCount(desktopCount) {
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+  const compactViewport = window.matchMedia?.("(max-width: 640px), (max-height: 760px)")?.matches ?? false;
+  const mediumViewport = window.matchMedia?.("(max-width: 1024px), (max-height: 900px)")?.matches ?? false;
+  const coarsePointer = window.matchMedia?.("(pointer: coarse)")?.matches ?? false;
+  const deviceMemory = Number(navigator.deviceMemory || 0);
+
+  if (reducedMotion) {
+    return Math.min(desktopCount, 16);
+  }
+
+  if (compactViewport || coarsePointer) {
+    return Math.min(desktopCount, 52);
+  }
+
+  if (mediumViewport) {
+    return Math.min(desktopCount, 78);
+  }
+
+  if (deviceMemory > 0 && deviceMemory <= 4) {
+    return Math.min(desktopCount, 64);
+  }
+
+  return desktopCount;
+}
 function randomNumber(min, max) {
   return min + Math.random() * (max - min);
 }
