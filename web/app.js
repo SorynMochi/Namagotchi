@@ -1,4 +1,4 @@
-﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
@@ -1047,7 +1047,7 @@ async function initializeAuthGate() {
     const auth = await response.json();
 
     if (!auth.loggedIn) {
-      showAuthLanding("Player accounts use Google sign-in. New accounts will choose a display name during onboarding.");
+      showAuthLanding("Player accounts only use Google sign-in.`nNew accounts will choose a display name.");
       return;
     }
 

@@ -480,3 +480,39 @@ body.auth-logged-out .auth-landing-stack {
   font-weight: 800 !important;
 }
 /* Landing frosted glass polish END */
+/* Landing note and logo scale polish START */
+body.auth-logged-out .auth-landing-stack {
+  transform: translateY(-6vh) !important;
+}
+
+.auth-logo,
+.auth-landing-logo {
+  width: min(480px, 90vw) !important;
+}
+
+.auth-note {
+  white-space: pre-line !important;
+}
+
+@media (max-width: 640px) {
+  body.auth-logged-out .auth-landing-stack {
+    transform: translateY(-3vh) !important;
+  }
+
+  .auth-logo,
+  .auth-landing-logo {
+    width: min(410px, 88vw) !important;
+  }
+}
+
+@media (max-height: 760px) {
+  body.auth-logged-out .auth-landing-stack {
+    transform: translateY(-2vh) !important;
+  }
+
+  .auth-logo,
+  .auth-landing-logo {
+    width: min(390px, 80vw) !important;
+  }
+}
+/* Landing note and logo scale polish END */
