@@ -2608,7 +2608,8 @@ async function openWardrobeItemDetail(itemID, compareSlot = "") {
     }
 
     const detail = await response.json();
-    renderWardrobeItemModal(detail);
+    const resolvedDetail = await resolveWardrobeEquippedItemComparisonV4(detail);
+    renderWardrobeItemModal(resolvedDetail);
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Could not load item details. The wardrobe gremlin misplaced the tag.", "system");
@@ -2809,7 +2810,8 @@ async function equipWardrobeItem(itemID, slotKey = "") {
     await loadPlayerStatus();
 
     if (result?.detail) {
-      renderWardrobeItemModal(result.detail);
+      const resolvedDetail = await resolveWardrobeEquippedItemComparisonV4(result.detail);
+      renderWardrobeItemModal(resolvedDetail);
     } else {
       await openWardrobeItemDetail(itemID, slotKey || activeWardrobeModalCompareSlot);
     }
