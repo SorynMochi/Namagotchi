@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let activeThemeKey = "";

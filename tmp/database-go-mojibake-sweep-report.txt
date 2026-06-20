@@ -1,0 +1,16 @@
+database.go mojibake sweep
+Generated: 2026-06-20 00:13:40
+
+Files scanned: 1
+
+Changed: .\internal\database\database.go
+  4 x [âœ¦] => [✦]
+  4 x [â™¡] => [♡]
+  2 x [âœ¨] => [✨]
+
+Changed files: 1
+Total replacements: 10
+
+No remaining obvious mojibake markers found in database.go files.
+
+No remaining non-ASCII characters found in database.go files.

@@ -1,0 +1,44 @@
+Mojibake sweep for Go and optional web text files
+Generated: 2026-06-20 00:20:41
+
+## Go files
+Files scanned: 44
+
+Changed: .\internal\database\database.go
+  4 x [âœ¦] => [✦]
+  4 x [â™¡] => [♡]
+  1 x [Â©] => [©]
+  2 x [âœ¨] => [✨]
+
+Changed files: 1
+Total replacements: 11
+
+Remaining suspicious mojibake markers found:
+  .\internal\database\database.go:2722: return fmt.Sprintf("(low care stat: %s Ã°Å¸Â«Â§)", statName)
+  .\internal\database\database.go:2728: return "(Playdeck defeat Ã°Å¸©Â¹)"
+
+Remaining non-ASCII lines for review:
+  .\internal\database\auth_display_name_policy_test.go:32: "emoji_Ã°Å¸â€™â€“",
+  .\internal\database\database.go:2691: return fmt.Sprintf("(Nami level up: Lv %d âœ¨)", context.Level)
+  .\internal\database\database.go:2693: return "(Nami level up âœ¨)"
+  .\internal\database\database.go:2697: return fmt.Sprintf("(Playdeck level up: Lv %d âœ¦)", context.Level)
+  .\internal\database\database.go:2699: return "(Playdeck level up âœ¦)"
+  .\internal\database\database.go:2708: return fmt.Sprintf("(%s level up: Lv %d âœ¦)", activityName, context.Level)
+  .\internal\database\database.go:2711: return fmt.Sprintf("(%s level up âœ¦)", activityName)
+  .\internal\database\database.go:2714: return "(player arrived â™¡)"
+  .\internal\database\database.go:2722: return fmt.Sprintf("(low care stat: %s ÃƒÂ°Ã…Â¸Ã‚Â«Ã‚Â§)", statName)
+  .\internal\database\database.go:2725: return "(just because â™¡)"
+  .\internal\database\database.go:2728: return "(Playdeck defeat ÃƒÂ°Ã…Â¸Â©Ã‚Â¹)"
+  .\internal\database\database.go:2731: return "(daily orders complete â™¡)"
+  .\internal\database\database.go:2739: return fmt.Sprintf("(care: %s â™¡)", actionName)
+
+## Web text files: JS, MJS, HTML
+Files scanned: 3
+
+Changed files: 0
+Total replacements: 0
+
+No remaining obvious mojibake markers found.
+
+Remaining non-ASCII lines for review:
+  .\web\app.js:1492: setTextIfChanged(playerPill, `ðŸ’Ž ${displayName}`);

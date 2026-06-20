@@ -1,4 +1,4 @@
-﻿const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
+const sectionButtons = document.querySelectorAll("[data-section], [data-section-link]");
 const sections = document.querySelectorAll(".content-section");
 
 const careStats = document.querySelector("#care-stats");
