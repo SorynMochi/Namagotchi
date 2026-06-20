@@ -1871,6 +1871,7 @@ body[data-theme="nami-days"] #section-home #nami-message::-webkit-scrollbar {
 /* Nami Days home hotfix: no mojibake, no overlap END */
 
 /* Home / Nami-Chan dashboard polish round two START */
+/* Home / Nami-Chan dashboard polish round two START */
 /* Home / Nami-Chan dashboard polish round two.
    ASCII-only generated text in this block to avoid future encoding trouble. */
 
@@ -1895,7 +1896,7 @@ body[data-theme="nami-days"] #section-home .care-overview-grid {
   gap: 12px !important;
 }
 
-/* Give the two status panels distinct "dashboard card" identities. */
+/* Give the two status panels distinct dashboard card identities. */
 body[data-theme="nami-days"] #section-home .nami-care-summary,
 body[data-theme="nami-days"] #section-home .care-status-compact {
   position: relative !important;
@@ -1985,26 +1986,40 @@ body[data-theme="nami-days"] #section-home .nami-need-card p:last-child {
 /* Care Status generated rows: support several possible child structures. */
 body[data-theme="nami-days"] #section-home .compact-stat-list {
   display: grid !important;
-  gap: 7px !important;
+  gap: 5px !important;
 }
 
 body[data-theme="nami-days"] #section-home .compact-stat-list > p,
 body[data-theme="nami-days"] #section-home .compact-stat-list > div,
 body[data-theme="nami-days"] #section-home .compact-stat-list .stat-row,
 body[data-theme="nami-days"] #section-home .compact-stat-list .mini-stat-line {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 34px !important;
   margin: 0 !important;
-  padding: 7px 9px !important;
+  padding: 4px 12px !important;
   border: 1px solid rgba(162, 95, 144, 0.16) !important;
-  border-radius: 11px !important;
+  border-radius: 999px !important;
   background:
     linear-gradient(180deg, rgba(255, 250, 253, 0.62), rgba(255, 233, 243, 0.40)) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.64),
     0 5px 12px rgba(105, 48, 77, 0.045) !important;
+  line-height: 1.05 !important;
 }
 
-body[data-theme="nami-days"] #section-home .compact-stat-list > p {
-  line-height: 1.25 !important;
+body[data-theme="nami-days"] #section-home .compact-stat-list > p > span,
+body[data-theme="nami-days"] #section-home .compact-stat-list > div > span,
+body[data-theme="nami-days"] #section-home .compact-stat-list .stat-row > span,
+body[data-theme="nami-days"] #section-home .compact-stat-list .mini-stat-line > span,
+body[data-theme="nami-days"] #section-home .compact-stat-list > p > strong,
+body[data-theme="nami-days"] #section-home .compact-stat-list > div > strong,
+body[data-theme="nami-days"] #section-home .compact-stat-list .stat-row > strong,
+body[data-theme="nami-days"] #section-home .compact-stat-list .mini-stat-line > strong {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
 }
 
 body[data-theme="nami-days"] #section-home .compact-stat-list .muted {
@@ -2014,6 +2029,14 @@ body[data-theme="nami-days"] #section-home .compact-stat-list .muted {
 }
 
 /* Care buttons: category-flavored without changing markup or layout. */
+body[data-theme="nami-days"] #section-home .compact-care-actions,
+body[data-theme="nami-days"] #section-home .care-actions.compact-care-actions {
+  gap: 7px 12px !important;
+  row-gap: 7px !important;
+  column-gap: 12px !important;
+  margin-bottom: 0 !important;
+}
+
 body[data-theme="nami-days"] #section-home .care-button {
   overflow: hidden !important;
   border-radius: 11px !important;
@@ -2052,7 +2075,6 @@ body[data-theme="nami-days"] #section-home .care-button[data-care-action="sleep_
   border-color: rgba(57, 174, 202, 0.26) !important;
 }
 
-/* Hover stays cohesive across the flavored buttons. */
 body[data-theme="nami-days"] #section-home .care-button:hover:not(:disabled) {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.72),
@@ -2064,7 +2086,8 @@ body[data-theme="nami-days"] #section-home .care-button:hover:not(:disabled) {
 body[data-theme="nami-days"] #section-home .nami-message-log-card {
   display: grid !important;
   grid-template-rows: auto minmax(0, 1fr) !important;
-  gap: 8px !important;
+  gap: 4px !important;
+  margin-top: 12px !important;
 
   border-color: rgba(255, 42, 163, 0.28) !important;
   background:
@@ -2079,7 +2102,8 @@ body[data-theme="nami-days"] #section-home .nami-message-log-card::before {
   align-items: center !important;
   justify-content: space-between !important;
 
-  padding: 0 0 7px !important;
+  padding: 0 0 4px !important;
+  margin: 0 !important;
   border-bottom: 1px solid rgba(57, 174, 202, 0.16) !important;
 
   color: var(--home-journal-title) !important;
@@ -2094,7 +2118,7 @@ body[data-theme="nami-days"] #section-home #nami-message-log,
 body[data-theme="nami-days"] #section-home .nami-message-log {
   display: grid !important;
   align-content: start !important;
-  gap: 7px !important;
+  gap: 1px !important;
 
   min-height: 82px !important;
   max-height: 142px !important;
@@ -2108,7 +2132,7 @@ body[data-theme="nami-days"] #section-home #nami-message-log p,
 body[data-theme="nami-days"] #section-home .nami-message-log p {
   position: relative !important;
   margin: 0 !important;
-  padding: 7px 9px 7px 12px !important;
+  padding: 6px 9px 6px 12px !important;
 
   border: 1px solid rgba(162, 95, 144, 0.15) !important;
   border-left: 4px solid rgba(255, 42, 163, 0.32) !important;
@@ -2119,7 +2143,7 @@ body[data-theme="nami-days"] #section-home .nami-message-log p {
 
   color: var(--home-journal-text) !important;
   -webkit-text-fill-color: var(--home-journal-text) !important;
-  line-height: 1.32 !important;
+  line-height: 1.28 !important;
   font-weight: 680 !important;
 }
 
@@ -2132,16 +2156,6 @@ body[data-theme="nami-days"] #section-home .nami-message-log p.muted {
   font-style: normal !important;
 }
 
-/* Keep the Home care buttons and journal separated. */
-body[data-theme="nami-days"] #section-home .compact-care-actions,
-body[data-theme="nami-days"] #section-home .care-actions.compact-care-actions {
-  margin-bottom: 0 !important;
-}
-
-body[data-theme="nami-days"] #section-home .nami-message-log-card {
-  margin-top: 18px !important;
-}
-
 /* Compact fallback. */
 @media (max-width: 980px) {
   body[data-theme="nami-days"] #section-home .nami-care-summary h2::after,
@@ -2151,3 +2165,112 @@ body[data-theme="nami-days"] #section-home .nami-message-log-card {
 }
 /* Home / Nami-Chan dashboard polish round two END */
 /* Home / Nami-Chan dashboard polish round two END */
+/* Home / Nami-Chan dashboard polish round two END */
+
+/* Home / Nami-Chan dashboard round two repair START */
+/* Repair the Home round-two pass without removing the good Nami Notes polish. */
+
+/* Care Status rows should be clean rows, not pill cards. */
+body[data-theme="nami-days"] #section-home .care-status-compact .compact-stat-list {
+  display: grid !important;
+  gap: 5px !important;
+  align-content: start !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .compact-stat-list > .stat-row {
+  display: grid !important;
+  grid-template-columns: 118px minmax(0, 1fr) 44px !important;
+  align-items: center !important;
+  column-gap: 10px !important;
+
+  min-height: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .care-stat-name,
+body[data-theme="nami-days"] #section-home .care-status-compact .care-stat-value {
+  display: block !important;
+  align-self: center !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .care-stat-name {
+  color: var(--home-journal-muted) !important;
+  -webkit-text-fill-color: var(--home-journal-muted) !important;
+  font-weight: 900 !important;
+  text-align: left !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .care-stat-value {
+  color: var(--home-journal-text) !important;
+  -webkit-text-fill-color: var(--home-journal-text) !important;
+  font-weight: 950 !important;
+  text-align: right !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .stat-bar {
+  align-self: center !important;
+  width: 100% !important;
+  height: 8px !important;
+  min-height: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: 1px solid rgba(162, 95, 144, 0.16) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 236, 245, 0.54)) !important;
+  box-shadow: inset 0 1px 2px rgba(105, 48, 77, 0.10) !important;
+  overflow: hidden !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .stat-fill {
+  height: 100% !important;
+  min-height: 0 !important;
+  border-radius: inherit !important;
+}
+
+/* Tighten care button rows so the section breathes better vertically. */
+body[data-theme="nami-days"] #section-home .compact-care-actions,
+body[data-theme="nami-days"] #section-home .care-actions.compact-care-actions {
+  gap: 5px 12px !important;
+  row-gap: 5px !important;
+  column-gap: 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-button {
+  min-height: 29px !important;
+  height: 29px !important;
+  padding: 4px 10px !important;
+  line-height: 1 !important;
+}
+
+/* Preserve a real visual lane between the bottom care buttons and Nami Notes. */
+body[data-theme="nami-days"] #section-home .nami-message-log-card {
+  margin-top: 18px !important;
+}
+
+/* Keep the already-good Nami Notes density. */
+body[data-theme="nami-days"] #section-home #nami-message-log,
+body[data-theme="nami-days"] #section-home .nami-message-log {
+  gap: 1px !important;
+}
+
+body[data-theme="nami-days"] #section-home .nami-message-log-card::before {
+  padding-bottom: 4px !important;
+}
+/* Home / Nami-Chan dashboard round two repair END */
+/* Home / Nami-Chan dashboard round two repair END */
