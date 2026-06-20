@@ -2609,6 +2609,7 @@ function renderWardrobeItemModal(detail) {
   renderWardrobeItemActions(detail);
   renderWardrobeStatLines(detail?.item?.statLines || []);
   renderWardrobeComparison(detail);
+  syncActiveWardrobeComparisonVisibility(detail);
 
   wardrobeItemModal.classList.remove("hidden");
   wardrobeItemModal.setAttribute("aria-hidden", "false");
@@ -2620,6 +2621,11 @@ function renderWardrobeAccessoryCompare(detail) {
   }
 
   wardrobeAccessoryCompare.replaceChildren();
+
+  if (detail?.hideComparison) {
+    wardrobeAccessoryCompare.classList.add("hidden");
+    return;
+  }
 
   const slots = Array.isArray(detail?.accessoryCompareSlots) ? detail.accessoryCompareSlots : [];
   wardrobeAccessoryCompare.classList.toggle("hidden", slots.length === 0);
@@ -5141,6 +5147,124 @@ function switchChatChannel(channel) {
   renderChatChannel();
 }
 
+function getActiveEquippedWardrobeSlots() {
+  return Array.isArray(latestPlayerStatus?.playdeck?.equipment)
+    ? latestPlayerStatus.playdeck.equipment
+    : [];
+}
+
+function getActiveEquippedWardrobeSlotForItem(itemID) {
+  const safeItemID = Number(itemID ?? 0);
+  if (safeItemID <= 0) {
+    return "";
+  }
+
+  const slot = getActiveEquippedWardrobeSlots().find((entry) => Number(entry?.itemId ?? 0) === safeItemID);
+  return String(slot?.slotKey || "").trim().toLowerCase();
+}
+
+function getActiveEquippedWardrobeItemIDInSlot(slotKey) {
+  const key = String(slotKey || "").trim().toLowerCase();
+  if (!key) {
+    return 0;
+  }
+
+  const slot = getActiveEquippedWardrobeSlots().find((entry) => String(entry?.slotKey || "").trim().toLowerCase() === key);
+  return Number(slot?.itemId ?? 0);
+}
+
+function isActiveAccessoryWardrobeSlot(slotKey) {
+  const key = String(slotKey || "").trim().toLowerCase();
+  return key === "accessory_1" || key === "accessory_2";
+}
+
+function getOtherActiveAccessoryWardrobeSlot(slotKey) {
+  const key = String(slotKey || "").trim().toLowerCase();
+  if (key === "accessory_1") { return "accessory_2"; }
+  if (key === "accessory_2") { return "accessory_1"; }
+  return "";
+}
+
+function hideActiveWardrobeComparison(detail, equippedSlot = "") {
+  return {
+    ...detail,
+    item: { ...(detail?.item || {}), equippedSlot },
+    hideComparison: true,
+    accessoryCompareSlots: [],
+  };
+}
+
+async function fetchActiveWardrobeItemDetail(itemID, compareSlot = "") {
+  const params = new URLSearchParams({ id: String(itemID) });
+  if (compareSlot) {
+    params.set("compareSlot", compareSlot);
+  }
+
+  const response = await fetch(`/api/player/wardrobe/item?${params.toString()}`);
+  if (!response.ok) {
+    throw new Error(`Item detail failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+async function resolveActiveWardrobeItemDetailComparison(detail) {
+  const item = detail?.item || {};
+  const itemID = Number(item.id ?? item.itemId ?? activeWardrobeModalItemId ?? 0);
+  const equippedSlot = String(item.equippedSlot || getActiveEquippedWardrobeSlotForItem(itemID)).trim().toLowerCase();
+
+  if (!equippedSlot) {
+    return { ...detail, hideComparison: false };
+  }
+
+  if (!isActiveAccessoryWardrobeSlot(equippedSlot)) {
+    return hideActiveWardrobeComparison(detail, equippedSlot);
+  }
+
+  const compareSlot = getOtherActiveAccessoryWardrobeSlot(equippedSlot);
+  if (!compareSlot || getActiveEquippedWardrobeItemIDInSlot(compareSlot) <= 0) {
+    return hideActiveWardrobeComparison(detail, equippedSlot);
+  }
+
+  const currentCompareSlot = String(detail?.compareSlot || "").trim().toLowerCase();
+  const resolvedDetail = currentCompareSlot === compareSlot
+    ? detail
+    : await fetchActiveWardrobeItemDetail(itemID, compareSlot);
+
+  if (!resolvedDetail?.compareItem) {
+    return hideActiveWardrobeComparison(resolvedDetail, equippedSlot);
+  }
+
+  return {
+    ...resolvedDetail,
+    item: { ...(resolvedDetail?.item || {}), equippedSlot },
+    hideComparison: false,
+    accessoryCompareSlots: [{
+      slotKey: compareSlot,
+      displayName: formatWardrobeSlot(compareSlot),
+      selected: true,
+    }],
+  };
+}
+
+function syncActiveWardrobeComparisonVisibility(detail) {
+  const compareSection = wardrobeComparisonList?.closest(".wardrobe-compare-section") || null;
+  const shouldHide = Boolean(detail?.hideComparison);
+
+  if (!compareSection) {
+    return;
+  }
+
+  compareSection.classList.toggle("hidden", shouldHide);
+  compareSection.toggleAttribute("hidden", shouldHide);
+  compareSection.style.display = shouldHide ? "none" : "";
+
+  if (shouldHide) {
+    wardrobeAccessoryCompare?.classList.add("hidden");
+    setTextIfChanged(wardrobeCompareTarget, "");
+    wardrobeComparisonList?.replaceChildren();
+  }
+}
 async function openWardrobeItemDetail(itemID, compareSlot = "", options = {}) {
   const safeItemID = Number(itemID);
 
@@ -5165,7 +5289,8 @@ async function openWardrobeItemDetail(itemID, compareSlot = "", options = {}) {
     }
 
     const detail = await response.json();
-    renderWardrobeItemModal(detail, options);
+    const resolvedDetail = await resolveActiveWardrobeItemDetailComparison(detail);
+    renderWardrobeItemModal(resolvedDetail, options);
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Could not load item details. The wardrobe gremlin misplaced the tag.", "system");
@@ -5205,6 +5330,7 @@ function renderWardrobeItemModal(detail, options = {}) {
   renderWardrobeItemActions(detail, { readOnly: isReadOnly });
   renderWardrobeStatLines(detail?.item?.statLines || []);
   renderWardrobeComparison(detail);
+  syncActiveWardrobeComparisonVisibility(detail);
 
   wardrobeItemModal.classList.remove("hidden");
   wardrobeItemModal.setAttribute("aria-hidden", "false");
@@ -5216,6 +5342,11 @@ function renderWardrobeAccessoryCompare(detail) {
   }
 
   wardrobeAccessoryCompare.replaceChildren();
+
+  if (detail?.hideComparison) {
+    wardrobeAccessoryCompare.classList.add("hidden");
+    return;
+  }
 
   const slots = Array.isArray(detail?.accessoryCompareSlots) ? detail.accessoryCompareSlots : [];
   wardrobeAccessoryCompare.classList.toggle("hidden", slots.length === 0);
