@@ -791,6 +791,178 @@ function syncKeyedChildren(container, entries, createElement, updateElement) {
   });
 }
 
+function cleanCollapseLabel(value) {
+
+  const text = String(value || "")
+
+    .replace(/expand_less|expand_more|left_panel_close|left_panel_open|right_panel_close|right_panel_open/g, "")
+
+    .replace(/[▲▼▶◀▸▾]/g, "")
+
+    .replace(/\s+/g, " ")
+
+    .trim();
+
+  return text || "Panel";
+
+}
+
+function updateCollapseButton(button, collapsed) {
+
+  if (!button) {
+
+    return;
+
+  }
+
+  const label = button.dataset.label || cleanCollapseLabel(button.textContent);
+
+  button.dataset.label = label;
+
+  button.setAttribute("aria-expanded", String(!collapsed));
+
+  const glyph = button.querySelector(".collapse-glyph");
+
+  if (glyph) {
+
+    glyph.textContent = collapsed ? "expand_more" : "expand_less";
+
+  }
+
+  const labelNode = button.querySelector(".collapse-label");
+
+  if (labelNode) {
+
+    labelNode.textContent = label;
+
+  }
+
+  button.classList.toggle("is-collapsed", Boolean(collapsed));
+
+}
+
+function updateRailToggleButton(button, collapsed) {
+
+  if (!button) {
+
+    return;
+
+  }
+
+  const side = String(button.dataset.railToggle || "").trim().toLowerCase();
+
+  button.setAttribute("aria-expanded", String(!collapsed));
+
+  button.classList.toggle("is-collapsed", Boolean(collapsed));
+
+  const glyph = button.querySelector(".collapse-glyph");
+
+  if (glyph) {
+
+    if (side === "right") {
+
+      glyph.textContent = collapsed ? "right_panel_open" : "right_panel_close";
+
+    } else {
+
+      glyph.textContent = collapsed ? "left_panel_open" : "left_panel_close";
+
+    }
+
+  }
+
+  const labelNode = button.querySelector(".collapse-label");
+
+  if (labelNode) {
+
+    labelNode.textContent = side === "right" ? "Buffs" : "Menu";
+
+  }
+
+}
+
+function toggleRail(side) {
+
+  const railSide = String(side || "").trim().toLowerCase();
+
+  if (!gameShell || (railSide !== "left" && railSide !== "right")) {
+
+    return;
+
+  }
+
+  const className = railSide === "left" ? "is-left-rail-collapsed" : "is-right-rail-collapsed";
+
+  const collapsed = !gameShell.classList.contains(className);
+
+  gameShell.classList.toggle(className, collapsed);
+
+  document.querySelectorAll(`[data-rail-toggle="${railSide}"]`).forEach((button) => {
+
+    updateRailToggleButton(button, collapsed);
+
+  });
+
+}
+
+function updateLeftPanelTitle(title, collapsed) {
+
+  if (!title) {
+
+    return;
+
+  }
+
+  const label = title.dataset.label || cleanCollapseLabel(title.textContent);
+
+  title.dataset.label = label;
+
+  title.setAttribute("aria-expanded", String(!collapsed));
+
+  title.classList.toggle("is-collapsed", Boolean(collapsed));
+
+  const glyph = title.querySelector(".collapse-glyph");
+
+  if (glyph) {
+
+    glyph.textContent = collapsed ? "expand_more" : "expand_less";
+
+  }
+
+  const labelNode = title.querySelector(".collapse-label");
+
+  if (labelNode) {
+
+    labelNode.textContent = label;
+
+  }
+
+}
+
+function toggleLeftPanel(title) {
+
+  if (!title) {
+
+    return;
+
+  }
+
+  const content = title.nextElementSibling;
+
+  if (!content) {
+
+    return;
+
+  }
+
+  const collapsed = !content.classList.contains("collapsed");
+
+  content.classList.toggle("collapsed", collapsed);
+
+  updateLeftPanelTitle(title, collapsed);
+
+}
+
 sectionButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const section = button.dataset.section || button.dataset.sectionLink;
