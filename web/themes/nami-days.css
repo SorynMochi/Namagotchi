@@ -1248,7 +1248,7 @@ body[data-theme="nami-days"] .placeholder-copy::before {
 }
 
 body[data-theme="nami-days"] .placeholder-copy::after {
-  content: "Ã¢Å“Â¦";
+  content: "ÃƒÂ¢Ã…â€œÃ‚Â¦";
   position: absolute;
   top: 14px;
   right: 18px;
@@ -1376,7 +1376,7 @@ body[data-theme="nami-days"] #section-home > .section-header .eyebrow {
 }
 
 body[data-theme="nami-days"] #section-home > .section-header .eyebrow::before {
-  content: "â™¡";
+  content: "Ã¢â„¢Â¡";
   color: var(--nami-home-ink);
   -webkit-text-fill-color: var(--nami-home-ink);
   font-size: 0.82rem;
@@ -1419,7 +1419,7 @@ body[data-theme="nami-days"] #section-home .nami-card::before {
 }
 
 body[data-theme="nami-days"] #section-home .nami-card::after {
-  content: "âœ¦";
+  content: "Ã¢Å“Â¦";
   position: absolute;
   top: 16px;
   right: 18px;
@@ -1481,7 +1481,7 @@ body[data-theme="nami-days"] #section-home #nami-message {
 
 body[data-theme="nami-days"] #section-home .nami-message::before,
 body[data-theme="nami-days"] #section-home #nami-message::before {
-  content: "â™¡";
+  content: "Ã¢â„¢Â¡";
   position: absolute;
   left: 16px;
   top: 13px;
@@ -1738,3 +1738,134 @@ body[data-theme="nami-days"] #section-home #nami-message::-webkit-scrollbar {
 }
 /* Nami Days home overlap correction END */
 /* Nami Days home overlap correction END */
+
+/* Nami Days home hotfix: no mojibake, no overlap START */
+/* Nami Days home hotfix: no mojibake, no overlap START */
+
+/*
+  Use CSS escapes instead of literal Unicode in content strings.
+  This prevents mojibake such as â™¡ when the stylesheet is interpreted oddly.
+*/
+body[data-theme="nami-days"] #section-home > .section-header .eyebrow::before,
+body[data-theme="nami-days"] #section-home .nami-message::before,
+body[data-theme="nami-days"] #section-home #nami-message::before {
+  content: "\2661" !important;
+}
+
+body[data-theme="nami-days"] #section-home .nami-card::after,
+body[data-theme="nami-days"] #section-home #nami-room-stage::after,
+body[data-theme="nami-days"] #section-home .nami-room-stage::after {
+  /*
+    The image stage overlay still needs its existing background layer, so this only
+    protects text-like generated glyphs from mojibake where applicable.
+  */
+}
+
+/* If the room-stage overlay should not render text, keep it purely visual. */
+body[data-theme="nami-days"] #section-home #nami-room-stage::after,
+body[data-theme="nami-days"] #section-home .nami-room-stage::after {
+  content: "" !important;
+}
+
+/* Sparkle on the Nami card, safely escaped. */
+body[data-theme="nami-days"] #section-home .nami-card::after {
+  content: "\2726" !important;
+}
+
+/*
+  Stronger Home care layout correction:
+  force the care panel into a vertical stack, then create a real visual air gap
+  between the care buttons and the message log.
+*/
+body[data-theme="nami-days"] #section-home .care-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-overview-grid {
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 0 14px !important;
+}
+
+body[data-theme="nami-days"] #section-home .compact-care-actions,
+body[data-theme="nami-days"] #section-home .care-actions.compact-care-actions {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 3 !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-auto-rows: minmax(30px, auto) !important;
+  gap: 8px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-button {
+  position: relative !important;
+  z-index: 4 !important;
+}
+
+/*
+  The extra top margin is intentional. Earlier card/row constraints were letting
+  the message log visually climb into the third button row.
+*/
+body[data-theme="nami-days"] #section-home .nami-message-log-card {
+  flex: 1 1 auto !important;
+  position: relative !important;
+  z-index: 1 !important;
+
+  min-width: 0 !important;
+  min-height: 92px !important;
+  max-height: none !important;
+
+  margin: 18px 0 0 !important;
+  padding: 10px 12px !important;
+
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+body[data-theme="nami-days"] #section-home #nami-message-log,
+body[data-theme="nami-days"] #section-home .nami-message-log {
+  min-height: 72px !important;
+  max-height: 132px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 6px !important;
+}
+
+/* Keep the caption bubble clean and scrollbar-free. */
+body[data-theme="nami-days"] #section-home .nami-message,
+body[data-theme="nami-days"] #section-home #nami-message {
+  overflow: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+body[data-theme="nami-days"] #section-home .nami-message::-webkit-scrollbar,
+body[data-theme="nami-days"] #section-home #nami-message::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  body[data-theme="nami-days"] #section-home .compact-care-actions,
+  body[data-theme="nami-days"] #section-home .care-actions.compact-care-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+/* Nami Days home hotfix: no mojibake, no overlap END */
+/* Nami Days home hotfix: no mojibake, no overlap END */
