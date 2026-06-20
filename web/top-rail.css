@@ -1321,3 +1321,27 @@ body[data-theme="nami-days"] {
   transform: none !important;
 }
 /* Top rail user header precise alignment END */
+
+/* Top rail collapse display repair START */
+/* Restore top rail collapse after the grid blueprint added display:grid !important. */
+.top-stats-panel #top-stats-body.collapse-body.collapsed,
+.top-stats-panel #top-stats-body.collapsed,
+.top-stats-panel .top-stats-compact.collapsed {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.top-stats-panel .top-panel-toggle {
+  cursor: pointer !important;
+}
+
+.top-stats-panel:has(#top-stats-body.collapsed) {
+  --top-stats-height: auto;
+}
+
+.top-stats-panel:has(#top-stats-body.collapsed) .top-panel-toggle {
+  border-bottom-color: transparent !important;
+}
+/* Top rail collapse display repair END */
+/* Top rail collapse display repair END */

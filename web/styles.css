@@ -8966,3 +8966,76 @@ body.auth-logged-out .game-shell {
 }
 /* Wardrobe viewport modal overlay END */
 /* Wardrobe viewport modal overlay END */
+
+/* Wardrobe modal viewport fallback and opacity repair START */
+/* Keep wardrobe modals above the full UI with no blurred/dim backdrop. */
+#wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483000 !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  padding: clamp(12px, 2.2vw, 28px) !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  overflow: auto !important;
+  overscroll-behavior: contain !important;
+  pointer-events: auto !important;
+}
+
+#wardrobe-item-modal.wardrobe-item-modal-backdrop.hidden {
+  display: none !important;
+}
+
+#wardrobe-item-modal.wardrobe-item-modal-backdrop::before,
+#wardrobe-item-modal.wardrobe-item-modal-backdrop::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Fallback for all themes. Theme-specific CSS can still make this prettier. */
+#wardrobe-item-modal .wardrobe-item-modal-card {
+  background:
+    linear-gradient(180deg, rgb(255, 246, 251), rgb(255, 235, 245)) !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  width: min(560px, calc(100vw - 32px)) !important;
+  max-width: min(560px, calc(100vw - 32px)) !important;
+  max-height: min(780px, calc(100dvh - 40px)) !important;
+
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
+  overflow: hidden !important;
+}
+
+#wardrobe-item-modal .wardrobe-item-modal-body {
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+}
+
+@media (max-height: 760px) {
+  #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+    align-items: start !important;
+  }
+
+  #wardrobe-item-modal .wardrobe-item-modal-card {
+    max-height: calc(100dvh - 24px) !important;
+  }
+}
+/* Wardrobe modal viewport fallback and opacity repair END */
+/* Wardrobe modal viewport fallback and opacity repair END */
