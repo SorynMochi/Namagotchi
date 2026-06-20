@@ -845,6 +845,7 @@ createForceTickButton();
 initializeEmojiPickerPortal();
 initializeChat();
 initializeChatResize();
+initializeChatVisibility();
 initializeNamiMessages();
 initializeCareButtonTimer();
 initializeHomeStage();
@@ -3556,15 +3557,30 @@ function initializeChat() {
 
   unreadChannels.clear();
   renderEmojiPicker();
-  initializeChatVisibility();
   switchChatChannel(currentChatChannel);
 }
 
+function getStoredChatHeight() {
+  const previousHeight = Number(localStorage.getItem(CHAT_PREVIOUS_HEIGHT_KEY));
+  const legacyHeight = Number(localStorage.getItem("namigotchi_chat_height"));
+  const savedHeight = previousHeight || legacyHeight || previousChatHeight || 190;
+
+  return clampChatHeight(savedHeight);
+}
+
+function persistChatHeight(height) {
+  const clampedHeight = clampChatHeight(Number(height));
+
+  previousChatHeight = clampedHeight;
+  localStorage.setItem("namigotchi_chat_height", String(clampedHeight));
+  localStorage.setItem(CHAT_PREVIOUS_HEIGHT_KEY, String(clampedHeight));
+
+  return clampedHeight;
+}
+
 function initializeChatResize() {
-  const savedHeight = Number(localStorage.getItem("namigotchi_chat_height"));
-  if (savedHeight) {
-    setChatHeight(savedHeight);
-  }
+  previousChatHeight = getStoredChatHeight();
+  setChatHeight(previousChatHeight);
 
   chatResizeHandle.addEventListener("pointerdown", (event) => {
     if (isChatHidden) {
@@ -3600,10 +3616,7 @@ function initializeChatResize() {
     isResizingChat = false;
     document.body.classList.remove("is-resizing-chat");
 
-    const chatHeight = Math.round(chatPanel.getBoundingClientRect().height);
-    previousChatHeight = chatHeight;
-    localStorage.setItem("namigotchi_chat_height", String(chatHeight));
-    localStorage.setItem(CHAT_PREVIOUS_HEIGHT_KEY, String(chatHeight));
+    persistChatHeight(chatPanel.getBoundingClientRect().height);
   };
 
   window.addEventListener("pointerup", finishResize);
@@ -4640,20 +4653,21 @@ function positionEmojiPickerInstant() {
 }
 
 function initializeChatVisibility() {
-  previousChatHeight =
-    Number(localStorage.getItem(CHAT_PREVIOUS_HEIGHT_KEY)) ||
-    Number(localStorage.getItem("namigotchi_chat_height")) ||
-    190;
-
-  setChatHidden(localStorage.getItem(CHAT_HIDDEN_KEY) === "true", false);
+  previousChatHeight = getStoredChatHeight();
+  setChatHidden(localStorage.getItem(CHAT_HIDDEN_KEY) === "true", false, {
+    preservePreviousHeight: true,
+  });
 }
 
-function setChatHidden(hidden, shouldSave = true) {
+function setChatHidden(hidden, shouldSave = true, options = {}) {
   isChatHidden = hidden;
 
   if (hidden) {
-    previousChatHeight = Math.round(chatPanel.getBoundingClientRect().height) || previousChatHeight || 190;
-    localStorage.setItem(CHAT_PREVIOUS_HEIGHT_KEY, String(previousChatHeight));
+    const currentHeight = Math.round(chatPanel.getBoundingClientRect().height);
+
+    if (!options.preservePreviousHeight && currentHeight > 60) {
+      persistChatHeight(currentHeight);
+    }
 
     chatPanel.classList.add("chat-hidden");
     chatToggleButton.textContent = "Show Chat";
@@ -4661,10 +4675,12 @@ function setChatHidden(hidden, shouldSave = true) {
     closeEmojiPicker();
     document.documentElement.style.setProperty("--chat-height", "46px");
   } else {
+    previousChatHeight = getStoredChatHeight();
+
     chatPanel.classList.remove("chat-hidden");
     chatToggleButton.textContent = "Hide Chat";
     chatToggleButton.setAttribute("aria-pressed", "false");
-    setChatHeight(previousChatHeight || 190);
+    setChatHeight(previousChatHeight);
   }
 
   if (shouldSave) {
