@@ -2274,3 +2274,39 @@ body[data-theme="nami-days"] #section-home .nami-message-log-card::before {
 }
 /* Home / Nami-Chan dashboard round two repair END */
 /* Home / Nami-Chan dashboard round two repair END */
+
+/* Home Care Status fit repair START */
+/* Tighten Care Status rows so all needs fit inside the card. */
+body[data-theme="nami-days"] #section-home .care-status-compact {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact h2 {
+  margin-bottom: 6px !important;
+  padding-bottom: 5px !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .compact-stat-list {
+  gap: 2px !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .compact-stat-list > .stat-row {
+  grid-template-columns: 118px minmax(0, 1fr) 42px !important;
+  min-height: 17px !important;
+  height: 17px !important;
+  column-gap: 9px !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .care-stat-name,
+body[data-theme="nami-days"] #section-home .care-status-compact .care-stat-value {
+  font-size: 0.76rem !important;
+  line-height: 1 !important;
+}
+
+body[data-theme="nami-days"] #section-home .care-status-compact .stat-bar {
+  height: 7px !important;
+  min-height: 7px !important;
+}
+/* Home Care Status fit repair END */
+/* Home Care Status fit repair END */
