@@ -732,8 +732,8 @@ body[data-theme="nami-days"] .combat-log-list,
 body[data-theme="nami-days"] .combat-log-list *,
 body[data-theme="nami-days"] .combat-log-card,
 body[data-theme="nami-days"] .combat-log-card * {
-  color: #111111 !important;
-  -webkit-text-fill-color: #111111 !important;
+  color: #9A4EAE !important;
+  -webkit-text-fill-color: #9A4EAE !important;
   text-shadow: none !important;
 }
 
@@ -1097,3 +1097,71 @@ body[data-theme="nami-days"] .chat-tabs {
     0 6px 14px rgba(148, 66, 92, 0.08) !important;
 }
 /* Nami Days transparent chat pass END */
+
+/* Nami Days black text purge START */
+/*
+  Nami Days should not render fully black text.
+  This catches explicit black-ish text spots and common inherited/default text areas
+  without changing the established non-black plum/mauve theme text colors.
+*/
+
+body[data-theme="nami-days"] {
+  --nami-days-no-black-text: #9A4EAE;
+}
+
+/* Combat log was intentionally black before; make it purple instead. */
+body[data-theme="nami-days"] #combat-log-list,
+body[data-theme="nami-days"] #combat-log-list *,
+body[data-theme="nami-days"] .combat-log,
+body[data-theme="nami-days"] .combat-log *,
+body[data-theme="nami-days"] .combat-log-list,
+body[data-theme="nami-days"] .combat-log-list *,
+body[data-theme="nami-days"] .combat-log-card,
+body[data-theme="nami-days"] .combat-log-card *,
+body[data-theme="nami-days"] .log-list,
+body[data-theme="nami-days"] .log-list * {
+  color: var(--nami-days-no-black-text) !important;
+  -webkit-text-fill-color: var(--nami-days-no-black-text) !important;
+}
+
+/* Native form/control defaults can sneak in black text. */
+body[data-theme="nami-days"] input,
+body[data-theme="nami-days"] textarea,
+body[data-theme="nami-days"] select,
+body[data-theme="nami-days"] option,
+body[data-theme="nami-days"] button {
+  color: inherit;
+}
+
+/* Buttons that may inherit browser/default black should use the no-black purple instead. */
+body[data-theme="nami-days"] .care-button,
+body[data-theme="nami-days"] .care-button *,
+body[data-theme="nami-days"] .task-card button,
+body[data-theme="nami-days"] .task-card button *,
+body[data-theme="nami-days"] .primary-button,
+body[data-theme="nami-days"] .primary-button *,
+body[data-theme="nami-days"] .secondary-button,
+body[data-theme="nami-days"] .secondary-button *,
+body[data-theme="nami-days"] .chat-form button,
+body[data-theme="nami-days"] .chat-form button * {
+  color: var(--nami-days-no-black-text) !important;
+  -webkit-text-fill-color: var(--nami-days-no-black-text) !important;
+}
+
+/* Safety net for values/labels that could otherwise inherit black from older component rules. */
+body[data-theme="nami-days"] .combat-panel,
+body[data-theme="nami-days"] .combat-panel *,
+body[data-theme="nami-days"] .wardrobe-panel,
+body[data-theme="nami-days"] .wardrobe-panel *,
+body[data-theme="nami-days"] .inventory-item-card,
+body[data-theme="nami-days"] .inventory-item-card *,
+body[data-theme="nami-days"] .equipment-card,
+body[data-theme="nami-days"] .equipment-card *,
+body[data-theme="nami-days"] .right-buffs-panel,
+body[data-theme="nami-days"] .right-buffs-panel *,
+body[data-theme="nami-days"] #section-gathering .task-card,
+body[data-theme="nami-days"] #section-gathering .task-card * {
+  text-shadow: none;
+}
+
+/* Nami Days black text purge END */
