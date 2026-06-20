@@ -2544,6 +2544,46 @@ function handleWardrobeItemKeydown(event) {
   openWardrobeItemDetail(target.dataset.wardrobeItemId, target.dataset.wardrobeCompareSlot || "");
 }
 
+async function fetchWardrobeItemDetailForCompareV4(itemID, compareSlot = "") {
+  const params = new URLSearchParams({ id: String(itemID) });
+  if (compareSlot) { params.set("compareSlot", compareSlot); }
+  const response = await fetch("/api/player/wardrobe/item?" + params.toString());
+  if (!response.ok) { throw new Error("Item detail failed: " + response.status); }
+  return response.json();
+}
+function getWardrobeEquippedSlotForCompareV4(item) {
+  return String(item?.equippedSlot || "").trim().toLowerCase();
+}
+function isWardrobeAccessoryItemForCompareV4(item) {
+  return normalizeWardrobeInventoryGroupKey(item?.equipmentSlot || item?.itemType || "") === "accessory";
+}
+function getOtherWardrobeAccessorySlotForCompareV4(slotKey) {
+  const key = String(slotKey || "").trim().toLowerCase();
+  if (key === "accessory_1") { return "accessory_2"; }
+  if (key === "accessory_2") { return "accessory_1"; }
+  return "";
+}
+function hideWardrobeComparisonForCompareV4(detail) {
+  return { ...detail, hideComparison: true, accessoryCompareSlots: [] };
+}
+async function resolveWardrobeEquippedItemComparisonV4(detail) {
+  const item = detail?.item || {};
+  const equippedSlot = getWardrobeEquippedSlotForCompareV4(item);
+  if (!equippedSlot) { return { ...detail, hideComparison: false }; }
+  if (!isWardrobeAccessoryItemForCompareV4(item)) { return hideWardrobeComparisonForCompareV4(detail); }
+  const otherSlot = getOtherWardrobeAccessorySlotForCompareV4(equippedSlot);
+  if (!otherSlot) { return hideWardrobeComparisonForCompareV4(detail); }
+  const itemID = Number(item.id ?? item.itemId ?? activeWardrobeModalItemId ?? 0);
+  const currentCompareSlot = String(detail?.compareSlot || "").trim().toLowerCase();
+  let resolvedDetail = detail;
+  if (itemID > 0 && currentCompareSlot !== otherSlot) {
+    resolvedDetail = await fetchWardrobeItemDetailForCompareV4(itemID, otherSlot);
+  }
+  if (!resolvedDetail?.compareItem) { return hideWardrobeComparisonForCompareV4(resolvedDetail); }
+  const filteredAccessorySlots = (Array.isArray(resolvedDetail?.accessoryCompareSlots) ? resolvedDetail.accessoryCompareSlots : []).filter((slot) => String(slot.slotKey || "").trim().toLowerCase() === otherSlot);
+  return { ...resolvedDetail, hideComparison: false, accessoryCompareSlots: filteredAccessorySlots };
+}
+
 async function openWardrobeItemDetail(itemID, compareSlot = "") {
   const safeItemID = Number(itemID);
 
@@ -2586,6 +2626,17 @@ function closeWardrobeItemModal() {
   resetWardrobeModalDragPosition();
 }
 
+function syncWardrobeCompareSectionVisibilityV4(detail) {
+  const compareSection = wardrobeComparisonList?.closest(".wardrobe-compare-section") || null;
+  const shouldHideComparison = Boolean(detail?.hideComparison);
+  compareSection?.classList.toggle("hidden", shouldHideComparison);
+  compareSection?.toggleAttribute("hidden", shouldHideComparison);
+  if (!shouldHideComparison) { return; }
+  wardrobeAccessoryCompare?.classList.add("hidden");
+  setTextIfChanged(wardrobeCompareTarget, "");
+  wardrobeComparisonList?.replaceChildren();
+}
+
 function renderWardrobeItemModal(detail) {
   if (!wardrobeItemModal) {
     return;
@@ -2609,6 +2660,7 @@ function renderWardrobeItemModal(detail) {
   renderWardrobeItemActions(detail);
   renderWardrobeStatLines(detail?.item?.statLines || []);
   renderWardrobeComparison(detail);
+  syncWardrobeCompareSectionVisibilityV4(detail);
 
   wardrobeItemModal.classList.remove("hidden");
   wardrobeItemModal.setAttribute("aria-hidden", "false");
@@ -5205,6 +5257,7 @@ function renderWardrobeItemModal(detail, options = {}) {
   renderWardrobeItemActions(detail, { readOnly: isReadOnly });
   renderWardrobeStatLines(detail?.item?.statLines || []);
   renderWardrobeComparison(detail);
+  syncWardrobeCompareSectionVisibilityV4(detail);
 
   wardrobeItemModal.classList.remove("hidden");
   wardrobeItemModal.setAttribute("aria-hidden", "false");

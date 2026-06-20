@@ -9066,3 +9066,10 @@ body.wardrobe-modal-dragging {
 /* Wardrobe modal dragging END */
 /* Wardrobe modal dragging END */
 /* Wardrobe modal dragging END */
+
+/* Wardrobe equipped item comparison visibility START */
+#wardrobe-item-modal .wardrobe-compare-section.hidden,
+#wardrobe-item-modal .wardrobe-compare-section[hidden] {
+  display: none !important;
+}
+/* Wardrobe equipped item comparison visibility END */
