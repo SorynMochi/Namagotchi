@@ -2641,16 +2641,14 @@ async function unequipWardrobeItem(itemID, slotKey = "") {
     }
 
     const result = await response.json();
+    const itemName =
+      result?.detail?.item?.name ||
+      wardrobeItemModalTitle?.textContent ||
+      "Item";
 
     await loadPlayerStatus();
+    closeWardrobeItemModal();
 
-    if (result?.detail) {
-      renderWardrobeItemModal(result.detail);
-    } else {
-      await openWardrobeItemDetail(itemID, slotKey || activeWardrobeModalCompareSlot);
-    }
-
-    const itemName = result?.detail?.item?.name || "Item";
     addChatMessage("System", `${itemName} removed from Nami-Chan's outfit.`, "system");
   } catch (error) {
     console.error(error);
