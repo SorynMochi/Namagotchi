@@ -1,0 +1,12 @@
+Final targeted mojibake cleanup
+Generated: 2026-06-20 00:29:35
+
+Changed: internal/database/database.go
+  fixed low-care stat suffix to Go escape \U0001FAE7
+  fixed Playdeck defeat suffix to Go escape \U0001FA79
+
+Remaining suspicious mojibake markers:
+  None found.
+
+Remaining non-ASCII lines:
+  None found.

@@ -2719,13 +2719,13 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 			statName = titleNamiLabel(strings.TrimPrefix(context.TriggerKey, "care_stat_low_"))
 		}
 
-		return fmt.Sprintf("(low care stat: %s ÃƒÂ°Ã…Â¸Ã‚Â«Ã‚Â§)", statName)
+		return fmt.Sprintf("(low care stat: %s \U0001FAE7)", statName)
 
 	case context.TriggerKey == "random_mood":
 		return "(just because \u2661)"
 
 	case context.TriggerKey == "playdeck_death":
-		return "(Playdeck defeat ÃƒÂ°Ã…Â¸Â\u00A9Ã‚Â¹)"
+		return "(Playdeck defeat \U0001FA79)"
 
 	case context.TriggerKey == "daily_orders_complete":
 		return "(daily orders complete \u2661)"
