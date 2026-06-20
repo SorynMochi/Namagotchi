@@ -559,6 +559,37 @@ const EMOJI_CATEGORIES = {
 const PLAYDECK_ZONE_MAX_STREAK_STORAGE_KEY = "namigotchi_playdeck_zone_max_streaks";
 const TOP_RAIL_TICK_SECONDS = 5;
 
+function createEmptyChatStore() {
+  return {
+    lobby: [],
+    whispers: [],
+    club: [],
+    trade: [],
+    help: [],
+    system: [],
+  };
+}
+
+function loadEmojiUsage() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(EMOJI_USAGE_KEY) || "{}");
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
+  } catch {
+    return {};
+  }
+}
+
+function loadIgnoredPlayers() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(CHAT_IGNORE_KEY) || "[]");
+    return new Set(Array.isArray(parsed) ? parsed.map((name) => String(name).toLowerCase()) : []);
+  } catch {
+    return new Set();
+  }
+}
+
 let latestPlayerStatus = null;
 let forceTickButton = null;
 let resetPlaydeckStreakButton = null;
