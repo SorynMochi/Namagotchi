@@ -589,6 +589,16 @@ let emojiPickerNeedsRender = true;
 let emojiPickerPreloadTimer = null;
 let namiRoomBackgroundTimer = null;
 let namiHomeStageMode = "";
+let wardrobeModalDragState = {
+  active: false,
+  pointerId: 0,
+  startClientX: 0,
+  startClientY: 0,
+  startOffsetX: 0,
+  startOffsetY: 0,
+  offsetX: 0,
+  offsetY: 0,
+};
 
 function setTextIfChanged(element, value) {
   if (!element) {
@@ -2356,6 +2366,7 @@ function initializeWardrobeItemModal() {
   });
 
   wardrobeItemModalClose?.addEventListener("click", closeWardrobeItemModal);
+  initializeWardrobeModalDragging();
 
   wardrobeItemModal?.addEventListener("click", (event) => {
     if (event.target === wardrobeItemModal) {
@@ -2370,6 +2381,141 @@ function initializeWardrobeItemModal() {
   });
 }
 
+function getWardrobeModalCard() {
+  return wardrobeItemModal?.querySelector(".wardrobe-item-modal-card") || null;
+}
+
+function setWardrobeModalDragOffset(x, y) {
+  const card = getWardrobeModalCard();
+
+  wardrobeModalDragState.offsetX = Number(x) || 0;
+  wardrobeModalDragState.offsetY = Number(y) || 0;
+
+  if (!card) {
+    return;
+  }
+
+  card.style.setProperty("--wardrobe-modal-drag-x", `${wardrobeModalDragState.offsetX}px`);
+  card.style.setProperty("--wardrobe-modal-drag-y", `${wardrobeModalDragState.offsetY}px`);
+}
+
+function resetWardrobeModalDragPosition() {
+  wardrobeModalDragState.active = false;
+  wardrobeModalDragState.pointerId = 0;
+  document.body.classList.remove("wardrobe-modal-dragging");
+  setWardrobeModalDragOffset(0, 0);
+}
+
+function clampWardrobeModalDragOffset(x, y) {
+  const card = getWardrobeModalCard();
+
+  if (!card) {
+    return { x, y };
+  }
+
+  const rect = card.getBoundingClientRect();
+  const currentX = wardrobeModalDragState.offsetX;
+  const currentY = wardrobeModalDragState.offsetY;
+  const baseLeft = rect.left - currentX;
+  const baseTop = rect.top - currentY;
+  const margin = 8;
+
+  const minX = margin - baseLeft;
+  const maxX = window.innerWidth - margin - baseLeft - rect.width;
+  const minY = margin - baseTop;
+  const maxY = window.innerHeight - margin - baseTop - rect.height;
+
+  const clamp = (value, min, max) => {
+    if (max < min) {
+      return Math.max(max, Math.min(min, value));
+    }
+
+    return Math.max(min, Math.min(max, value));
+  };
+
+  return {
+    x: clamp(x, minX, maxX),
+    y: clamp(y, minY, maxY),
+  };
+}
+
+function initializeWardrobeModalDragging() {
+  const card = getWardrobeModalCard();
+
+  if (!wardrobeItemModal || !card || card.dataset.dragReady === "true") {
+    return;
+  }
+
+  card.dataset.dragReady = "true";
+
+  const dragHandle = card.querySelector(".wardrobe-item-modal-header") || card;
+
+  dragHandle.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) {
+      return;
+    }
+
+    if (event.target.closest("button, a, input, select, textarea, [contenteditable='true']")) {
+      return;
+    }
+
+    wardrobeModalDragState.active = true;
+    wardrobeModalDragState.pointerId = event.pointerId;
+    wardrobeModalDragState.startClientX = event.clientX;
+    wardrobeModalDragState.startClientY = event.clientY;
+    wardrobeModalDragState.startOffsetX = wardrobeModalDragState.offsetX;
+    wardrobeModalDragState.startOffsetY = wardrobeModalDragState.offsetY;
+
+    dragHandle.setPointerCapture?.(event.pointerId);
+    document.body.classList.add("wardrobe-modal-dragging");
+    event.preventDefault();
+  });
+
+  dragHandle.addEventListener("pointermove", (event) => {
+    if (!wardrobeModalDragState.active || wardrobeModalDragState.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const nextX =
+      wardrobeModalDragState.startOffsetX +
+      event.clientX -
+      wardrobeModalDragState.startClientX;
+
+    const nextY =
+      wardrobeModalDragState.startOffsetY +
+      event.clientY -
+      wardrobeModalDragState.startClientY;
+
+    const clamped = clampWardrobeModalDragOffset(nextX, nextY);
+    setWardrobeModalDragOffset(clamped.x, clamped.y);
+  });
+
+  const stopDragging = (event) => {
+    if (!wardrobeModalDragState.active || wardrobeModalDragState.pointerId !== event.pointerId) {
+      return;
+    }
+
+    wardrobeModalDragState.active = false;
+    wardrobeModalDragState.pointerId = 0;
+    document.body.classList.remove("wardrobe-modal-dragging");
+  };
+
+  dragHandle.addEventListener("pointerup", stopDragging);
+  dragHandle.addEventListener("pointercancel", stopDragging);
+
+  window.addEventListener("resize", () => {
+    if (!wardrobeItemModal || wardrobeItemModal.classList.contains("hidden")) {
+      return;
+    }
+
+    const clamped = clampWardrobeModalDragOffset(
+      wardrobeModalDragState.offsetX,
+      wardrobeModalDragState.offsetY
+    );
+
+    setWardrobeModalDragOffset(clamped.x, clamped.y);
+  });
+}
 function initializeDevWardrobeSpawner() {
   // Dev controls are server-gated at /dev.
 }
@@ -2437,6 +2583,7 @@ function closeWardrobeItemModal() {
   wardrobeItemModal.classList.add("hidden");
   wardrobeItemModal.setAttribute("aria-hidden", "true");
   activeWardrobeModalItemId = 0;
+  resetWardrobeModalDragPosition();
 }
 
 function renderWardrobeItemModal(detail) {

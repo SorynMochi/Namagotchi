@@ -9039,3 +9039,30 @@ body.auth-logged-out .game-shell {
 }
 /* Wardrobe modal viewport fallback and opacity repair END */
 /* Wardrobe modal viewport fallback and opacity repair END */
+
+/* Wardrobe modal dragging START */
+#wardrobe-item-modal .wardrobe-item-modal-card {
+  transform:
+    translate(
+      var(--wardrobe-modal-drag-x, 0px),
+      var(--wardrobe-modal-drag-y, 0px)
+    ) !important;
+}
+
+#wardrobe-item-modal .wardrobe-item-modal-header {
+  cursor: grab !important;
+  user-select: none !important;
+  touch-action: none !important;
+}
+
+#wardrobe-item-modal .wardrobe-item-modal-header:active,
+body.wardrobe-modal-dragging #wardrobe-item-modal .wardrobe-item-modal-header {
+  cursor: grabbing !important;
+}
+
+body.wardrobe-modal-dragging {
+  user-select: none !important;
+}
+/* Wardrobe modal dragging END */
+/* Wardrobe modal dragging END */
+/* Wardrobe modal dragging END */
