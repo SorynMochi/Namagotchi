@@ -2632,7 +2632,7 @@ body > .emoji-picker-floating .emoji-option:hover {
 }
 
 .nav-item.premium::before {
-  content: "ÃƒÂ¢Ã‹Å“Ã¢â‚¬Â¦";
+  content: "\2661";
   color: var(--yellow);
 }
 
@@ -4064,7 +4064,7 @@ h3 {
 }
 
 .nav-item::before {
-  content: "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¡";
+  content: "\2661";
   margin-right: 5px;
   color: var(--theme-residual-nav-icon-text);
 }

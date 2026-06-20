@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color-scheme: dark;
 
   --bg-0: #030514;
@@ -1928,19 +1928,19 @@ body[data-theme="tokyo-night"] #section-settings .section-header::before {
 }
 
 body[data-theme="tokyo-night"] #section-home .section-header::before {
-  content: "\591C"; /* 夜 */
+  content: "\591C"; /* å¤œ */
 }
 
 body[data-theme="tokyo-night"] #section-gathering .section-header::before {
-  content: "\50CD"; /* 働 */
+  content: "\50CD"; /* åƒ */
 }
 
 body[data-theme="tokyo-night"] #section-wardrobe .section-header::before {
-  content: "\670D"; /* 服 */
+  content: "\670D"; /* æœ */
 }
 
 body[data-theme="tokyo-night"] #section-settings .section-header::before {
-  content: "\8A2D"; /* 設 */
+  content: "\8A2D"; /* è¨­ */
 }
 
 /* Keep the Japanese props out of the way on small screens or collapsed layouts. */

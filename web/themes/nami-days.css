@@ -1248,7 +1248,7 @@ body[data-theme="nami-days"] .placeholder-copy::before {
 }
 
 body[data-theme="nami-days"] .placeholder-copy::after {
-  content: "ÃƒÂ¢Ã…â€œÃ‚Â¦";
+  content: "\2661";
   position: absolute;
   top: 14px;
   right: 18px;
@@ -1376,7 +1376,7 @@ body[data-theme="nami-days"] #section-home > .section-header .eyebrow {
 }
 
 body[data-theme="nami-days"] #section-home > .section-header .eyebrow::before {
-  content: "Ã¢â„¢Â¡";
+  content: "\2661";
   color: var(--nami-home-ink);
   -webkit-text-fill-color: var(--nami-home-ink);
   font-size: 0.82rem;
@@ -1419,7 +1419,7 @@ body[data-theme="nami-days"] #section-home .nami-card::before {
 }
 
 body[data-theme="nami-days"] #section-home .nami-card::after {
-  content: "Ã¢Å“Â¦";
+  content: "\2726";
   position: absolute;
   top: 16px;
   right: 18px;
@@ -1481,7 +1481,7 @@ body[data-theme="nami-days"] #section-home #nami-message {
 
 body[data-theme="nami-days"] #section-home .nami-message::before,
 body[data-theme="nami-days"] #section-home #nami-message::before {
-  content: "Ã¢â„¢Â¡";
+  content: "\2661";
   position: absolute;
   left: 16px;
   top: 13px;
@@ -1744,7 +1744,7 @@ body[data-theme="nami-days"] #section-home #nami-message::-webkit-scrollbar {
 
 /*
   Use CSS escapes instead of literal Unicode in content strings.
-  This prevents mojibake such as â™¡ when the stylesheet is interpreted oddly.
+  This prevents mojibake in CSS generated content when the stylesheet is interpreted oddly.
 */
 body[data-theme="nami-days"] #section-home > .section-header .eyebrow::before,
 body[data-theme="nami-days"] #section-home .nami-message::before,
