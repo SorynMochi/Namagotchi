@@ -1,4 +1,4 @@
-﻿
+
 
 /* Top player tick pill START */
 
@@ -1115,3 +1115,76 @@ body[data-theme="nami-days"] .top-player-name-button.top-player-tick-pill::after
 }
 /* Nami Days tick pill shadow cleanup END */
 
+/* Top rail user header alignment START */
+/*
+  Treat the player tick pill as the user section header:
+  - same typography as top rail h2 section headers
+  - same divider line between header row and stat rows
+  - no grid movement, only visual alignment
+*/
+
+:root {
+  --top-rail-header-color: var(--cyan);
+  --top-rail-header-divider-color: var(--theme-legacy-cyan-20);
+  --top-rail-header-font-size: 0.72rem;
+  --top-rail-header-font-weight: 950;
+  --top-rail-header-letter-spacing: 0.08em;
+  --top-rail-header-line-height: 1;
+}
+
+/* Nami Days uses the neon pink header language. Other themes fall back to their cyan/header token. */
+body[data-theme="nami-days"] {
+  --top-rail-header-color: #ff2aa3;
+  --top-rail-header-divider-color: rgba(57, 174, 202, 0.20);
+}
+
+/* Keep normal top rail headers and the player tick header on the same typography contract. */
+.top-stats-compact > .stat-group.compact > h2,
+.top-user-info .top-player-name-button,
+.top-user-info .top-player-name-button.top-player-tick-pill,
+.top-user-info .top-player-name-button.top-player-tick-pill * {
+  color: var(--top-rail-header-color) !important;
+  -webkit-text-fill-color: var(--top-rail-header-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-header-font-size) !important;
+  font-style: normal !important;
+  font-weight: var(--top-rail-header-font-weight) !important;
+  line-height: var(--top-rail-header-line-height) !important;
+  letter-spacing: var(--top-rail-header-letter-spacing) !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
+}
+
+/* Match the built-in divider under Currency / Resources / etc. */
+.top-stats-compact > .stat-group.compact > h2 {
+  border-bottom-color: var(--top-rail-header-divider-color) !important;
+}
+
+/* The user section needs its divider drawn separately because the tick pill is not an h2. */
+.top-stats-compact > .top-user-info {
+  position: relative !important;
+}
+
+.top-stats-compact > .top-user-info::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: var(--top-rail-section-pad-x);
+  right: var(--top-rail-section-pad-x);
+  top: calc(var(--top-rail-section-pad-y) + var(--top-rail-header-row-height) - 1px);
+  height: 1px;
+  background: var(--top-rail-header-divider-color);
+  pointer-events: none;
+}
+
+/* Preserve the pill's compact fit while matching header typography. */
+.top-user-info .top-player-name-button,
+.top-user-info .top-player-name-button.top-player-tick-pill {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+  text-align: center !important;
+}
+/* Top rail user header alignment END */
