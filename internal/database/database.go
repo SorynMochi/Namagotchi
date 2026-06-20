@@ -2688,15 +2688,15 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 	switch {
 	case context.TriggerKey == "nami_level_up":
 		if context.Level > 0 {
-			return fmt.Sprintf("(Nami level up: Lv %d ✨)", context.Level)
+			return fmt.Sprintf("(Nami level up: Lv %d \u2728)", context.Level)
 		}
-		return "(Nami level up ✨)"
+		return "(Nami level up \u2728)"
 
 	case context.TriggerKey == "playdeck_level_up":
 		if context.Level > 0 {
-			return fmt.Sprintf("(Playdeck level up: Lv %d ✦)", context.Level)
+			return fmt.Sprintf("(Playdeck level up: Lv %d \u2726)", context.Level)
 		}
-		return "(Playdeck level up ✦)"
+		return "(Playdeck level up \u2726)"
 
 	case context.TriggerKey == "activity_level_up":
 		activityName := strings.TrimSpace(context.ActivityName)
@@ -2705,13 +2705,13 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 		}
 
 		if context.Level > 0 {
-			return fmt.Sprintf("(%s level up: Lv %d ✦)", activityName, context.Level)
+			return fmt.Sprintf("(%s level up: Lv %d \u2726)", activityName, context.Level)
 		}
 
-		return fmt.Sprintf("(%s level up ✦)", activityName)
+		return fmt.Sprintf("(%s level up \u2726)", activityName)
 
 	case context.TriggerKey == "user_online":
-		return "(player arrived ♡)"
+		return "(player arrived \u2661)"
 
 	case strings.HasPrefix(context.TriggerKey, "care_stat_low_"):
 		statName := strings.TrimSpace(context.ResourceName)
@@ -2719,16 +2719,16 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 			statName = titleNamiLabel(strings.TrimPrefix(context.TriggerKey, "care_stat_low_"))
 		}
 
-		return fmt.Sprintf("(low care stat: %s Ã°Å¸Â«Â§)", statName)
+		return fmt.Sprintf("(low care stat: %s ÃƒÂ°Ã…Â¸Ã‚Â«Ã‚Â§)", statName)
 
 	case context.TriggerKey == "random_mood":
-		return "(just because ♡)"
+		return "(just because \u2661)"
 
 	case context.TriggerKey == "playdeck_death":
-		return "(Playdeck defeat Ã°Å¸©Â¹)"
+		return "(Playdeck defeat ÃƒÂ°Ã…Â¸Â\u00A9Ã‚Â¹)"
 
 	case context.TriggerKey == "daily_orders_complete":
-		return "(daily orders complete ♡)"
+		return "(daily orders complete \u2661)"
 
 	case namiContextIsCareAction(context):
 		actionName := strings.TrimSpace(context.ActionName)
@@ -2736,7 +2736,7 @@ func namiMessageSuffix(context NamiProceduralContext) string {
 			actionName = titleNamiLabel(strings.TrimPrefix(context.TriggerKey, "care_"))
 		}
 
-		return fmt.Sprintf("(care: %s ♡)", actionName)
+		return fmt.Sprintf("(care: %s \u2661)", actionName)
 
 	default:
 		return ""

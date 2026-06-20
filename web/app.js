@@ -1489,7 +1489,7 @@ function updateTopPlayerName(player) {
   }
 
   const displayName = String(player?.displayName || CURRENT_PLAYER_NAME || "Player").trim() || "Player";
-  setTextIfChanged(playerPill, `💎 ${displayName}`);
+  setTextIfChanged(playerPill, `\u{1F48E} ${displayName}`);
 }
 function syncTopRailTickPill(tick) {
   const playerPill = document.querySelector(".top-player-name-button");

@@ -29,7 +29,7 @@ func TestValidateAuthDisplayNameRejectsInvalidNames(t *testing.T) {
 		"has space",
 		"has.dot",
 		"has@symbol",
-		"emoji_ðŸ’–",
+		"emoji_\U0001F496",
 	}
 
 	for _, name := range invalidNames {
