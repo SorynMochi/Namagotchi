@@ -1188,3 +1188,136 @@ body[data-theme="nami-days"] {
   text-align: center !important;
 }
 /* Top rail user header alignment END */
+
+/* Top rail user header precise alignment START */
+/*
+  Final top-rail header alignment:
+  - section h2 headers and the player tick pill use the same visual header contract
+  - the divider under the player tick pill is positioned from the same text + padding math as h2
+  - grid rows remain unchanged
+*/
+
+:root {
+  --top-rail-header-color: var(--cyan);
+  --top-rail-header-divider-color: var(--theme-legacy-cyan-20);
+  --top-rail-header-font-size: 0.72rem;
+  --top-rail-header-font-weight: 950;
+  --top-rail-header-letter-spacing: 0.08em;
+  --top-rail-header-line-height: 1;
+  --top-rail-header-divider-padding: 7px;
+
+  /* h2 divider position = section top padding + header text line-height + header padding-bottom */
+  --top-rail-user-divider-top: calc(
+    var(--top-rail-section-pad-y) +
+    var(--top-rail-header-font-size) +
+    var(--top-rail-header-divider-padding)
+  );
+}
+
+body[data-theme="nami-days"] {
+  --top-rail-header-color: #ff2aa3;
+  --top-rail-header-divider-color: rgba(57, 174, 202, 0.20);
+}
+
+/* Normal top-rail headers. */
+.top-stats-compact > .stat-group.compact > h2 {
+  align-self: start !important;
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 0 var(--top-rail-header-divider-padding) !important;
+  border-bottom: 1px solid var(--top-rail-header-divider-color) !important;
+
+  color: var(--top-rail-header-color) !important;
+  -webkit-text-fill-color: var(--top-rail-header-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-header-font-size) !important;
+  font-style: normal !important;
+  font-weight: var(--top-rail-header-font-weight) !important;
+  line-height: var(--top-rail-header-line-height) !important;
+  letter-spacing: var(--top-rail-header-letter-spacing) !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
+}
+
+/* Player tick pill behaves as the user-column header. */
+.top-user-info .top-player-name-button,
+.top-user-info .top-player-name-button.top-player-tick-pill {
+  grid-row: 1 !important;
+  align-self: start !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+
+  /*
+    Keep the pill compact, but nudge it up so its text sits on the same visual line
+    as the h2 text in the other top-rail sections.
+  */
+  height: 16px !important;
+  min-height: 16px !important;
+  margin: -2px 0 0 !important;
+  padding: 0 10px !important;
+
+  box-sizing: border-box !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+
+  color: var(--top-rail-header-color) !important;
+  -webkit-text-fill-color: var(--top-rail-header-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-header-font-size) !important;
+  font-style: normal !important;
+  font-weight: var(--top-rail-header-font-weight) !important;
+  line-height: var(--top-rail-header-line-height) !important;
+  letter-spacing: var(--top-rail-header-letter-spacing) !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
+}
+
+.top-user-info .top-player-name-button.top-player-tick-pill *,
+.top-user-info .top-player-name-button * {
+  color: var(--top-rail-header-color) !important;
+  -webkit-text-fill-color: var(--top-rail-header-color) !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-style: normal !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  text-transform: inherit !important;
+  text-shadow: none !important;
+}
+
+/* Draw the user divider from the same header math as the h2 border-bottom. */
+.top-stats-compact > .top-user-info {
+  position: relative !important;
+}
+
+.top-stats-compact > .top-user-info::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: var(--top-rail-section-pad-x);
+  right: var(--top-rail-section-pad-x);
+  top: var(--top-rail-user-divider-top);
+  height: 1px;
+  background: var(--top-rail-header-divider-color);
+  pointer-events: none;
+}
+
+/* Keep user stat rows locked to the same row track after the divider correction. */
+.top-user-info .top-user-meter-list {
+  grid-row: 2 / 5 !important;
+  transform: none !important;
+}
+/* Top rail user header precise alignment END */
