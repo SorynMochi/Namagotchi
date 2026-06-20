@@ -8876,3 +8876,93 @@ body.auth-logged-out .game-shell {
   }
 }
 /* Auth landing END */
+
+/* Wardrobe viewport modal overlay START */
+/* Make wardrobe item details a true viewport modal, not a main-panel overlay. */
+.wardrobe-item-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483000 !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  padding: clamp(12px, 2.2vw, 28px) !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  overflow: auto !important;
+  overscroll-behavior: contain !important;
+  pointer-events: auto !important;
+}
+
+.wardrobe-item-modal-backdrop::before,
+.wardrobe-item-modal-backdrop::after {
+  content: none !important;
+  display: none !important;
+}
+
+.wardrobe-item-modal-backdrop.hidden {
+  display: none !important;
+}
+
+.wardrobe-item-modal-card {
+  position: relative !important;
+  z-index: 1 !important;
+
+  width: min(560px, calc(100vw - 32px)) !important;
+  max-width: min(560px, calc(100vw - 32px)) !important;
+  max-height: min(780px, calc(100dvh - 40px)) !important;
+
+  margin: auto !important;
+
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
+
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+.wardrobe-item-modal-header {
+  min-height: 0 !important;
+}
+
+.wardrobe-item-modal-body {
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Keep very tall item detail cards usable on shorter screens. */
+@media (max-height: 760px) {
+  .wardrobe-item-modal-backdrop {
+    align-items: start !important;
+  }
+
+  .wardrobe-item-modal-card {
+    max-height: calc(100dvh - 24px) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .wardrobe-item-modal-backdrop {
+    padding: 10px !important;
+  }
+
+  .wardrobe-item-modal-card {
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+    max-height: calc(100dvh - 20px) !important;
+  }
+}
+/* Wardrobe viewport modal overlay END */
+/* Wardrobe viewport modal overlay END */
