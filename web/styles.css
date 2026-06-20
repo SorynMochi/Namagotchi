@@ -9066,3 +9066,67 @@ body.wardrobe-modal-dragging {
 /* Wardrobe modal dragging END */
 /* Wardrobe modal dragging END */
 /* Wardrobe modal dragging END */
+
+/* Side rail glyph polish START */
+.rail-toggle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.rail-toggle .collapse-glyph {
+  flex: 0 0 auto !important;
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  font-size: 22px !important;
+  line-height: 1 !important;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 500,
+    "GRAD" 0,
+    "opsz" 24 !important;
+}
+
+.left-rail .rail-toggle {
+  justify-content: flex-start !important;
+}
+
+.left-rail .rail-toggle .collapse-glyph {
+  order: 0 !important;
+}
+
+.left-rail .rail-toggle .collapse-label {
+  order: 1 !important;
+}
+
+.right-rail .rail-toggle {
+  justify-content: space-between !important;
+}
+
+.right-rail .rail-toggle .collapse-label {
+  order: 0 !important;
+}
+
+.right-rail .rail-toggle .collapse-glyph {
+  order: 1 !important;
+  margin-left: auto !important;
+}
+
+.game-shell.is-left-rail-collapsed .left-rail .rail-toggle,
+.game-shell.is-right-rail-collapsed .right-rail .rail-toggle {
+  justify-content: center !important;
+  padding-inline: 0 !important;
+}
+
+.game-shell.is-left-rail-collapsed .left-rail .rail-toggle .collapse-glyph,
+.game-shell.is-right-rail-collapsed .right-rail .rail-toggle .collapse-glyph {
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  font-size: 22px !important;
+}
+/* Side rail glyph polish END */
