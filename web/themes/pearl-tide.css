@@ -209,7 +209,7 @@ body[data-theme="pearl-tide"] {
   --dropdown-option-text: #f3fbff;
 
   background:
-    url("/images/Nami_Splash.webp") center center / cover no-repeat fixed !important;
+    linear-gradient(180deg, #06182c 0%, #08243a 100%) !important;
   color: var(--text);
 }
 
@@ -889,6 +889,10 @@ body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-body {
 
 /* Pearl Tide glass transparency pass END */
 
+
+
+
+
 /* Pearl Tide bubble canvas layer START */
 body[data-theme="pearl-tide"] {
   isolation: isolate;
@@ -900,8 +904,6 @@ body[data-theme="pearl-tide"] .theme-effects-pearl-tide {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.78;
-  mix-blend-mode: screen;
 }
 
 body[data-theme="pearl-tide"] .pearl-tide-bubble-canvas {
@@ -918,20 +920,21 @@ body[data-theme="pearl-tide"] #wardrobe-item-modal {
 }
 
 body[data-theme="pearl-tide"] .theme-effects-pearl-tide.theme-effects-reduced-motion {
-  opacity: 0.54;
+  opacity: 0.92;
 }
 
 @media (max-width: 980px) {
   body[data-theme="pearl-tide"] .theme-effects-pearl-tide {
-    opacity: 0.62;
+    opacity: 0.96;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   body[data-theme="pearl-tide"] .theme-effects-pearl-tide {
-    opacity: 0.46;
+    opacity: 0.90;
   }
 }
 /* Pearl Tide bubble canvas layer END */
 
 /* Pearl Tide theme END */
+

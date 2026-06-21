@@ -46,6 +46,16 @@
       lanternTimer = null;
     }
 
+    if (pearlTideBubbleAnimationFrame) {
+      window.cancelAnimationFrame(pearlTideBubbleAnimationFrame);
+      pearlTideBubbleAnimationFrame = 0;
+    }
+
+    if (pearlTideBubbleResizeListener) {
+      window.removeEventListener("resize", pearlTideBubbleResizeListener);
+      pearlTideBubbleResizeListener = null;
+    }
+
     if (activeLayer) {
       activeLayer.remove();
       activeLayer = null;
@@ -558,6 +568,10 @@
     activeLayer = layer;
   }
 
+
+
+
+
   /* Pearl Tide bubble canvas effect START */
   function startPearlTideThemeEffect() {
     document.documentElement.classList.add("theme-effect-pearl-tide");
@@ -575,36 +589,103 @@
     activeLayer = layer;
 
     const ctx = canvas.getContext("2d", { alpha: true });
+    const backgroundCanvas = document.createElement("canvas");
+    const backgroundCtx = backgroundCanvas.getContext("2d", { alpha: false });
 
-    if (!ctx) {
+    if (!ctx || !backgroundCtx) {
       return;
     }
+
+    const backgroundImage = new Image();
+    backgroundImage.src = "/images/Nami_Splash.webp";
 
     const reducedMotion = reduceMotionQuery.matches;
     const bubbles = [];
     let viewportWidth = 0;
     let viewportHeight = 0;
     let pixelRatio = 1;
+    let backgroundReady = false;
+    let coverRect = { dx: 0, dy: 0, dw: 1, dh: 1 };
+
+    function calculateCoverRect(imageWidth, imageHeight, targetWidth, targetHeight) {
+      const scale = Math.max(targetWidth / imageWidth, targetHeight / imageHeight);
+      const drawWidth = imageWidth * scale;
+      const drawHeight = imageHeight * scale;
+
+      return {
+        dx: (targetWidth - drawWidth) / 2,
+        dy: (targetHeight - drawHeight) / 2,
+        dw: drawWidth,
+        dh: drawHeight,
+      };
+    }
+
+    function redrawBackgroundBuffer() {
+      backgroundCtx.setTransform(1, 0, 0, 1, 0, 0);
+      backgroundCtx.clearRect(0, 0, viewportWidth, viewportHeight);
+
+      if (!backgroundReady) {
+        const fallback = backgroundCtx.createLinearGradient(0, 0, 0, viewportHeight);
+        fallback.addColorStop(0, "#06182c");
+        fallback.addColorStop(1, "#08243a");
+        backgroundCtx.fillStyle = fallback;
+        backgroundCtx.fillRect(0, 0, viewportWidth, viewportHeight);
+        return;
+      }
+
+      backgroundCtx.drawImage(
+        backgroundImage,
+        coverRect.dx,
+        coverRect.dy,
+        coverRect.dw,
+        coverRect.dh
+      );
+    }
+
+    function drawBackgroundToVisibleCanvas() {
+      ctx.drawImage(backgroundCanvas, 0, 0, viewportWidth, viewportHeight);
+    }
 
     function makeBubble(isInitial) {
-      const radiusScale = Math.max(0.74, Math.min(1.24, viewportWidth / 1500));
-      const radius = randomBetween(5, 25) * radiusScale;
+      const radiusScale = Math.max(0.85, Math.min(1.22, viewportWidth / 1500));
+      const radius = randomBetween(9, 32) * radiusScale;
       const originX = randomBetween(-radius, viewportWidth + radius);
 
       return {
         originX,
         x: originX,
-        y: isInitial ? randomBetween(-radius, viewportHeight + radius) : viewportHeight + radius + randomBetween(0, viewportHeight * 0.18),
+        y: isInitial
+          ? randomBetween(-radius, viewportHeight + radius)
+          : viewportHeight + radius + randomBetween(0, viewportHeight * 0.18),
         radius,
-        heightScale: randomBetween(0.70, 1.02),
-        lift: randomBetween(0.18, 0.82) * radiusScale,
-        drift: randomBetween(8, 34) * radiusScale,
-        wobbleSpeed: randomBetween(0.0008, 0.0024),
+        heightScale: randomBetween(0.74, 1.04),
+        lift: randomBetween(0.16, 0.58) * radiusScale,
+        drift: randomBetween(10, 38) * radiusScale,
+        wobbleSpeed: randomBetween(0.0008, 0.0023),
         wobbleOffset: randomBetween(0, Math.PI * 2),
         rotation: randomBetween(0, Math.PI * 2),
-        rotationSpeed: randomBetween(-0.004, 0.004),
-        opacity: randomBetween(0.20, 0.54)
+        rotationSpeed: randomBetween(-0.003, 0.003),
+        opacity: randomBetween(0.28, 0.58),
+        lensPower: randomBetween(0.16, 0.30),
       };
+    }
+
+    function replaceBubble(targetBubble) {
+      const replacement = makeBubble(false);
+
+      targetBubble.originX = replacement.originX;
+      targetBubble.x = replacement.x;
+      targetBubble.y = replacement.y;
+      targetBubble.radius = replacement.radius;
+      targetBubble.heightScale = replacement.heightScale;
+      targetBubble.lift = replacement.lift;
+      targetBubble.drift = replacement.drift;
+      targetBubble.wobbleSpeed = replacement.wobbleSpeed;
+      targetBubble.wobbleOffset = replacement.wobbleOffset;
+      targetBubble.rotation = replacement.rotation;
+      targetBubble.rotationSpeed = replacement.rotationSpeed;
+      targetBubble.opacity = replacement.opacity;
+      targetBubble.lensPower = replacement.lensPower;
     }
 
     function resizeCanvas() {
@@ -617,13 +698,27 @@
       canvas.style.width = `${viewportWidth}px`;
       canvas.style.height = `${viewportHeight}px`;
 
+      backgroundCanvas.width = viewportWidth;
+      backgroundCanvas.height = viewportHeight;
+
       ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+      if (backgroundReady) {
+        coverRect = calculateCoverRect(
+          backgroundImage.naturalWidth || backgroundImage.width,
+          backgroundImage.naturalHeight || backgroundImage.height,
+          viewportWidth,
+          viewportHeight
+        );
+      }
+
+      redrawBackgroundBuffer();
 
       bubbles.length = 0;
 
       const targetCount = reducedMotion
-        ? 34
-        : Math.max(52, Math.min(104, Math.round(viewportWidth / 18)));
+        ? 24
+        : Math.max(36, Math.min(72, Math.round(viewportWidth / 30)));
 
       for (let index = 0; index < targetCount; index += 1) {
         bubbles.push(makeBubble(true));
@@ -632,26 +727,123 @@
       drawFrame(performance.now(), true);
     }
 
-    function drawBubble(bubble, now) {
-      const wobble = Math.sin(now * bubble.wobbleSpeed + bubble.wobbleOffset);
-      const pulse = Math.cos(now * bubble.wobbleSpeed * 1.8 + bubble.wobbleOffset);
-      const x = bubble.originX + wobble * bubble.drift;
-      const y = bubble.y;
-      const radiusX = bubble.radius * (0.86 + pulse * 0.055);
-      const radiusY = bubble.radius * bubble.heightScale * (1.02 - pulse * 0.04);
+    function drawClippedBackgroundSlice(sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight) {
+      const sourceRight = sourceX + sourceWidth;
+      const sourceBottom = sourceY + sourceHeight;
 
-      const gradient = ctx.createRadialGradient(
-        x - radiusX * 0.26,
+      const clippedSourceX = Math.max(0, sourceX);
+      const clippedSourceY = Math.max(0, sourceY);
+      const clippedSourceRight = Math.min(viewportWidth, sourceRight);
+      const clippedSourceBottom = Math.min(viewportHeight, sourceBottom);
+
+      const clippedSourceWidth = clippedSourceRight - clippedSourceX;
+      const clippedSourceHeight = clippedSourceBottom - clippedSourceY;
+
+      if (clippedSourceWidth <= 0 || clippedSourceHeight <= 0 || sourceWidth <= 0 || sourceHeight <= 0) {
+        return;
+      }
+
+      const leftRatio = (clippedSourceX - sourceX) / sourceWidth;
+      const topRatio = (clippedSourceY - sourceY) / sourceHeight;
+      const rightRatio = (sourceRight - clippedSourceRight) / sourceWidth;
+      const bottomRatio = (sourceBottom - clippedSourceBottom) / sourceHeight;
+
+      const clippedDestX = destX + destWidth * leftRatio;
+      const clippedDestY = destY + destHeight * topRatio;
+      const clippedDestWidth = destWidth * Math.max(0, 1 - leftRatio - rightRatio);
+      const clippedDestHeight = destHeight * Math.max(0, 1 - topRatio - bottomRatio);
+
+      if (clippedDestWidth <= 0 || clippedDestHeight <= 0) {
+        return;
+      }
+
+      ctx.drawImage(
+        backgroundCanvas,
+        clippedSourceX,
+        clippedSourceY,
+        clippedSourceWidth,
+        clippedSourceHeight,
+        clippedDestX,
+        clippedDestY,
+        clippedDestWidth,
+        clippedDestHeight
+      );
+    }
+
+    function drawLensBackground(bubble, metrics) {
+      if (!backgroundReady || !metrics) {
+        return;
+      }
+
+      const { x, y, radiusX, radiusY } = metrics;
+      const sliceHeight = 2.25;
+      const lensPower = bubble.lensPower;
+
+      ctx.save();
+
+      ctx.translate(x, y);
+      ctx.rotate(bubble.rotation);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, Math.PI * 2);
+      ctx.clip();
+
+      ctx.rotate(-bubble.rotation);
+      ctx.translate(-x, -y);
+
+      for (let localY = -radiusY; localY <= radiusY; localY += sliceHeight) {
+        const normalizedY = localY / radiusY;
+        const chord = Math.sqrt(Math.max(0, 1 - normalizedY * normalizedY));
+        const destHalfWidth = radiusX * chord;
+
+        if (destHalfWidth <= 0.5) {
+          continue;
+        }
+
+        const centerBoost = 1 - Math.abs(normalizedY);
+        const horizontalScale = 1 + lensPower * (0.45 + centerBoost * 1.10);
+        const verticalScale = 1 + lensPower * 0.46;
+
+        const sourceHalfWidth = destHalfWidth / horizontalScale;
+        const sourceHeight = sliceHeight / verticalScale;
+
+        const sourceX = x - sourceHalfWidth;
+        const sourceY = y + localY / verticalScale;
+        const sourceWidth = sourceHalfWidth * 2;
+
+        drawClippedBackgroundSlice(
+          sourceX,
+          sourceY,
+          sourceWidth,
+          sourceHeight,
+          x - destHalfWidth,
+          y + localY,
+          destHalfWidth * 2,
+          sliceHeight
+        );
+      }
+
+      ctx.restore();
+    }
+
+    function drawBubbleShell(bubble, metrics) {
+      if (!metrics) {
+        return;
+      }
+
+      const { x, y, radiusX, radiusY } = metrics;
+
+      const shellGradient = ctx.createRadialGradient(
+        x - radiusX * 0.30,
         y - radiusY * 0.34,
         0,
         x,
         y,
-        Math.max(radiusX, radiusY) * 1.18
+        Math.max(radiusX, radiusY) * 1.22
       );
 
-      gradient.addColorStop(0, `rgba(245, 254, 255, ${Math.min(0.56, bubble.opacity + 0.18).toFixed(3)})`);
-      gradient.addColorStop(0.42, `rgba(151, 236, 246, ${bubble.opacity.toFixed(3)})`);
-      gradient.addColorStop(1, "rgba(151, 236, 246, 0)");
+      shellGradient.addColorStop(0, `rgba(255, 255, 255, ${Math.min(0.22, bubble.opacity + 0.06).toFixed(3)})`);
+      shellGradient.addColorStop(0.42, `rgba(151, 236, 246, ${(bubble.opacity * 0.22).toFixed(3)})`);
+      shellGradient.addColorStop(1, "rgba(151, 236, 246, 0)");
 
       ctx.save();
       ctx.translate(x, y);
@@ -659,19 +851,37 @@
 
       ctx.beginPath();
       ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, Math.PI * 2);
-      ctx.fillStyle = gradient;
+      ctx.fillStyle = shellGradient;
       ctx.fill();
 
-      ctx.lineWidth = Math.max(0.8, bubble.radius * 0.055);
-      ctx.strokeStyle = `rgba(234, 252, 255, ${Math.min(0.38, bubble.opacity + 0.08).toFixed(3)})`;
+      ctx.lineWidth = Math.max(1, bubble.radius * 0.065);
+      ctx.strokeStyle = `rgba(234, 252, 255, ${Math.min(0.48, bubble.opacity + 0.10).toFixed(3)})`;
       ctx.stroke();
 
       ctx.beginPath();
       ctx.ellipse(-radiusX * 0.30, -radiusY * 0.34, radiusX * 0.18, radiusY * 0.10, -0.52, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.42, bubble.opacity + 0.16).toFixed(3)})`;
+      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.48, bubble.opacity + 0.18).toFixed(3)})`;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.ellipse(radiusX * 0.28, radiusY * 0.32, radiusX * 0.20, radiusY * 0.12, -0.34, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(110, 233, 245, 0.055)";
       ctx.fill();
 
       ctx.restore();
+    }
+
+    function getBubbleMetrics(bubble, now) {
+      const wobble = Math.sin(now * bubble.wobbleSpeed + bubble.wobbleOffset);
+      const pulse = Math.cos(now * bubble.wobbleSpeed * 1.8 + bubble.wobbleOffset);
+      const x = bubble.originX + wobble * bubble.drift;
+      const y = bubble.y;
+      const radiusX = bubble.radius * (0.88 + pulse * 0.055);
+      const radiusY = bubble.radius * bubble.heightScale * (1.04 - pulse * 0.04);
+
+      bubble.x = x;
+
+      return { x, y, radiusX, radiusY };
     }
 
     function drawFrame(now, drawOnce = false) {
@@ -680,30 +890,21 @@
       }
 
       ctx.clearRect(0, 0, viewportWidth, viewportHeight);
+      drawBackgroundToVisibleCanvas();
 
       for (const bubble of bubbles) {
         if (!drawOnce && !reducedMotion) {
           bubble.y -= bubble.lift;
           bubble.rotation += bubble.rotationSpeed;
 
-          if (bubble.y < -bubble.radius * 2.4) {
-            const replacement = makeBubble(false);
-            bubble.originX = replacement.originX;
-            bubble.x = replacement.x;
-            bubble.y = replacement.y;
-            bubble.radius = replacement.radius;
-            bubble.heightScale = replacement.heightScale;
-            bubble.lift = replacement.lift;
-            bubble.drift = replacement.drift;
-            bubble.wobbleSpeed = replacement.wobbleSpeed;
-            bubble.wobbleOffset = replacement.wobbleOffset;
-            bubble.rotation = replacement.rotation;
-            bubble.rotationSpeed = replacement.rotationSpeed;
-            bubble.opacity = replacement.opacity;
+          if (bubble.y < -bubble.radius * 2.6) {
+            replaceBubble(bubble);
           }
         }
 
-        drawBubble(bubble, now);
+        const metrics = getBubbleMetrics(bubble, now);
+        drawLensBackground(bubble, metrics);
+        drawBubbleShell(bubble, metrics);
       }
 
       if (!drawOnce && !reducedMotion) {
@@ -713,6 +914,24 @@
 
     pearlTideBubbleResizeListener = () => resizeCanvas();
     window.addEventListener("resize", pearlTideBubbleResizeListener, { passive: true });
+
+    backgroundImage.addEventListener("load", () => {
+      backgroundReady = true;
+      coverRect = calculateCoverRect(
+        backgroundImage.naturalWidth || backgroundImage.width,
+        backgroundImage.naturalHeight || backgroundImage.height,
+        viewportWidth,
+        viewportHeight
+      );
+      redrawBackgroundBuffer();
+      drawFrame(performance.now(), true);
+    }, { once: true });
+
+    backgroundImage.addEventListener("error", () => {
+      backgroundReady = false;
+      redrawBackgroundBuffer();
+      drawFrame(performance.now(), true);
+    }, { once: true });
 
     resizeCanvas();
 
@@ -876,3 +1095,4 @@
     installCandyWatcher();
   }
 })();
+
