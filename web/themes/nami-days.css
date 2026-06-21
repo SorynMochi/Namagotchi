@@ -1606,15 +1606,7 @@ body[data-theme="nami-days"] #section-home .care-button:disabled {
     linear-gradient(180deg, rgba(255, 238, 246, 0.82), rgba(255, 214, 232, 0.64)) !important;
 }
 
-/* Wake / current urgent action still gets a stronger pink emphasis. */
-body[data-theme="nami-days"] #section-home #sleep-toggle-button:not(:disabled) {
-  border-color: rgba(255, 42, 163, 0.46) !important;
-  background:
-    linear-gradient(180deg, rgba(255, 132, 194, 0.96), rgba(255, 102, 179, 0.88)) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.58),
-    0 9px 18px rgba(255, 42, 163, 0.16) !important;
-}
+/* Sleep/Wake follows the same state colors as every other care button. */
 
 /* Nami message log card under the buttons: make it feel like a soft activity journal. */
 body[data-theme="nami-days"] #section-home .nami-message-log-card {
