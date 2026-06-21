@@ -5,6 +5,8 @@
   let activeLayer = null;
   let petalTimer = null;
   let lanternTimer = null;
+  let pearlTideBubbleAnimationFrame = 0;
+  let pearlTideBubbleResizeListener = null;
 
   function randomBetween(min, max) {
     return Math.random() * (max - min) + min;
@@ -29,6 +31,10 @@
     return themeKey === "rainy-mood";
   }
 
+  function isPearlTideTheme(themeKey) {
+    return themeKey === "pearl-tide";
+  }
+
   function clearThemeEffects() {
     if (petalTimer) {
       window.clearInterval(petalTimer);
@@ -45,8 +51,8 @@
       activeLayer = null;
     }
 
-    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood");
-    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood");
+    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide");
+    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide");
     document.querySelectorAll(".tokyo-night-rail-signs, .tokyo-night-left-signs").forEach((node) => node.remove());
   }
 
@@ -71,6 +77,10 @@
 
     if (isRainyMoodTheme(themeKey)) {
       startRainyMoodThemeEffect();
+    }
+
+    if (isPearlTideTheme(themeKey)) {
+      startPearlTideThemeEffect();
     }
   }
 
@@ -547,6 +557,172 @@
     document.body.append(layer);
     activeLayer = layer;
   }
+
+  /* Pearl Tide bubble canvas effect START */
+  function startPearlTideThemeEffect() {
+    document.documentElement.classList.add("theme-effect-pearl-tide");
+    document.body?.classList.add("theme-effect-pearl-tide");
+
+    const layer = document.createElement("div");
+    layer.className = "theme-effects-layer theme-effects-pearl-tide";
+    layer.setAttribute("aria-hidden", "true");
+
+    const canvas = document.createElement("canvas");
+    canvas.className = "pearl-tide-bubble-canvas";
+    layer.append(canvas);
+
+    document.body.append(layer);
+    activeLayer = layer;
+
+    const ctx = canvas.getContext("2d", { alpha: true });
+
+    if (!ctx) {
+      return;
+    }
+
+    const reducedMotion = reduceMotionQuery.matches;
+    const bubbles = [];
+    let viewportWidth = 0;
+    let viewportHeight = 0;
+    let pixelRatio = 1;
+
+    function makeBubble(isInitial) {
+      const radiusScale = Math.max(0.74, Math.min(1.24, viewportWidth / 1500));
+      const radius = randomBetween(5, 25) * radiusScale;
+      const originX = randomBetween(-radius, viewportWidth + radius);
+
+      return {
+        originX,
+        x: originX,
+        y: isInitial ? randomBetween(-radius, viewportHeight + radius) : viewportHeight + radius + randomBetween(0, viewportHeight * 0.18),
+        radius,
+        heightScale: randomBetween(0.70, 1.02),
+        lift: randomBetween(0.18, 0.82) * radiusScale,
+        drift: randomBetween(8, 34) * radiusScale,
+        wobbleSpeed: randomBetween(0.0008, 0.0024),
+        wobbleOffset: randomBetween(0, Math.PI * 2),
+        rotation: randomBetween(0, Math.PI * 2),
+        rotationSpeed: randomBetween(-0.004, 0.004),
+        opacity: randomBetween(0.20, 0.54)
+      };
+    }
+
+    function resizeCanvas() {
+      viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
+      viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.round(viewportWidth * pixelRatio);
+      canvas.height = Math.round(viewportHeight * pixelRatio);
+      canvas.style.width = `${viewportWidth}px`;
+      canvas.style.height = `${viewportHeight}px`;
+
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+      bubbles.length = 0;
+
+      const targetCount = reducedMotion
+        ? 34
+        : Math.max(52, Math.min(104, Math.round(viewportWidth / 18)));
+
+      for (let index = 0; index < targetCount; index += 1) {
+        bubbles.push(makeBubble(true));
+      }
+
+      drawFrame(performance.now(), true);
+    }
+
+    function drawBubble(bubble, now) {
+      const wobble = Math.sin(now * bubble.wobbleSpeed + bubble.wobbleOffset);
+      const pulse = Math.cos(now * bubble.wobbleSpeed * 1.8 + bubble.wobbleOffset);
+      const x = bubble.originX + wobble * bubble.drift;
+      const y = bubble.y;
+      const radiusX = bubble.radius * (0.86 + pulse * 0.055);
+      const radiusY = bubble.radius * bubble.heightScale * (1.02 - pulse * 0.04);
+
+      const gradient = ctx.createRadialGradient(
+        x - radiusX * 0.26,
+        y - radiusY * 0.34,
+        0,
+        x,
+        y,
+        Math.max(radiusX, radiusY) * 1.18
+      );
+
+      gradient.addColorStop(0, `rgba(245, 254, 255, ${Math.min(0.56, bubble.opacity + 0.18).toFixed(3)})`);
+      gradient.addColorStop(0.42, `rgba(151, 236, 246, ${bubble.opacity.toFixed(3)})`);
+      gradient.addColorStop(1, "rgba(151, 236, 246, 0)");
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(bubble.rotation);
+
+      ctx.beginPath();
+      ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.lineWidth = Math.max(0.8, bubble.radius * 0.055);
+      ctx.strokeStyle = `rgba(234, 252, 255, ${Math.min(0.38, bubble.opacity + 0.08).toFixed(3)})`;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(-radiusX * 0.30, -radiusY * 0.34, radiusX * 0.18, radiusY * 0.10, -0.52, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.42, bubble.opacity + 0.16).toFixed(3)})`;
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawFrame(now, drawOnce = false) {
+      if (!isPearlTideTheme(activeThemeKey) || !canvas.isConnected) {
+        return;
+      }
+
+      ctx.clearRect(0, 0, viewportWidth, viewportHeight);
+
+      for (const bubble of bubbles) {
+        if (!drawOnce && !reducedMotion) {
+          bubble.y -= bubble.lift;
+          bubble.rotation += bubble.rotationSpeed;
+
+          if (bubble.y < -bubble.radius * 2.4) {
+            const replacement = makeBubble(false);
+            bubble.originX = replacement.originX;
+            bubble.x = replacement.x;
+            bubble.y = replacement.y;
+            bubble.radius = replacement.radius;
+            bubble.heightScale = replacement.heightScale;
+            bubble.lift = replacement.lift;
+            bubble.drift = replacement.drift;
+            bubble.wobbleSpeed = replacement.wobbleSpeed;
+            bubble.wobbleOffset = replacement.wobbleOffset;
+            bubble.rotation = replacement.rotation;
+            bubble.rotationSpeed = replacement.rotationSpeed;
+            bubble.opacity = replacement.opacity;
+          }
+        }
+
+        drawBubble(bubble, now);
+      }
+
+      if (!drawOnce && !reducedMotion) {
+        pearlTideBubbleAnimationFrame = window.requestAnimationFrame(drawFrame);
+      }
+    }
+
+    pearlTideBubbleResizeListener = () => resizeCanvas();
+    window.addEventListener("resize", pearlTideBubbleResizeListener, { passive: true });
+
+    resizeCanvas();
+
+    if (!reducedMotion) {
+      pearlTideBubbleAnimationFrame = window.requestAnimationFrame(drawFrame);
+    } else {
+      layer.classList.add("theme-effects-reduced-motion");
+    }
+  }
+  /* Pearl Tide bubble canvas effect END */
 
   function startRainyMoodThemeEffect() {
     document.documentElement.classList.add("theme-effect-rainy-mood");
