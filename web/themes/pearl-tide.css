@@ -616,4 +616,277 @@ body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-body {
 }
 /* Pearl Tide responsive/background fallback END */
 
+/* Pearl Tide glass transparency pass START */
+/* Late Pearl Tide-only pass: keep UI surface backgrounds at or below 0.30 alpha. */
+
+body[data-theme="pearl-tide"] {
+  --pearl-glass: rgba(10, 43, 66, 0.26);
+  --pearl-glass-strong: rgba(6, 29, 51, 0.30);
+  --pearl-glass-soft: rgba(18, 70, 94, 0.22);
+
+  --panel: rgba(8, 35, 58, 0.26);
+  --panel-soft: rgba(13, 56, 82, 0.22);
+  --panel-deep: rgba(4, 22, 42, 0.30);
+
+  --theme-panel-overlay: rgba(255, 255, 255, 0.025);
+  --theme-card-bg-overlay: rgba(255, 255, 255, 0.025);
+  --theme-card-bg-deep: rgba(6, 29, 51, 0.22);
+  --theme-card-bg-deep-solid: rgba(6, 29, 51, 0.26);
+  --theme-card-inner-highlight: rgba(255, 255, 255, 0.035);
+
+  --theme-work-active-bg: rgba(9, 47, 70, 0.26);
+  --theme-zone-active-bg: rgba(110, 233, 245, 0.10);
+
+  --theme-progress-track-bg: rgba(4, 22, 42, 0.26);
+  --theme-pill-bg: rgba(6, 29, 51, 0.22);
+
+  --theme-chat-form-bg: rgba(4, 22, 42, 0.24);
+  --theme-chat-input-bg: rgba(2, 14, 28, 0.24);
+
+  --theme-nami-message-bg: rgba(6, 29, 51, 0.24);
+  --theme-wardrobe-row-bg: rgba(4, 22, 42, 0.22);
+  --theme-equipment-card-bg-strong: rgba(5, 24, 45, 0.26);
+  --theme-equipment-empty-bg: rgba(4, 22, 42, 0.20);
+
+  --dropdown-bg:
+    linear-gradient(135deg, rgba(10, 43, 66, 0.30), rgba(4, 22, 42, 0.28));
+  --dropdown-bg-hover:
+    linear-gradient(135deg, rgba(13, 56, 82, 0.30), rgba(6, 29, 51, 0.30));
+  --dropdown-option-bg: rgba(6, 29, 51, 0.30);
+
+  --top-player-tick-bg:
+    linear-gradient(180deg, rgba(18, 70, 94, 0.30), rgba(4, 22, 42, 0.26));
+}
+
+body[data-theme="pearl-tide"] .panel,
+body[data-theme="pearl-tide"] .main-panel,
+body[data-theme="pearl-tide"] .chat-panel,
+body[data-theme="pearl-tide"] .top-stats-panel,
+body[data-theme="pearl-tide"] .nav-panel,
+body[data-theme="pearl-tide"] .right-buffs-panel,
+body[data-theme="pearl-tide"] .nami-card,
+body[data-theme="pearl-tide"] .care-card,
+body[data-theme="pearl-tide"] .zone-list,
+body[data-theme="pearl-tide"] .combat-panel,
+body[data-theme="pearl-tide"] .task-card,
+body[data-theme="pearl-tide"] .placeholder-copy,
+body[data-theme="pearl-tide"] .settings-card,
+body[data-theme="pearl-tide"] .wardrobe-panel,
+body[data-theme="pearl-tide"] .equipment-card,
+body[data-theme="pearl-tide"] .inventory-item-card,
+body[data-theme="pearl-tide"] .right-buff-group {
+  border-color: rgba(126, 233, 246, 0.36) !important;
+  background:
+    linear-gradient(180deg, rgba(10, 43, 66, 0.28), rgba(4, 22, 42, 0.24)) !important;
+  color: var(--text) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.12),
+    0 18px 46px rgba(0, 10, 24, 0.34),
+    0 0 26px rgba(110, 233, 245, 0.08) !important;
+  backdrop-filter: blur(10px) saturate(1.18);
+  -webkit-backdrop-filter: blur(10px) saturate(1.18);
+}
+
+body[data-theme="pearl-tide"] .panel::before {
+  background:
+    linear-gradient(180deg, rgba(234, 252, 255, 0.045), transparent 48%, rgba(110, 233, 245, 0.025)) !important;
+  opacity: 1 !important;
+}
+
+body[data-theme="pearl-tide"] .panel-title,
+body[data-theme="pearl-tide"] .collapse-toggle {
+  background:
+    linear-gradient(180deg, rgba(18, 70, 94, 0.30), rgba(5, 24, 45, 0.26)) !important;
+  border-bottom-color: rgba(126, 233, 246, 0.32) !important;
+}
+
+body[data-theme="pearl-tide"] .top-stats-compact,
+body[data-theme="pearl-tide"] .stat-group.compact,
+body[data-theme="pearl-tide"] .menu-status-card,
+body[data-theme="pearl-tide"] .buff-card,
+body[data-theme="pearl-tide"] .stat-lines,
+body[data-theme="pearl-tide"] .compact-grid-lines,
+body[data-theme="pearl-tide"] .nami-message,
+body[data-theme="pearl-tide"] .chat-form,
+body[data-theme="pearl-tide"] .chat-log,
+body[data-theme="pearl-tide"] .equipment-slot,
+body[data-theme="pearl-tide"] .wardrobe-bonus-card,
+body[data-theme="pearl-tide"] .wardrobe-bonus-row,
+body[data-theme="pearl-tide"] .settings-field,
+body[data-theme="pearl-tide"] .nami-progression-card,
+body[data-theme="pearl-tide"] .nami-need-card,
+body[data-theme="pearl-tide"] .care-status-compact,
+body[data-theme="pearl-tide"] .nami-care-summary,
+body[data-theme="pearl-tide"] .right-buff-list,
+body[data-theme="pearl-tide"] .right-buff-group {
+  border-color: rgba(126, 233, 246, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(6, 29, 51, 0.24), rgba(4, 22, 42, 0.18)) !important;
+  color: var(--text-soft) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.08),
+    0 8px 22px rgba(0, 10, 24, 0.14) !important;
+}
+
+body[data-theme="pearl-tide"] .main-nav.menu-grid .nav-item {
+  border-color: rgba(126, 233, 246, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(11, 58, 84, 0.26), rgba(5, 24, 45, 0.20)) !important;
+  color: #e4f8fc !important;
+}
+
+body[data-theme="pearl-tide"] .main-nav.menu-grid .nav-item:hover {
+  border-color: rgba(143, 244, 207, 0.52) !important;
+  background:
+    linear-gradient(180deg, rgba(13, 70, 96, 0.30), rgba(6, 29, 51, 0.24)) !important;
+}
+
+body[data-theme="pearl-tide"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(255, 143, 184, 0.66) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 143, 184, 0.30), rgba(110, 233, 245, 0.22), rgba(143, 244, 207, 0.16)) !important;
+}
+
+body[data-theme="pearl-tide"] .nami-placeholder,
+body[data-theme="pearl-tide"] .nami-room-stage {
+  border-color: rgba(143, 244, 207, 0.38) !important;
+  background:
+    linear-gradient(180deg, rgba(6, 29, 51, 0.20), rgba(4, 22, 42, 0.18)) !important;
+}
+
+body[data-theme="pearl-tide"] .nami-message,
+body[data-theme="pearl-tide"] .nami-message-log-card,
+body[data-theme="pearl-tide"] #nami-message-log,
+body[data-theme="pearl-tide"] .nami-message-log {
+  border-color: rgba(126, 233, 246, 0.26) !important;
+  background:
+    linear-gradient(180deg, rgba(6, 29, 51, 0.24), rgba(4, 22, 42, 0.18)) !important;
+}
+
+body[data-theme="pearl-tide"] .meter-track,
+body[data-theme="pearl-tide"] .stat-bar,
+body[data-theme="pearl-tide"] .progress-track {
+  background:
+    linear-gradient(180deg, rgba(2, 14, 28, 0.26), rgba(6, 29, 51, 0.18)) !important;
+  border-color: rgba(190, 245, 255, 0.22) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-tabs,
+body[data-theme="pearl-tide"] .chat-tab {
+  background:
+    linear-gradient(180deg, rgba(8, 35, 58, 0.22), rgba(4, 22, 42, 0.18)) !important;
+  border-color: rgba(126, 233, 246, 0.22) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-tab.active {
+  background:
+    linear-gradient(180deg, rgba(255, 143, 184, 0.30), rgba(200, 183, 255, 0.18)) !important;
+  color: #ffffff !important;
+}
+
+body[data-theme="pearl-tide"] .chat-input,
+body[data-theme="pearl-tide"] input,
+body[data-theme="pearl-tide"] select,
+body[data-theme="pearl-tide"] textarea {
+  background: rgba(2, 14, 28, 0.24) !important;
+  border-color: rgba(126, 233, 246, 0.30) !important;
+  color: var(--text) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form button,
+body[data-theme="pearl-tide"] .secondary-button,
+body[data-theme="pearl-tide"] #logout-button,
+body[data-theme="pearl-tide"] #dev-spawn-wardrobe-item-button,
+body[data-theme="pearl-tide"] .wardrobe-item-actions button,
+body[data-theme="pearl-tide"] .wardrobe-item-modal-close,
+body[data-theme="pearl-tide"] .inventory-item-card button,
+body[data-theme="pearl-tide"] .equipment-card button,
+body[data-theme="pearl-tide"] .task-card button,
+body[data-theme="pearl-tide"] .top-player-name-button {
+  border-color: rgba(126, 233, 246, 0.38) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 70, 94, 0.30), rgba(5, 24, 45, 0.24)) !important;
+  color: #f3fbff !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button {
+  text-shadow: 0 1px 2px rgba(0, 10, 24, 0.78) !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) {
+  background:
+    linear-gradient(180deg, rgba(143, 244, 207, 0.30), rgba(110, 233, 245, 0.18)) !important;
+  border-color: rgba(143, 244, 207, 0.58) !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="pearl-tide"] #section-home .care-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) * {
+  color: #f3fbff !important;
+  -webkit-text-fill-color: #f3fbff !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-blocked,
+body[data-theme="pearl-tide"] #section-home .care-button:disabled:not(.care-button-active):not(.care-button-queued) {
+  background:
+    linear-gradient(180deg, rgba(45, 68, 86, 0.26), rgba(24, 42, 60, 0.20)) !important;
+  border-color: rgba(158, 188, 204, 0.28) !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-queued {
+  background:
+    linear-gradient(180deg, rgba(200, 183, 255, 0.30), rgba(110, 233, 245, 0.14)) !important;
+  border-color: rgba(200, 183, 255, 0.58) !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-queued,
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-queued * {
+  color: #f6f1ff !important;
+  -webkit-text-fill-color: #f6f1ff !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-active,
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-active:disabled {
+  background:
+    linear-gradient(180deg, rgba(255, 143, 184, 0.30), rgba(143, 244, 207, 0.20)) !important;
+  border-color: rgba(255, 143, 184, 0.66) !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-active,
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-active * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button .care-button-progress-fill {
+  background:
+    linear-gradient(90deg, rgba(110, 233, 245, 0.30), rgba(143, 244, 207, 0.24), rgba(255, 143, 184, 0.22)) !important;
+}
+
+body[data-theme="pearl-tide"] .emoji-picker {
+  background:
+    linear-gradient(180deg, rgba(6, 29, 51, 0.30), rgba(3, 16, 31, 0.28)) !important;
+  border-color: rgba(126, 233, 246, 0.34) !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  background:
+    linear-gradient(180deg, rgba(7, 31, 53, 0.30), rgba(4, 20, 38, 0.28)) !important;
+  border-color: rgba(126, 233, 246, 0.40) !important;
+  backdrop-filter: blur(10px) saturate(1.16) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(1.16) !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-header,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  background:
+    linear-gradient(180deg, rgba(10, 43, 66, 0.28), rgba(5, 24, 45, 0.24)) !important;
+  border-color: rgba(126, 233, 246, 0.26) !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgba(5, 24, 45, 0.22) !important;
+}
+
+/* Pearl Tide glass transparency pass END */
+
 /* Pearl Tide theme END */
