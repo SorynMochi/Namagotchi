@@ -209,10 +209,6 @@ body[data-theme="pearl-tide"] {
   --dropdown-option-text: #f3fbff;
 
   background:
-    radial-gradient(circle at 16% 8%, rgba(143, 244, 207, 0.20), transparent 24rem),
-    radial-gradient(circle at 86% 14%, rgba(255, 143, 184, 0.18), transparent 24rem),
-    radial-gradient(circle at 50% 96%, rgba(200, 183, 255, 0.16), transparent 30rem),
-    linear-gradient(180deg, rgba(5, 24, 48, 0.68), rgba(4, 22, 42, 0.80)),
     url("/images/Nami_Splash.webp") center center / cover no-repeat fixed !important;
   color: var(--text);
 }
