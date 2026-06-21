@@ -133,6 +133,7 @@ const CHAT_OFFLINE_WHISPERS_KEY = "namigotchi_offline_whispers_v1";
 const THEME_STORAGE_KEY = "namigotchi_theme_v1";
 const THEME_FILES = {
   "nami-days": "/themes/nami-days.css",
+  "pearl-tide": "/themes/pearl-tide.css",
   "nami-default": "/themes/nami-default.css",
   midnight: "/themes/midnight.css",
   strawberry: "/themes/strawberry.css",
@@ -227,6 +228,10 @@ function setTheme(themeKey) {
 
   if (themeStylesheet) {
     themeStylesheet.href = THEME_FILES[safeThemeKey];
+  }
+
+  if (document.body) {
+    document.body.dataset.theme = safeThemeKey;
   }
 
   if (themeSelect) {

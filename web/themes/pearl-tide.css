@@ -1,0 +1,623 @@
+/* Pearl Tide theme START */
+/* Cozy dark underwater UI over the bright Nami Splash reef background. */
+
+:root {
+  color-scheme: dark;
+
+  --pearl-abyss: #06182c;
+  --pearl-deep: #08243a;
+  --pearl-tide: #0b3a54;
+  --pearl-glass: rgba(10, 43, 66, 0.88);
+  --pearl-glass-strong: rgba(6, 29, 51, 0.94);
+  --pearl-glass-soft: rgba(18, 70, 94, 0.72);
+
+  --pearl-foam: #eafcff;
+  --pearl-soft: #c8e8f0;
+  --pearl-muted: #9ebccc;
+
+  --reef-aqua: #6ee9f5;
+  --reef-seafoam: #8ff4cf;
+  --reef-coral: #ff8fb8;
+  --reef-pearl: #ffe8ad;
+  --reef-lavender: #c8b7ff;
+
+  --bg-0: #06182c;
+  --bg-1: #08243a;
+  --bg-2: #0b3a54;
+
+  --panel: rgba(8, 35, 58, 0.88);
+  --panel-soft: rgba(13, 56, 82, 0.78);
+  --panel-deep: rgba(4, 22, 42, 0.94);
+
+  --line: rgba(126, 233, 246, 0.28);
+  --line-bright: rgba(190, 245, 255, 0.54);
+
+  --text: #f3fbff;
+  --text-soft: #c8e8f0;
+  --muted: #9ebccc;
+
+  --cyan: #6ee9f5;
+  --cyan-deep: #34bfd6;
+  --cyan-soft: #d7fbff;
+  --pink: #ff8fb8;
+  --pink-soft: #ffd7e8;
+  --violet: #c8b7ff;
+  --violet-soft: #eee8ff;
+  --green: #8ff4cf;
+  --yellow: #ffe8ad;
+  --orange: #ffbf8f;
+  --danger: #ff7d9f;
+  --cream: #fff5d8;
+
+  --rose-shadow: rgba(255, 143, 184, 0.16);
+  --blue-shadow: rgba(110, 233, 245, 0.18);
+
+  --theme-page-glow-pink: rgba(255, 143, 184, 0.16);
+  --theme-page-glow-cyan: rgba(110, 233, 245, 0.22);
+  --theme-page-glow-violet: rgba(200, 183, 255, 0.14);
+  --theme-page-gradient-top: #08243a;
+  --theme-page-gradient-bottom: #04162a;
+
+  --theme-panel-overlay: rgba(255, 255, 255, 0.055);
+  --theme-panel-border-sheen-pink: rgba(255, 143, 184, 0.22);
+  --theme-panel-border-sheen-cyan: rgba(126, 233, 246, 0.32);
+  --theme-panel-title-bg: rgba(110, 233, 245, 0.09);
+
+  --theme-card-border-cyan: rgba(126, 233, 246, 0.22);
+  --theme-card-bg-overlay: rgba(255, 255, 255, 0.055);
+  --theme-card-bg-deep: rgba(6, 29, 51, 0.72);
+  --theme-card-bg-deep-solid: rgba(6, 29, 51, 0.86);
+  --theme-card-inner-highlight: rgba(255, 255, 255, 0.075);
+
+  --theme-work-active-border: rgba(143, 244, 207, 0.44);
+  --theme-work-active-glow: rgba(110, 233, 245, 0.18);
+  --theme-work-active-bg: rgba(9, 47, 70, 0.82);
+  --theme-work-active-pill-bg: linear-gradient(90deg, #8ff4cf, #6ee9f5, #c8b7ff);
+  --theme-work-active-pill-text: #062131;
+  --theme-work-active-button-bg: linear-gradient(180deg, #8ff4cf, #34bfd6);
+  --theme-work-active-button-border: rgba(234, 252, 255, 0.48);
+  --theme-work-active-button-text: #062131;
+  --theme-work-active-button-shadow: 0 10px 24px rgba(110, 233, 245, 0.18);
+
+  --shadow:
+    0 18px 44px rgba(0, 10, 24, 0.42),
+    0 0 30px rgba(110, 233, 245, 0.09),
+    0 0 28px rgba(255, 143, 184, 0.065);
+
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.11);
+
+  --theme-focus-outline: #8ff4cf;
+
+  --theme-progress-track-border: rgba(190, 245, 255, 0.14);
+  --theme-progress-track-bg: rgba(4, 22, 42, 0.68);
+  --theme-progress-fill-shadow: 0 0 16px rgba(110, 233, 245, 0.22);
+  --theme-progress-xp-fill: linear-gradient(90deg, #8ff4cf, #6ee9f5, #c8b7ff);
+  --theme-progress-stat-fill: linear-gradient(90deg, #6ee9f5, #8ff4cf, #ff8fb8);
+  --theme-progress-chat-handle-fill: linear-gradient(90deg, #6ee9f5, #ff8fb8);
+
+  --theme-button-primary-border: rgba(190, 245, 255, 0.46);
+  --theme-button-primary-bg: linear-gradient(180deg, #8ff4cf, #34bfd6);
+  --theme-button-primary-text: #062131;
+  --theme-button-primary-shadow: 0 8px 22px rgba(110, 233, 245, 0.18);
+
+  --theme-button-secondary-border: rgba(126, 233, 246, 0.28);
+  --theme-button-secondary-bg:
+    radial-gradient(circle at 18% 0%, rgba(143, 244, 207, 0.16), transparent 4.8rem),
+    linear-gradient(180deg, rgba(18, 70, 94, 0.86), rgba(6, 29, 51, 0.90));
+  --theme-button-secondary-text: #eafcff;
+  --theme-button-secondary-shadow: 0 8px 18px rgba(0, 10, 24, 0.22);
+
+  --theme-care-button-border: rgba(126, 233, 246, 0.30);
+  --theme-care-button-bg: linear-gradient(180deg, rgba(18, 70, 94, 0.86), rgba(6, 29, 51, 0.92));
+  --theme-care-button-text: #eafcff;
+  --theme-care-button-shadow: 0 8px 18px rgba(0, 10, 24, 0.22);
+
+  --theme-pill-border: rgba(126, 233, 246, 0.24);
+  --theme-pill-bg: rgba(6, 29, 51, 0.62);
+  --theme-pill-text: #c8e8f0;
+  --theme-pill-active-bg: linear-gradient(90deg, #8ff4cf, #6ee9f5, #ff8fb8);
+  --theme-pill-active-text: #062131;
+
+  --theme-nav-hover-border: rgba(143, 244, 207, 0.46);
+  --theme-nav-hover-bg: rgba(110, 233, 245, 0.12);
+  --theme-nav-hover-text: #eafcff;
+  --theme-nav-active-border: rgba(255, 143, 184, 0.66);
+  --theme-nav-active-bg:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.18), transparent 3.8rem),
+    linear-gradient(135deg, rgba(255, 143, 184, 0.34), rgba(110, 233, 245, 0.18), rgba(143, 244, 207, 0.14));
+  --theme-nav-active-text: #ffffff;
+  --theme-nav-active-shadow: 0 0 20px rgba(255, 143, 184, 0.18), 0 0 18px rgba(110, 233, 245, 0.12);
+
+  --theme-chat-text: #d8f5fb;
+  --theme-chat-name: #8ff4cf;
+  --theme-chat-form-bg: rgba(4, 22, 42, 0.74);
+  --theme-chat-input-border: rgba(126, 233, 246, 0.25);
+  --theme-chat-input-bg: rgba(2, 14, 28, 0.74);
+  --theme-chat-input-placeholder: rgba(200, 232, 240, 0.56);
+  --theme-chat-submit-bg: #8ff4cf;
+  --theme-chat-submit-text: #062131;
+
+  --theme-side-link-text: #c8e8f0;
+  --theme-side-link-hover-text: #8ff4cf;
+  --theme-buff-divider: rgba(126, 233, 246, 0.14);
+
+  --theme-scrollbar-color: rgba(110, 233, 245, 0.82);
+  --theme-scrollbar-color-main: rgba(143, 244, 207, 0.76);
+  --theme-scrollbar-track: rgba(4, 22, 42, 0.52);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #6ee9f5, #8ff4cf, #ff8fb8);
+
+  --theme-nami-placeholder-glow-cyan: rgba(110, 233, 245, 0.20);
+  --theme-nami-slot-glow-pink: rgba(255, 143, 184, 0.16);
+  --theme-nami-slot-glow-cyan: rgba(110, 233, 245, 0.18);
+  --theme-nami-room-stage-bg: #08243a;
+  --theme-nami-message-bg: rgba(6, 29, 51, 0.76);
+  --theme-nami-message-text: #eafcff;
+
+  --theme-zone-active-bg: rgba(110, 233, 245, 0.10);
+  --theme-zone-active-shadow: 0 0 24px rgba(110, 233, 245, 0.10);
+
+  --theme-meter-label-text: #f3fbff;
+  --theme-meter-label-shadow: 0 1px 2px rgba(0, 10, 24, 0.72), 0 0 8px rgba(0, 10, 24, 0.44);
+  --theme-tick-fill: linear-gradient(90deg, #8ff4cf, #6ee9f5, #c8b7ff, #ff8fb8);
+  --theme-hp-fill: linear-gradient(90deg, #8ff4cf, #ffe8ad, #ff8fb8);
+
+  --theme-wardrobe-row-border: rgba(126, 233, 246, 0.18);
+  --theme-wardrobe-row-bg: rgba(4, 22, 42, 0.52);
+  --theme-equipment-card-border-strong: rgba(126, 233, 246, 0.25);
+  --theme-equipment-card-bg-strong: rgba(5, 24, 45, 0.78);
+  --theme-equipment-card-outline: rgba(255, 255, 255, 0.045);
+  --theme-equipment-empty-border: rgba(158, 188, 204, 0.18);
+  --theme-equipment-empty-bg-glow: rgba(110, 233, 245, 0.07);
+  --theme-equipment-empty-bg: rgba(4, 22, 42, 0.50);
+  --theme-equipment-empty-shadow: rgba(110, 233, 245, 0.05);
+  --theme-equipment-empty-shadow-soft: rgba(255, 255, 255, 0.035);
+  --theme-gear-pill-border: rgba(190, 245, 255, 0.18);
+  --theme-gear-empty-name-text: rgba(200, 232, 240, 0.70);
+}
+
+/* Pearl Tide shell START */
+body[data-theme="pearl-tide"] {
+  --top-player-tick-bg:
+    radial-gradient(circle at 18% 0%, rgba(143, 244, 207, 0.18), transparent 5rem),
+    linear-gradient(180deg, rgba(18, 70, 94, 0.86), rgba(4, 22, 42, 0.88));
+  --top-player-tick-fill: linear-gradient(90deg, #8ff4cf, #6ee9f5, #ff8fb8);
+  --top-player-tick-border: rgba(126, 233, 246, 0.42);
+  --top-player-tick-text: #f3fbff;
+  --top-player-tick-shadow: 0 10px 22px rgba(0, 10, 24, 0.30), inset 0 1px 0 rgba(234, 252, 255, 0.18);
+
+  --top-user-label-color: #b6d9e4;
+  --top-user-value-color: #f3fbff;
+
+  --dropdown-bg:
+    radial-gradient(circle at 14% 0%, rgba(143, 244, 207, 0.16), transparent 5rem),
+    radial-gradient(circle at 92% 16%, rgba(255, 143, 184, 0.14), transparent 5.4rem),
+    linear-gradient(135deg, rgba(10, 43, 66, 0.96), rgba(4, 22, 42, 0.96));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 14% 0%, rgba(143, 244, 207, 0.24), transparent 5.2rem),
+    radial-gradient(circle at 92% 16%, rgba(255, 143, 184, 0.20), transparent 5.6rem),
+    linear-gradient(135deg, rgba(13, 56, 82, 0.98), rgba(6, 29, 51, 0.98));
+  --dropdown-border: rgba(126, 233, 246, 0.32);
+  --dropdown-border-hover: rgba(143, 244, 207, 0.54);
+  --dropdown-text: #f3fbff;
+  --dropdown-label: #c8e8f0;
+  --dropdown-muted: #9ebccc;
+  --dropdown-arrow: #8ff4cf;
+  --dropdown-accent: #6ee9f5;
+  --dropdown-focus: rgba(143, 244, 207, 0.44);
+  --dropdown-shadow: 0 14px 30px rgba(0, 10, 24, 0.30), inset 0 1px 0 rgba(234, 252, 255, 0.14);
+  --dropdown-option-bg: #061d33;
+  --dropdown-option-text: #f3fbff;
+
+  background:
+    radial-gradient(circle at 16% 8%, rgba(143, 244, 207, 0.20), transparent 24rem),
+    radial-gradient(circle at 86% 14%, rgba(255, 143, 184, 0.18), transparent 24rem),
+    radial-gradient(circle at 50% 96%, rgba(200, 183, 255, 0.16), transparent 30rem),
+    linear-gradient(180deg, rgba(5, 24, 48, 0.68), rgba(4, 22, 42, 0.80)),
+    url("/images/Nami_Splash.webp") center center / cover no-repeat fixed !important;
+  color: var(--text);
+}
+
+body[data-theme="pearl-tide"]::before {
+  background:
+    radial-gradient(circle, rgba(234, 252, 255, 0.18) 0 1px, transparent 1.6px),
+    radial-gradient(circle, rgba(143, 244, 207, 0.12) 0 1px, transparent 1.7px),
+    linear-gradient(135deg, rgba(234, 252, 255, 0.055), transparent 44%, rgba(110, 233, 245, 0.045)) !important;
+  background-size: 128px 92px, 164px 118px, auto !important;
+  background-position: 0 0, 44px 18px, center !important;
+  opacity: 1 !important;
+}
+/* Pearl Tide shell END */
+
+/* Pearl Tide glass panels START */
+body[data-theme="pearl-tide"] .panel,
+body[data-theme="pearl-tide"] .main-panel,
+body[data-theme="pearl-tide"] .chat-panel,
+body[data-theme="pearl-tide"] .top-stats-panel,
+body[data-theme="pearl-tide"] .nav-panel,
+body[data-theme="pearl-tide"] .right-buffs-panel,
+body[data-theme="pearl-tide"] .nami-card,
+body[data-theme="pearl-tide"] .care-card,
+body[data-theme="pearl-tide"] .zone-list,
+body[data-theme="pearl-tide"] .combat-panel,
+body[data-theme="pearl-tide"] .task-card,
+body[data-theme="pearl-tide"] .placeholder-copy,
+body[data-theme="pearl-tide"] .settings-card,
+body[data-theme="pearl-tide"] .wardrobe-panel,
+body[data-theme="pearl-tide"] .equipment-card,
+body[data-theme="pearl-tide"] .inventory-item-card,
+body[data-theme="pearl-tide"] .right-buff-group {
+  border-color: rgba(126, 233, 246, 0.32) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(234, 252, 255, 0.12), transparent 13rem),
+    radial-gradient(circle at 100% 0%, rgba(255, 143, 184, 0.08), transparent 14rem),
+    linear-gradient(180deg, rgba(10, 43, 66, 0.88), rgba(4, 22, 42, 0.90)) !important;
+  color: var(--text) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.14),
+    0 18px 46px rgba(0, 10, 24, 0.36),
+    0 0 26px rgba(110, 233, 245, 0.08),
+    0 0 24px rgba(255, 143, 184, 0.045) !important;
+  backdrop-filter: blur(14px) saturate(1.08);
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+}
+
+body[data-theme="pearl-tide"] .panel-title,
+body[data-theme="pearl-tide"] .collapse-toggle {
+  color: #eafcff !important;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(143, 244, 207, 0.16), transparent 6rem),
+    linear-gradient(180deg, rgba(18, 70, 94, 0.94), rgba(5, 24, 45, 0.96)) !important;
+  border-bottom-color: rgba(126, 233, 246, 0.28) !important;
+  text-shadow: 0 1px 2px rgba(0, 10, 24, 0.74) !important;
+}
+
+body[data-theme="pearl-tide"] h1,
+body[data-theme="pearl-tide"] h2,
+body[data-theme="pearl-tide"] h3,
+body[data-theme="pearl-tide"] .eyebrow,
+body[data-theme="pearl-tide"] .top-stats-panel h2,
+body[data-theme="pearl-tide"] .stat-group.compact h2 {
+  color: #eafcff !important;
+  text-shadow: 0 1px 2px rgba(0, 10, 24, 0.72);
+}
+
+body[data-theme="pearl-tide"] .eyebrow {
+  color: #8ff4cf !important;
+  letter-spacing: 0.11em;
+}
+
+body[data-theme="pearl-tide"] .muted,
+body[data-theme="pearl-tide"] .placeholder-copy,
+body[data-theme="pearl-tide"] .equipment-slot-label,
+body[data-theme="pearl-tide"] .gear-level-tag,
+body[data-theme="pearl-tide"] .gear-tailoring-tag {
+  color: var(--muted) !important;
+}
+
+body[data-theme="pearl-tide"] strong,
+body[data-theme="pearl-tide"] b,
+body[data-theme="pearl-tide"] .gear-card-name,
+body[data-theme="pearl-tide"] .wardrobe-bonus-row strong {
+  color: var(--text) !important;
+}
+/* Pearl Tide glass panels END */
+
+/* Pearl Tide inner surfaces START */
+body[data-theme="pearl-tide"] .top-stats-compact,
+body[data-theme="pearl-tide"] .stat-group.compact,
+body[data-theme="pearl-tide"] .menu-status-card,
+body[data-theme="pearl-tide"] .buff-card,
+body[data-theme="pearl-tide"] .stat-lines,
+body[data-theme="pearl-tide"] .compact-grid-lines,
+body[data-theme="pearl-tide"] .nami-message,
+body[data-theme="pearl-tide"] .chat-form,
+body[data-theme="pearl-tide"] .chat-log,
+body[data-theme="pearl-tide"] .equipment-slot,
+body[data-theme="pearl-tide"] .wardrobe-bonus-card,
+body[data-theme="pearl-tide"] .wardrobe-bonus-row,
+body[data-theme="pearl-tide"] .settings-field,
+body[data-theme="pearl-tide"] .nami-progression-card,
+body[data-theme="pearl-tide"] .nami-need-card,
+body[data-theme="pearl-tide"] .care-status-compact,
+body[data-theme="pearl-tide"] .nami-care-summary {
+  border-color: rgba(126, 233, 246, 0.20) !important;
+  background:
+    linear-gradient(180deg, rgba(234, 252, 255, 0.055), rgba(234, 252, 255, 0.018)),
+    rgba(4, 22, 42, 0.58) !important;
+  color: var(--text-soft) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.08),
+    0 8px 22px rgba(0, 10, 24, 0.16) !important;
+}
+
+body[data-theme="pearl-tide"] .meter-track,
+body[data-theme="pearl-tide"] .stat-bar {
+  border-color: rgba(190, 245, 255, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(2, 14, 28, 0.72), rgba(6, 29, 51, 0.62)) !important;
+  box-shadow:
+    inset 0 1px 3px rgba(0, 10, 24, 0.42),
+    0 0 0 1px rgba(234, 252, 255, 0.035) !important;
+}
+
+body[data-theme="pearl-tide"] .meter-fill,
+body[data-theme="pearl-tide"] .stat-fill,
+body[data-theme="pearl-tide"] .tick-fill,
+body[data-theme="pearl-tide"] .xp-fill {
+  box-shadow: 0 0 14px rgba(110, 233, 245, 0.20) !important;
+}
+/* Pearl Tide inner surfaces END */
+
+/* Pearl Tide navigation START */
+body[data-theme="pearl-tide"] .main-nav.menu-grid .nav-item {
+  border-color: rgba(126, 233, 246, 0.24) !important;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(234, 252, 255, 0.11), transparent 2.8rem),
+    linear-gradient(180deg, rgba(11, 58, 84, 0.74), rgba(5, 24, 45, 0.86)) !important;
+  color: #c8e8f0 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.10),
+    0 8px 18px rgba(0, 10, 24, 0.22) !important;
+}
+
+body[data-theme="pearl-tide"] .main-nav.menu-grid .nav-icon,
+body[data-theme="pearl-tide"] .main-nav.menu-grid .nav-label {
+  color: inherit !important;
+}
+
+body[data-theme="pearl-tide"] .main-nav.menu-grid .nav-item:hover {
+  border-color: rgba(143, 244, 207, 0.48) !important;
+  color: #f3fbff !important;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(143, 244, 207, 0.18), transparent 2.8rem),
+    linear-gradient(180deg, rgba(13, 70, 96, 0.82), rgba(6, 29, 51, 0.88)) !important;
+}
+
+body[data-theme="pearl-tide"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(255, 143, 184, 0.62) !important;
+  color: #ffffff !important;
+  background:
+    radial-gradient(circle at 16% 12%, rgba(255, 255, 255, 0.18), transparent 2.7rem),
+    linear-gradient(135deg, rgba(255, 143, 184, 0.34), rgba(110, 233, 245, 0.20), rgba(143, 244, 207, 0.14)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.16),
+    0 0 20px rgba(255, 143, 184, 0.18),
+    0 0 18px rgba(110, 233, 245, 0.12) !important;
+}
+/* Pearl Tide navigation END */
+
+/* Pearl Tide home stage START */
+body[data-theme="pearl-tide"] .nami-placeholder,
+body[data-theme="pearl-tide"] .nami-room-stage {
+  border-color: rgba(143, 244, 207, 0.34) !important;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(110, 233, 245, 0.18), transparent 12rem),
+    radial-gradient(circle at 50% 90%, rgba(255, 143, 184, 0.10), transparent 14rem),
+    linear-gradient(180deg, rgba(6, 29, 51, 0.72), rgba(4, 22, 42, 0.88)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.12),
+    0 0 24px rgba(110, 233, 245, 0.10) !important;
+}
+
+body[data-theme="pearl-tide"] .nami-message,
+body[data-theme="pearl-tide"] .nami-message-log-card {
+  color: var(--theme-nami-message-text) !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(143, 244, 207, 0.10), transparent 10rem),
+    linear-gradient(180deg, rgba(6, 29, 51, 0.74), rgba(4, 22, 42, 0.68)) !important;
+  border-color: rgba(126, 233, 246, 0.22) !important;
+}
+/* Pearl Tide home stage END */
+
+/* Pearl Tide care buttons START */
+body[data-theme="pearl-tide"] #section-home .compact-care-actions,
+body[data-theme="pearl-tide"] #section-home .care-actions.compact-care-actions {
+  gap: 7px 12px !important;
+  row-gap: 7px !important;
+  column-gap: 12px !important;
+  margin-bottom: 0 !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button {
+  overflow: hidden !important;
+  border-radius: 11px !important;
+  letter-spacing: 0.01em !important;
+  opacity: 1 !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+/* Available: glowing seafoam */
+body[data-theme="pearl-tide"] #section-home .care-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.58), transparent 3.6rem),
+    linear-gradient(180deg, rgba(219, 255, 246, 0.98), rgba(143, 244, 207, 0.90)) !important;
+  border-color: rgba(143, 244, 207, 0.62) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 7px 16px rgba(0, 10, 24, 0.14),
+    0 0 16px rgba(143, 244, 207, 0.18) !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="pearl-tide"] #section-home .care-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) * {
+  color: #073044 !important;
+  -webkit-text-fill-color: #073044 !important;
+}
+
+/* Disabled: stormy blue-mauve */
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-blocked,
+body[data-theme="pearl-tide"] #section-home .care-button:disabled:not(.care-button-active):not(.care-button-queued) {
+  background:
+    linear-gradient(180deg, rgba(45, 68, 86, 0.74), rgba(24, 42, 60, 0.66)) !important;
+  border-color: rgba(158, 188, 204, 0.24) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.08) !important;
+  opacity: 0.72 !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-blocked,
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-blocked *,
+body[data-theme="pearl-tide"] #section-home .care-button:disabled:not(.care-button-active):not(.care-button-queued),
+body[data-theme="pearl-tide"] #section-home .care-button:disabled:not(.care-button-active):not(.care-button-queued) * {
+  color: rgba(210, 230, 238, 0.64) !important;
+  -webkit-text-fill-color: rgba(210, 230, 238, 0.64) !important;
+}
+
+/* Queued: lavender bubble */
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-queued {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.46), transparent 3.6rem),
+    linear-gradient(180deg, rgba(238, 232, 255, 0.98), rgba(200, 183, 255, 0.90)) !important;
+  border-color: rgba(200, 183, 255, 0.66) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 0 0 1px rgba(200, 183, 255, 0.16),
+    0 8px 18px rgba(94, 70, 160, 0.18) !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-queued,
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-queued * {
+  color: #352465 !important;
+  -webkit-text-fill-color: #352465 !important;
+}
+
+/* Active: coral-pink reef flare */
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-active,
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-active:disabled {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.44), transparent 3.6rem),
+    linear-gradient(180deg, rgba(255, 176, 204, 1), rgba(255, 113, 162, 0.94)) !important;
+  border-color: rgba(255, 143, 184, 0.82) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.50),
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 10px 24px rgba(255, 113, 162, 0.26),
+    0 0 22px rgba(255, 143, 184, 0.20) !important;
+  opacity: 1 !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-active,
+body[data-theme="pearl-tide"] #section-home .care-button.care-button-active * {
+  color: #3f1024 !important;
+  -webkit-text-fill-color: #3f1024 !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button .care-button-progress-fill {
+  background:
+    linear-gradient(90deg, rgba(110, 233, 245, 0.88), rgba(143, 244, 207, 0.82), rgba(255, 143, 184, 0.76)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 0 18px rgba(110, 233, 245, 0.20) !important;
+}
+
+body[data-theme="pearl-tide"] #section-home .care-button:hover:not(:disabled) {
+  filter: none !important;
+  transform: translateY(-1px);
+}
+/* Pearl Tide care buttons END */
+
+/* Pearl Tide chat and controls START */
+body[data-theme="pearl-tide"] .chat-log {
+  color: var(--theme-chat-text) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-input,
+body[data-theme="pearl-tide"] input,
+body[data-theme="pearl-tide"] select {
+  color: var(--text) !important;
+  background: rgba(2, 14, 28, 0.74) !important;
+  border-color: rgba(126, 233, 246, 0.25) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-input:empty::before {
+  color: rgba(200, 232, 240, 0.56) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form button,
+body[data-theme="pearl-tide"] .secondary-button,
+body[data-theme="pearl-tide"] #logout-button,
+body[data-theme="pearl-tide"] #dev-spawn-wardrobe-item-button,
+body[data-theme="pearl-tide"] .wardrobe-item-actions button,
+body[data-theme="pearl-tide"] .wardrobe-item-modal-close,
+body[data-theme="pearl-tide"] .inventory-item-card button,
+body[data-theme="pearl-tide"] .equipment-card button,
+body[data-theme="pearl-tide"] .task-card button {
+  border-color: rgba(126, 233, 246, 0.34) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(143, 244, 207, 0.18), transparent 4.2rem),
+    linear-gradient(180deg, rgba(18, 70, 94, 0.92), rgba(5, 24, 45, 0.94)) !important;
+  color: #eafcff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.12),
+    0 8px 18px rgba(0, 10, 24, 0.24) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form button:hover,
+body[data-theme="pearl-tide"] .secondary-button:hover,
+body[data-theme="pearl-tide"] #logout-button:hover,
+body[data-theme="pearl-tide"] #dev-spawn-wardrobe-item-button:hover,
+body[data-theme="pearl-tide"] .wardrobe-item-actions button:hover,
+body[data-theme="pearl-tide"] .wardrobe-item-modal-close:hover,
+body[data-theme="pearl-tide"] .inventory-item-card button:hover,
+body[data-theme="pearl-tide"] .equipment-card button:hover,
+body[data-theme="pearl-tide"] .task-card button:hover {
+  border-color: rgba(143, 244, 207, 0.52) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.16),
+    0 0 18px rgba(110, 233, 245, 0.14),
+    0 8px 18px rgba(0, 10, 24, 0.24) !important;
+}
+
+body[data-theme="pearl-tide"] .emoji-picker {
+  border-color: rgba(126, 233, 246, 0.30) !important;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(143, 244, 207, 0.12), transparent 7rem),
+    linear-gradient(180deg, rgba(6, 29, 51, 0.98), rgba(3, 16, 31, 0.99)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 20px 56px rgba(0, 10, 24, 0.56) !important;
+}
+/* Pearl Tide chat and controls END */
+
+/* Pearl Tide wardrobe modal START */
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(234, 252, 255, 0.12), transparent 16rem),
+    radial-gradient(circle at 100% 0%, rgba(255, 143, 184, 0.08), transparent 16rem),
+    linear-gradient(180deg, rgb(7, 31, 53), rgb(4, 20, 38)) !important;
+  border-color: rgba(126, 233, 246, 0.36) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.16),
+    0 22px 52px rgba(0, 10, 24, 0.46),
+    0 0 0 1px rgba(234, 252, 255, 0.08) !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-header,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  background:
+    linear-gradient(180deg, rgba(10, 43, 66, 0.96), rgba(5, 24, 45, 0.96)) !important;
+  border-color: rgba(126, 233, 246, 0.22) !important;
+  color: var(--text) !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgb(5, 24, 45) !important;
+}
+/* Pearl Tide wardrobe modal END */
+
+/* Pearl Tide responsive/background fallback START */
+@media (max-width: 980px) {
+  body[data-theme="pearl-tide"] {
+    background-attachment: scroll !important;
+  }
+}
+/* Pearl Tide responsive/background fallback END */
+
+/* Pearl Tide theme END */
