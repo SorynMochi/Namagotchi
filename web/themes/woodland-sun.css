@@ -1004,3 +1004,35 @@ body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active:hover svg *
 }
 
 /* Woodland Sun rail gold and glyph polish END */
+
+/* Woodland Sun care status bar gradient START */
+/* Care Status bars only: dark bark brown -> forest green -> gold. */
+
+body[data-theme="woodland-sun"] #section-home .care-status-compact .bar {
+  border-color: rgba(216, 235, 145, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(29, 53, 24, 0.42), rgba(15, 32, 15, 0.34)) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(19, 39, 16, 0.42),
+    0 0 8px rgba(244, 215, 121, 0.06) !important;
+}
+
+body[data-theme="woodland-sun"] #section-home .care-status-compact .fill,
+body[data-theme="woodland-sun"] #section-home .care-status-compact .stat-fill,
+body[data-theme="woodland-sun"] #section-home .care-status-compact .mood-fill {
+  background:
+    linear-gradient(90deg, #4a2b16 0%, #2f6a3d 52%, #f4d779 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 251, 218, 0.24),
+    0 0 12px rgba(159, 210, 106, 0.14),
+    0 0 10px rgba(244, 215, 121, 0.10) !important;
+}
+
+body[data-theme="woodland-sun"] #section-home .care-status-compact .fill::after,
+body[data-theme="woodland-sun"] #section-home .care-status-compact .stat-fill::after,
+body[data-theme="woodland-sun"] #section-home .care-status-compact .mood-fill::after {
+  background:
+    linear-gradient(180deg, rgba(255, 251, 218, 0.26), transparent 58%) !important;
+}
+
+/* Woodland Sun care status bar gradient END */
