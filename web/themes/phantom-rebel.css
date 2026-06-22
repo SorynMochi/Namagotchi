@@ -556,3 +556,48 @@ body[data-theme="phantom-rebel"] #section-work .task-panel button {
 }
 
 /* Phantom Rebel display font END */
+
+/* Phantom Rebel display sizing test START */
+/* Larger display font pass for page headings, care buttons, and work buttons. */
+
+/* Page headings like "Home ♥ Nami-chan", plus h1 page titles where present. */
+body[data-theme="phantom-rebel"] .content-section .section-header .eyebrow {
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 0.92rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.075em !important;
+}
+
+body[data-theme="phantom-rebel"] .content-section .section-header h1 {
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 1.18rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.065em !important;
+}
+
+/* Care button text larger without increasing button boxes. */
+body[data-theme="phantom-rebel"] .care-card button,
+body[data-theme="phantom-rebel"] .care-actions button,
+body[data-theme="phantom-rebel"] button.care-action-button,
+body[data-theme="phantom-rebel"] .compact-care-actions .care-button {
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 0.84rem !important;
+  font-weight: 400 !important;
+  line-height: 0.86 !important;
+  letter-spacing: 0.055em !important;
+}
+
+/* Work button text a little bolder/larger too. */
+body[data-theme="phantom-rebel"] #section-work .task-card button,
+body[data-theme="phantom-rebel"] #section-work .work-card button,
+body[data-theme="phantom-rebel"] #section-work .task-panel button {
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 0.88rem !important;
+  font-weight: 400 !important;
+  line-height: 0.90 !important;
+  letter-spacing: 0.060em !important;
+}
+
+/* Phantom Rebel display sizing test END */
