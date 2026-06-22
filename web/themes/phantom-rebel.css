@@ -1134,3 +1134,18 @@ body[data-theme="phantom-rebel"] ::-webkit-scrollbar-corner {
 }
 
 /* Phantom Rebel square corners END */
+
+/* Phantom Rebel chat channel bar grey START */
+/* Match chat channel bar to the grey care button shell color. */
+
+body[data-theme="phantom-rebel"] .chat-panel .chat-tabs,
+body[data-theme="phantom-rebel"] #chat-panel .chat-tabs {
+  background:
+    linear-gradient(180deg, rgba(30, 33, 40, 0.98), rgba(8, 9, 12, 0.98)) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 6px 14px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Phantom Rebel chat channel bar grey END */
