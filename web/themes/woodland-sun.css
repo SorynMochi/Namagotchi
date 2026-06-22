@@ -812,3 +812,110 @@ body[data-theme="woodland-sun"] button.care-action-button:not(.care-button-block
 }
 
 /* Woodland Sun work-chat-care polish END */
+
+/* Woodland Sun chat and care detail polish START */
+/* Active care progress, bottom chat text, and chat scrollbar only. */
+
+/* Active care progress: replace leftover pink with woodland sunlight over bark. */
+body[data-theme="woodland-sun"] #section-home .care-button.care-button-active .care-button-progress-fill,
+body[data-theme="woodland-sun"] #section-home .care-button-active .care-button-progress-fill,
+body[data-theme="woodland-sun"] #section-home .care-button.care-button-active .care-progress-fill,
+body[data-theme="woodland-sun"] #section-home .care-button-active .care-progress-fill {
+  background:
+    radial-gradient(circle at 20% 50%, rgba(255, 251, 218, 0.42), transparent 2.4rem),
+    repeating-linear-gradient(
+      100deg,
+      rgba(255, 251, 218, 0.12) 0 7px,
+      rgba(139, 92, 48, 0.00) 7px 14px,
+      rgba(68, 38, 18, 0.16) 14px 21px
+    ),
+    linear-gradient(90deg, #f7e7a5, #d7a957 42%, #8b5a32 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 252, 220, 0.28),
+    0 0 12px rgba(244, 215, 121, 0.22) !important;
+}
+
+body[data-theme="woodland-sun"] #section-home .care-button.care-button-active .care-button-progress,
+body[data-theme="woodland-sun"] #section-home .care-button-active .care-button-progress,
+body[data-theme="woodland-sun"] #section-home .care-button.care-button-active .care-progress,
+body[data-theme="woodland-sun"] #section-home .care-button-active .care-progress {
+  background:
+    linear-gradient(180deg, rgba(41, 25, 13, 0.56), rgba(19, 11, 6, 0.44)) !important;
+  border-color: rgba(244, 215, 121, 0.22) !important;
+}
+
+/* Bottom chat: message text, timestamps, and names. Do not touch channel tabs. */
+body[data-theme="woodland-sun"] .chat-log {
+  scrollbar-color: rgba(244, 215, 121, 0.82) rgba(32, 59, 24, 0.34) !important;
+  color: #fff8e8 !important;
+  text-shadow: 0 1px 1px rgba(18, 38, 15, 0.64) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-message {
+  color: #fff8e8 !important;
+  text-shadow: 0 1px 1px rgba(18, 38, 15, 0.64) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-time {
+  color: #c9dca7 !important;
+  -webkit-text-fill-color: #c9dca7 !important;
+  font-weight: 800 !important;
+  text-shadow: 0 1px 1px rgba(18, 38, 15, 0.72) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-name {
+  color: #f4d779 !important;
+  -webkit-text-fill-color: #f4d779 !important;
+  font-weight: 950 !important;
+  text-shadow:
+    0 1px 1px rgba(39, 24, 12, 0.74),
+    0 0 8px rgba(244, 215, 121, 0.12) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-text {
+  color: #fff8e8 !important;
+  -webkit-text-fill-color: #fff8e8 !important;
+  text-shadow: 0 1px 1px rgba(18, 38, 15, 0.66) !important;
+}
+
+/* Keep emotes/whispers forest-coded but distinct. */
+body[data-theme="woodland-sun"] .chat-message.chat-emote,
+body[data-theme="woodland-sun"] .chat-message.chat-emote .chat-text {
+  color: #f7e7a5 !important;
+  -webkit-text-fill-color: #f7e7a5 !important;
+}
+
+body[data-theme="woodland-sun"] .chat-message.chat-whisper,
+body[data-theme="woodland-sun"] .chat-message.chat-whisper .chat-text {
+  color: #d7f0c2 !important;
+  -webkit-text-fill-color: #d7f0c2 !important;
+}
+
+/* Chat scrollbar: golden sap thumb with dark leaf track. */
+body[data-theme="woodland-sun"] .chat-log::-webkit-scrollbar {
+  width: 9px !important;
+  height: 9px !important;
+}
+
+body[data-theme="woodland-sun"] .chat-log::-webkit-scrollbar-track {
+  background:
+    linear-gradient(180deg, rgba(22, 49, 22, 0.44), rgba(12, 30, 13, 0.38)) !important;
+  border-radius: 999px !important;
+}
+
+body[data-theme="woodland-sun"] .chat-log::-webkit-scrollbar-thumb {
+  border-radius: 999px !important;
+  border: 2px solid rgba(21, 47, 22, 0.72) !important;
+  background:
+    linear-gradient(180deg, #f4d779, #b97f3f 54%, #6a4428) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 251, 218, 0.34),
+    0 0 10px rgba(244, 215, 121, 0.16) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-log::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(180deg, #fff0ae, #d09a4f 52%, #7a4c28) !important;
+}
+
+/* Woodland Sun chat and care detail polish END */
