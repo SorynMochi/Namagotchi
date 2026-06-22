@@ -9111,3 +9111,100 @@ body.wardrobe-modal-dragging {
   font-size: 22px !important;
 }
 /* Side rail glyph polish END */
+
+/* Wardrobe rarity text bridge START */
+/* Keep rarity text consistent across Inventory, Current Outfit, and linked chat items. */
+
+#section-inventory .inventory-item-card.rarity-basic .gear-level-tag,
+#section-inventory .equipment-card.rarity-basic:not(.is-empty) .gear-level-tag,
+.chat-item-token.rarity-basic,
+.chat-item-token.rarity-basic .chat-item-name,
+.chat-item-token.rarity-basic .chat-item-bracket,
+.chat-item-link.rarity-basic,
+.chat-item-link.rarity-basic .chat-item-name,
+.chat-item-link.rarity-basic .chat-item-bracket {
+  color: var(--wardrobe-rarity-basic, #A8B0BA) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-basic, #A8B0BA) !important;
+}
+
+#section-inventory .inventory-item-card.rarity-cute .gear-level-tag,
+#section-inventory .equipment-card.rarity-cute:not(.is-empty) .gear-level-tag,
+.chat-item-token.rarity-cute,
+.chat-item-token.rarity-cute .chat-item-name,
+.chat-item-token.rarity-cute .chat-item-bracket,
+.chat-item-link.rarity-cute,
+.chat-item-link.rarity-cute .chat-item-name,
+.chat-item-link.rarity-cute .chat-item-bracket {
+  color: var(--wardrobe-rarity-cute, #FF8FC7) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-cute, #FF8FC7) !important;
+}
+
+#section-inventory .inventory-item-card.rarity-chic .gear-level-tag,
+#section-inventory .equipment-card.rarity-chic:not(.is-empty) .gear-level-tag,
+.chat-item-token.rarity-chic,
+.chat-item-token.rarity-chic .chat-item-name,
+.chat-item-token.rarity-chic .chat-item-bracket,
+.chat-item-link.rarity-chic,
+.chat-item-link.rarity-chic .chat-item-name,
+.chat-item-link.rarity-chic .chat-item-bracket {
+  color: var(--wardrobe-rarity-chic, #9B7CFF) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-chic, #9B7CFF) !important;
+}
+
+#section-inventory .inventory-item-card.rarity-trendy .gear-level-tag,
+#section-inventory .equipment-card.rarity-trendy:not(.is-empty) .gear-level-tag,
+.chat-item-token.rarity-trendy,
+.chat-item-token.rarity-trendy .chat-item-name,
+.chat-item-token.rarity-trendy .chat-item-bracket,
+.chat-item-link.rarity-trendy,
+.chat-item-link.rarity-trendy .chat-item-name,
+.chat-item-link.rarity-trendy .chat-item-bracket {
+  color: var(--wardrobe-rarity-trendy, #35C8FF) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-trendy, #35C8FF) !important;
+}
+
+#section-inventory .inventory-item-card.rarity-glam .gear-level-tag,
+#section-inventory .equipment-card.rarity-glam:not(.is-empty) .gear-level-tag,
+.chat-item-token.rarity-glam,
+.chat-item-token.rarity-glam .chat-item-name,
+.chat-item-token.rarity-glam .chat-item-bracket,
+.chat-item-link.rarity-glam,
+.chat-item-link.rarity-glam .chat-item-name,
+.chat-item-link.rarity-glam .chat-item-bracket {
+  color: var(--wardrobe-rarity-glam, #FFD166) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-glam, #FFD166) !important;
+}
+
+#section-inventory .inventory-item-card.rarity-iconic .gear-level-tag,
+#section-inventory .equipment-card.rarity-iconic:not(.is-empty) .gear-level-tag,
+.chat-item-token.rarity-iconic,
+.chat-item-token.rarity-iconic .chat-item-name,
+.chat-item-token.rarity-iconic .chat-item-bracket,
+.chat-item-link.rarity-iconic,
+.chat-item-link.rarity-iconic .chat-item-name,
+.chat-item-link.rarity-iconic .chat-item-bracket {
+  color: var(--wardrobe-rarity-iconic, #FF8A3D) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-iconic, #FF8A3D) !important;
+}
+
+#section-inventory .inventory-item-card.rarity-devastating .gear-level-tag,
+#section-inventory .equipment-card.rarity-devastating:not(.is-empty) .gear-level-tag,
+.chat-item-token.rarity-devastating,
+.chat-item-token.rarity-devastating .chat-item-name,
+.chat-item-token.rarity-devastating .chat-item-bracket,
+.chat-item-link.rarity-devastating,
+.chat-item-link.rarity-devastating .chat-item-name,
+.chat-item-link.rarity-devastating .chat-item-bracket {
+  color: var(--wardrobe-rarity-devastating, #FF2D75) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-devastating, #FF2D75) !important;
+}
+
+/* Keep the level badge readable while preserving the rarity hue. */
+#section-inventory .equipment-card:not(.is-empty) .gear-level-tag,
+#section-inventory .inventory-item-card .gear-level-tag,
+.chat-item-token,
+.chat-item-link {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.38) !important;
+}
+
+/* Wardrobe rarity text bridge END */

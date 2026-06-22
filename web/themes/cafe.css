@@ -1739,3 +1739,99 @@ body[data-theme="cafe"] .wardrobe-comparison-row.negative strong {
 }
 
 /* Cafe wardrobe readability END */
+
+/* Cafe rarity text bridge START */
+/* Cafe has strong readable-text overrides, so repeat rarity text here without changing backgrounds. */
+
+body[data-theme="cafe"] #section-inventory .inventory-item-card.rarity-basic .gear-level-tag,
+body[data-theme="cafe"] #section-inventory .equipment-card.rarity-basic:not(.is-empty) .gear-level-tag,
+body[data-theme="cafe"] .chat-item-token.rarity-basic,
+body[data-theme="cafe"] .chat-item-token.rarity-basic .chat-item-name,
+body[data-theme="cafe"] .chat-item-token.rarity-basic .chat-item-bracket,
+body[data-theme="cafe"] .chat-item-link.rarity-basic,
+body[data-theme="cafe"] .chat-item-link.rarity-basic .chat-item-name,
+body[data-theme="cafe"] .chat-item-link.rarity-basic .chat-item-bracket {
+  color: var(--wardrobe-rarity-basic, #A8B0BA) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-basic, #A8B0BA) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .inventory-item-card.rarity-cute .gear-level-tag,
+body[data-theme="cafe"] #section-inventory .equipment-card.rarity-cute:not(.is-empty) .gear-level-tag,
+body[data-theme="cafe"] .chat-item-token.rarity-cute,
+body[data-theme="cafe"] .chat-item-token.rarity-cute .chat-item-name,
+body[data-theme="cafe"] .chat-item-token.rarity-cute .chat-item-bracket,
+body[data-theme="cafe"] .chat-item-link.rarity-cute,
+body[data-theme="cafe"] .chat-item-link.rarity-cute .chat-item-name,
+body[data-theme="cafe"] .chat-item-link.rarity-cute .chat-item-bracket {
+  color: var(--wardrobe-rarity-cute, #FF8FC7) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-cute, #FF8FC7) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .inventory-item-card.rarity-chic .gear-level-tag,
+body[data-theme="cafe"] #section-inventory .equipment-card.rarity-chic:not(.is-empty) .gear-level-tag,
+body[data-theme="cafe"] .chat-item-token.rarity-chic,
+body[data-theme="cafe"] .chat-item-token.rarity-chic .chat-item-name,
+body[data-theme="cafe"] .chat-item-token.rarity-chic .chat-item-bracket,
+body[data-theme="cafe"] .chat-item-link.rarity-chic,
+body[data-theme="cafe"] .chat-item-link.rarity-chic .chat-item-name,
+body[data-theme="cafe"] .chat-item-link.rarity-chic .chat-item-bracket {
+  color: var(--wardrobe-rarity-chic, #9B7CFF) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-chic, #9B7CFF) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .inventory-item-card.rarity-trendy .gear-level-tag,
+body[data-theme="cafe"] #section-inventory .equipment-card.rarity-trendy:not(.is-empty) .gear-level-tag,
+body[data-theme="cafe"] .chat-item-token.rarity-trendy,
+body[data-theme="cafe"] .chat-item-token.rarity-trendy .chat-item-name,
+body[data-theme="cafe"] .chat-item-token.rarity-trendy .chat-item-bracket,
+body[data-theme="cafe"] .chat-item-link.rarity-trendy,
+body[data-theme="cafe"] .chat-item-link.rarity-trendy .chat-item-name,
+body[data-theme="cafe"] .chat-item-link.rarity-trendy .chat-item-bracket {
+  color: var(--wardrobe-rarity-trendy, #35C8FF) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-trendy, #35C8FF) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .inventory-item-card.rarity-glam .gear-level-tag,
+body[data-theme="cafe"] #section-inventory .equipment-card.rarity-glam:not(.is-empty) .gear-level-tag,
+body[data-theme="cafe"] .chat-item-token.rarity-glam,
+body[data-theme="cafe"] .chat-item-token.rarity-glam .chat-item-name,
+body[data-theme="cafe"] .chat-item-token.rarity-glam .chat-item-bracket,
+body[data-theme="cafe"] .chat-item-link.rarity-glam,
+body[data-theme="cafe"] .chat-item-link.rarity-glam .chat-item-name,
+body[data-theme="cafe"] .chat-item-link.rarity-glam .chat-item-bracket {
+  color: var(--wardrobe-rarity-glam, #FFD166) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-glam, #FFD166) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .inventory-item-card.rarity-iconic .gear-level-tag,
+body[data-theme="cafe"] #section-inventory .equipment-card.rarity-iconic:not(.is-empty) .gear-level-tag,
+body[data-theme="cafe"] .chat-item-token.rarity-iconic,
+body[data-theme="cafe"] .chat-item-token.rarity-iconic .chat-item-name,
+body[data-theme="cafe"] .chat-item-token.rarity-iconic .chat-item-bracket,
+body[data-theme="cafe"] .chat-item-link.rarity-iconic,
+body[data-theme="cafe"] .chat-item-link.rarity-iconic .chat-item-name,
+body[data-theme="cafe"] .chat-item-link.rarity-iconic .chat-item-bracket {
+  color: var(--wardrobe-rarity-iconic, #FF8A3D) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-iconic, #FF8A3D) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .inventory-item-card.rarity-devastating .gear-level-tag,
+body[data-theme="cafe"] #section-inventory .equipment-card.rarity-devastating:not(.is-empty) .gear-level-tag,
+body[data-theme="cafe"] .chat-item-token.rarity-devastating,
+body[data-theme="cafe"] .chat-item-token.rarity-devastating .chat-item-name,
+body[data-theme="cafe"] .chat-item-token.rarity-devastating .chat-item-bracket,
+body[data-theme="cafe"] .chat-item-link.rarity-devastating,
+body[data-theme="cafe"] .chat-item-link.rarity-devastating .chat-item-name,
+body[data-theme="cafe"] .chat-item-link.rarity-devastating .chat-item-bracket {
+  color: var(--wardrobe-rarity-devastating, #FF2D75) !important;
+  -webkit-text-fill-color: var(--wardrobe-rarity-devastating, #FF2D75) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .equipment-card:not(.is-empty) .gear-level-tag,
+body[data-theme="cafe"] #section-inventory .inventory-item-card .gear-level-tag,
+body[data-theme="cafe"] .chat-item-token,
+body[data-theme="cafe"] .chat-item-link {
+  text-shadow: 0 1px 1px rgba(44, 22, 14, 0.70) !important;
+}
+
+/* Cafe rarity text bridge END */
