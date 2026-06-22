@@ -1677,3 +1677,22 @@ body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #nami-xp-label 
 }
 
 /* Phantom Rebel top rail END */
+
+/* Phantom Rebel top rail display font START */
+/* Top rail headings and player name use the Phantom Rebel display font. */
+
+body[data-theme="phantom-rebel"] .top-stats-panel .panel-title,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-panel-toggle,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-panel-toggle *,
+body[data-theme="phantom-rebel"] .top-stats-compact > .stat-group.compact > h2,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button #top-player-name {
+  font-family: "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.065em !important;
+}
+
+/* Phantom Rebel top rail display font END */

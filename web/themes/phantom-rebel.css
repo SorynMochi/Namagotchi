@@ -508,3 +508,51 @@ body[data-theme="phantom-rebel"] .right-buff-group .buff-card small {
 }
 
 /* Phantom Rebel theme END */
+
+/* Phantom Rebel display font START */
+/* Test display font for Phantom Rebel headings, care buttons, and work buttons only. */
+
+@font-face {
+  font-family: "Phantom Rebel Display";
+  src: url("/themes/phantom-rebel.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body[data-theme="phantom-rebel"] {
+  --phantom-display-font: "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif;
+}
+
+/* General theme headings and panel title text. */
+body[data-theme="phantom-rebel"] .panel-title,
+body[data-theme="phantom-rebel"] .collapse-toggle,
+body[data-theme="phantom-rebel"] h1,
+body[data-theme="phantom-rebel"] h2,
+body[data-theme="phantom-rebel"] h3,
+body[data-theme="phantom-rebel"] .eyebrow {
+  font-family: var(--phantom-display-font) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.055em !important;
+}
+
+/* Care action buttons. */
+body[data-theme="phantom-rebel"] .care-card button,
+body[data-theme="phantom-rebel"] .care-actions button,
+body[data-theme="phantom-rebel"] button.care-action-button,
+body[data-theme="phantom-rebel"] .compact-care-actions .care-button {
+  font-family: var(--phantom-display-font) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.045em !important;
+}
+
+/* Work buttons. */
+body[data-theme="phantom-rebel"] #section-work .task-card button,
+body[data-theme="phantom-rebel"] #section-work .work-card button,
+body[data-theme="phantom-rebel"] #section-work .task-panel button {
+  font-family: var(--phantom-display-font) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Phantom Rebel display font END */
