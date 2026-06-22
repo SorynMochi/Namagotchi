@@ -1554,7 +1554,7 @@ body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #nami-xp-label 
 /* Firefly-gold named labels, blue player/category headers, moonlight values. */
 
 body[data-theme="woodland-moon"] {
-  --top-player-tick-fill: linear-gradient(90deg, #4892ff 0%, #9ebee4 48%, #d8ea86 100%) !important;
+  --top-player-tick-fill: linear-gradient(90deg, #2b4f86 0%, #3a649b 42%, #547db2 100%) !important;
   --top-user-label-color: #d8ea86 !important;
   --top-user-value-color: #eef4ff !important;
 }
@@ -1571,17 +1571,17 @@ body[data-theme="woodland-moon"] .top-stats-compact > .stat-group.compact > h2 {
     0 0 10px rgba(72, 146, 255, 0.16) !important;
 }
 
-/* Player name stays blue. */
+/* Player name uses firefly gold for contrast against the blue tick fill. */
 body[data-theme="woodland-moon"] .top-user-info .top-player-name-button,
 body[data-theme="woodland-moon"] .top-user-info .top-player-name-button.top-player-tick-pill,
 body[data-theme="woodland-moon"] .top-user-info .top-player-name-button.top-player-tick-pill *,
 body[data-theme="woodland-moon"] .top-user-info .top-player-name-button .top-player-name,
 body[data-theme="woodland-moon"] .top-user-info .top-player-name-button #top-player-name {
-  color: #4892ff !important;
-  -webkit-text-fill-color: #4892ff !important;
+  color: #d8ea86 !important;
+  -webkit-text-fill-color: #d8ea86 !important;
   text-shadow:
-    0 1px 1px rgba(8, 14, 22, 0.78),
-    0 0 10px rgba(72, 146, 255, 0.18) !important;
+    0 1px 1px rgba(18, 12, 8, 0.80),
+    0 0 10px rgba(216, 234, 134, 0.18) !important;
 }
 
 /* Named labels under top rail sections become firefly-gold. */
