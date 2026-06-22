@@ -1832,3 +1832,44 @@ body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg * {
 }
 
 /* Woodland Moon blue menu glyph override END */
+
+/* Woodland Moon firefly buff text START */
+/* Buff names in firefly-gold, buff effects/descriptions in moonlight silver. */
+
+body[data-theme="woodland-moon"] .right-rail .buff-card strong,
+body[data-theme="woodland-moon"] .right-buffs-panel .buff-card strong,
+body[data-theme="woodland-moon"] .right-buff-group .buff-card strong {
+  color: #d8ea86 !important;
+  -webkit-text-fill-color: #d8ea86 !important;
+  text-shadow:
+    0 1px 1px rgba(18, 12, 8, 0.76),
+    0 0 8px rgba(216, 234, 134, 0.14) !important;
+}
+
+body[data-theme="woodland-moon"] .right-rail .buff-card span,
+body[data-theme="woodland-moon"] .right-rail .buff-card small,
+body[data-theme="woodland-moon"] .right-buffs-panel .buff-card span,
+body[data-theme="woodland-moon"] .right-buffs-panel .buff-card small,
+body[data-theme="woodland-moon"] .right-buff-group .buff-card span,
+body[data-theme="woodland-moon"] .right-buff-group .buff-card small {
+  color: #d9e6f5 !important;
+  -webkit-text-fill-color: #d9e6f5 !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.64) !important;
+}
+
+/* Keep menu glyph hover/active blue. */
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover .nav-icon *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover svg *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active .nav-icon *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg * {
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
+  fill: #4892ff !important;
+  stroke: #4892ff !important;
+}
+
+/* Woodland Moon firefly buff text END */
