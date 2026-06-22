@@ -919,3 +919,88 @@ body[data-theme="woodland-sun"] .chat-log::-webkit-scrollbar-thumb:hover {
 }
 
 /* Woodland Sun chat and care detail polish END */
+
+/* Woodland Sun rail gold and glyph polish START */
+/* Gold rail headings/status text, brown menu glyphs on hover/active only. */
+
+body[data-theme="woodland-sun"] {
+  --woodland-heading-gold: #f4d779;
+  --woodland-glyph-brown: #6a4428;
+  --woodland-glyph-brown-dark: #4a2b16;
+}
+
+/* Left rail MENU heading and right rail BUFFS heading. */
+body[data-theme="woodland-sun"] .left-rail .panel-title,
+body[data-theme="woodland-sun"] .left-rail .panel-title *,
+body[data-theme="woodland-sun"] .right-rail .panel-title,
+body[data-theme="woodland-sun"] .right-rail .panel-title *,
+body[data-theme="woodland-sun"] .right-buffs-panel .panel-title,
+body[data-theme="woodland-sun"] .right-buffs-panel .panel-title * {
+  color: var(--woodland-heading-gold) !important;
+  -webkit-text-fill-color: var(--woodland-heading-gold) !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.72),
+    0 0 10px rgba(244, 215, 121, 0.12) !important;
+}
+
+/* Right rail internal group headings like GLOBAL BUFFS / PERSONAL BUFFS. */
+body[data-theme="woodland-sun"] .right-rail h2,
+body[data-theme="woodland-sun"] .right-rail h3,
+body[data-theme="woodland-sun"] .right-buffs-panel h2,
+body[data-theme="woodland-sun"] .right-buffs-panel h3,
+body[data-theme="woodland-sun"] .right-buff-group h2,
+body[data-theme="woodland-sun"] .right-buff-group h3,
+body[data-theme="woodland-sun"] .right-buff-group > strong {
+  color: var(--woodland-heading-gold) !important;
+  -webkit-text-fill-color: var(--woodland-heading-gold) !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.70),
+    0 0 9px rgba(244, 215, 121, 0.10) !important;
+}
+
+/* Left rail server time and online users. */
+body[data-theme="woodland-sun"] .left-rail .server-clock,
+body[data-theme="woodland-sun"] .left-rail .server-clock *,
+body[data-theme="woodland-sun"] .left-rail .server-time,
+body[data-theme="woodland-sun"] .left-rail .server-time *,
+body[data-theme="woodland-sun"] .left-rail .online-users,
+body[data-theme="woodland-sun"] .left-rail .online-users *,
+body[data-theme="woodland-sun"] .left-rail #server-time,
+body[data-theme="woodland-sun"] .left-rail #server-time *,
+body[data-theme="woodland-sun"] .left-rail #online-users,
+body[data-theme="woodland-sun"] .left-rail #online-users *,
+body[data-theme="woodland-sun"] .left-rail [data-server-time],
+body[data-theme="woodland-sun"] .left-rail [data-online-users] {
+  color: var(--woodland-heading-gold) !important;
+  -webkit-text-fill-color: var(--woodland-heading-gold) !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.70),
+    0 0 8px rgba(244, 215, 121, 0.10) !important;
+}
+
+/* Menu glyphs only: turn brown on hover/active, not the button background. */
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item:hover .nav-icon,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item:hover .nav-icon *,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item:hover svg,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item:hover svg *,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active .nav-icon,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active .nav-icon *,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active svg,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active svg * {
+  color: var(--woodland-glyph-brown) !important;
+  -webkit-text-fill-color: var(--woodland-glyph-brown) !important;
+  fill: var(--woodland-glyph-brown) !important;
+  stroke: var(--woodland-glyph-brown) !important;
+}
+
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active:hover .nav-icon,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active:hover .nav-icon *,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active:hover svg,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active:hover svg * {
+  color: var(--woodland-glyph-brown-dark) !important;
+  -webkit-text-fill-color: var(--woodland-glyph-brown-dark) !important;
+  fill: var(--woodland-glyph-brown-dark) !important;
+  stroke: var(--woodland-glyph-brown-dark) !important;
+}
+
+/* Woodland Sun rail gold and glyph polish END */

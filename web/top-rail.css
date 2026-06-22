@@ -1458,3 +1458,19 @@ body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #nami-xp-label .
 }
 
 /* Woodland Sun top rail END */
+
+/* Woodland Sun top rail gold headings START */
+/* Top rail heading text only. Values and labels stay as-is. */
+
+body[data-theme="woodland-sun"] .top-stats-panel .panel-title,
+body[data-theme="woodland-sun"] .top-stats-panel .top-panel-toggle,
+body[data-theme="woodland-sun"] .top-stats-panel .top-panel-toggle *,
+body[data-theme="woodland-sun"] .top-stats-compact > .stat-group.compact > h2 {
+  color: #f4d779 !important;
+  -webkit-text-fill-color: #f4d779 !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.72),
+    0 0 10px rgba(244, 215, 121, 0.12) !important;
+}
+
+/* Woodland Sun top rail gold headings END */
