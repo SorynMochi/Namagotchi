@@ -1629,3 +1629,113 @@ body[data-theme="cafe"] #section-playdeck .combat-log input[type="checkbox"] {
 }
 
 /* Cafe final Playdeck color fix END */
+
+/* Cafe wardrobe readability START */
+/* Font colors only. Do not alter gear-level-tag rarity colors. */
+
+body[data-theme="cafe"] #section-inventory .eyebrow,
+body[data-theme="cafe"] #section-inventory .wardrobe-panel-titlebar h2,
+body[data-theme="cafe"] #section-inventory .inventory-group-header {
+  color: #442416 !important;
+  -webkit-text-fill-color: #442416 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.72) !important;
+}
+
+body[data-theme="cafe"] #wardrobe-inline-count,
+body[data-theme="cafe"] #section-inventory .inventory-group-header strong {
+  color: #5e3524 !important;
+  -webkit-text-fill-color: #5e3524 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.68) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .equipment-slot-label {
+  color: #6f3f2b !important;
+  -webkit-text-fill-color: #6f3f2b !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.70) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .equipment-card .gear-card-name,
+body[data-theme="cafe"] #section-inventory .inventory-item-card .gear-card-name {
+  color: #2c160e !important;
+  -webkit-text-fill-color: #2c160e !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.74) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .equipment-card .gear-card-empty-name,
+body[data-theme="cafe"] #section-inventory .inventory-empty-row,
+body[data-theme="cafe"] #section-inventory .wardrobe-bonus-row.is-empty {
+  color: #8b6654 !important;
+  -webkit-text-fill-color: #8b6654 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.62) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .equipment-card .gear-tailoring-tag,
+body[data-theme="cafe"] #section-inventory .inventory-item-card .gear-tailoring-tag {
+  color: #fff8ef !important;
+  -webkit-text-fill-color: #fff8ef !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.86) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .wardrobe-bonus-row,
+body[data-theme="cafe"] #section-inventory .wardrobe-bonus-label {
+  color: #442416 !important;
+  -webkit-text-fill-color: #442416 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.70) !important;
+}
+
+body[data-theme="cafe"] #section-inventory .wardrobe-bonus-row strong,
+body[data-theme="cafe"] #section-inventory .wardrobe-bonus-value {
+  color: #9b5d28 !important;
+  -webkit-text-fill-color: #9b5d28 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.76) !important;
+}
+
+body[data-theme="cafe"] .wardrobe-item-modal-header h2 {
+  color: #321c13 !important;
+  -webkit-text-fill-color: #321c13 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.76) !important;
+}
+
+body[data-theme="cafe"] .wardrobe-item-modal-meta,
+body[data-theme="cafe"] .wardrobe-compare-target {
+  color: #6f3f2b !important;
+  -webkit-text-fill-color: #6f3f2b !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.68) !important;
+}
+
+body[data-theme="cafe"] .wardrobe-item-modal-section h3 {
+  color: #442416 !important;
+  -webkit-text-fill-color: #442416 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.72) !important;
+}
+
+body[data-theme="cafe"] .wardrobe-stat-line,
+body[data-theme="cafe"] .wardrobe-comparison-row,
+body[data-theme="cafe"] .wardrobe-stat-line span,
+body[data-theme="cafe"] .wardrobe-comparison-row span {
+  color: #442416 !important;
+  -webkit-text-fill-color: #442416 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.70) !important;
+}
+
+body[data-theme="cafe"] .wardrobe-stat-line strong,
+body[data-theme="cafe"] .wardrobe-stat-source-implicit strong,
+body[data-theme="cafe"] .wardrobe-stat-source-suffix strong,
+body[data-theme="cafe"] .wardrobe-stat-source-prefix strong,
+body[data-theme="cafe"] .wardrobe-comparison-row strong {
+  color: #9b5d28 !important;
+  -webkit-text-fill-color: #9b5d28 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.76) !important;
+}
+
+body[data-theme="cafe"] .wardrobe-comparison-row.positive strong {
+  color: #3f642a !important;
+  -webkit-text-fill-color: #3f642a !important;
+}
+
+body[data-theme="cafe"] .wardrobe-comparison-row.negative strong {
+  color: #9f3e2e !important;
+  -webkit-text-fill-color: #9f3e2e !important;
+}
+
+/* Cafe wardrobe readability END */

@@ -1345,3 +1345,48 @@ body[data-theme="nami-days"] {
 }
 /* Top rail collapse display repair END */
 /* Top rail collapse display repair END */
+
+/* Cafe top rail readability START */
+/* Font colors only. top-rail.css loads after theme CSS, so Cafe needs the late rail tokens here. */
+
+body[data-theme="cafe"] {
+  --top-rail-header-color: #fff8ef;
+  --top-rail-header-divider-color: rgba(243, 210, 184, 0.34);
+  --top-rail-compact-label-color: #f3d2b8;
+  --top-rail-compact-value-color: #fff8ef;
+}
+
+body[data-theme="cafe"] .top-stats-compact > .stat-group.compact > h2,
+body[data-theme="cafe"] .top-user-info .top-player-name-button,
+body[data-theme="cafe"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="cafe"] .top-user-info .top-player-name-button.top-player-tick-pill * {
+  color: #fff8ef !important;
+  -webkit-text-fill-color: #fff8ef !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.82) !important;
+}
+
+body[data-theme="cafe"] .top-stats-panel .stat-group.compact .stat-lines span,
+body[data-theme="cafe"] .top-stats-panel .stat-group.compact .compact-grid-lines span,
+body[data-theme="cafe"] .top-stats-panel .top-user-info .top-user-meter-list .metric-name,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #current-action-label .metric-name,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-name,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-name,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #nami-xp-label .metric-name {
+  color: #f3d2b8 !important;
+  -webkit-text-fill-color: #f3d2b8 !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.72) !important;
+}
+
+body[data-theme="cafe"] .top-stats-panel .stat-group.compact .stat-lines strong,
+body[data-theme="cafe"] .top-stats-panel .stat-group.compact .compact-grid-lines strong,
+body[data-theme="cafe"] .top-stats-panel .top-user-info .top-user-meter-list .metric-value,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #current-action-label .metric-value,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-value,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-value,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #nami-xp-label .metric-value {
+  color: #fff8ef !important;
+  -webkit-text-fill-color: #fff8ef !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.78) !important;
+}
+
+/* Cafe top rail readability END */
