@@ -1119,3 +1119,18 @@ body[data-theme="phantom-rebel"] .nav-panel .rail-toggle .collapse-label {
 }
 
 /* Phantom Rebel rail labels display font restore END */
+
+/* Phantom Rebel square corners START */
+/* Hard-edge pass: remove rounded corners everywhere in this theme. */
+
+body[data-theme="phantom-rebel"] :where(*, *::before, *::after) {
+  border-radius: 0 !important;
+}
+
+body[data-theme="phantom-rebel"] ::-webkit-scrollbar-thumb,
+body[data-theme="phantom-rebel"] ::-webkit-scrollbar-track,
+body[data-theme="phantom-rebel"] ::-webkit-scrollbar-corner {
+  border-radius: 0 !important;
+}
+
+/* Phantom Rebel square corners END */
