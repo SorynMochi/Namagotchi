@@ -1620,7 +1620,7 @@ body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #nami-xp-label 
 body[data-theme="phantom-rebel"] {
   --top-player-tick-bg:
     linear-gradient(180deg, rgba(24, 26, 32, 0.94), rgba(8, 9, 12, 0.96));
-  --top-player-tick-fill: linear-gradient(90deg, #ffffff 0%, #ff6671 48%, #e31b23 100%);
+  --top-player-tick-fill: linear-gradient(90deg, #ffffff 0%, #ff0000 48%, #ff0000 100%);
   --top-player-tick-border: rgba(255, 255, 255, 0.28);
   --top-player-tick-text: #f7f7f8;
   --top-player-tick-shadow: 0 10px 22px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -1633,11 +1633,11 @@ body[data-theme="phantom-rebel"] .top-stats-panel .panel-title,
 body[data-theme="phantom-rebel"] .top-stats-panel .top-panel-toggle,
 body[data-theme="phantom-rebel"] .top-stats-panel .top-panel-toggle *,
 body[data-theme="phantom-rebel"] .top-stats-compact > .stat-group.compact > h2 {
-  color: #ff3642 !important;
-  -webkit-text-fill-color: #ff3642 !important;
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
   text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.82),
-    0 0 10px rgba(227, 27, 35, 0.12) !important;
+    0 0 10px rgba(255, 0, 0, 0.12) !important;
 }
 
 body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button,
@@ -1649,7 +1649,7 @@ body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button #top-pla
   -webkit-text-fill-color: #f7f7f8 !important;
   text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.82),
-    0 0 8px rgba(227, 27, 35, 0.08) !important;
+    0 0 8px rgba(255, 0, 0, 0.08) !important;
 }
 
 body[data-theme="phantom-rebel"] .top-stats-panel .stat-group.compact .stat-lines span,
@@ -1772,12 +1772,12 @@ body[data-theme="phantom-rebel"] {
   --top-player-tick-bg:
     linear-gradient(180deg, rgba(24, 26, 32, 0.94), rgba(8, 9, 12, 0.96)) !important;
   --top-player-tick-fill:
-    linear-gradient(135deg, #050507 0%, #050507 49.85%, #e31b23 49.85%, #e31b23 100%) !important;
+    linear-gradient(135deg, #050507 0%, #050507 49.85%, #ff0000 49.85%, #ff0000 100%) !important;
   --phantom-top-track:
     linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)),
     linear-gradient(90deg, rgba(4, 5, 8, 0.96), rgba(14, 15, 20, 0.90));
   --phantom-top-fill:
-    linear-gradient(135deg, #050507 0%, #050507 49.85%, #e31b23 49.85%, #e31b23 100%);
+    linear-gradient(135deg, #050507 0%, #050507 49.85%, #ff0000 49.85%, #ff0000 100%);
 }
 
 body[data-theme="phantom-rebel"] .top-player-name-button.top-player-tick-pill {
@@ -1794,7 +1794,7 @@ body[data-theme="phantom-rebel"] .top-player-name-button.top-player-tick-pill::b
   opacity: 0.94 !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 0 12px rgba(227, 27, 35, 0.18) !important;
+    0 0 12px rgba(255, 0, 0, 0.18) !important;
 }
 
 body[data-theme="phantom-rebel"] .top-player-name-button.top-player-tick-pill::after {
@@ -1813,7 +1813,7 @@ body[data-theme="phantom-rebel"] .top-user-info .top-user-meter-list .meter-trac
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.10),
     0 0 0 1px rgba(0, 0, 0, 0.62),
-    0 0 8px rgba(227, 27, 35, 0.10) !important;
+    0 0 8px rgba(255, 0, 0, 0.10) !important;
 }
 
 body[data-theme="phantom-rebel"] .top-user-info .top-user-meter-list .meter-track > *,
@@ -1832,7 +1832,7 @@ body[data-theme="phantom-rebel"] #playdeck-xp-fill {
   background: var(--phantom-top-fill) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 0 8px rgba(227, 27, 35, 0.20) !important;
+    0 0 8px rgba(255, 0, 0, 0.20) !important;
 }
 
 /* Phantom Rebel aligned tick bars END */

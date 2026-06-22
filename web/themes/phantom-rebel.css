@@ -2,8 +2,8 @@
 /* Bold red/black/white urban-noir theme inspired by sharp rebellious JRPG UI language. */
 
 body[data-theme="phantom-rebel"] {
-  --phantom-red: #e31b23;
-  --phantom-red-hot: #ff3642;
+  --phantom-red: #ff0000;
+  --phantom-red-hot: #ff0000;
   --phantom-black: #08090c;
   --phantom-black-soft: #111318;
   --phantom-charcoal: #1a1d24;
@@ -14,7 +14,7 @@ body[data-theme="phantom-rebel"] {
   --phantom-border-bright: rgba(255, 255, 255, 0.34);
 
   --theme-chat-text: #f7f7f8;
-  --theme-chat-name: #ff3642;
+  --theme-chat-name: #ff0000;
   --theme-chat-input-placeholder: rgba(247, 247, 248, 0.48);
   --theme-meter-label-text: #f7f7f8;
   --theme-meter-label-shadow: 0 1px 2px rgba(0, 0, 0, 0.86), 0 0 10px rgba(0, 0, 0, 0.38);
@@ -23,7 +23,7 @@ body[data-theme="phantom-rebel"] {
 body[data-theme="phantom-rebel"] {
   background:
     linear-gradient(180deg, rgba(5, 5, 8, 0.22), rgba(8, 8, 12, 0.38)),
-    radial-gradient(circle at 85% 8%, rgba(227, 27, 35, 0.14), transparent 26rem),
+    radial-gradient(circle at 85% 8%, rgba(255, 0, 0, 0.14), transparent 26rem),
     radial-gradient(circle at 10% 80%, rgba(255, 255, 255, 0.06), transparent 22rem),
     url("/images/red_city.webp") center center / cover no-repeat fixed !important;
   color: #f7f7f8 !important;
@@ -32,7 +32,7 @@ body[data-theme="phantom-rebel"] {
 body[data-theme="phantom-rebel"]::before {
   background:
     radial-gradient(circle, rgba(255, 255, 255, 0.08) 0 1px, transparent 1.8px),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 42%, rgba(227, 27, 35, 0.05)) !important;
+    linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 42%, rgba(255, 0, 0, 0.05)) !important;
   background-size: 160px 120px, auto !important;
   background-position: 0 0, center !important;
   opacity: 1 !important;
@@ -64,7 +64,7 @@ body[data-theme="phantom-rebel"] .right-buff-group {
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 18px 42px rgba(0, 0, 0, 0.36),
     0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 18px rgba(227, 27, 35, 0.08) !important;
+    0 0 18px rgba(255, 0, 0, 0.08) !important;
   backdrop-filter: blur(8px) saturate(1.05);
   -webkit-backdrop-filter: blur(8px) saturate(1.05);
 }
@@ -103,7 +103,7 @@ body[data-theme="phantom-rebel"] .panel-title,
 body[data-theme="phantom-rebel"] .collapse-toggle {
   color: #f7f7f8 !important;
   background:
-    linear-gradient(90deg, rgba(227, 27, 35, 0.96), rgba(146, 17, 24, 0.92), rgba(18, 19, 24, 0.88)) !important;
+    linear-gradient(90deg, rgba(255, 0, 0, 0.96), rgba(255, 0, 0, 0.92), rgba(18, 19, 24, 0.88)) !important;
   border-bottom-color: rgba(255, 255, 255, 0.16) !important;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.78) !important;
   letter-spacing: 0.08em;
@@ -118,7 +118,7 @@ body[data-theme="phantom-rebel"] h3 {
 }
 
 body[data-theme="phantom-rebel"] .eyebrow {
-  color: #ff3642 !important;
+  color: #ff0000 !important;
   letter-spacing: 0.12em;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.76) !important;
 }
@@ -157,13 +157,13 @@ body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item:hover {
 }
 
 body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item.active {
-  border-color: rgba(255, 54, 66, 0.52) !important;
+  border-color: rgba(255, 0, 0, 0.52) !important;
   color: #f7f7f8 !important;
   background:
-    linear-gradient(180deg, rgba(227, 27, 35, 0.98), rgba(122, 15, 21, 0.95), rgba(18, 19, 24, 0.90)) !important;
+    linear-gradient(180deg, rgba(255, 0, 0, 0.98), rgba(255, 0, 0, 0.95), rgba(18, 19, 24, 0.90)) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 0 18px rgba(227, 27, 35, 0.18) !important;
+    0 0 18px rgba(255, 0, 0, 0.18) !important;
 }
 
 body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item:hover .nav-icon,
@@ -207,9 +207,9 @@ body[data-theme="phantom-rebel"] .wardrobe-item-modal-close:hover,
 body[data-theme="phantom-rebel"] .inventory-item-card button:hover,
 body[data-theme="phantom-rebel"] .equipment-card button:hover,
 body[data-theme="phantom-rebel"] .task-card button:hover {
-  border-color: rgba(255, 54, 66, 0.48) !important;
+  border-color: rgba(255, 0, 0, 0.48) !important;
   background:
-    linear-gradient(180deg, rgba(227, 27, 35, 0.96), rgba(118, 14, 20, 0.96)) !important;
+    linear-gradient(180deg, rgba(255, 0, 0, 0.96), rgba(255, 0, 0, 0.96)) !important;
   color: #ffffff !important;
 }
 
@@ -229,23 +229,23 @@ body[data-theme="phantom-rebel"] #section-work .work-card.active button,
 body[data-theme="phantom-rebel"] #section-work .work-card.is-active button,
 body[data-theme="phantom-rebel"] #section-work .task-card[data-state="active"] button,
 body[data-theme="phantom-rebel"] #section-work .work-card[data-state="active"] button {
-  border-color: rgba(255, 54, 66, 0.52) !important;
+  border-color: rgba(255, 0, 0, 0.52) !important;
   background:
-    linear-gradient(180deg, rgba(227, 27, 35, 0.98), rgba(112, 13, 18, 0.96)) !important;
+    linear-gradient(180deg, rgba(255, 0, 0, 0.98), rgba(255, 0, 0, 0.96)) !important;
   color: #ffffff !important;
 }
 
 /* Care states */
 body[data-theme="phantom-rebel"] .care-button-active,
 body[data-theme="phantom-rebel"] button.care-button-active {
-  border-color: rgba(255, 54, 66, 0.56) !important;
+  border-color: rgba(255, 0, 0, 0.56) !important;
   background:
-    linear-gradient(180deg, rgba(227, 27, 35, 0.98), rgba(112, 13, 18, 0.96)) !important;
+    linear-gradient(180deg, rgba(255, 0, 0, 0.98), rgba(255, 0, 0, 0.96)) !important;
   color: #ffffff !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 10px 22px rgba(0, 0, 0, 0.24),
-    0 0 16px rgba(227, 27, 35, 0.16) !important;
+    0 0 16px rgba(255, 0, 0, 0.16) !important;
 }
 
 body[data-theme="phantom-rebel"] .care-button-queued,
@@ -283,10 +283,10 @@ body[data-theme="phantom-rebel"] #section-home .care-button-active .care-button-
 body[data-theme="phantom-rebel"] #section-home .care-button.care-button-active .care-progress-fill,
 body[data-theme="phantom-rebel"] #section-home .care-button-active .care-progress-fill {
   background:
-    linear-gradient(90deg, #ffffff 0%, #ff6a73 48%, #e31b23 100%) !important;
+    linear-gradient(90deg, #ffffff 0%, #ff0000 48%, #ff0000 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 0 12px rgba(227, 27, 35, 0.18) !important;
+    0 0 12px rgba(255, 0, 0, 0.18) !important;
 }
 
 body[data-theme="phantom-rebel"] #section-home .care-status-compact .bar {
@@ -299,10 +299,10 @@ body[data-theme="phantom-rebel"] #section-home .care-status-compact .fill,
 body[data-theme="phantom-rebel"] #section-home .care-status-compact .stat-fill,
 body[data-theme="phantom-rebel"] #section-home .care-status-compact .mood-fill {
   background:
-    linear-gradient(90deg, #ffffff 0%, #ff6a73 48%, #e31b23 100%) !important;
+    linear-gradient(90deg, #ffffff 0%, #ff0000 48%, #ff0000 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 0 12px rgba(227, 27, 35, 0.12) !important;
+    0 0 12px rgba(255, 0, 0, 0.12) !important;
 }
 
 /* Chat */
@@ -328,9 +328,9 @@ body[data-theme="phantom-rebel"] .chat-channel-tabs button.active,
 body[data-theme="phantom-rebel"] .chat-tab[aria-selected="true"],
 body[data-theme="phantom-rebel"] .chat-tabs button[aria-selected="true"],
 body[data-theme="phantom-rebel"] .chat-channel-tabs button[aria-selected="true"] {
-  border-color: rgba(255, 54, 66, 0.56) !important;
+  border-color: rgba(255, 0, 0, 0.56) !important;
   background:
-    linear-gradient(180deg, rgba(227, 27, 35, 0.96), rgba(122, 15, 21, 0.94)) !important;
+    linear-gradient(180deg, rgba(255, 0, 0, 0.96), rgba(255, 0, 0, 0.94)) !important;
   color: #ffffff !important;
   text-shadow: none !important;
 }
@@ -357,15 +357,15 @@ body[data-theme="phantom-rebel"] .chat-time {
 }
 
 body[data-theme="phantom-rebel"] .chat-name {
-  color: #ff3642 !important;
-  -webkit-text-fill-color: #ff3642 !important;
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
   text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.84),
-    0 0 8px rgba(227, 27, 35, 0.10) !important;
+    0 0 8px rgba(255, 0, 0, 0.10) !important;
 }
 
 body[data-theme="phantom-rebel"] .chat-log {
-  scrollbar-color: rgba(255, 54, 66, 0.84) rgba(18, 20, 25, 0.34) !important;
+  scrollbar-color: rgba(255, 0, 0, 0.84) rgba(18, 20, 25, 0.34) !important;
 }
 
 body[data-theme="phantom-rebel"] .chat-log::-webkit-scrollbar-track {
@@ -378,10 +378,10 @@ body[data-theme="phantom-rebel"] .chat-log::-webkit-scrollbar-thumb {
   border-radius: 999px !important;
   border: 2px solid rgba(8, 9, 12, 0.86) !important;
   background:
-    linear-gradient(180deg, #ffffff, #ff5d69 48%, #e31b23 100%) !important;
+    linear-gradient(180deg, #ffffff, #ff0000 48%, #ff0000 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.26),
-    0 0 10px rgba(227, 27, 35, 0.14) !important;
+    0 0 10px rgba(255, 0, 0, 0.14) !important;
 }
 
 /* Home stage */
@@ -390,7 +390,7 @@ body[data-theme="phantom-rebel"] .nami-room-stage {
   border-color: rgba(255, 255, 255, 0.20) !important;
   background:
     radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.06), transparent 12rem),
-    radial-gradient(circle at 84% 18%, rgba(227, 27, 35, 0.08), transparent 12rem),
+    radial-gradient(circle at 84% 18%, rgba(255, 0, 0, 0.08), transparent 12rem),
     linear-gradient(180deg, rgba(12, 13, 17, 0.74), rgba(7, 8, 10, 0.68)) !important;
 }
 
@@ -416,7 +416,7 @@ body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-item-modal-heade
 body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-item-modal-section {
   border-color: rgba(255, 255, 255, 0.12) !important;
   background:
-    linear-gradient(180deg, rgba(30, 12, 16, 0.72), rgba(10, 10, 14, 0.62)) !important;
+    linear-gradient(180deg, rgba(255, 0, 0, 0.72), rgba(10, 10, 14, 0.62)) !important;
   color: #f7f7f8 !important;
 }
 
@@ -443,8 +443,8 @@ body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-source-impl
 body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
 body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
 body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-comparison-row strong {
-  color: #ff3642 !important;
-  -webkit-text-fill-color: #ff3642 !important;
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
 }
 
 /* Left/right rail text */
@@ -465,7 +465,7 @@ body[data-theme="phantom-rebel"] .right-buff-group > strong {
   -webkit-text-fill-color: #f7f7f8 !important;
   text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.78),
-    0 0 8px rgba(227, 27, 35, 0.08) !important;
+    0 0 8px rgba(255, 0, 0, 0.08) !important;
 }
 
 body[data-theme="phantom-rebel"] .left-rail .server-clock,
@@ -489,11 +489,11 @@ body[data-theme="phantom-rebel"] .left-rail [data-online-users] {
 body[data-theme="phantom-rebel"] .right-rail .buff-card strong,
 body[data-theme="phantom-rebel"] .right-buffs-panel .buff-card strong,
 body[data-theme="phantom-rebel"] .right-buff-group .buff-card strong {
-  color: #ff3642 !important;
-  -webkit-text-fill-color: #ff3642 !important;
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
   text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.82),
-    0 0 8px rgba(227, 27, 35, 0.10) !important;
+    0 0 8px rgba(255, 0, 0, 0.10) !important;
 }
 
 body[data-theme="phantom-rebel"] .right-rail .buff-card span,
@@ -671,7 +671,7 @@ body[data-theme="phantom-rebel"] {
 
   /* This angle matches the parallelogram end cuts. */
   --phantom-bar-fill-bg:
-    linear-gradient(135deg, #050507 0%, #050507 49.85%, #e31b23 49.85%, #e31b23 100%);
+    linear-gradient(135deg, #050507 0%, #050507 49.85%, #ff0000 49.85%, #ff0000 100%);
 
   --phantom-track-clip: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
   --phantom-fill-clip: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
@@ -694,7 +694,7 @@ body[data-theme="phantom-rebel"] #section-home .care-status-compact .stat-bar {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 0 1px rgba(0, 0, 0, 0.66),
-    0 0 10px rgba(227, 27, 35, 0.12) !important;
+    0 0 10px rgba(255, 0, 0, 0.12) !important;
 }
 
 /* Fills: direct, named, and generated fill elements. */
@@ -712,7 +712,7 @@ body[data-theme="phantom-rebel"] :is(#nami-xp-fill, #tick-fill, #playdeck-hp-fil
   clip-path: var(--phantom-fill-clip) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 0 10px rgba(227, 27, 35, 0.20) !important;
+    0 0 10px rgba(255, 0, 0, 0.20) !important;
 }
 
 /* All care action button shells are angular, but not split-colored. */
@@ -745,7 +745,7 @@ body[data-theme="phantom-rebel"] .care-button-active,
 body[data-theme="phantom-rebel"] button.care-button-active,
 body[data-theme="phantom-rebel"] .care-actions button.care-button-active:disabled,
 body[data-theme="phantom-rebel"] button.care-action-button.care-button-active:disabled {
-  border-color: rgba(255, 54, 66, 0.78) !important;
+  border-color: rgba(255, 0, 0, 0.78) !important;
   background:
     linear-gradient(180deg, rgba(16, 18, 23, 0.98), rgba(4, 5, 8, 0.98)) !important;
   color: #ffffff !important;
@@ -753,7 +753,7 @@ body[data-theme="phantom-rebel"] button.care-action-button.care-button-active:di
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.10),
     0 10px 22px rgba(0, 0, 0, 0.34),
-    0 0 18px rgba(227, 27, 35, 0.20) !important;
+    0 0 18px rgba(255, 0, 0, 0.20) !important;
 }
 
 /* Queued care buttons: bright/silver state shell. */
@@ -813,7 +813,7 @@ body[data-theme="phantom-rebel"] #section-home .care-button.care-button-active :
   opacity: 1 !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 0 10px rgba(227, 27, 35, 0.22) !important;
+    0 0 10px rgba(255, 0, 0, 0.22) !important;
   z-index: 1 !important;
 }
 
@@ -830,8 +830,8 @@ body[data-theme="phantom-rebel"] .care-button-label {
 
 body[data-theme="phantom-rebel"] #section-home .nami-care-summary h2,
 body[data-theme="phantom-rebel"] #section-home .care-status-compact h2 {
-  color: #ff3642 !important;
-  -webkit-text-fill-color: #ff3642 !important;
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
   font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
   font-size: 1.12rem !important;
   font-weight: 400 !important;
@@ -839,7 +839,7 @@ body[data-theme="phantom-rebel"] #section-home .care-status-compact h2 {
   letter-spacing: 0.065em !important;
   text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.86),
-    0 0 10px rgba(227, 27, 35, 0.18) !important;
+    0 0 10px rgba(255, 0, 0, 0.18) !important;
 }
 
 /* Nami Messages panel: solid black at 20% background opacity without dimming text. */
@@ -856,12 +856,12 @@ body[data-theme="phantom-rebel"] #section-home .nami-message-log {
 
 /* Nami Messages timestamps. */
 body[data-theme="phantom-rebel"] #section-home .nami-log-time {
-  color: #ff3642 !important;
-  -webkit-text-fill-color: #ff3642 !important;
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
   font-weight: 950 !important;
   text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.86),
-    0 0 8px rgba(227, 27, 35, 0.16) !important;
+    0 0 8px rgba(255, 0, 0, 0.16) !important;
 }
 
 /* Nami Messages body text. */
@@ -887,8 +887,8 @@ body[data-theme="phantom-rebel"] #section-home #nami-message-log .muted {
 body[data-theme="phantom-rebel"] .right-buffs-panel .right-buff-group h3,
 body[data-theme="phantom-rebel"] .right-rail .right-buff-group h3,
 body[data-theme="phantom-rebel"] .right-buff-group > h3 {
-  color: #ff3642 !important;
-  -webkit-text-fill-color: #ff3642 !important;
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
   font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
   font-size: 1.02rem !important;
   font-weight: 400 !important;
@@ -896,7 +896,7 @@ body[data-theme="phantom-rebel"] .right-buff-group > h3 {
   letter-spacing: 0.070em !important;
   text-shadow:
     0 1px 1px rgba(0, 0, 0, 0.86),
-    0 0 10px rgba(227, 27, 35, 0.20) !important;
+    0 0 10px rgba(255, 0, 0, 0.20) !important;
 }
 
 /* Phantom Rebel right rail buff group headings END */
@@ -1015,7 +1015,7 @@ body[data-theme="phantom-rebel"] .top-panel-toggle .material-symbols-rounded {
 
 body[data-theme="phantom-rebel"] {
   --phantom-menu-split-bg:
-    linear-gradient(135deg, #e31b23 0%, #e31b23 49.85%, #050507 49.85%, #050507 100%);
+    linear-gradient(135deg, #ff0000 0%, #ff0000 49.85%, #050507 49.85%, #050507 100%);
 }
 
 /* Left rail menu buttons: no rounded corners, hard red/black graphic split. */
@@ -1028,7 +1028,7 @@ body[data-theme="phantom-rebel"] .nav-panel .main-nav.menu-grid .nav-item {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 7px 16px rgba(0, 0, 0, 0.26),
-    0 0 10px rgba(227, 27, 35, 0.08) !important;
+    0 0 10px rgba(255, 0, 0, 0.08) !important;
   overflow: hidden !important;
 }
 
@@ -1040,12 +1040,12 @@ body[data-theme="phantom-rebel"] .nav-panel .main-nav.menu-grid .nav-item.active
   border-radius: 0 !important;
   border-color: rgba(255, 255, 255, 0.42) !important;
   background:
-    linear-gradient(135deg, #050507 0%, #050507 49.85%, #ff3642 49.85%, #ff3642 100%) !important;
+    linear-gradient(135deg, #050507 0%, #050507 49.85%, #ff0000 49.85%, #ff0000 100%) !important;
   color: #ffffff !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     0 8px 18px rgba(0, 0, 0, 0.30),
-    0 0 16px rgba(227, 27, 35, 0.18) !important;
+    0 0 16px rgba(255, 0, 0, 0.18) !important;
 }
 
 /* Menu labels stay white/readable. */
@@ -1104,3 +1104,18 @@ body[data-theme="phantom-rebel"] .nav-panel .main-nav.menu-grid .nav-item .mater
 }
 
 /* Phantom Rebel left rail menu split buttons END */
+
+/* Phantom Rebel rail labels display font restore START */
+/* Keep the rail toggle text "Menu" and "Buffs" in the Phantom Rebel display font. */
+
+body[data-theme="phantom-rebel"] .left-rail .rail-toggle .collapse-label,
+body[data-theme="phantom-rebel"] .right-rail .rail-toggle .collapse-label,
+body[data-theme="phantom-rebel"] .nav-panel .rail-toggle .collapse-label {
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 1.00rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.070em !important;
+}
+
+/* Phantom Rebel rail labels display font restore END */
