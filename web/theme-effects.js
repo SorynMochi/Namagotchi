@@ -716,9 +716,10 @@
 
       bubbles.length = 0;
 
+      const viewportArea = viewportWidth * viewportHeight;
       const targetCount = reducedMotion
-        ? 24
-        : Math.max(36, Math.min(72, Math.round(viewportWidth / 30)));
+        ? Math.max(30, Math.min(60, Math.round(viewportArea / 140000)))
+        : Math.max(50, Math.min(180, Math.round(viewportArea / 52000)));
 
       for (let index = 0; index < targetCount; index += 1) {
         bubbles.push(makeBubble(true));
