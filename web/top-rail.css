@@ -1474,3 +1474,20 @@ body[data-theme="woodland-sun"] .top-stats-compact > .stat-group.compact > h2 {
 }
 
 /* Woodland Sun top rail gold headings END */
+
+/* Woodland Sun top rail player name gold START */
+/* Player name only. Keeps meter labels and values unchanged. */
+
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button #top-player-name {
+  color: #f4d779 !important;
+  -webkit-text-fill-color: #f4d779 !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.76),
+    0 0 10px rgba(244, 215, 121, 0.14) !important;
+}
+
+/* Woodland Sun top rail player name gold END */
