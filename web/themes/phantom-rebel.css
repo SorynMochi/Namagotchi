@@ -661,83 +661,212 @@ body[data-theme="phantom-rebel"] .care-button-label .care-button-timer-text {
 
 /* Phantom Rebel rail title and care timer polish END */
 
-/* Phantom Rebel parallelogram progress bars START */
-/* Theme-specific angular progress bars: hard black/red split, no soft gradient blending. */
+/* Phantom Rebel aligned progress bars START */
+/* Unified slash geometry: the track edge, fill edge, and black/red split all use the same slash direction. */
 
 body[data-theme="phantom-rebel"] {
-  --phantom-bar-track-bg:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.045)),
-    linear-gradient(90deg, rgba(4, 5, 8, 0.92), rgba(14, 15, 20, 0.88));
-  --phantom-bar-fill-bg:
-    linear-gradient(90deg, #050507 0%, #050507 50%, #e31b23 50%, #e31b23 100%);
-  --phantom-bar-clip: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
-  --phantom-bar-clip-small: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+  --phantom-split-fill:
+    linear-gradient(135deg, #050507 0%, #050507 49.85%, #e31b23 49.85%, #e31b23 100%);
+  --phantom-track-bg:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.045)),
+    linear-gradient(90deg, rgba(4, 5, 8, 0.96), rgba(14, 15, 20, 0.92));
+
+  --phantom-track-clip: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  --phantom-fill-clip: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+
+  --phantom-track-clip-small: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+  --phantom-fill-clip-small: polygon(0 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+
+  --phantom-care-button-clip: polygon(18px 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
+  --phantom-care-fill-clip: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
 }
 
-/* Main page progress tracks. */
-body[data-theme="phantom-rebel"] .bar,
-body[data-theme="phantom-rebel"] .stat-bar,
-body[data-theme="phantom-rebel"] .task-xp-bar,
-body[data-theme="phantom-rebel"] .care-status-compact .bar,
-body[data-theme="phantom-rebel"] .nami-progression-card .bar,
-body[data-theme="phantom-rebel"] .combat-panel .bar,
-body[data-theme="phantom-rebel"] .zone-card .bar {
+/* Generic progress tracks, including Care XP / Nami XP / Care Status / Work XP. */
+body[data-theme="phantom-rebel"] :is(
+  .bar,
+  .stat-bar,
+  .meter-track,
+  .task-xp-bar,
+  .xp-bar,
+  .hp-bar,
+  .need-bar,
+  .mood-bar,
+  .progress-bar
+),
+body[data-theme="phantom-rebel"] #section-home :is(
+  .nami-progression-card,
+  .nami-need-card,
+  .care-status-compact,
+  .nami-status-card
+) :is(
+  .bar,
+  .stat-bar,
+  .meter-track,
+  .xp-bar,
+  .hp-bar,
+  .need-bar,
+  .mood-bar,
+  .progress-bar
+) {
   height: 12px !important;
-  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
   border-radius: 0 !important;
-  background: var(--phantom-bar-track-bg) !important;
-  clip-path: var(--phantom-bar-clip) !important;
+  background: var(--phantom-track-bg) !important;
+  clip-path: var(--phantom-track-clip) !important;
   overflow: hidden !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 0 0 1px rgba(0, 0, 0, 0.62),
-    0 0 10px rgba(227, 27, 35, 0.10) !important;
+    0 0 0 1px rgba(0, 0, 0, 0.66),
+    0 0 10px rgba(227, 27, 35, 0.12) !important;
 }
 
-/* Main page progress fills. */
-body[data-theme="phantom-rebel"] .bar .fill,
-body[data-theme="phantom-rebel"] .stat-bar .fill,
-body[data-theme="phantom-rebel"] .task-xp-bar .fill,
-body[data-theme="phantom-rebel"] .care-status-compact .fill,
-body[data-theme="phantom-rebel"] .care-status-compact .stat-fill,
-body[data-theme="phantom-rebel"] .care-status-compact .mood-fill,
-body[data-theme="phantom-rebel"] .nami-progression-card .fill,
-body[data-theme="phantom-rebel"] .combat-panel .fill,
-body[data-theme="phantom-rebel"] .zone-card .fill,
-body[data-theme="phantom-rebel"] .xp-fill,
-body[data-theme="phantom-rebel"] .hp-fill,
-body[data-theme="phantom-rebel"] .stat-fill,
-body[data-theme="phantom-rebel"] .mood-fill,
-body[data-theme="phantom-rebel"] .task-xp-fill {
+/* Generic progress fills. This catches named fills and unknown direct fill children. */
+body[data-theme="phantom-rebel"] :is(
+  .bar,
+  .stat-bar,
+  .meter-track,
+  .task-xp-bar,
+  .xp-bar,
+  .hp-bar,
+  .need-bar,
+  .mood-bar,
+  .progress-bar
+) > *,
+body[data-theme="phantom-rebel"] :is(
+  .fill,
+  .meter-fill,
+  .tick-fill,
+  .xp-fill,
+  .hp-fill,
+  .stat-fill,
+  .mood-fill,
+  .task-xp-fill,
+  .progress-fill
+),
+body[data-theme="phantom-rebel"] #section-home :is(
+  .nami-progression-card,
+  .nami-need-card,
+  .care-status-compact,
+  .nami-status-card
+) :is(
+  .fill,
+  .meter-fill,
+  .tick-fill,
+  .xp-fill,
+  .hp-fill,
+  .stat-fill,
+  .mood-fill,
+  .task-xp-fill,
+  .progress-fill,
+  [class$="-fill"],
+  [class*="-fill"]
+),
+body[data-theme="phantom-rebel"] :is(
+  #nami-xp-fill,
+  #tick-fill,
+  #playdeck-hp-fill,
+  #playdeck-xp-fill
+) {
   height: 100% !important;
   min-height: 0 !important;
   border-radius: 0 !important;
-  background: var(--phantom-bar-fill-bg) !important;
+  background: var(--phantom-split-fill) !important;
+  clip-path: var(--phantom-fill-clip) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 0 10px rgba(227, 27, 35, 0.18) !important;
+    0 0 10px rgba(227, 27, 35, 0.20) !important;
 }
 
-/* Active care action progress fill, inside the care buttons. */
-body[data-theme="phantom-rebel"] .care-button-progress-fill,
-body[data-theme="phantom-rebel"] .care-progress-fill,
-body[data-theme="phantom-rebel"] #section-home .care-button.care-button-active .care-button-progress-fill,
-body[data-theme="phantom-rebel"] #section-home .care-button-active .care-button-progress-fill,
-body[data-theme="phantom-rebel"] #section-home .care-button.care-button-active .care-progress-fill,
-body[data-theme="phantom-rebel"] #section-home .care-button-active .care-progress-fill {
+/* Care action button shells: every state gets the same slash geometry. */
+body[data-theme="phantom-rebel"] .care-card button,
+body[data-theme="phantom-rebel"] .care-actions button,
+body[data-theme="phantom-rebel"] button.care-action-button,
+body[data-theme="phantom-rebel"] .compact-care-actions .care-button {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
   border-radius: 0 !important;
-  clip-path: var(--phantom-bar-clip-small) !important;
-  background: var(--phantom-bar-fill-bg) !important;
+  clip-path: var(--phantom-care-button-clip) !important;
+}
+
+/* Available: dark, readable, not active. */
+body[data-theme="phantom-rebel"] .care-card button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="phantom-rebel"] .care-actions button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="phantom-rebel"] button.care-action-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.30) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.10) 18%, transparent 18%),
+    linear-gradient(180deg, rgba(18, 20, 25, 0.98), rgba(7, 8, 11, 0.98)) !important;
+  color: #f7f7f8 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 7px 16px rgba(0, 0, 0, 0.22) !important;
+}
+
+/* Active: hard black/red rebel state. Active buttons are disabled by JS, so this must beat disabled styles. */
+body[data-theme="phantom-rebel"] .care-button-active,
+body[data-theme="phantom-rebel"] button.care-button-active,
+body[data-theme="phantom-rebel"] .care-actions button.care-button-active:disabled,
+body[data-theme="phantom-rebel"] button.care-action-button.care-button-active:disabled {
+  border-color: rgba(255, 54, 66, 0.78) !important;
+  background: var(--phantom-split-fill) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 0 10px rgba(227, 27, 35, 0.16) !important;
+    0 10px 22px rgba(0, 0, 0, 0.30),
+    0 0 18px rgba(227, 27, 35, 0.24) !important;
 }
 
-/* If the active care button itself clips children, keep the shape angular too. */
-body[data-theme="phantom-rebel"] .care-button-active,
-body[data-theme="phantom-rebel"] button.care-button-active {
-  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%) !important;
+/* Queued: bright/silver card, clearly different from active. */
+body[data-theme="phantom-rebel"] .care-button-queued,
+body[data-theme="phantom-rebel"] button.care-button-queued {
+  border-color: rgba(255, 255, 255, 0.56) !important;
+  background:
+    linear-gradient(135deg, #f7f7f8 0%, #f7f7f8 49.85%, #aeb4c1 49.85%, #d7dae2 100%) !important;
+  color: #101216 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 7px 16px rgba(0, 0, 0, 0.20) !important;
+}
+
+/* Blocked/disabled: muted ash. Exclude active and queued so active progress does not get swallowed. */
+body[data-theme="phantom-rebel"] .care-button-blocked,
+body[data-theme="phantom-rebel"] button.care-button-blocked,
+body[data-theme="phantom-rebel"] .care-actions button:disabled:not(.care-button-active):not(.care-button-queued),
+body[data-theme="phantom-rebel"] button.care-action-button:disabled:not(.care-button-active):not(.care-button-queued) {
+  border-color: rgba(122, 128, 140, 0.36) !important;
+  background:
+    linear-gradient(135deg, rgba(64, 69, 78, 0.76) 0%, rgba(64, 69, 78, 0.76) 49.85%, rgba(32, 35, 42, 0.80) 49.85%, rgba(32, 35, 42, 0.80) 100%) !important;
+  color: #bcc2ce !important;
+  opacity: 1 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 6px 14px rgba(0, 0, 0, 0.16) !important;
+}
+
+/* Active care action progress fill inside the button. */
+body[data-theme="phantom-rebel"] .care-button-progress-fill,
+body[data-theme="phantom-rebel"] .care-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button .care-button-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button .care-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button-active .care-button-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button-active .care-progress-fill {
   border-radius: 0 !important;
+  clip-path: var(--phantom-care-fill-clip) !important;
+  background: var(--phantom-split-fill) !important;
+  opacity: 0.96 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 10px rgba(227, 27, 35, 0.22) !important;
 }
 
-/* Phantom Rebel parallelogram progress bars END */
+/* Keep care labels above the progress fill. */
+body[data-theme="phantom-rebel"] .care-button-label {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Phantom Rebel aligned progress bars END */
