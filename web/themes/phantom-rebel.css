@@ -1,0 +1,510 @@
+/* Phantom Rebel theme START */
+/* Bold red/black/white urban-noir theme inspired by sharp rebellious JRPG UI language. */
+
+body[data-theme="phantom-rebel"] {
+  --phantom-red: #e31b23;
+  --phantom-red-hot: #ff3642;
+  --phantom-black: #08090c;
+  --phantom-black-soft: #111318;
+  --phantom-charcoal: #1a1d24;
+  --phantom-white: #f7f7f8;
+  --phantom-silver: #d3d7df;
+  --phantom-slate: #9ca4b2;
+  --phantom-border: rgba(255, 255, 255, 0.18);
+  --phantom-border-bright: rgba(255, 255, 255, 0.34);
+
+  --theme-chat-text: #f7f7f8;
+  --theme-chat-name: #ff3642;
+  --theme-chat-input-placeholder: rgba(247, 247, 248, 0.48);
+  --theme-meter-label-text: #f7f7f8;
+  --theme-meter-label-shadow: 0 1px 2px rgba(0, 0, 0, 0.86), 0 0 10px rgba(0, 0, 0, 0.38);
+}
+
+body[data-theme="phantom-rebel"] {
+  background:
+    linear-gradient(180deg, rgba(5, 5, 8, 0.22), rgba(8, 8, 12, 0.38)),
+    radial-gradient(circle at 85% 8%, rgba(227, 27, 35, 0.14), transparent 26rem),
+    radial-gradient(circle at 10% 80%, rgba(255, 255, 255, 0.06), transparent 22rem),
+    url("/images/red_city.webp") center center / cover no-repeat fixed !important;
+  color: #f7f7f8 !important;
+}
+
+body[data-theme="phantom-rebel"]::before {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.08) 0 1px, transparent 1.8px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 42%, rgba(227, 27, 35, 0.05)) !important;
+  background-size: 160px 120px, auto !important;
+  background-position: 0 0, center !important;
+  opacity: 1 !important;
+}
+
+/* Main glass/panel shells */
+body[data-theme="phantom-rebel"] .panel,
+body[data-theme="phantom-rebel"] .main-panel,
+body[data-theme="phantom-rebel"] .chat-panel,
+body[data-theme="phantom-rebel"] .top-stats-panel,
+body[data-theme="phantom-rebel"] .nav-panel,
+body[data-theme="phantom-rebel"] .right-buffs-panel,
+body[data-theme="phantom-rebel"] .nami-card,
+body[data-theme="phantom-rebel"] .care-card,
+body[data-theme="phantom-rebel"] .zone-list,
+body[data-theme="phantom-rebel"] .combat-panel,
+body[data-theme="phantom-rebel"] .task-card,
+body[data-theme="phantom-rebel"] .placeholder-copy,
+body[data-theme="phantom-rebel"] .settings-card,
+body[data-theme="phantom-rebel"] .wardrobe-panel,
+body[data-theme="phantom-rebel"] .equipment-card,
+body[data-theme="phantom-rebel"] .inventory-item-card,
+body[data-theme="phantom-rebel"] .right-buff-group {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(16, 17, 22, 0.76), rgba(8, 9, 12, 0.70)) !important;
+  color: #f7f7f8 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 42px rgba(0, 0, 0, 0.36),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 0 18px rgba(227, 27, 35, 0.08) !important;
+  backdrop-filter: blur(8px) saturate(1.05);
+  -webkit-backdrop-filter: blur(8px) saturate(1.05);
+}
+
+/* Inner surfaces */
+body[data-theme="phantom-rebel"] .top-stats-compact,
+body[data-theme="phantom-rebel"] .stat-group.compact,
+body[data-theme="phantom-rebel"] .menu-status-card,
+body[data-theme="phantom-rebel"] .buff-card,
+body[data-theme="phantom-rebel"] .stat-lines,
+body[data-theme="phantom-rebel"] .compact-grid-lines,
+body[data-theme="phantom-rebel"] .nami-message,
+body[data-theme="phantom-rebel"] .chat-form,
+body[data-theme="phantom-rebel"] .chat-log,
+body[data-theme="phantom-rebel"] .equipment-slot,
+body[data-theme="phantom-rebel"] .wardrobe-bonus-card,
+body[data-theme="phantom-rebel"] .wardrobe-bonus-row,
+body[data-theme="phantom-rebel"] .settings-field,
+body[data-theme="phantom-rebel"] .nami-progression-card,
+body[data-theme="phantom-rebel"] .nami-need-card,
+body[data-theme="phantom-rebel"] .care-status-compact,
+body[data-theme="phantom-rebel"] .nami-care-summary,
+body[data-theme="phantom-rebel"] .right-buff-list,
+body[data-theme="phantom-rebel"] .right-buff-group {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 25, 0.58), rgba(8, 9, 12, 0.44)) !important;
+  color: #d3d7df !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 8px 22px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Headers / title bars */
+body[data-theme="phantom-rebel"] .panel-title,
+body[data-theme="phantom-rebel"] .collapse-toggle {
+  color: #f7f7f8 !important;
+  background:
+    linear-gradient(90deg, rgba(227, 27, 35, 0.96), rgba(146, 17, 24, 0.92), rgba(18, 19, 24, 0.88)) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.16) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.78) !important;
+  letter-spacing: 0.08em;
+}
+
+body[data-theme="phantom-rebel"] h1,
+body[data-theme="phantom-rebel"] h2,
+body[data-theme="phantom-rebel"] h3 {
+  color: #f7f7f8 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.82) !important;
+  letter-spacing: 0.05em;
+}
+
+body[data-theme="phantom-rebel"] .eyebrow {
+  color: #ff3642 !important;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.76) !important;
+}
+
+body[data-theme="phantom-rebel"] .muted,
+body[data-theme="phantom-rebel"] .placeholder-copy,
+body[data-theme="phantom-rebel"] .equipment-slot-label,
+body[data-theme="phantom-rebel"] .gear-level-tag,
+body[data-theme="phantom-rebel"] .gear-tailoring-tag {
+  color: #bcc2ce !important;
+}
+
+body[data-theme="phantom-rebel"] strong,
+body[data-theme="phantom-rebel"] b,
+body[data-theme="phantom-rebel"] .gear-card-name,
+body[data-theme="phantom-rebel"] .wardrobe-bonus-row strong {
+  color: #f7f7f8 !important;
+}
+
+/* Navigation */
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 25, 0.82), rgba(9, 10, 13, 0.86)) !important;
+  color: #f7f7f8 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 18px rgba(0, 0, 0, 0.22) !important;
+}
+
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item:hover {
+  border-color: rgba(255, 255, 255, 0.34) !important;
+  color: #f7f7f8 !important;
+  background:
+    linear-gradient(180deg, rgba(36, 39, 47, 0.90), rgba(13, 14, 18, 0.90)) !important;
+}
+
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(255, 54, 66, 0.52) !important;
+  color: #f7f7f8 !important;
+  background:
+    linear-gradient(180deg, rgba(227, 27, 35, 0.98), rgba(122, 15, 21, 0.95), rgba(18, 19, 24, 0.90)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 18px rgba(227, 27, 35, 0.18) !important;
+}
+
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item:hover .nav-icon,
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item:hover svg,
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item:hover svg *,
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item.active .nav-icon,
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item.active svg,
+body[data-theme="phantom-rebel"] .main-nav.menu-grid .nav-item.active svg * {
+  color: #f7f7f8 !important;
+  -webkit-text-fill-color: #f7f7f8 !important;
+  fill: #f7f7f8 !important;
+  stroke: #f7f7f8 !important;
+}
+
+/* Buttons */
+body[data-theme="phantom-rebel"] .chat-form button,
+body[data-theme="phantom-rebel"] .secondary-button,
+body[data-theme="phantom-rebel"] #logout-button,
+body[data-theme="phantom-rebel"] #dev-spawn-wardrobe-item-button,
+body[data-theme="phantom-rebel"] .wardrobe-item-actions button,
+body[data-theme="phantom-rebel"] .wardrobe-item-modal-close,
+body[data-theme="phantom-rebel"] .inventory-item-card button,
+body[data-theme="phantom-rebel"] .equipment-card button,
+body[data-theme="phantom-rebel"] .task-card button {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 25, 0.96), rgba(9, 10, 13, 0.96)) !important;
+  color: #f7f7f8 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.80) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 18px rgba(0, 0, 0, 0.18) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-form button:hover,
+body[data-theme="phantom-rebel"] .secondary-button:hover,
+body[data-theme="phantom-rebel"] #logout-button:hover,
+body[data-theme="phantom-rebel"] #dev-spawn-wardrobe-item-button:hover,
+body[data-theme="phantom-rebel"] .wardrobe-item-actions button:hover,
+body[data-theme="phantom-rebel"] .wardrobe-item-modal-close:hover,
+body[data-theme="phantom-rebel"] .inventory-item-card button:hover,
+body[data-theme="phantom-rebel"] .equipment-card button:hover,
+body[data-theme="phantom-rebel"] .task-card button:hover {
+  border-color: rgba(255, 54, 66, 0.48) !important;
+  background:
+    linear-gradient(180deg, rgba(227, 27, 35, 0.96), rgba(118, 14, 20, 0.96)) !important;
+  color: #ffffff !important;
+}
+
+/* Work buttons */
+body[data-theme="phantom-rebel"] #section-work .task-card button,
+body[data-theme="phantom-rebel"] #section-work .work-card button,
+body[data-theme="phantom-rebel"] #section-work .task-panel button {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(16, 18, 23, 0.96), rgba(8, 9, 12, 0.96)) !important;
+  color: #f7f7f8 !important;
+}
+
+body[data-theme="phantom-rebel"] #section-work .task-card.active button,
+body[data-theme="phantom-rebel"] #section-work .task-card.is-active button,
+body[data-theme="phantom-rebel"] #section-work .work-card.active button,
+body[data-theme="phantom-rebel"] #section-work .work-card.is-active button,
+body[data-theme="phantom-rebel"] #section-work .task-card[data-state="active"] button,
+body[data-theme="phantom-rebel"] #section-work .work-card[data-state="active"] button {
+  border-color: rgba(255, 54, 66, 0.52) !important;
+  background:
+    linear-gradient(180deg, rgba(227, 27, 35, 0.98), rgba(112, 13, 18, 0.96)) !important;
+  color: #ffffff !important;
+}
+
+/* Care states */
+body[data-theme="phantom-rebel"] .care-button-active,
+body[data-theme="phantom-rebel"] button.care-button-active {
+  border-color: rgba(255, 54, 66, 0.56) !important;
+  background:
+    linear-gradient(180deg, rgba(227, 27, 35, 0.98), rgba(112, 13, 18, 0.96)) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 22px rgba(0, 0, 0, 0.24),
+    0 0 16px rgba(227, 27, 35, 0.16) !important;
+}
+
+body[data-theme="phantom-rebel"] .care-button-queued,
+body[data-theme="phantom-rebel"] button.care-button-queued {
+  border-color: rgba(255, 255, 255, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(242, 242, 244, 0.92), rgba(208, 211, 218, 0.92)) !important;
+  color: #101216 !important;
+}
+
+body[data-theme="phantom-rebel"] .care-button-blocked,
+body[data-theme="phantom-rebel"] button.care-button-blocked,
+body[data-theme="phantom-rebel"] .care-actions button:disabled,
+body[data-theme="phantom-rebel"] button:disabled.care-button-blocked,
+body[data-theme="phantom-rebel"] button.care-button-blocked:disabled {
+  border-color: rgba(122, 128, 140, 0.26) !important;
+  background:
+    linear-gradient(180deg, rgba(59, 63, 71, 0.68), rgba(37, 40, 46, 0.72)) !important;
+  color: #bcc2ce !important;
+  opacity: 1 !important;
+}
+
+body[data-theme="phantom-rebel"] .care-card button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="phantom-rebel"] .care-actions button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="phantom-rebel"] button.care-action-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 25, 0.96), rgba(9, 10, 13, 0.96)) !important;
+  color: #f7f7f8 !important;
+}
+
+/* Progress / bars */
+body[data-theme="phantom-rebel"] #section-home .care-button.care-button-active .care-button-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button-active .care-button-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button.care-button-active .care-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button-active .care-progress-fill {
+  background:
+    linear-gradient(90deg, #ffffff 0%, #ff6a73 48%, #e31b23 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 0 12px rgba(227, 27, 35, 0.18) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-home .care-status-compact .bar {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(10, 11, 14, 0.58), rgba(6, 6, 8, 0.48)) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-home .care-status-compact .fill,
+body[data-theme="phantom-rebel"] #section-home .care-status-compact .stat-fill,
+body[data-theme="phantom-rebel"] #section-home .care-status-compact .mood-fill {
+  background:
+    linear-gradient(90deg, #ffffff 0%, #ff6a73 48%, #e31b23 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 12px rgba(227, 27, 35, 0.12) !important;
+}
+
+/* Chat */
+body[data-theme="phantom-rebel"] .chat-panel,
+body[data-theme="phantom-rebel"] .chat-shell {
+  background:
+    linear-gradient(180deg, rgba(13, 14, 18, 0.82), rgba(8, 9, 12, 0.76)) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-tab,
+body[data-theme="phantom-rebel"] .chat-tabs button,
+body[data-theme="phantom-rebel"] .chat-channel-tabs button {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(20, 22, 28, 0.84), rgba(10, 11, 14, 0.84)) !important;
+  color: #f7f7f8 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.62) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-tab.active,
+body[data-theme="phantom-rebel"] .chat-tabs button.active,
+body[data-theme="phantom-rebel"] .chat-channel-tabs button.active,
+body[data-theme="phantom-rebel"] .chat-tab[aria-selected="true"],
+body[data-theme="phantom-rebel"] .chat-tabs button[aria-selected="true"],
+body[data-theme="phantom-rebel"] .chat-channel-tabs button[aria-selected="true"] {
+  border-color: rgba(255, 54, 66, 0.56) !important;
+  background:
+    linear-gradient(180deg, rgba(227, 27, 35, 0.96), rgba(122, 15, 21, 0.94)) !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-log,
+body[data-theme="phantom-rebel"] .chat-messages {
+  background:
+    linear-gradient(180deg, rgba(8, 9, 12, 0.82), rgba(5, 6, 8, 0.80)) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f7f7f8 !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-message,
+body[data-theme="phantom-rebel"] .chat-text {
+  color: #f7f7f8 !important;
+  -webkit-text-fill-color: #f7f7f8 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.72) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-time {
+  color: #c4c8d1 !important;
+  -webkit-text-fill-color: #c4c8d1 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.76) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-name {
+  color: #ff3642 !important;
+  -webkit-text-fill-color: #ff3642 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.84),
+    0 0 8px rgba(227, 27, 35, 0.10) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-log {
+  scrollbar-color: rgba(255, 54, 66, 0.84) rgba(18, 20, 25, 0.34) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-log::-webkit-scrollbar-track {
+  background:
+    linear-gradient(180deg, rgba(18, 20, 25, 0.56), rgba(8, 9, 12, 0.44)) !important;
+  border-radius: 999px !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-log::-webkit-scrollbar-thumb {
+  border-radius: 999px !important;
+  border: 2px solid rgba(8, 9, 12, 0.86) !important;
+  background:
+    linear-gradient(180deg, #ffffff, #ff5d69 48%, #e31b23 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    0 0 10px rgba(227, 27, 35, 0.14) !important;
+}
+
+/* Home stage */
+body[data-theme="phantom-rebel"] .nami-placeholder,
+body[data-theme="phantom-rebel"] .nami-room-stage {
+  border-color: rgba(255, 255, 255, 0.20) !important;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.06), transparent 12rem),
+    radial-gradient(circle at 84% 18%, rgba(227, 27, 35, 0.08), transparent 12rem),
+    linear-gradient(180deg, rgba(12, 13, 17, 0.74), rgba(7, 8, 10, 0.68)) !important;
+}
+
+/* Modals */
+body[data-theme="phantom-rebel"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(255, 255, 255, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(12, 13, 17, 0.98), rgba(6, 6, 9, 0.99)) !important;
+  color: #f7f7f8 !important;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.54),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-item-modal-header,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background:
+    linear-gradient(180deg, rgba(30, 12, 16, 0.72), rgba(10, 10, 14, 0.62)) !important;
+  color: #f7f7f8 !important;
+}
+
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #f7f7f8 !important;
+  -webkit-text-fill-color: #f7f7f8 !important;
+}
+
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #d3d7df !important;
+  -webkit-text-fill-color: #d3d7df !important;
+}
+
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="phantom-rebel"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #ff3642 !important;
+  -webkit-text-fill-color: #ff3642 !important;
+}
+
+/* Left/right rail text */
+body[data-theme="phantom-rebel"] .left-rail .panel-title,
+body[data-theme="phantom-rebel"] .left-rail .panel-title *,
+body[data-theme="phantom-rebel"] .right-rail .panel-title,
+body[data-theme="phantom-rebel"] .right-rail .panel-title *,
+body[data-theme="phantom-rebel"] .right-buffs-panel .panel-title,
+body[data-theme="phantom-rebel"] .right-buffs-panel .panel-title *,
+body[data-theme="phantom-rebel"] .right-rail h2,
+body[data-theme="phantom-rebel"] .right-rail h3,
+body[data-theme="phantom-rebel"] .right-buffs-panel h2,
+body[data-theme="phantom-rebel"] .right-buffs-panel h3,
+body[data-theme="phantom-rebel"] .right-buff-group h2,
+body[data-theme="phantom-rebel"] .right-buff-group h3,
+body[data-theme="phantom-rebel"] .right-buff-group > strong {
+  color: #f7f7f8 !important;
+  -webkit-text-fill-color: #f7f7f8 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.78),
+    0 0 8px rgba(227, 27, 35, 0.08) !important;
+}
+
+body[data-theme="phantom-rebel"] .left-rail .server-clock,
+body[data-theme="phantom-rebel"] .left-rail .server-clock *,
+body[data-theme="phantom-rebel"] .left-rail .server-time,
+body[data-theme="phantom-rebel"] .left-rail .server-time *,
+body[data-theme="phantom-rebel"] .left-rail .online-users,
+body[data-theme="phantom-rebel"] .left-rail .online-users *,
+body[data-theme="phantom-rebel"] .left-rail #server-time,
+body[data-theme="phantom-rebel"] .left-rail #server-time *,
+body[data-theme="phantom-rebel"] .left-rail #online-users,
+body[data-theme="phantom-rebel"] .left-rail #online-users *,
+body[data-theme="phantom-rebel"] .left-rail [data-server-time],
+body[data-theme="phantom-rebel"] .left-rail [data-online-users] {
+  color: #d3d7df !important;
+  -webkit-text-fill-color: #d3d7df !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.72) !important;
+}
+
+/* Buffs */
+body[data-theme="phantom-rebel"] .right-rail .buff-card strong,
+body[data-theme="phantom-rebel"] .right-buffs-panel .buff-card strong,
+body[data-theme="phantom-rebel"] .right-buff-group .buff-card strong {
+  color: #ff3642 !important;
+  -webkit-text-fill-color: #ff3642 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.82),
+    0 0 8px rgba(227, 27, 35, 0.10) !important;
+}
+
+body[data-theme="phantom-rebel"] .right-rail .buff-card span,
+body[data-theme="phantom-rebel"] .right-rail .buff-card small,
+body[data-theme="phantom-rebel"] .right-buffs-panel .buff-card span,
+body[data-theme="phantom-rebel"] .right-buffs-panel .buff-card small,
+body[data-theme="phantom-rebel"] .right-buff-group .buff-card span,
+body[data-theme="phantom-rebel"] .right-buff-group .buff-card small {
+  color: #d3d7df !important;
+  -webkit-text-fill-color: #d3d7df !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.70) !important;
+}
+
+/* Phantom Rebel theme END */

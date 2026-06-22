@@ -136,6 +136,7 @@ const THEME_FILES = {
   "pearl-tide": "/themes/pearl-tide.css",
   "woodland-sun": "/themes/woodland-sun.css",
   "woodland-moon": "/themes/woodland-moon.css",
+  "phantom-rebel": "/themes/phantom-rebel.css",
   "nami-default": "/themes/nami-default.css",
   midnight: "/themes/midnight.css",
   strawberry: "/themes/strawberry.css",

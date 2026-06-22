@@ -1613,3 +1613,67 @@ body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #nami-xp-label 
 }
 
 /* Woodland Moon firefly top rail labels END */
+
+/* Phantom Rebel top rail START */
+/* Top rail support for the Phantom Rebel theme. */
+
+body[data-theme="phantom-rebel"] {
+  --top-player-tick-bg:
+    linear-gradient(180deg, rgba(24, 26, 32, 0.94), rgba(8, 9, 12, 0.96));
+  --top-player-tick-fill: linear-gradient(90deg, #ffffff 0%, #ff6671 48%, #e31b23 100%);
+  --top-player-tick-border: rgba(255, 255, 255, 0.28);
+  --top-player-tick-text: #f7f7f8;
+  --top-player-tick-shadow: 0 10px 22px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  --top-user-label-color: #d3d7df;
+  --top-user-value-color: #f7f7f8;
+}
+
+body[data-theme="phantom-rebel"] .top-stats-panel .panel-title,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-panel-toggle,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-panel-toggle *,
+body[data-theme="phantom-rebel"] .top-stats-compact > .stat-group.compact > h2 {
+  color: #ff3642 !important;
+  -webkit-text-fill-color: #ff3642 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.82),
+    0 0 10px rgba(227, 27, 35, 0.12) !important;
+}
+
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="phantom-rebel"] .top-user-info .top-player-name-button #top-player-name {
+  color: #f7f7f8 !important;
+  -webkit-text-fill-color: #f7f7f8 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.82),
+    0 0 8px rgba(227, 27, 35, 0.08) !important;
+}
+
+body[data-theme="phantom-rebel"] .top-stats-panel .stat-group.compact .stat-lines span,
+body[data-theme="phantom-rebel"] .top-stats-panel .stat-group.compact .compact-grid-lines span,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info .top-user-meter-list .metric-name,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #current-action-label .metric-name,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-name,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-name,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #nami-xp-label .metric-name {
+  color: #d3d7df !important;
+  -webkit-text-fill-color: #d3d7df !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.76) !important;
+}
+
+body[data-theme="phantom-rebel"] .top-stats-panel .stat-group.compact .stat-lines strong,
+body[data-theme="phantom-rebel"] .top-stats-panel .stat-group.compact .compact-grid-lines strong,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info .top-user-meter-list .metric-value,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #current-action-label .metric-value,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-value,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-value,
+body[data-theme="phantom-rebel"] .top-stats-panel .top-user-info #nami-xp-label .metric-value {
+  color: #f7f7f8 !important;
+  -webkit-text-fill-color: #f7f7f8 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.80) !important;
+}
+
+/* Phantom Rebel top rail END */
