@@ -1,0 +1,1598 @@
+/* Woodland Moon theme START */
+/* Bright forest background with transparent warm-green glass UI. */
+
+:root {
+  color-scheme: light;
+
+  --woodland-canopy: #244a25;
+  --woodland-leaf: #4f8b39;
+  --woodland-fresh: #92c85b;
+  --woodland-moon: #f4d779;
+  --woodland-cream: #fffbe8;
+  --woodland-bark: #6a4428;
+  --woodland-soil: #3b281a;
+  --woodland-moss: #2f6a3d;
+  --woodland-sky: #c7efe6;
+
+  --bg-0: #e8f6d2;
+  --bg-1: #a7d86b;
+  --bg-2: #2f6a3d;
+
+  --panel: rgba(34, 78, 39, 0.24);
+  --panel-soft: rgba(69, 117, 56, 0.20);
+  --panel-deep: rgba(19, 45, 24, 0.30);
+
+  --line: rgba(216, 235, 145, 0.34);
+  --line-bright: rgba(255, 251, 232, 0.44);
+
+  --text: #fffbe8;
+  --text-soft: #d8eec6;
+  --muted: #b9d8a8;
+
+  --cyan: #c7efe6;
+  --cyan-soft: #eefdf8;
+  --pink: #ff9bb7;
+  --pink-soft: #ffe2eb;
+  --violet: #bda6ff;
+  --violet-soft: #f1ebff;
+  --green: #9fd26a;
+  --yellow: #f4d779;
+  --orange: #d89344;
+  --danger: #cf6964;
+  --cream: #fffbe8;
+
+  --shadow:
+    0 18px 44px rgba(19, 39, 16, 0.28),
+    0 0 30px rgba(159, 210, 106, 0.10),
+    0 0 24px rgba(244, 215, 121, 0.08);
+
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 220, 0.16);
+
+  --theme-focus-outline: #f4d779;
+
+  --theme-page-glow-pink: rgba(244, 215, 121, 0.18);
+  --theme-page-glow-cyan: rgba(199, 239, 230, 0.20);
+  --theme-page-glow-violet: rgba(79, 139, 57, 0.14);
+  --theme-page-gradient-top: #244a25;
+  --theme-page-gradient-bottom: #122d18;
+
+  --theme-panel-overlay: rgba(255, 255, 220, 0.040);
+  --theme-panel-border-sheen-pink: rgba(244, 215, 121, 0.24);
+  --theme-panel-border-sheen-cyan: rgba(199, 239, 230, 0.20);
+  --theme-panel-title-bg: rgba(244, 215, 121, 0.08);
+
+  --theme-card-border-cyan: rgba(216, 235, 145, 0.22);
+  --theme-card-bg-overlay: rgba(255, 255, 220, 0.040);
+  --theme-card-bg-deep: rgba(19, 45, 24, 0.22);
+  --theme-card-bg-deep-solid: rgba(19, 45, 24, 0.26);
+  --theme-card-inner-highlight: rgba(255, 255, 220, 0.055);
+
+  --theme-button-primary-border: rgba(255, 251, 232, 0.38);
+  --theme-button-primary-bg: linear-gradient(180deg, #f4d779, #9fd26a);
+  --theme-button-primary-text: #1d3518;
+  --theme-button-primary-shadow: 0 8px 22px rgba(79, 139, 57, 0.18);
+
+  --theme-button-secondary-border: rgba(216, 235, 145, 0.30);
+  --theme-button-secondary-bg:
+    radial-gradient(circle at 18% 0%, rgba(244, 215, 121, 0.16), transparent 4.8rem),
+    linear-gradient(180deg, rgba(69, 117, 56, 0.30), rgba(19, 45, 24, 0.26));
+  --theme-button-secondary-text: #fffbe8;
+  --theme-button-secondary-shadow: 0 8px 18px rgba(19, 39, 16, 0.18);
+
+  --theme-care-button-border: rgba(216, 235, 145, 0.30);
+  --theme-care-button-bg: linear-gradient(180deg, rgba(69, 117, 56, 0.30), rgba(19, 45, 24, 0.26));
+  --theme-care-button-text: #fffbe8;
+  --theme-care-button-shadow: 0 8px 18px rgba(19, 39, 16, 0.18);
+
+  --theme-pill-border: rgba(216, 235, 145, 0.24);
+  --theme-pill-bg: rgba(19, 45, 24, 0.22);
+  --theme-pill-text: #d8eec6;
+  --theme-pill-active-bg: linear-gradient(90deg, #f4d779, #9fd26a, #c7efe6);
+  --theme-pill-active-text: #1d3518;
+
+  --theme-nav-hover-border: rgba(244, 215, 121, 0.48);
+  --theme-nav-hover-bg: rgba(244, 215, 121, 0.12);
+  --theme-nav-hover-text: #fffbe8;
+  --theme-nav-active-border: rgba(244, 215, 121, 0.66);
+  --theme-nav-active-bg:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 220, 0.18), transparent 3.8rem),
+    linear-gradient(135deg, rgba(244, 215, 121, 0.34), rgba(159, 210, 106, 0.22), rgba(47, 106, 61, 0.20));
+  --theme-nav-active-text: #fffbe8;
+  --theme-nav-active-shadow: 0 0 20px rgba(244, 215, 121, 0.16), 0 0 18px rgba(159, 210, 106, 0.12);
+
+  --theme-chat-text: #fffbe8;
+  --theme-chat-name: #f4d779;
+  --theme-chat-form-bg: rgba(19, 45, 24, 0.24);
+  --theme-chat-input-border: rgba(216, 235, 145, 0.30);
+  --theme-chat-input-bg: rgba(15, 37, 19, 0.34);
+  --theme-chat-input-placeholder: rgba(216, 238, 198, 0.66);
+  --theme-chat-submit-bg: #f4d779;
+  --theme-chat-submit-text: #1d3518;
+
+  --theme-side-link-text: #d8eec6;
+  --theme-side-link-hover-text: #f4d779;
+  --theme-buff-divider: rgba(216, 235, 145, 0.16);
+
+  --theme-scrollbar-color: rgba(159, 210, 106, 0.82);
+  --theme-scrollbar-color-main: rgba(244, 215, 121, 0.76);
+  --theme-scrollbar-track: rgba(19, 45, 24, 0.28);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #f4d779, #9fd26a, #2f6a3d);
+
+  --theme-nami-placeholder-glow-cyan: rgba(199, 239, 230, 0.16);
+  --theme-nami-slot-glow-pink: rgba(244, 215, 121, 0.12);
+  --theme-nami-slot-glow-cyan: rgba(159, 210, 106, 0.16);
+  --theme-nami-room-stage-bg: #244a25;
+  --theme-nami-message-bg: rgba(19, 45, 24, 0.24);
+  --theme-nami-message-text: #fffbe8;
+
+  --theme-zone-active-bg: rgba(244, 215, 121, 0.10);
+  --theme-zone-active-shadow: 0 0 24px rgba(244, 215, 121, 0.10);
+
+  --theme-meter-label-text: #fffbe8;
+  --theme-meter-label-shadow: 0 1px 2px rgba(19, 39, 16, 0.70), 0 0 8px rgba(19, 39, 16, 0.38);
+  --theme-tick-fill: linear-gradient(90deg, #f4d779, #9fd26a, #c7efe6);
+  --theme-hp-fill: linear-gradient(90deg, #9fd26a, #f4d779, #d89344);
+  --theme-progress-xp-fill: linear-gradient(90deg, #f4d779, #9fd26a, #c7efe6);
+  --theme-progress-stat-fill: linear-gradient(90deg, #9fd26a, #f4d779, #d89344);
+  --theme-progress-chat-handle-fill: linear-gradient(90deg, #9fd26a, #f4d779);
+  --theme-progress-track-border: rgba(216, 235, 145, 0.18);
+  --theme-progress-track-bg: rgba(19, 45, 24, 0.30);
+  --theme-progress-fill-shadow: 0 0 16px rgba(244, 215, 121, 0.20);
+
+  --theme-wardrobe-row-border: rgba(216, 235, 145, 0.18);
+  --theme-wardrobe-row-bg: rgba(19, 45, 24, 0.22);
+  --theme-equipment-card-border-strong: rgba(216, 235, 145, 0.26);
+  --theme-equipment-card-bg-strong: rgba(19, 45, 24, 0.26);
+  --theme-equipment-card-outline: rgba(255, 255, 220, 0.045);
+  --theme-equipment-empty-border: rgba(185, 216, 168, 0.18);
+  --theme-equipment-empty-bg-glow: rgba(244, 215, 121, 0.07);
+  --theme-equipment-empty-bg: rgba(19, 45, 24, 0.18);
+  --theme-equipment-empty-shadow: rgba(244, 215, 121, 0.05);
+  --theme-equipment-empty-shadow-soft: rgba(255, 255, 220, 0.035);
+  --theme-gear-pill-border: rgba(255, 251, 232, 0.18);
+  --theme-gear-empty-name-text: rgba(216, 238, 198, 0.70);
+}
+
+/* Woodland Moon shell START */
+body[data-theme="woodland-moon"] {
+  --dropdown-bg:
+    radial-gradient(circle at 14% 0%, rgba(244, 215, 121, 0.18), transparent 5rem),
+    radial-gradient(circle at 92% 16%, rgba(159, 210, 106, 0.14), transparent 5.4rem),
+    linear-gradient(135deg, rgba(44, 92, 42, 0.92), rgba(19, 45, 24, 0.92));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 14% 0%, rgba(244, 215, 121, 0.24), transparent 5.2rem),
+    radial-gradient(circle at 92% 16%, rgba(159, 210, 106, 0.20), transparent 5.6rem),
+    linear-gradient(135deg, rgba(58, 110, 50, 0.94), rgba(23, 55, 28, 0.94));
+  --dropdown-border: rgba(216, 235, 145, 0.34);
+  --dropdown-border-hover: rgba(244, 215, 121, 0.52);
+  --dropdown-text: #fffbe8;
+  --dropdown-label: #d8eec6;
+  --dropdown-muted: #b9d8a8;
+  --dropdown-arrow: #f4d779;
+  --dropdown-accent: #9fd26a;
+  --dropdown-focus: rgba(244, 215, 121, 0.44);
+  --dropdown-shadow: 0 14px 30px rgba(19, 39, 16, 0.28), inset 0 1px 0 rgba(255, 255, 220, 0.14);
+  --dropdown-option-bg: #1d3518;
+  --dropdown-option-text: #fffbe8;
+
+  background:
+    radial-gradient(circle at 18% 8%, rgba(244, 215, 121, 0.12), transparent 23rem),
+    radial-gradient(circle at 84% 14%, rgba(199, 239, 230, 0.10), transparent 24rem),
+    linear-gradient(180deg, rgba(30, 72, 33, 0.12), rgba(16, 42, 22, 0.20)),
+    url("/images/Forest_Nights.webp") center center / cover no-repeat fixed !important;
+  color: var(--text);
+}
+
+body[data-theme="woodland-moon"]::before {
+  background:
+    radial-gradient(circle, rgba(255, 251, 232, 0.14) 0 1px, transparent 1.7px),
+    radial-gradient(circle, rgba(244, 215, 121, 0.10) 0 1px, transparent 1.8px),
+    linear-gradient(135deg, rgba(255, 251, 232, 0.035), transparent 44%, rgba(47, 106, 61, 0.055)) !important;
+  background-size: 132px 96px, 176px 124px, auto !important;
+  background-position: 0 0, 48px 22px, center !important;
+  opacity: 1 !important;
+}
+/* Woodland Moon shell END */
+
+/* Woodland Moon glass panels START */
+body[data-theme="woodland-moon"] .panel,
+body[data-theme="woodland-moon"] .main-panel,
+body[data-theme="woodland-moon"] .chat-panel,
+body[data-theme="woodland-moon"] .top-stats-panel,
+body[data-theme="woodland-moon"] .nav-panel,
+body[data-theme="woodland-moon"] .right-buffs-panel,
+body[data-theme="woodland-moon"] .nami-card,
+body[data-theme="woodland-moon"] .care-card,
+body[data-theme="woodland-moon"] .zone-list,
+body[data-theme="woodland-moon"] .combat-panel,
+body[data-theme="woodland-moon"] .task-card,
+body[data-theme="woodland-moon"] .placeholder-copy,
+body[data-theme="woodland-moon"] .settings-card,
+body[data-theme="woodland-moon"] .wardrobe-panel,
+body[data-theme="woodland-moon"] .equipment-card,
+body[data-theme="woodland-moon"] .inventory-item-card,
+body[data-theme="woodland-moon"] .right-buff-group {
+  border-color: rgba(216, 235, 145, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(44, 92, 42, 0.28), rgba(19, 45, 24, 0.22)) !important;
+  color: #fffbe8 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.14),
+    0 18px 42px rgba(19, 39, 16, 0.28),
+    0 0 22px rgba(244, 215, 121, 0.06) !important;
+  backdrop-filter: blur(9px) saturate(1.12);
+  -webkit-backdrop-filter: blur(9px) saturate(1.12);
+}
+
+body[data-theme="woodland-moon"] .panel-title,
+body[data-theme="woodland-moon"] .collapse-toggle {
+  color: #fffbe8 !important;
+  background:
+    linear-gradient(180deg, rgba(74, 122, 53, 0.36), rgba(23, 55, 28, 0.30)) !important;
+  border-bottom-color: rgba(216, 235, 145, 0.30) !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.76) !important;
+}
+
+body[data-theme="woodland-moon"] h1,
+body[data-theme="woodland-moon"] h2,
+body[data-theme="woodland-moon"] h3,
+body[data-theme="woodland-moon"] .eyebrow,
+body[data-theme="woodland-moon"] .top-stats-panel h2,
+body[data-theme="woodland-moon"] .stat-group.compact h2 {
+  color: #fffbe8 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.72);
+}
+
+body[data-theme="woodland-moon"] .eyebrow {
+  color: #f4d779 !important;
+  letter-spacing: 0.11em;
+}
+
+body[data-theme="woodland-moon"] .muted,
+body[data-theme="woodland-moon"] .placeholder-copy,
+body[data-theme="woodland-moon"] .equipment-slot-label,
+body[data-theme="woodland-moon"] .gear-level-tag,
+body[data-theme="woodland-moon"] .gear-tailoring-tag {
+  color: #d8eec6 !important;
+}
+
+body[data-theme="woodland-moon"] strong,
+body[data-theme="woodland-moon"] b,
+body[data-theme="woodland-moon"] .gear-card-name,
+body[data-theme="woodland-moon"] .wardrobe-bonus-row strong {
+  color: #fffbe8 !important;
+}
+/* Woodland Moon glass panels END */
+
+/* Woodland Moon inner surfaces START */
+body[data-theme="woodland-moon"] .top-stats-compact,
+body[data-theme="woodland-moon"] .stat-group.compact,
+body[data-theme="woodland-moon"] .menu-status-card,
+body[data-theme="woodland-moon"] .buff-card,
+body[data-theme="woodland-moon"] .stat-lines,
+body[data-theme="woodland-moon"] .compact-grid-lines,
+body[data-theme="woodland-moon"] .nami-message,
+body[data-theme="woodland-moon"] .chat-form,
+body[data-theme="woodland-moon"] .chat-log,
+body[data-theme="woodland-moon"] .equipment-slot,
+body[data-theme="woodland-moon"] .wardrobe-bonus-card,
+body[data-theme="woodland-moon"] .wardrobe-bonus-row,
+body[data-theme="woodland-moon"] .settings-field,
+body[data-theme="woodland-moon"] .nami-progression-card,
+body[data-theme="woodland-moon"] .nami-need-card,
+body[data-theme="woodland-moon"] .care-status-compact,
+body[data-theme="woodland-moon"] .nami-care-summary,
+body[data-theme="woodland-moon"] .right-buff-list,
+body[data-theme="woodland-moon"] .right-buff-group {
+  border-color: rgba(216, 235, 145, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(19, 45, 24, 0.22), rgba(19, 39, 16, 0.16)) !important;
+  color: #d8eec6 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.08),
+    0 8px 22px rgba(19, 39, 16, 0.12) !important;
+}
+
+body[data-theme="woodland-moon"] .meter-track,
+body[data-theme="woodland-moon"] .stat-bar,
+body[data-theme="woodland-moon"] .progress-track {
+  background:
+    linear-gradient(180deg, rgba(19, 39, 16, 0.30), rgba(19, 45, 24, 0.20)) !important;
+  border-color: rgba(216, 235, 145, 0.22) !important;
+}
+
+body[data-theme="woodland-moon"] .meter-fill,
+body[data-theme="woodland-moon"] .stat-fill,
+body[data-theme="woodland-moon"] .tick-fill,
+body[data-theme="woodland-moon"] .xp-fill {
+  box-shadow: 0 0 14px rgba(244, 215, 121, 0.18) !important;
+}
+/* Woodland Moon inner surfaces END */
+
+/* Woodland Moon navigation START */
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item {
+  border-color: rgba(216, 235, 145, 0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(74, 122, 53, 0.28), rgba(19, 45, 24, 0.20)) !important;
+  color: #d8eec6 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.10),
+    0 8px 18px rgba(19, 39, 16, 0.18) !important;
+}
+
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-label {
+  color: inherit !important;
+}
+
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover {
+  border-color: rgba(244, 215, 121, 0.50) !important;
+  color: #fffbe8 !important;
+  background:
+    linear-gradient(180deg, rgba(94, 145, 62, 0.34), rgba(23, 55, 28, 0.24)) !important;
+}
+
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(244, 215, 121, 0.64) !important;
+  color: #fffbe8 !important;
+  background:
+    radial-gradient(circle at 16% 12%, rgba(255, 255, 220, 0.18), transparent 2.7rem),
+    linear-gradient(135deg, rgba(244, 215, 121, 0.34), rgba(159, 210, 106, 0.22), rgba(47, 106, 61, 0.20)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.16),
+    0 0 18px rgba(244, 215, 121, 0.16),
+    0 0 18px rgba(159, 210, 106, 0.10) !important;
+}
+/* Woodland Moon navigation END */
+
+/* Woodland Moon home stage START */
+body[data-theme="woodland-moon"] .nami-placeholder,
+body[data-theme="woodland-moon"] .nami-room-stage {
+  border-color: rgba(244, 215, 121, 0.34) !important;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(244, 215, 121, 0.12), transparent 12rem),
+    radial-gradient(circle at 50% 90%, rgba(159, 210, 106, 0.10), transparent 14rem),
+    linear-gradient(180deg, rgba(19, 45, 24, 0.20), rgba(19, 39, 16, 0.18)) !important;
+}
+
+body[data-theme="woodland-moon"] .nami-message,
+body[data-theme="woodland-moon"] .nami-message-log-card {
+  color: #fffbe8 !important;
+  background:
+    linear-gradient(180deg, rgba(19, 45, 24, 0.24), rgba(19, 39, 16, 0.18)) !important;
+  border-color: rgba(216, 235, 145, 0.22) !important;
+}
+/* Woodland Moon home stage END */
+
+/* Woodland Moon controls START */
+body[data-theme="woodland-moon"] .chat-log {
+  color: #fffbe8 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.62) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-input,
+body[data-theme="woodland-moon"] input,
+body[data-theme="woodland-moon"] select,
+body[data-theme="woodland-moon"] textarea {
+  color: #fffbe8 !important;
+  background: rgba(15, 37, 19, 0.32) !important;
+  border-color: rgba(216, 235, 145, 0.30) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-input:empty::before {
+  color: rgba(216, 238, 198, 0.64) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-form button,
+body[data-theme="woodland-moon"] .secondary-button,
+body[data-theme="woodland-moon"] #logout-button,
+body[data-theme="woodland-moon"] #dev-spawn-wardrobe-item-button,
+body[data-theme="woodland-moon"] .wardrobe-item-actions button,
+body[data-theme="woodland-moon"] .wardrobe-item-modal-close,
+body[data-theme="woodland-moon"] .inventory-item-card button,
+body[data-theme="woodland-moon"] .equipment-card button,
+body[data-theme="woodland-moon"] .task-card button {
+  border-color: rgba(216, 235, 145, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(74, 122, 53, 0.36), rgba(23, 55, 28, 0.30)) !important;
+  color: #fffbe8 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.12),
+    0 8px 18px rgba(19, 39, 16, 0.20) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-form button:hover,
+body[data-theme="woodland-moon"] .secondary-button:hover,
+body[data-theme="woodland-moon"] #logout-button:hover,
+body[data-theme="woodland-moon"] #dev-spawn-wardrobe-item-button:hover,
+body[data-theme="woodland-moon"] .wardrobe-item-actions button:hover,
+body[data-theme="woodland-moon"] .wardrobe-item-modal-close:hover,
+body[data-theme="woodland-moon"] .inventory-item-card button:hover,
+body[data-theme="woodland-moon"] .equipment-card button:hover,
+body[data-theme="woodland-moon"] .task-card button:hover {
+  border-color: rgba(244, 215, 121, 0.52) !important;
+  color: #ffffff !important;
+}
+/* Woodland Moon controls END */
+
+/* Woodland Moon wardrobe modal skin START */
+body[data-theme="woodland-moon"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(216, 235, 145, 0.40) !important;
+  background:
+    linear-gradient(180deg, rgba(31, 67, 32, 0.94), rgba(14, 34, 18, 0.96)) !important;
+  color: #fffbe8 !important;
+  box-shadow:
+    0 24px 60px rgba(19, 39, 16, 0.42),
+    inset 0 1px 0 rgba(255, 255, 220, 0.12) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-header,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(216, 235, 145, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(74, 122, 53, 0.30), rgba(19, 45, 24, 0.24)) !important;
+  color: #fffbe8 !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgba(14, 34, 18, 0.92) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="woodland-moon"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #fffbe8 !important;
+  -webkit-text-fill-color: #fffbe8 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.70) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="woodland-moon"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #d8eec6 !important;
+  -webkit-text-fill-color: #d8eec6 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.46) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #f4d779 !important;
+  -webkit-text-fill-color: #f4d779 !important;
+}
+/* Woodland Moon wardrobe modal skin END */
+
+/* Woodland Moon responsive START */
+@media (max-width: 980px) {
+  body[data-theme="woodland-moon"] {
+    background-attachment: scroll !important;
+  }
+}
+/* Woodland Moon responsive END */
+
+/* Woodland Moon theme END */
+
+/* Woodland Moon work-chat-care polish START */
+/* Bark-texture state pass for work buttons, chat, and home care actions. */
+
+body[data-theme="woodland-moon"] {
+  --theme-work-active-border: rgba(244, 215, 121, 0.56);
+  --theme-work-active-glow: rgba(106, 68, 40, 0.26);
+  --theme-work-active-bg:
+    radial-gradient(circle at 18% 0%, rgba(255, 241, 170, 0.12), transparent 4.2rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.05) 0 9px,
+      rgba(78, 49, 27, 0.00) 9px 18px,
+      rgba(44, 26, 14, 0.08) 18px 27px
+    ),
+    linear-gradient(180deg, rgba(110, 71, 41, 0.82), rgba(66, 41, 23, 0.86));
+  --theme-work-active-pill-bg: linear-gradient(90deg, #f4d779, #d8a457, #8f5d34);
+  --theme-work-active-pill-text: #2c1b10;
+  --theme-work-active-button-bg:
+    radial-gradient(circle at 20% 0%, rgba(255, 238, 165, 0.14), transparent 4.2rem),
+    repeating-linear-gradient(
+      100deg,
+      rgba(255, 255, 220, 0.06) 0 8px,
+      rgba(105, 65, 37, 0.00) 8px 16px,
+      rgba(43, 24, 13, 0.10) 16px 24px
+    ),
+    linear-gradient(180deg, #8a5a34, #5d3922 58%, #432615);
+  --theme-work-active-button-border: rgba(244, 215, 121, 0.54);
+  --theme-work-active-button-text: #f7e7b1;
+  --theme-work-active-button-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.16),
+    0 10px 22px rgba(44, 26, 14, 0.24);
+
+  --theme-chat-text: #fff8e8;
+  --theme-chat-name: #f4d779;
+  --theme-chat-form-bg:
+    linear-gradient(180deg, rgba(31, 56, 24, 0.38), rgba(18, 39, 18, 0.28));
+  --theme-chat-input-border: rgba(216, 235, 145, 0.30);
+  --theme-chat-input-bg:
+    linear-gradient(180deg, rgba(18, 39, 18, 0.42), rgba(11, 25, 12, 0.36));
+  --theme-chat-input-placeholder: rgba(226, 239, 197, 0.58);
+  --theme-chat-submit-bg:
+    linear-gradient(180deg, #f4d779, #d2a451);
+  --theme-chat-submit-text: #2b1d11;
+
+  --theme-care-button-border: rgba(214, 190, 119, 0.38);
+  --theme-care-button-bg:
+    radial-gradient(circle at 18% 0%, rgba(255, 238, 165, 0.10), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.05) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.08) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(92, 61, 36, 0.74), rgba(57, 37, 23, 0.78));
+  --theme-care-button-text: #f6e6b0;
+  --theme-care-button-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.12),
+    0 8px 18px rgba(44, 26, 14, 0.18);
+}
+
+/* Work card and work button polish */
+body[data-theme="woodland-moon"] #section-work .task-card,
+body[data-theme="woodland-moon"] #section-work .work-card,
+body[data-theme="woodland-moon"] #section-work .task-panel {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 241, 170, 0.05), transparent 4rem),
+    linear-gradient(180deg, rgba(52, 92, 42, 0.26), rgba(22, 47, 24, 0.20)) !important;
+}
+
+body[data-theme="woodland-moon"] #section-work .task-card button,
+body[data-theme="woodland-moon"] #section-work .work-card button,
+body[data-theme="woodland-moon"] #section-work .task-panel button {
+  border-color: rgba(204, 180, 111, 0.36) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 238, 165, 0.08), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.05) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.08) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(90, 60, 36, 0.60), rgba(55, 35, 22, 0.62)) !important;
+  color: #eedfb0 !important;
+  text-shadow: 0 1px 1px rgba(25, 15, 10, 0.64) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.10),
+    0 8px 18px rgba(44, 26, 14, 0.18) !important;
+}
+
+body[data-theme="woodland-moon"] #section-work .task-card button:hover:not(:disabled),
+body[data-theme="woodland-moon"] #section-work .work-card button:hover:not(:disabled),
+body[data-theme="woodland-moon"] #section-work .task-panel button:hover:not(:disabled) {
+  border-color: rgba(244, 215, 121, 0.48) !important;
+  color: #fff4ca !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 241, 170, 0.12), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.05) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.10) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(104, 68, 40, 0.68), rgba(62, 39, 24, 0.70)) !important;
+}
+
+body[data-theme="woodland-moon"] #section-work .task-card.active button,
+body[data-theme="woodland-moon"] #section-work .task-card.is-active button,
+body[data-theme="woodland-moon"] #section-work .work-card.active button,
+body[data-theme="woodland-moon"] #section-work .work-card.is-active button,
+body[data-theme="woodland-moon"] #section-work .task-card[data-state="active"] button,
+body[data-theme="woodland-moon"] #section-work .work-card[data-state="active"] button {
+  border-color: rgba(244, 215, 121, 0.56) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 241, 170, 0.15), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.06) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.11) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(129, 83, 48, 0.86), rgba(79, 49, 28, 0.90)) !important;
+  color: #f7e7b1 !important;
+  text-shadow: 0 1px 1px rgba(25, 15, 10, 0.72) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.14),
+    0 10px 22px rgba(44, 26, 14, 0.24),
+    0 0 18px rgba(244, 215, 121, 0.10) !important;
+}
+
+/* Chat styling polish */
+body[data-theme="woodland-moon"] .chat-panel,
+body[data-theme="woodland-moon"] .chat-shell {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(244, 215, 121, 0.08), transparent 4rem),
+    linear-gradient(180deg, rgba(34, 64, 28, 0.28), rgba(16, 37, 17, 0.24)) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-tabs,
+body[data-theme="woodland-moon"] .chat-channel-tabs,
+body[data-theme="woodland-moon"] .chat-tab-row {
+  background: transparent !important;
+}
+
+body[data-theme="woodland-moon"] .chat-tab,
+body[data-theme="woodland-moon"] .chat-tabs button,
+body[data-theme="woodland-moon"] .chat-channel-tabs button {
+  border-color: rgba(185, 164, 102, 0.34) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 238, 165, 0.07), transparent 3.8rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.04) 0 7px,
+      rgba(101, 65, 38, 0.00) 7px 14px,
+      rgba(40, 24, 13, 0.07) 14px 21px
+    ),
+    linear-gradient(180deg, rgba(72, 49, 30, 0.56), rgba(42, 27, 17, 0.58)) !important;
+  color: #d8eec6 !important;
+  text-shadow: 0 1px 1px rgba(25, 15, 10, 0.52) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.08),
+    0 6px 14px rgba(44, 26, 14, 0.14) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-tab.active,
+body[data-theme="woodland-moon"] .chat-tabs button.active,
+body[data-theme="woodland-moon"] .chat-channel-tabs button.active,
+body[data-theme="woodland-moon"] .chat-tab[aria-selected="true"],
+body[data-theme="woodland-moon"] .chat-tabs button[aria-selected="true"],
+body[data-theme="woodland-moon"] .chat-channel-tabs button[aria-selected="true"] {
+  border-color: rgba(244, 215, 121, 0.56) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 241, 170, 0.18), transparent 3.8rem),
+    linear-gradient(180deg, rgba(244, 215, 121, 0.88), rgba(185, 129, 61, 0.84)) !important;
+  color: #2c1b10 !important;
+  text-shadow: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.22),
+    0 6px 16px rgba(185, 129, 61, 0.18) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log,
+body[data-theme="woodland-moon"] .chat-messages {
+  background:
+    linear-gradient(180deg, rgba(18, 39, 18, 0.28), rgba(11, 25, 12, 0.22)) !important;
+  border-color: rgba(216, 235, 145, 0.22) !important;
+  color: #fff8e8 !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log .message,
+body[data-theme="woodland-moon"] .chat-log .chat-line,
+body[data-theme="woodland-moon"] .chat-messages .message,
+body[data-theme="woodland-moon"] .chat-messages .chat-line {
+  color: #fff8e8 !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log .sender,
+body[data-theme="woodland-moon"] .chat-log .author,
+body[data-theme="woodland-moon"] .chat-messages .sender,
+body[data-theme="woodland-moon"] .chat-messages .author {
+  color: #f4d779 !important;
+}
+
+body[data-theme="woodland-moon"] .chat-form {
+  background:
+    linear-gradient(180deg, rgba(28, 53, 22, 0.34), rgba(15, 34, 16, 0.28)) !important;
+  border-top-color: rgba(216, 235, 145, 0.20) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-input,
+body[data-theme="woodland-moon"] .chat-input[contenteditable="true"] {
+  background:
+    linear-gradient(180deg, rgba(15, 33, 15, 0.38), rgba(10, 22, 10, 0.32)) !important;
+  border-color: rgba(216, 235, 145, 0.30) !important;
+  color: #fff8e8 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.08),
+    0 6px 14px rgba(19, 39, 16, 0.12) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-input::placeholder,
+body[data-theme="woodland-moon"] input.chat-input::placeholder,
+body[data-theme="woodland-moon"] textarea.chat-input::placeholder {
+  color: rgba(226, 239, 197, 0.60) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-form button,
+body[data-theme="woodland-moon"] .chat-submit-button,
+body[data-theme="woodland-moon"] .chat-send-button {
+  border-color: rgba(244, 215, 121, 0.44) !important;
+  background:
+    linear-gradient(180deg, rgba(244, 215, 121, 0.92), rgba(199, 146, 69, 0.90)) !important;
+  color: #2c1b10 !important;
+  text-shadow: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.22),
+    0 8px 18px rgba(185, 129, 61, 0.16) !important;
+}
+
+/* Home care action buttons state clarity */
+body[data-theme="woodland-moon"] .care-button-active,
+body[data-theme="woodland-moon"] button.care-button-active {
+  border-color: rgba(244, 215, 121, 0.58) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 241, 170, 0.16), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.06) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.11) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(128, 82, 47, 0.88), rgba(78, 48, 28, 0.92)) !important;
+  color: #f7e7b1 !important;
+  text-shadow: 0 1px 1px rgba(25, 15, 10, 0.72) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.16),
+    0 10px 22px rgba(44, 26, 14, 0.22),
+    0 0 18px rgba(244, 215, 121, 0.10) !important;
+}
+
+body[data-theme="woodland-moon"] .care-button-queued,
+body[data-theme="woodland-moon"] button.care-button-queued {
+  border-color: rgba(198, 215, 132, 0.42) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(220, 238, 170, 0.10), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.04) 0 8px,
+      rgba(86, 69, 45, 0.00) 8px 16px,
+      rgba(35, 29, 20, 0.08) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(85, 80, 45, 0.74), rgba(51, 49, 31, 0.78)) !important;
+  color: #eef0c7 !important;
+  text-shadow: 0 1px 1px rgba(18, 16, 10, 0.62) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.10),
+    0 8px 18px rgba(28, 24, 14, 0.16) !important;
+}
+
+body[data-theme="woodland-moon"] .care-button-blocked,
+body[data-theme="woodland-moon"] button.care-button-blocked,
+body[data-theme="woodland-moon"] .care-actions button:disabled,
+body[data-theme="woodland-moon"] button:disabled.care-button-blocked,
+body[data-theme="woodland-moon"] button.care-button-blocked:disabled {
+  border-color: rgba(145, 141, 124, 0.26) !important;
+  background:
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.02) 0 8px,
+      rgba(83, 79, 72, 0.00) 8px 16px,
+      rgba(31, 31, 29, 0.06) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(82, 76, 68, 0.48), rgba(49, 46, 41, 0.52)) !important;
+  color: #c9c3b6 !important;
+  text-shadow: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.04),
+    0 6px 12px rgba(20, 18, 16, 0.10) !important;
+  opacity: 1 !important;
+}
+
+body[data-theme="woodland-moon"] .care-card button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="woodland-moon"] .care-actions button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="woodland-moon"] button.care-action-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) {
+  border-color: rgba(204, 180, 111, 0.36) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 238, 165, 0.09), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.05) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.08) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(92, 61, 36, 0.74), rgba(57, 37, 23, 0.78)) !important;
+  color: #f2e0ac !important;
+  text-shadow: 0 1px 1px rgba(25, 15, 10, 0.62) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.12),
+    0 8px 18px rgba(44, 26, 14, 0.18) !important;
+}
+
+body[data-theme="woodland-moon"] .care-card button:not(.care-button-blocked):not(:disabled):hover,
+body[data-theme="woodland-moon"] .care-actions button:not(.care-button-blocked):not(:disabled):hover,
+body[data-theme="woodland-moon"] button.care-action-button:not(.care-button-blocked):not(:disabled):hover {
+  border-color: rgba(244, 215, 121, 0.50) !important;
+  color: #fff4ca !important;
+}
+
+/* Woodland Moon work-chat-care polish END */
+
+/* Woodland Moon chat and care detail polish START */
+/* Active care progress, bottom chat text, and chat scrollbar only. */
+
+/* Active care progress: replace leftover pink with woodland sunlight over bark. */
+body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-button-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button-active .care-button-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button-active .care-progress-fill {
+  background:
+    radial-gradient(circle at 20% 50%, rgba(255, 251, 218, 0.42), transparent 2.4rem),
+    repeating-linear-gradient(
+      100deg,
+      rgba(255, 251, 218, 0.12) 0 7px,
+      rgba(139, 92, 48, 0.00) 7px 14px,
+      rgba(68, 38, 18, 0.16) 14px 21px
+    ),
+    linear-gradient(90deg, #f7e7a5, #d7a957 42%, #8b5a32 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 252, 220, 0.28),
+    0 0 12px rgba(244, 215, 121, 0.22) !important;
+}
+
+body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-button-progress,
+body[data-theme="woodland-moon"] #section-home .care-button-active .care-button-progress,
+body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-progress,
+body[data-theme="woodland-moon"] #section-home .care-button-active .care-progress {
+  background:
+    linear-gradient(180deg, rgba(41, 25, 13, 0.56), rgba(19, 11, 6, 0.44)) !important;
+  border-color: rgba(244, 215, 121, 0.22) !important;
+}
+
+/* Bottom chat: message text, timestamps, and names. Do not touch channel tabs. */
+body[data-theme="woodland-moon"] .chat-log {
+  scrollbar-color: rgba(244, 215, 121, 0.82) rgba(32, 59, 24, 0.34) !important;
+  color: #fff8e8 !important;
+  text-shadow: 0 1px 1px rgba(18, 38, 15, 0.64) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-message {
+  color: #fff8e8 !important;
+  text-shadow: 0 1px 1px rgba(18, 38, 15, 0.64) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-time {
+  color: #c9dca7 !important;
+  -webkit-text-fill-color: #c9dca7 !important;
+  font-weight: 800 !important;
+  text-shadow: 0 1px 1px rgba(18, 38, 15, 0.72) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-name {
+  color: #f4d779 !important;
+  -webkit-text-fill-color: #f4d779 !important;
+  font-weight: 950 !important;
+  text-shadow:
+    0 1px 1px rgba(39, 24, 12, 0.74),
+    0 0 8px rgba(244, 215, 121, 0.12) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-text {
+  color: #fff8e8 !important;
+  -webkit-text-fill-color: #fff8e8 !important;
+  text-shadow: 0 1px 1px rgba(18, 38, 15, 0.66) !important;
+}
+
+/* Keep emotes/whispers forest-coded but distinct. */
+body[data-theme="woodland-moon"] .chat-message.chat-emote,
+body[data-theme="woodland-moon"] .chat-message.chat-emote .chat-text {
+  color: #f7e7a5 !important;
+  -webkit-text-fill-color: #f7e7a5 !important;
+}
+
+body[data-theme="woodland-moon"] .chat-message.chat-whisper,
+body[data-theme="woodland-moon"] .chat-message.chat-whisper .chat-text {
+  color: #d7f0c2 !important;
+  -webkit-text-fill-color: #d7f0c2 !important;
+}
+
+/* Chat scrollbar: golden sap thumb with dark leaf track. */
+body[data-theme="woodland-moon"] .chat-log::-webkit-scrollbar {
+  width: 9px !important;
+  height: 9px !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log::-webkit-scrollbar-track {
+  background:
+    linear-gradient(180deg, rgba(22, 49, 22, 0.44), rgba(12, 30, 13, 0.38)) !important;
+  border-radius: 999px !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log::-webkit-scrollbar-thumb {
+  border-radius: 999px !important;
+  border: 2px solid rgba(21, 47, 22, 0.72) !important;
+  background:
+    linear-gradient(180deg, #f4d779, #b97f3f 54%, #6a4428) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 251, 218, 0.34),
+    0 0 10px rgba(244, 215, 121, 0.16) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(180deg, #fff0ae, #d09a4f 52%, #7a4c28) !important;
+}
+
+/* Woodland Moon chat and care detail polish END */
+
+/* Woodland Moon rail gold and glyph polish START */
+/* Gold rail headings/status text, brown menu glyphs on hover/active only. */
+
+body[data-theme="woodland-moon"] {
+  --woodland-heading-gold: #f4d779;
+  --woodland-glyph-brown: #6a4428;
+  --woodland-glyph-brown-dark: #4a2b16;
+}
+
+/* Left rail MENU heading and right rail BUFFS heading. */
+body[data-theme="woodland-moon"] .left-rail .panel-title,
+body[data-theme="woodland-moon"] .left-rail .panel-title *,
+body[data-theme="woodland-moon"] .right-rail .panel-title,
+body[data-theme="woodland-moon"] .right-rail .panel-title *,
+body[data-theme="woodland-moon"] .right-buffs-panel .panel-title,
+body[data-theme="woodland-moon"] .right-buffs-panel .panel-title * {
+  color: var(--woodland-heading-gold) !important;
+  -webkit-text-fill-color: var(--woodland-heading-gold) !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.72),
+    0 0 10px rgba(244, 215, 121, 0.12) !important;
+}
+
+/* Right rail internal group headings like GLOBAL BUFFS / PERSONAL BUFFS. */
+body[data-theme="woodland-moon"] .right-rail h2,
+body[data-theme="woodland-moon"] .right-rail h3,
+body[data-theme="woodland-moon"] .right-buffs-panel h2,
+body[data-theme="woodland-moon"] .right-buffs-panel h3,
+body[data-theme="woodland-moon"] .right-buff-group h2,
+body[data-theme="woodland-moon"] .right-buff-group h3,
+body[data-theme="woodland-moon"] .right-buff-group > strong {
+  color: var(--woodland-heading-gold) !important;
+  -webkit-text-fill-color: var(--woodland-heading-gold) !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.70),
+    0 0 9px rgba(244, 215, 121, 0.10) !important;
+}
+
+/* Left rail server time and online users. */
+body[data-theme="woodland-moon"] .left-rail .server-clock,
+body[data-theme="woodland-moon"] .left-rail .server-clock *,
+body[data-theme="woodland-moon"] .left-rail .server-time,
+body[data-theme="woodland-moon"] .left-rail .server-time *,
+body[data-theme="woodland-moon"] .left-rail .online-users,
+body[data-theme="woodland-moon"] .left-rail .online-users *,
+body[data-theme="woodland-moon"] .left-rail #server-time,
+body[data-theme="woodland-moon"] .left-rail #server-time *,
+body[data-theme="woodland-moon"] .left-rail #online-users,
+body[data-theme="woodland-moon"] .left-rail #online-users *,
+body[data-theme="woodland-moon"] .left-rail [data-server-time],
+body[data-theme="woodland-moon"] .left-rail [data-online-users] {
+  color: var(--woodland-heading-gold) !important;
+  -webkit-text-fill-color: var(--woodland-heading-gold) !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.70),
+    0 0 8px rgba(244, 215, 121, 0.10) !important;
+}
+
+/* Menu glyphs only: turn brown on hover/active, not the button background. */
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover .nav-icon *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover svg *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active .nav-icon *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg * {
+  color: var(--woodland-glyph-brown) !important;
+  -webkit-text-fill-color: var(--woodland-glyph-brown) !important;
+  fill: var(--woodland-glyph-brown) !important;
+  stroke: var(--woodland-glyph-brown) !important;
+}
+
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active:hover .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active:hover .nav-icon *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active:hover svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active:hover svg * {
+  color: var(--woodland-glyph-brown-dark) !important;
+  -webkit-text-fill-color: var(--woodland-glyph-brown-dark) !important;
+  fill: var(--woodland-glyph-brown-dark) !important;
+  stroke: var(--woodland-glyph-brown-dark) !important;
+}
+
+/* Woodland Moon rail gold and glyph polish END */
+
+/* Woodland Moon care status bar gradient START */
+/* Care Status bars only: dark bark brown -> forest green -> gold. */
+
+body[data-theme="woodland-moon"] #section-home .care-status-compact .bar {
+  border-color: rgba(216, 235, 145, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(29, 53, 24, 0.42), rgba(15, 32, 15, 0.34)) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(19, 39, 16, 0.42),
+    0 0 8px rgba(244, 215, 121, 0.06) !important;
+}
+
+body[data-theme="woodland-moon"] #section-home .care-status-compact .fill,
+body[data-theme="woodland-moon"] #section-home .care-status-compact .stat-fill,
+body[data-theme="woodland-moon"] #section-home .care-status-compact .mood-fill {
+  background:
+    linear-gradient(90deg, #4a2b16 0%, #2f6a3d 52%, #f4d779 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 251, 218, 0.24),
+    0 0 12px rgba(159, 210, 106, 0.14),
+    0 0 10px rgba(244, 215, 121, 0.10) !important;
+}
+
+body[data-theme="woodland-moon"] #section-home .care-status-compact .fill::after,
+body[data-theme="woodland-moon"] #section-home .care-status-compact .stat-fill::after,
+body[data-theme="woodland-moon"] #section-home .care-status-compact .mood-fill::after {
+  background:
+    linear-gradient(180deg, rgba(255, 251, 218, 0.26), transparent 58%) !important;
+}
+
+/* Woodland Moon care status bar gradient END */
+
+/* Woodland Moon canvas light effects START */
+/* One stable canvas layer under the UI. No DOM blend layers. */
+
+body[data-theme="woodland-moon"] {
+  isolation: isolate;
+}
+
+body[data-theme="woodland-moon"] .theme-effects-woodland-moon {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 1 !important;
+  contain: strict;
+}
+
+body[data-theme="woodland-moon"] .woodland-moon-light-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  opacity: 1 !important;
+}
+
+body[data-theme="woodland-moon"] .game-shell {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 980px) {
+  body[data-theme="woodland-moon"] .theme-effects-woodland-moon {
+    opacity: 0.88;
+  }
+}
+/* Woodland Moon canvas light effects END */
+
+
+/* Woodland Moon recolor START */
+/* Late night recolor pass: cool moonlit glass, firefly accents, same transparency, bark-textured buttons retained. */
+
+body[data-theme="woodland-moon"] {
+  --woodland-moon-midnight: #101b2c;
+  --woodland-moon-deep: #16273c;
+  --woodland-moon-twilight: #223a57;
+  --woodland-moon-mist: #b8c9dd;
+  --woodland-moon-moonlight: #eef4ff;
+  --woodland-moon-frost: #d9e6ff;
+  --woodland-moon-firefly: #d8ea86;
+  --woodland-moon-firefly-soft: #eef7b5;
+  --woodland-moon-aqua: #90bff0;
+  --woodland-moon-bark: #6c472c;
+  --woodland-moon-bark-deep: #49301f;
+  --woodland-moon-border: rgba(190, 212, 245, 0.30);
+  --woodland-moon-border-bright: rgba(220, 234, 255, 0.40);
+
+  --theme-chat-text: #eef4ff;
+  --theme-chat-name: #d8ea86;
+  --theme-chat-input-placeholder: rgba(192, 210, 232, 0.66);
+  --theme-meter-label-text: #eef4ff;
+  --theme-meter-label-shadow: 0 1px 2px rgba(9, 15, 24, 0.82), 0 0 8px rgba(9, 15, 24, 0.32);
+}
+
+body[data-theme="woodland-moon"] {
+  background:
+    radial-gradient(circle at 18% 10%, rgba(224, 235, 255, 0.12), transparent 22rem),
+    radial-gradient(circle at 82% 14%, rgba(216, 234, 134, 0.08), transparent 24rem),
+    linear-gradient(180deg, rgba(12, 22, 38, 0.14), rgba(7, 14, 24, 0.24)),
+    url("/images/Forest_Nights.webp") center center / cover no-repeat fixed !important;
+  color: #eef4ff !important;
+}
+
+body[data-theme="woodland-moon"]::before {
+  background:
+    radial-gradient(circle, rgba(240, 246, 255, 0.10) 0 1px, transparent 1.8px),
+    radial-gradient(circle, rgba(216, 234, 134, 0.08) 0 1px, transparent 1.8px),
+    linear-gradient(135deg, rgba(240, 246, 255, 0.030), transparent 46%, rgba(144, 191, 240, 0.045)) !important;
+  background-size: 148px 108px, 184px 136px, auto !important;
+  background-position: 0 0, 52px 24px, center !important;
+  opacity: 1 !important;
+}
+
+/* Major shell panels */
+body[data-theme="woodland-moon"] .panel,
+body[data-theme="woodland-moon"] .main-panel,
+body[data-theme="woodland-moon"] .chat-panel,
+body[data-theme="woodland-moon"] .top-stats-panel,
+body[data-theme="woodland-moon"] .nav-panel,
+body[data-theme="woodland-moon"] .right-buffs-panel,
+body[data-theme="woodland-moon"] .nami-card,
+body[data-theme="woodland-moon"] .care-card,
+body[data-theme="woodland-moon"] .zone-list,
+body[data-theme="woodland-moon"] .combat-panel,
+body[data-theme="woodland-moon"] .task-card,
+body[data-theme="woodland-moon"] .placeholder-copy,
+body[data-theme="woodland-moon"] .settings-card,
+body[data-theme="woodland-moon"] .wardrobe-panel,
+body[data-theme="woodland-moon"] .equipment-card,
+body[data-theme="woodland-moon"] .inventory-item-card,
+body[data-theme="woodland-moon"] .right-buff-group {
+  border-color: rgba(190, 212, 245, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(22, 39, 60, 0.30), rgba(11, 20, 34, 0.24)) !important;
+  color: #eef4ff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 246, 255, 0.12),
+    0 18px 42px rgba(6, 11, 18, 0.34),
+    0 0 22px rgba(144, 191, 240, 0.06) !important;
+  backdrop-filter: blur(9px) saturate(1.10);
+  -webkit-backdrop-filter: blur(9px) saturate(1.10);
+}
+
+/* Inner surfaces */
+body[data-theme="woodland-moon"] .top-stats-compact,
+body[data-theme="woodland-moon"] .stat-group.compact,
+body[data-theme="woodland-moon"] .menu-status-card,
+body[data-theme="woodland-moon"] .buff-card,
+body[data-theme="woodland-moon"] .stat-lines,
+body[data-theme="woodland-moon"] .compact-grid-lines,
+body[data-theme="woodland-moon"] .nami-message,
+body[data-theme="woodland-moon"] .chat-form,
+body[data-theme="woodland-moon"] .chat-log,
+body[data-theme="woodland-moon"] .equipment-slot,
+body[data-theme="woodland-moon"] .wardrobe-bonus-card,
+body[data-theme="woodland-moon"] .wardrobe-bonus-row,
+body[data-theme="woodland-moon"] .settings-field,
+body[data-theme="woodland-moon"] .nami-progression-card,
+body[data-theme="woodland-moon"] .nami-need-card,
+body[data-theme="woodland-moon"] .care-status-compact,
+body[data-theme="woodland-moon"] .nami-care-summary,
+body[data-theme="woodland-moon"] .right-buff-list,
+body[data-theme="woodland-moon"] .right-buff-group {
+  border-color: rgba(190, 212, 245, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(10, 20, 34, 0.28), rgba(8, 15, 26, 0.20)) !important;
+  color: #c4d4e6 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 246, 255, 0.07),
+    0 8px 22px rgba(6, 11, 18, 0.18) !important;
+}
+
+body[data-theme="woodland-moon"] .panel-title,
+body[data-theme="woodland-moon"] .collapse-toggle {
+  color: #d8ea86 !important;
+  background:
+    linear-gradient(180deg, rgba(40, 63, 91, 0.38), rgba(18, 31, 48, 0.32)) !important;
+  border-bottom-color: rgba(190, 212, 245, 0.24) !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.78) !important;
+}
+
+body[data-theme="woodland-moon"] h1,
+body[data-theme="woodland-moon"] h2,
+body[data-theme="woodland-moon"] h3,
+body[data-theme="woodland-moon"] .eyebrow {
+  color: #eef4ff !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.76) !important;
+}
+
+body[data-theme="woodland-moon"] .eyebrow {
+  color: #d8ea86 !important;
+  letter-spacing: 0.11em;
+}
+
+body[data-theme="woodland-moon"] .muted,
+body[data-theme="woodland-moon"] .placeholder-copy,
+body[data-theme="woodland-moon"] .equipment-slot-label,
+body[data-theme="woodland-moon"] .gear-level-tag,
+body[data-theme="woodland-moon"] .gear-tailoring-tag {
+  color: #bfd0e3 !important;
+}
+
+body[data-theme="woodland-moon"] strong,
+body[data-theme="woodland-moon"] b,
+body[data-theme="woodland-moon"] .gear-card-name,
+body[data-theme="woodland-moon"] .wardrobe-bonus-row strong {
+  color: #eef4ff !important;
+}
+
+/* Navigation */
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item {
+  border-color: rgba(190, 212, 245, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(29, 47, 71, 0.34), rgba(12, 22, 36, 0.24)) !important;
+  color: #c4d4e6 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 246, 255, 0.08),
+    0 8px 18px rgba(6, 11, 18, 0.20) !important;
+}
+
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover {
+  border-color: rgba(216, 234, 134, 0.46) !important;
+  color: #eef4ff !important;
+  background:
+    linear-gradient(180deg, rgba(40, 63, 91, 0.40), rgba(18, 31, 48, 0.28)) !important;
+}
+
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(216, 234, 134, 0.58) !important;
+  color: #eef4ff !important;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(240, 246, 255, 0.14), transparent 2.8rem),
+    linear-gradient(135deg, rgba(70, 96, 130, 0.34), rgba(34, 58, 87, 0.30), rgba(18, 31, 48, 0.24)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 246, 255, 0.14),
+    0 0 18px rgba(144, 191, 240, 0.12),
+    0 0 16px rgba(216, 234, 134, 0.08) !important;
+}
+
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover svg *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg * {
+  color: #6c472c !important;
+  -webkit-text-fill-color: #6c472c !important;
+  fill: #6c472c !important;
+  stroke: #6c472c !important;
+}
+
+/* Buttons retain bark texture, but with moonlit borders and firefly text */
+body[data-theme="woodland-moon"] .chat-form button,
+body[data-theme="woodland-moon"] .secondary-button,
+body[data-theme="woodland-moon"] #logout-button,
+body[data-theme="woodland-moon"] #dev-spawn-wardrobe-item-button,
+body[data-theme="woodland-moon"] .wardrobe-item-actions button,
+body[data-theme="woodland-moon"] .wardrobe-item-modal-close,
+body[data-theme="woodland-moon"] .inventory-item-card button,
+body[data-theme="woodland-moon"] .equipment-card button,
+body[data-theme="woodland-moon"] .task-card button {
+  border-color: rgba(190, 212, 245, 0.28) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(240, 246, 255, 0.10), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.05) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.08) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(93, 63, 39, 0.72), rgba(57, 37, 23, 0.78)) !important;
+  color: #eef7b5 !important;
+  text-shadow: 0 1px 1px rgba(18, 11, 7, 0.74) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.10),
+    0 8px 18px rgba(21, 12, 7, 0.18) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-form button:hover,
+body[data-theme="woodland-moon"] .secondary-button:hover,
+body[data-theme="woodland-moon"] #logout-button:hover,
+body[data-theme="woodland-moon"] #dev-spawn-wardrobe-item-button:hover,
+body[data-theme="woodland-moon"] .wardrobe-item-actions button:hover,
+body[data-theme="woodland-moon"] .wardrobe-item-modal-close:hover,
+body[data-theme="woodland-moon"] .inventory-item-card button:hover,
+body[data-theme="woodland-moon"] .equipment-card button:hover,
+body[data-theme="woodland-moon"] .task-card button:hover {
+  border-color: rgba(216, 234, 134, 0.48) !important;
+  color: #fffbd1 !important;
+}
+
+/* Work buttons */
+body[data-theme="woodland-moon"] #section-work .task-card button,
+body[data-theme="woodland-moon"] #section-work .work-card button,
+body[data-theme="woodland-moon"] #section-work .task-panel button {
+  border-color: rgba(190, 212, 245, 0.26) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(240, 246, 255, 0.08), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.05) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.08) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(88, 60, 38, 0.66), rgba(53, 35, 23, 0.70)) !important;
+  color: #eef7b5 !important;
+}
+
+body[data-theme="woodland-moon"] #section-work .task-card.active button,
+body[data-theme="woodland-moon"] #section-work .task-card.is-active button,
+body[data-theme="woodland-moon"] #section-work .work-card.active button,
+body[data-theme="woodland-moon"] #section-work .work-card.is-active button,
+body[data-theme="woodland-moon"] #section-work .task-card[data-state="active"] button,
+body[data-theme="woodland-moon"] #section-work .work-card[data-state="active"] button {
+  border-color: rgba(216, 234, 134, 0.52) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(240, 246, 255, 0.12), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.06) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.10) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(122, 84, 51, 0.84), rgba(72, 47, 28, 0.90)) !important;
+  color: #fffbd1 !important;
+}
+
+/* Care action states */
+body[data-theme="woodland-moon"] .care-button-active,
+body[data-theme="woodland-moon"] button.care-button-active {
+  border-color: rgba(216, 234, 134, 0.56) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(240, 246, 255, 0.14), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.06) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.11) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(124, 84, 52, 0.88), rgba(74, 47, 28, 0.92)) !important;
+  color: #fffbd1 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 220, 0.16),
+    0 10px 22px rgba(21, 12, 7, 0.22),
+    0 0 18px rgba(216, 234, 134, 0.10) !important;
+}
+
+body[data-theme="woodland-moon"] .care-button-queued,
+body[data-theme="woodland-moon"] button.care-button-queued {
+  border-color: rgba(164, 194, 230, 0.38) !important;
+  background:
+    linear-gradient(180deg, rgba(53, 71, 92, 0.78), rgba(34, 44, 58, 0.82)) !important;
+  color: #dde9fa !important;
+}
+
+body[data-theme="woodland-moon"] .care-button-blocked,
+body[data-theme="woodland-moon"] button.care-button-blocked,
+body[data-theme="woodland-moon"] .care-actions button:disabled,
+body[data-theme="woodland-moon"] button:disabled.care-button-blocked,
+body[data-theme="woodland-moon"] button.care-button-blocked:disabled {
+  border-color: rgba(110, 125, 144, 0.26) !important;
+  background:
+    linear-gradient(180deg, rgba(61, 67, 77, 0.52), rgba(34, 37, 43, 0.58)) !important;
+  color: #c0c6ce !important;
+  opacity: 1 !important;
+}
+
+body[data-theme="woodland-moon"] .care-card button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="woodland-moon"] .care-actions button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="woodland-moon"] button.care-action-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) {
+  border-color: rgba(190, 212, 245, 0.26) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(240, 246, 255, 0.10), transparent 4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(255, 255, 220, 0.05) 0 8px,
+      rgba(101, 65, 38, 0.00) 8px 16px,
+      rgba(40, 24, 13, 0.08) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(92, 61, 36, 0.74), rgba(57, 37, 23, 0.78)) !important;
+  color: #f1f5c2 !important;
+}
+
+/* Active care progress and care status bars */
+body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-button-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button-active .care-button-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button-active .care-progress-fill {
+  background:
+    linear-gradient(90deg, #4d3420 0%, #4c7396 50%, #d8ea86 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 251, 220, 0.22),
+    0 0 12px rgba(216, 234, 134, 0.20) !important;
+}
+
+body[data-theme="woodland-moon"] #section-home .care-status-compact .bar {
+  border-color: rgba(190, 212, 245, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(12, 21, 36, 0.46), rgba(7, 13, 22, 0.38)) !important;
+}
+
+body[data-theme="woodland-moon"] #section-home .care-status-compact .fill,
+body[data-theme="woodland-moon"] #section-home .care-status-compact .stat-fill,
+body[data-theme="woodland-moon"] #section-home .care-status-compact .mood-fill {
+  background:
+    linear-gradient(90deg, #3f2a1b 0%, #325a71 54%, #d8ea86 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 246, 255, 0.18),
+    0 0 12px rgba(144, 191, 240, 0.10),
+    0 0 10px rgba(216, 234, 134, 0.08) !important;
+}
+
+/* Chat */
+body[data-theme="woodland-moon"] .chat-panel,
+body[data-theme="woodland-moon"] .chat-shell {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(224, 235, 255, 0.06), transparent 4rem),
+    linear-gradient(180deg, rgba(20, 34, 52, 0.30), rgba(9, 18, 30, 0.26)) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-tab,
+body[data-theme="woodland-moon"] .chat-tabs button,
+body[data-theme="woodland-moon"] .chat-channel-tabs button {
+  border-color: rgba(190, 212, 245, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(28, 45, 67, 0.62), rgba(15, 24, 37, 0.64)) !important;
+  color: #c4d4e6 !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.58) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-tab.active,
+body[data-theme="woodland-moon"] .chat-tabs button.active,
+body[data-theme="woodland-moon"] .chat-channel-tabs button.active,
+body[data-theme="woodland-moon"] .chat-tab[aria-selected="true"],
+body[data-theme="woodland-moon"] .chat-tabs button[aria-selected="true"],
+body[data-theme="woodland-moon"] .chat-channel-tabs button[aria-selected="true"] {
+  border-color: rgba(216, 234, 134, 0.52) !important;
+  background:
+    linear-gradient(180deg, rgba(215, 233, 255, 0.90), rgba(151, 180, 220, 0.86)) !important;
+  color: #152131 !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log,
+body[data-theme="woodland-moon"] .chat-messages {
+  background:
+    linear-gradient(180deg, rgba(10, 18, 30, 0.30), rgba(7, 14, 24, 0.24)) !important;
+  border-color: rgba(190, 212, 245, 0.18) !important;
+  color: #eef4ff !important;
+}
+
+body[data-theme="woodland-moon"] .chat-message,
+body[data-theme="woodland-moon"] .chat-text {
+  color: #eef4ff !important;
+  -webkit-text-fill-color: #eef4ff !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.62) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-time {
+  color: #c0d0e2 !important;
+  -webkit-text-fill-color: #c0d0e2 !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.72) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-name {
+  color: #d8ea86 !important;
+  -webkit-text-fill-color: #d8ea86 !important;
+  text-shadow:
+    0 1px 1px rgba(23, 18, 9, 0.76),
+    0 0 8px rgba(216, 234, 134, 0.10) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log {
+  scrollbar-color: rgba(216, 234, 134, 0.82) rgba(17, 30, 47, 0.34) !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log::-webkit-scrollbar-track {
+  background:
+    linear-gradient(180deg, rgba(16, 28, 45, 0.48), rgba(9, 17, 28, 0.40)) !important;
+  border-radius: 999px !important;
+}
+
+body[data-theme="woodland-moon"] .chat-log::-webkit-scrollbar-thumb {
+  border-radius: 999px !important;
+  border: 2px solid rgba(12, 22, 35, 0.76) !important;
+  background:
+    linear-gradient(180deg, #d8ea86, #96b6db 56%, #503522) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 246, 255, 0.28),
+    0 0 10px rgba(216, 234, 134, 0.14) !important;
+}
+
+/* Home stage */
+body[data-theme="woodland-moon"] .nami-placeholder,
+body[data-theme="woodland-moon"] .nami-room-stage {
+  border-color: rgba(190, 212, 245, 0.30) !important;
+  background:
+    radial-gradient(circle at 50% 8%, rgba(224, 235, 255, 0.12), transparent 11rem),
+    radial-gradient(circle at 50% 90%, rgba(216, 234, 134, 0.08), transparent 12rem),
+    linear-gradient(180deg, rgba(10, 20, 34, 0.24), rgba(8, 15, 26, 0.20)) !important;
+}
+
+/* Wardrobe modal */
+body[data-theme="woodland-moon"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(190, 212, 245, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 30, 46, 0.96), rgba(8, 14, 24, 0.97)) !important;
+  color: #eef4ff !important;
+  box-shadow:
+    0 24px 60px rgba(6, 11, 18, 0.46),
+    inset 0 1px 0 rgba(240, 246, 255, 0.10) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-header,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(190, 212, 245, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(29, 47, 71, 0.34), rgba(11, 20, 34, 0.28)) !important;
+  color: #eef4ff !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="woodland-moon"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #eef4ff !important;
+  -webkit-text-fill-color: #eef4ff !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="woodland-moon"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #bfd0e3 !important;
+  -webkit-text-fill-color: #bfd0e3 !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #d8ea86 !important;
+  -webkit-text-fill-color: #d8ea86 !important;
+}
+
+/* Left/right rail text */
+body[data-theme="woodland-moon"] .left-rail .panel-title,
+body[data-theme="woodland-moon"] .left-rail .panel-title *,
+body[data-theme="woodland-moon"] .right-rail .panel-title,
+body[data-theme="woodland-moon"] .right-rail .panel-title *,
+body[data-theme="woodland-moon"] .right-buffs-panel .panel-title,
+body[data-theme="woodland-moon"] .right-buffs-panel .panel-title *,
+body[data-theme="woodland-moon"] .right-rail h2,
+body[data-theme="woodland-moon"] .right-rail h3,
+body[data-theme="woodland-moon"] .right-buffs-panel h2,
+body[data-theme="woodland-moon"] .right-buffs-panel h3,
+body[data-theme="woodland-moon"] .right-buff-group h2,
+body[data-theme="woodland-moon"] .right-buff-group h3,
+body[data-theme="woodland-moon"] .right-buff-group > strong,
+body[data-theme="woodland-moon"] .left-rail .server-clock,
+body[data-theme="woodland-moon"] .left-rail .server-clock *,
+body[data-theme="woodland-moon"] .left-rail .server-time,
+body[data-theme="woodland-moon"] .left-rail .server-time *,
+body[data-theme="woodland-moon"] .left-rail .online-users,
+body[data-theme="woodland-moon"] .left-rail .online-users *,
+body[data-theme="woodland-moon"] .left-rail #server-time,
+body[data-theme="woodland-moon"] .left-rail #server-time *,
+body[data-theme="woodland-moon"] .left-rail #online-users,
+body[data-theme="woodland-moon"] .left-rail #online-users *,
+body[data-theme="woodland-moon"] .left-rail [data-server-time],
+body[data-theme="woodland-moon"] .left-rail [data-online-users] {
+  color: #d8ea86 !important;
+  -webkit-text-fill-color: #d8ea86 !important;
+  text-shadow:
+    0 1px 1px rgba(16, 12, 8, 0.72),
+    0 0 10px rgba(216, 234, 134, 0.10) !important;
+}
+
+/* Woodland Moon recolor END */

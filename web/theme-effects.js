@@ -9,6 +9,8 @@
   let pearlTideBubbleResizeListener = null;
   let woodlandSunCanvasAnimationFrame = 0;
   let woodlandSunCanvasResizeListener = null;
+  let woodlandMoonCanvasAnimationFrame = 0;
+  let woodlandMoonCanvasResizeListener = null;
 
   function randomBetween(min, max) {
     return Math.random() * (max - min) + min;
@@ -39,6 +41,10 @@
 
   function isWoodlandSunTheme(themeKey) {
     return themeKey === "woodland-sun";
+  }
+
+  function isWoodlandMoonTheme(themeKey) {
+    return themeKey === "woodland-moon";
   }
 
 
@@ -73,13 +79,23 @@
       woodlandSunCanvasResizeListener = null;
     }
 
+    if (woodlandMoonCanvasAnimationFrame) {
+      window.cancelAnimationFrame(woodlandMoonCanvasAnimationFrame);
+      woodlandMoonCanvasAnimationFrame = 0;
+    }
+
+    if (woodlandMoonCanvasResizeListener) {
+      window.removeEventListener("resize", woodlandMoonCanvasResizeListener);
+      woodlandMoonCanvasResizeListener = null;
+    }
+
     if (activeLayer) {
       activeLayer.remove();
       activeLayer = null;
     }
 
-    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide", "theme-effect-woodland-sun");
-    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide", "theme-effect-woodland-sun");
+    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide", "theme-effect-woodland-sun", "theme-effect-woodland-moon");
+    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide", "theme-effect-woodland-sun", "theme-effect-woodland-moon");
     document.querySelectorAll(".tokyo-night-rail-signs, .tokyo-night-left-signs").forEach((node) => node.remove());
   }
 
@@ -112,6 +128,10 @@
 
     if (isWoodlandSunTheme(themeKey)) {
       startWoodlandSunCanvasEffect();
+    }
+
+    if (isWoodlandMoonTheme(themeKey)) {
+      startWoodlandMoonCanvasEffect();
     }
 
   }
@@ -857,6 +877,261 @@
     }
   }
   /* Woodland Sun canvas light effect END */
+
+  /* Woodland Moon canvas light effect START */
+  function startWoodlandMoonCanvasEffect() {
+    document.documentElement.classList.add("theme-effect-woodland-moon");
+    document.body?.classList.add("theme-effect-woodland-moon");
+
+    const layer = document.createElement("div");
+    layer.className = "theme-effects-layer theme-effects-woodland-moon";
+    layer.setAttribute("aria-hidden", "true");
+
+    const canvas = document.createElement("canvas");
+    canvas.className = "woodland-moon-light-canvas";
+    layer.append(canvas);
+
+    document.body.append(layer);
+    activeLayer = layer;
+
+    const ctx = canvas.getContext("2d", { alpha: true });
+
+    if (!ctx) {
+      return;
+    }
+
+    const reducedMotion = reduceMotionQuery.matches;
+    const moonbeams = [];
+    const fireflies = [];
+
+    let viewportWidth = 0;
+    let viewportHeight = 0;
+    let pixelRatio = 1;
+
+    function smoothStep(edge0, edge1, value) {
+      const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+      return t * t * (3 - 2 * t);
+    }
+
+    function makeMoonbeam(now, initialDelay = 0) {
+      const duration = randomBetween(96, 164) * 1000;
+      const startDelay = initialDelay * 1000;
+      const beamWidth = randomBetween(viewportWidth * 0.10, viewportWidth * 0.28);
+      const beamHeight = randomBetween(viewportHeight * 1.05, viewportHeight * 1.78);
+
+      return {
+        startTime: now + startDelay,
+        duration,
+        x: randomBetween(-viewportWidth * 0.18, viewportWidth * 0.98),
+        y: randomBetween(-viewportHeight * 0.24, viewportHeight * 0.08),
+        width: beamWidth,
+        height: beamHeight,
+        rotation: randomBetween(-0.26, 0.12),
+        driftX: randomBetween(-viewportWidth * 0.030, viewportWidth * 0.038),
+        driftY: randomBetween(viewportHeight * 0.010, viewportHeight * 0.036),
+        alpha: randomBetween(0.18, 0.34),
+        coolAlpha: randomBetween(0.30, 0.52),
+        blur: randomBetween(11, 22),
+      };
+    }
+
+    function replaceMoonbeam(index, now) {
+      moonbeams[index] = makeMoonbeam(now, randomBetween(6, 26));
+    }
+
+    function makeFirefly() {
+      const palette = randomItem([
+        { core: "255, 252, 214", glow: "216, 234, 134", rim: "127, 173, 73" },
+        { core: "255, 246, 190", glow: "231, 218, 122", rim: "143, 116, 56" },
+        { core: "242, 255, 210", glow: "200, 234, 118", rim: "112, 156, 76" }
+      ]);
+
+      return {
+        x: randomBetween(-viewportWidth * 0.04, viewportWidth * 1.02),
+        y: randomBetween(-viewportHeight * 0.02, viewportHeight * 0.98),
+        orbitX: randomBetween(18, 82),
+        orbitY: randomBetween(10, 48),
+        driftSpeed: randomBetween(0.00036, 0.00078),
+        pulseSpeed: randomBetween(0.0010, 0.0020),
+        phase: randomBetween(0, Math.PI * 2),
+        alpha: randomBetween(0.32, 0.72),
+        glow: randomBetween(16, 34),
+        core: randomBetween(1.6, 3.6),
+        palette,
+      };
+    }
+
+    function resizeCanvas() {
+      viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
+      viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.round(viewportWidth * pixelRatio);
+      canvas.height = Math.round(viewportHeight * pixelRatio);
+      canvas.style.width = "${0}px";
+      canvas.style.height = "${0}px";
+      canvas.style.width = viewportWidth + "px";
+      canvas.style.height = viewportHeight + "px";
+
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+      const now = performance.now();
+      moonbeams.length = 0;
+      fireflies.length = 0;
+
+      const moonbeamCount = reducedMotion
+        ? 4
+        : Math.max(5, Math.min(9, Math.round(viewportWidth / 420)));
+
+      for (let index = 0; index < moonbeamCount; index += 1) {
+        moonbeams.push(makeMoonbeam(now, reducedMotion ? 0 : randomBetween(0, 56)));
+      }
+
+      const viewportArea = viewportWidth * viewportHeight;
+      const fireflyCount = reducedMotion
+        ? Math.max(12, Math.min(22, Math.round(viewportArea / 260000)))
+        : Math.max(24, Math.min(56, Math.round(viewportArea / 125000)));
+
+      for (let index = 0; index < fireflyCount; index += 1) {
+        fireflies.push(makeFirefly());
+      }
+
+      drawFrame(now, true);
+    }
+
+    function drawMoonbeam(beam, now) {
+      if (now < beam.startTime) {
+        return;
+      }
+
+      const phase = (now - beam.startTime) / beam.duration;
+
+      if (phase >= 1) {
+        return;
+      }
+
+      const fadeIn = smoothStep(0.10, 0.36, phase);
+      const fadeOut = 1 - smoothStep(0.72, 0.96, phase);
+      const lifeAlpha = fadeIn * fadeOut;
+      const drift = smoothStep(0, 1, phase);
+      const alpha = beam.alpha * lifeAlpha;
+
+      if (alpha <= 0.001) {
+        return;
+      }
+
+      const x = beam.x + beam.driftX * drift;
+      const y = beam.y + beam.driftY * drift;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.translate(x, y);
+      ctx.rotate(beam.rotation);
+      ctx.transform(1, 0, -0.09, 1, 0, 0);
+
+      if ("filter" in ctx) {
+        ctx.filter = "blur(" + beam.blur.toFixed(1) + "px)";
+      }
+
+      const gradient = ctx.createLinearGradient(-beam.width * 0.5, 0, beam.width * 0.5, 0);
+      gradient.addColorStop(0.00, "rgba(232, 241, 255, 0)");
+      gradient.addColorStop(0.20, "rgba(232, 241, 255, " + (beam.coolAlpha * 0.42).toFixed(3) + ")");
+      gradient.addColorStop(0.50, "rgba(182, 209, 255, " + (beam.coolAlpha).toFixed(3) + ")");
+      gradient.addColorStop(0.80, "rgba(232, 241, 255, " + (beam.coolAlpha * 0.36).toFixed(3) + ")");
+      gradient.addColorStop(1.00, "rgba(232, 241, 255, 0)");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(-beam.width * 0.50, 0);
+      ctx.lineTo(beam.width * 0.50, 0);
+      ctx.lineTo(beam.width * 0.34, beam.height);
+      ctx.lineTo(-beam.width * 0.60, beam.height);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawFirefly(fly, now) {
+      const driftTime = now * fly.driftSpeed + fly.phase;
+      const pulseTime = now * fly.pulseSpeed + fly.phase;
+
+      const x =
+        fly.x +
+        Math.sin(driftTime) * fly.orbitX +
+        Math.cos(driftTime * 0.63) * fly.orbitX * 0.38;
+
+      const y =
+        fly.y +
+        Math.cos(driftTime * 0.84) * fly.orbitY +
+        Math.sin(driftTime * 0.57) * fly.orbitY * 0.30;
+
+      const pulse = 0.76 + Math.sin(pulseTime) * 0.24;
+      const alpha = fly.alpha * (0.72 + Math.sin(pulseTime * 0.82) * 0.28);
+      const glowRadius = fly.glow * pulse;
+      const coreRadius = fly.core * (0.84 + Math.sin(pulseTime * 1.24) * 0.16);
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.globalCompositeOperation = "source-over";
+
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, glowRadius);
+      glow.addColorStop(0.00, "rgba(" + fly.palette.core + ", 0.90)");
+      glow.addColorStop(0.28, "rgba(" + fly.palette.glow + ", 0.42)");
+      glow.addColorStop(0.62, "rgba(" + fly.palette.rim + ", 0.12)");
+      glow.addColorStop(1.00, "rgba(" + fly.palette.rim + ", 0)");
+
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(x, y, glowRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(" + fly.palette.core + ", 0.96)";
+      ctx.beginPath();
+      ctx.arc(x, y, coreRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawFrame(now, drawOnce = false) {
+      if (!isWoodlandMoonTheme(activeThemeKey) || !canvas.isConnected) {
+        return;
+      }
+
+      ctx.clearRect(0, 0, viewportWidth, viewportHeight);
+
+      moonbeams.forEach((beam, index) => {
+        if (!reducedMotion && now - beam.startTime > beam.duration) {
+          replaceMoonbeam(index, now);
+        }
+
+        drawMoonbeam(moonbeams[index], now);
+      });
+
+      for (const fly of fireflies) {
+        drawFirefly(fly, now);
+      }
+
+      if (!drawOnce && !reducedMotion) {
+        woodlandMoonCanvasAnimationFrame = window.requestAnimationFrame(drawFrame);
+      }
+    }
+
+    woodlandMoonCanvasResizeListener = () => resizeCanvas();
+    window.addEventListener("resize", woodlandMoonCanvasResizeListener, { passive: true });
+
+    resizeCanvas();
+
+    if (!reducedMotion) {
+      woodlandMoonCanvasAnimationFrame = window.requestAnimationFrame(drawFrame);
+    } else {
+      layer.classList.add("theme-effects-reduced-motion");
+      drawFrame(performance.now(), true);
+    }
+  }
+  /* Woodland Moon canvas light effect END */
 
   /* Pearl Tide bubble canvas effect START */
   function startPearlTideThemeEffect() {
