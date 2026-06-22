@@ -900,3 +900,112 @@ body[data-theme="phantom-rebel"] .right-buff-group > h3 {
 }
 
 /* Phantom Rebel right rail buff group headings END */
+
+/* Phantom Rebel Courier Prime text pass START */
+/* All non-Phantom-display text uses Courier Prime. Material glyphs stay protected. */
+
+body[data-theme="phantom-rebel"] {
+  --phantom-body-font: "Courier Prime", "Atkinson Hyperlegible Mono", "Courier New", ui-monospace, monospace;
+}
+
+/* Broad body text pass. More specific Phantom Rebel display-font rules still win. */
+body[data-theme="phantom-rebel"],
+body[data-theme="phantom-rebel"] :where(
+  a,
+  abbr,
+  address,
+  article,
+  aside,
+  b,
+  blockquote,
+  button,
+  caption,
+  cite,
+  code,
+  dd,
+  details,
+  div,
+  dl,
+  dt,
+  em,
+  fieldset,
+  figcaption,
+  footer,
+  form,
+  header,
+  input,
+  label,
+  legend,
+  li,
+  main,
+  nav,
+  option,
+  output,
+  p,
+  pre,
+  section,
+  select,
+  small,
+  span,
+  strong,
+  sub,
+  summary,
+  sup,
+  table,
+  tbody,
+  td,
+  textarea,
+  tfoot,
+  th,
+  thead,
+  tr,
+  u,
+  ul
+):not(.material-symbols-rounded):not(.collapse-glyph):not(.nav-icon) {
+  font-family: var(--phantom-body-font) !important;
+}
+
+/* Care timers are not Phantom-display text, so they move from Nunito to Courier Prime too. */
+body[data-theme="phantom-rebel"] .care-button-label .care-button-timer-text {
+  font-family: var(--phantom-body-font) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.010em !important;
+}
+
+/* Inputs, selects, placeholders, and textareas should also read as Courier Prime. */
+body[data-theme="phantom-rebel"] input,
+body[data-theme="phantom-rebel"] textarea,
+body[data-theme="phantom-rebel"] select,
+body[data-theme="phantom-rebel"] option,
+body[data-theme="phantom-rebel"] .chat-input,
+body[data-theme="phantom-rebel"] .chat-input::placeholder,
+body[data-theme="phantom-rebel"] input::placeholder,
+body[data-theme="phantom-rebel"] textarea::placeholder {
+  font-family: var(--phantom-body-font) !important;
+}
+
+/* Glyph safety: never let Courier Prime or Phantom Rebel Display eat Google icons. */
+body[data-theme="phantom-rebel"] .material-symbols-rounded,
+body[data-theme="phantom-rebel"] .collapse-glyph,
+body[data-theme="phantom-rebel"] .nav-icon.material-symbols-rounded,
+body[data-theme="phantom-rebel"] .rail-toggle .material-symbols-rounded,
+body[data-theme="phantom-rebel"] .top-panel-toggle .material-symbols-rounded {
+  font-family: "Material Symbols Rounded" !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  word-wrap: normal !important;
+  direction: ltr !important;
+  font-feature-settings: "liga" !important;
+  -webkit-font-feature-settings: "liga" !important;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 700,
+    "GRAD" 0,
+    "opsz" 24 !important;
+}
+
+/* Phantom Rebel Courier Prime text pass END */
