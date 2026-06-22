@@ -7,6 +7,8 @@
   let lanternTimer = null;
   let pearlTideBubbleAnimationFrame = 0;
   let pearlTideBubbleResizeListener = null;
+  let woodlandSunCanvasAnimationFrame = 0;
+  let woodlandSunCanvasResizeListener = null;
 
   function randomBetween(min, max) {
     return Math.random() * (max - min) + min;
@@ -35,6 +37,10 @@
     return themeKey === "pearl-tide";
   }
 
+  function isWoodlandSunTheme(themeKey) {
+    return themeKey === "woodland-sun";
+  }
+
 
   function clearThemeEffects() {
     if (petalTimer) {
@@ -57,13 +63,23 @@
       pearlTideBubbleResizeListener = null;
     }
 
+    if (woodlandSunCanvasAnimationFrame) {
+      window.cancelAnimationFrame(woodlandSunCanvasAnimationFrame);
+      woodlandSunCanvasAnimationFrame = 0;
+    }
+
+    if (woodlandSunCanvasResizeListener) {
+      window.removeEventListener("resize", woodlandSunCanvasResizeListener);
+      woodlandSunCanvasResizeListener = null;
+    }
+
     if (activeLayer) {
       activeLayer.remove();
       activeLayer = null;
     }
 
-    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide");
-    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide");
+    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide", "theme-effect-woodland-sun");
+    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide", "theme-effect-woodland-sun");
     document.querySelectorAll(".tokyo-night-rail-signs, .tokyo-night-left-signs").forEach((node) => node.remove());
   }
 
@@ -92,6 +108,10 @@
 
     if (isPearlTideTheme(themeKey)) {
       startPearlTideThemeEffect();
+    }
+
+    if (isWoodlandSunTheme(themeKey)) {
+      startWoodlandSunCanvasEffect();
     }
 
   }
@@ -575,6 +595,259 @@
 
 
 
+
+  /* Woodland Sun canvas light effect START */
+  function startWoodlandSunCanvasEffect() {
+    document.documentElement.classList.add("theme-effect-woodland-sun");
+    document.body?.classList.add("theme-effect-woodland-sun");
+
+    const layer = document.createElement("div");
+    layer.className = "theme-effects-layer theme-effects-woodland-sun";
+    layer.setAttribute("aria-hidden", "true");
+
+    const canvas = document.createElement("canvas");
+    canvas.className = "woodland-sun-light-canvas";
+    layer.append(canvas);
+
+    document.body.append(layer);
+    activeLayer = layer;
+
+    const ctx = canvas.getContext("2d", { alpha: true });
+
+    if (!ctx) {
+      return;
+    }
+
+    const reducedMotion = reduceMotionQuery.matches;
+    const shafts = [];
+    const bokehLights = [];
+
+    let viewportWidth = 0;
+    let viewportHeight = 0;
+    let pixelRatio = 1;
+
+    function smoothStep(edge0, edge1, value) {
+      const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+      return t * t * (3 - 2 * t);
+    }
+
+    function makeLightShaft(now, initialDelay = 0) {
+      const duration = randomBetween(82, 142) * 1000;
+      const startDelay = initialDelay * 1000;
+      const shaftWidth = randomBetween(viewportWidth * 0.12, viewportWidth * 0.32);
+      const shaftHeight = randomBetween(viewportHeight * 1.08, viewportHeight * 1.82);
+
+      return {
+        startTime: now + startDelay,
+        duration,
+        x: randomBetween(-viewportWidth * 0.16, viewportWidth * 0.98),
+        y: randomBetween(-viewportHeight * 0.24, viewportHeight * 0.08),
+        width: shaftWidth,
+        height: shaftHeight,
+        rotation: randomBetween(-0.30, 0.18),
+        driftX: randomBetween(-viewportWidth * 0.035, viewportWidth * 0.045),
+        driftY: randomBetween(viewportHeight * 0.018, viewportHeight * 0.055),
+        alpha: randomBetween(0.68, 0.96),
+        warmAlpha: randomBetween(0.52, 0.82),
+        blur: randomBetween(9, 18),
+      };
+    }
+
+    function replaceLightShaft(index, now) {
+      shafts[index] = makeLightShaft(now, randomBetween(4, 22));
+    }
+
+    function makeBokehLight() {
+      const sizeBase = Math.max(150, Math.min(420, viewportWidth * randomBetween(0.095, 0.245)));
+      const palette = randomItem([
+        { core: "255, 254, 224", mid: "244, 215, 121", edge: "159, 210, 106" },
+        { core: "236, 255, 212", mid: "159, 230, 116", edge: "64, 138, 73" },
+        { core: "255, 244, 198", mid: "255, 180, 92", edge: "139, 92, 48" },
+        { core: "229, 255, 232", mid: "199, 239, 190", edge: "116, 190, 98" },
+      ]);
+
+      return {
+        x: randomBetween(-viewportWidth * 0.08, viewportWidth * 1.05),
+        y: randomBetween(-viewportHeight * 0.05, viewportHeight * 1.02),
+        size: sizeBase,
+        alpha: randomBetween(0.46, 0.78),
+        pulse: randomBetween(0, Math.PI * 2),
+        pulseSpeed: randomBetween(0.000045, 0.00012),
+        driftX: randomBetween(-viewportWidth * 0.08, viewportWidth * 0.08),
+        driftY: randomBetween(-viewportHeight * 0.05, viewportHeight * 0.05),
+        driftSpeed: randomBetween(0.000018, 0.000046),
+        blur: randomBetween(0.0, 1.8),
+        palette,
+      };
+    }
+
+    function resizeCanvas() {
+      viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
+      viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.round(viewportWidth * pixelRatio);
+      canvas.height = Math.round(viewportHeight * pixelRatio);
+      canvas.style.width = `${viewportWidth}px`;
+      canvas.style.height = `${viewportHeight}px`;
+
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+      const now = performance.now();
+      shafts.length = 0;
+      bokehLights.length = 0;
+
+      const shaftCount = reducedMotion
+        ? 5
+        : Math.max(6, Math.min(11, Math.round(viewportWidth / 360)));
+
+      for (let index = 0; index < shaftCount; index += 1) {
+        shafts.push(makeLightShaft(now, reducedMotion ? 0 : randomBetween(0, 48)));
+      }
+
+      const viewportArea = viewportWidth * viewportHeight;
+      const bokehCount = reducedMotion
+        ? Math.max(16, Math.min(28, Math.round(viewportArea / 190000)))
+        : Math.max(34, Math.min(64, Math.round(viewportArea / 115000)));
+
+      for (let index = 0; index < bokehCount; index += 1) {
+        bokehLights.push(makeBokehLight());
+      }
+
+      drawFrame(now, true);
+    }
+
+    function drawLightShaft(shaft, now) {
+      if (now < shaft.startTime) {
+        return;
+      }
+
+      const rawPhase = (now - shaft.startTime) / shaft.duration;
+
+      if (rawPhase >= 1) {
+        return;
+      }
+
+      const fadeIn = smoothStep(0.08, 0.34, rawPhase);
+      const fadeOut = 1 - smoothStep(0.72, 0.96, rawPhase);
+      const lifeAlpha = fadeIn * fadeOut;
+      const easedDrift = smoothStep(0, 1, rawPhase);
+      const alpha = shaft.alpha * lifeAlpha;
+
+      if (alpha <= 0.001) {
+        return;
+      }
+
+      const x = shaft.x + shaft.driftX * easedDrift;
+      const y = shaft.y + shaft.driftY * easedDrift;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.translate(x, y);
+      ctx.rotate(shaft.rotation);
+      ctx.transform(1, 0, -0.11, 1, 0, 0);
+
+      if ("filter" in ctx) {
+        ctx.filter = `blur(${shaft.blur.toFixed(1)}px)`;
+      }
+
+      const gradient = ctx.createLinearGradient(-shaft.width * 0.5, 0, shaft.width * 0.5, 0);
+      gradient.addColorStop(0.00, "rgba(255, 250, 210, 0)");
+      gradient.addColorStop(0.18, `rgba(255, 252, 220, ${(shaft.warmAlpha * 0.42).toFixed(3)})`);
+      gradient.addColorStop(0.50, `rgba(255, 226, 108, ${(shaft.warmAlpha).toFixed(3)})`);
+      gradient.addColorStop(0.82, `rgba(255, 252, 220, ${(shaft.warmAlpha * 0.42).toFixed(3)})`);
+      gradient.addColorStop(1.00, "rgba(255, 250, 210, 0)");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(-shaft.width * 0.50, 0);
+      ctx.lineTo(shaft.width * 0.50, 0);
+      ctx.lineTo(shaft.width * 0.34, shaft.height);
+      ctx.lineTo(-shaft.width * 0.62, shaft.height);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawBokehLight(light, now) {
+      const driftTime = now * light.driftSpeed + light.pulse;
+      const pulseTime = now * light.pulseSpeed + light.pulse;
+      const x = light.x + Math.sin(driftTime) * light.driftX + Math.cos(driftTime * 0.73) * light.driftX * 0.28;
+      const y = light.y + Math.cos(driftTime * 0.84) * light.driftY + Math.sin(driftTime * 0.51) * light.driftY * 0.20;
+      const pulse = 0.86 + Math.sin(pulseTime) * 0.14;
+      const radius = light.size * pulse;
+      const alpha = light.alpha * (0.88 + Math.cos(pulseTime * 0.71) * 0.12);
+      const palette = light.palette;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.globalCompositeOperation = "source-over";
+
+      if ("filter" in ctx) {
+        ctx.filter = `blur(${light.blur.toFixed(1)}px)`;
+      }
+
+      const gradient = ctx.createRadialGradient(
+        x - radius * 0.18,
+        y - radius * 0.22,
+        0,
+        x,
+        y,
+        radius
+      );
+
+      gradient.addColorStop(0.00, `rgba(${palette.core}, 0.96)`);
+      gradient.addColorStop(0.24, `rgba(${palette.mid}, 0.72)`);
+      gradient.addColorStop(0.58, `rgba(${palette.edge}, 0.42)`);
+      gradient.addColorStop(1.00, `rgba(${palette.edge}, 0)`);
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawFrame(now, drawOnce = false) {
+      if (!isWoodlandSunTheme(activeThemeKey) || !canvas.isConnected) {
+        return;
+      }
+
+      ctx.clearRect(0, 0, viewportWidth, viewportHeight);
+
+      for (const light of bokehLights) {
+        drawBokehLight(light, now);
+      }
+
+      shafts.forEach((shaft, index) => {
+        if (!reducedMotion && now - shaft.startTime > shaft.duration) {
+          replaceLightShaft(index, now);
+        }
+
+        drawLightShaft(shafts[index], now);
+      });
+
+      if (!drawOnce && !reducedMotion) {
+        woodlandSunCanvasAnimationFrame = window.requestAnimationFrame(drawFrame);
+      }
+    }
+
+    woodlandSunCanvasResizeListener = () => resizeCanvas();
+    window.addEventListener("resize", woodlandSunCanvasResizeListener, { passive: true });
+
+    resizeCanvas();
+
+    if (!reducedMotion) {
+      woodlandSunCanvasAnimationFrame = window.requestAnimationFrame(drawFrame);
+    } else {
+      layer.classList.add("theme-effects-reduced-motion");
+      drawFrame(performance.now(), true);
+    }
+  }
+  /* Woodland Sun canvas light effect END */
 
   /* Pearl Tide bubble canvas effect START */
   function startPearlTideThemeEffect() {
