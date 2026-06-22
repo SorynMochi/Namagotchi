@@ -1,0 +1,485 @@
+/* Woodland Sun theme START */
+/* Bright forest background with transparent warm-green glass UI. */
+
+:root {
+  color-scheme: light;
+
+  --woodland-canopy: #244a25;
+  --woodland-leaf: #4f8b39;
+  --woodland-fresh: #92c85b;
+  --woodland-sun: #f4d779;
+  --woodland-cream: #fffbe8;
+  --woodland-bark: #6a4428;
+  --woodland-soil: #3b281a;
+  --woodland-moss: #2f6a3d;
+  --woodland-sky: #c7efe6;
+
+  --bg-0: #e8f6d2;
+  --bg-1: #a7d86b;
+  --bg-2: #2f6a3d;
+
+  --panel: rgba(34, 78, 39, 0.24);
+  --panel-soft: rgba(69, 117, 56, 0.20);
+  --panel-deep: rgba(19, 45, 24, 0.30);
+
+  --line: rgba(216, 235, 145, 0.34);
+  --line-bright: rgba(255, 251, 232, 0.44);
+
+  --text: #fffbe8;
+  --text-soft: #d8eec6;
+  --muted: #b9d8a8;
+
+  --cyan: #c7efe6;
+  --cyan-soft: #eefdf8;
+  --pink: #ff9bb7;
+  --pink-soft: #ffe2eb;
+  --violet: #bda6ff;
+  --violet-soft: #f1ebff;
+  --green: #9fd26a;
+  --yellow: #f4d779;
+  --orange: #d89344;
+  --danger: #cf6964;
+  --cream: #fffbe8;
+
+  --shadow:
+    0 18px 44px rgba(19, 39, 16, 0.28),
+    0 0 30px rgba(159, 210, 106, 0.10),
+    0 0 24px rgba(244, 215, 121, 0.08);
+
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 220, 0.16);
+
+  --theme-focus-outline: #f4d779;
+
+  --theme-page-glow-pink: rgba(244, 215, 121, 0.18);
+  --theme-page-glow-cyan: rgba(199, 239, 230, 0.20);
+  --theme-page-glow-violet: rgba(79, 139, 57, 0.14);
+  --theme-page-gradient-top: #244a25;
+  --theme-page-gradient-bottom: #122d18;
+
+  --theme-panel-overlay: rgba(255, 255, 220, 0.040);
+  --theme-panel-border-sheen-pink: rgba(244, 215, 121, 0.24);
+  --theme-panel-border-sheen-cyan: rgba(199, 239, 230, 0.20);
+  --theme-panel-title-bg: rgba(244, 215, 121, 0.08);
+
+  --theme-card-border-cyan: rgba(216, 235, 145, 0.22);
+  --theme-card-bg-overlay: rgba(255, 255, 220, 0.040);
+  --theme-card-bg-deep: rgba(19, 45, 24, 0.22);
+  --theme-card-bg-deep-solid: rgba(19, 45, 24, 0.26);
+  --theme-card-inner-highlight: rgba(255, 255, 220, 0.055);
+
+  --theme-button-primary-border: rgba(255, 251, 232, 0.38);
+  --theme-button-primary-bg: linear-gradient(180deg, #f4d779, #9fd26a);
+  --theme-button-primary-text: #1d3518;
+  --theme-button-primary-shadow: 0 8px 22px rgba(79, 139, 57, 0.18);
+
+  --theme-button-secondary-border: rgba(216, 235, 145, 0.30);
+  --theme-button-secondary-bg:
+    radial-gradient(circle at 18% 0%, rgba(244, 215, 121, 0.16), transparent 4.8rem),
+    linear-gradient(180deg, rgba(69, 117, 56, 0.30), rgba(19, 45, 24, 0.26));
+  --theme-button-secondary-text: #fffbe8;
+  --theme-button-secondary-shadow: 0 8px 18px rgba(19, 39, 16, 0.18);
+
+  --theme-care-button-border: rgba(216, 235, 145, 0.30);
+  --theme-care-button-bg: linear-gradient(180deg, rgba(69, 117, 56, 0.30), rgba(19, 45, 24, 0.26));
+  --theme-care-button-text: #fffbe8;
+  --theme-care-button-shadow: 0 8px 18px rgba(19, 39, 16, 0.18);
+
+  --theme-pill-border: rgba(216, 235, 145, 0.24);
+  --theme-pill-bg: rgba(19, 45, 24, 0.22);
+  --theme-pill-text: #d8eec6;
+  --theme-pill-active-bg: linear-gradient(90deg, #f4d779, #9fd26a, #c7efe6);
+  --theme-pill-active-text: #1d3518;
+
+  --theme-nav-hover-border: rgba(244, 215, 121, 0.48);
+  --theme-nav-hover-bg: rgba(244, 215, 121, 0.12);
+  --theme-nav-hover-text: #fffbe8;
+  --theme-nav-active-border: rgba(244, 215, 121, 0.66);
+  --theme-nav-active-bg:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 220, 0.18), transparent 3.8rem),
+    linear-gradient(135deg, rgba(244, 215, 121, 0.34), rgba(159, 210, 106, 0.22), rgba(47, 106, 61, 0.20));
+  --theme-nav-active-text: #fffbe8;
+  --theme-nav-active-shadow: 0 0 20px rgba(244, 215, 121, 0.16), 0 0 18px rgba(159, 210, 106, 0.12);
+
+  --theme-chat-text: #fffbe8;
+  --theme-chat-name: #f4d779;
+  --theme-chat-form-bg: rgba(19, 45, 24, 0.24);
+  --theme-chat-input-border: rgba(216, 235, 145, 0.30);
+  --theme-chat-input-bg: rgba(15, 37, 19, 0.34);
+  --theme-chat-input-placeholder: rgba(216, 238, 198, 0.66);
+  --theme-chat-submit-bg: #f4d779;
+  --theme-chat-submit-text: #1d3518;
+
+  --theme-side-link-text: #d8eec6;
+  --theme-side-link-hover-text: #f4d779;
+  --theme-buff-divider: rgba(216, 235, 145, 0.16);
+
+  --theme-scrollbar-color: rgba(159, 210, 106, 0.82);
+  --theme-scrollbar-color-main: rgba(244, 215, 121, 0.76);
+  --theme-scrollbar-track: rgba(19, 45, 24, 0.28);
+  --theme-scrollbar-thumb-bg: linear-gradient(180deg, #f4d779, #9fd26a, #2f6a3d);
+
+  --theme-nami-placeholder-glow-cyan: rgba(199, 239, 230, 0.16);
+  --theme-nami-slot-glow-pink: rgba(244, 215, 121, 0.12);
+  --theme-nami-slot-glow-cyan: rgba(159, 210, 106, 0.16);
+  --theme-nami-room-stage-bg: #244a25;
+  --theme-nami-message-bg: rgba(19, 45, 24, 0.24);
+  --theme-nami-message-text: #fffbe8;
+
+  --theme-zone-active-bg: rgba(244, 215, 121, 0.10);
+  --theme-zone-active-shadow: 0 0 24px rgba(244, 215, 121, 0.10);
+
+  --theme-meter-label-text: #fffbe8;
+  --theme-meter-label-shadow: 0 1px 2px rgba(19, 39, 16, 0.70), 0 0 8px rgba(19, 39, 16, 0.38);
+  --theme-tick-fill: linear-gradient(90deg, #f4d779, #9fd26a, #c7efe6);
+  --theme-hp-fill: linear-gradient(90deg, #9fd26a, #f4d779, #d89344);
+  --theme-progress-xp-fill: linear-gradient(90deg, #f4d779, #9fd26a, #c7efe6);
+  --theme-progress-stat-fill: linear-gradient(90deg, #9fd26a, #f4d779, #d89344);
+  --theme-progress-chat-handle-fill: linear-gradient(90deg, #9fd26a, #f4d779);
+  --theme-progress-track-border: rgba(216, 235, 145, 0.18);
+  --theme-progress-track-bg: rgba(19, 45, 24, 0.30);
+  --theme-progress-fill-shadow: 0 0 16px rgba(244, 215, 121, 0.20);
+
+  --theme-wardrobe-row-border: rgba(216, 235, 145, 0.18);
+  --theme-wardrobe-row-bg: rgba(19, 45, 24, 0.22);
+  --theme-equipment-card-border-strong: rgba(216, 235, 145, 0.26);
+  --theme-equipment-card-bg-strong: rgba(19, 45, 24, 0.26);
+  --theme-equipment-card-outline: rgba(255, 255, 220, 0.045);
+  --theme-equipment-empty-border: rgba(185, 216, 168, 0.18);
+  --theme-equipment-empty-bg-glow: rgba(244, 215, 121, 0.07);
+  --theme-equipment-empty-bg: rgba(19, 45, 24, 0.18);
+  --theme-equipment-empty-shadow: rgba(244, 215, 121, 0.05);
+  --theme-equipment-empty-shadow-soft: rgba(255, 255, 220, 0.035);
+  --theme-gear-pill-border: rgba(255, 251, 232, 0.18);
+  --theme-gear-empty-name-text: rgba(216, 238, 198, 0.70);
+}
+
+/* Woodland Sun shell START */
+body[data-theme="woodland-sun"] {
+  --dropdown-bg:
+    radial-gradient(circle at 14% 0%, rgba(244, 215, 121, 0.18), transparent 5rem),
+    radial-gradient(circle at 92% 16%, rgba(159, 210, 106, 0.14), transparent 5.4rem),
+    linear-gradient(135deg, rgba(44, 92, 42, 0.92), rgba(19, 45, 24, 0.92));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 14% 0%, rgba(244, 215, 121, 0.24), transparent 5.2rem),
+    radial-gradient(circle at 92% 16%, rgba(159, 210, 106, 0.20), transparent 5.6rem),
+    linear-gradient(135deg, rgba(58, 110, 50, 0.94), rgba(23, 55, 28, 0.94));
+  --dropdown-border: rgba(216, 235, 145, 0.34);
+  --dropdown-border-hover: rgba(244, 215, 121, 0.52);
+  --dropdown-text: #fffbe8;
+  --dropdown-label: #d8eec6;
+  --dropdown-muted: #b9d8a8;
+  --dropdown-arrow: #f4d779;
+  --dropdown-accent: #9fd26a;
+  --dropdown-focus: rgba(244, 215, 121, 0.44);
+  --dropdown-shadow: 0 14px 30px rgba(19, 39, 16, 0.28), inset 0 1px 0 rgba(255, 255, 220, 0.14);
+  --dropdown-option-bg: #1d3518;
+  --dropdown-option-text: #fffbe8;
+
+  background:
+    radial-gradient(circle at 18% 8%, rgba(244, 215, 121, 0.12), transparent 23rem),
+    radial-gradient(circle at 84% 14%, rgba(199, 239, 230, 0.10), transparent 24rem),
+    linear-gradient(180deg, rgba(30, 72, 33, 0.12), rgba(16, 42, 22, 0.20)),
+    url("/images/Forest_Days.webp") center center / cover no-repeat fixed !important;
+  color: var(--text);
+}
+
+body[data-theme="woodland-sun"]::before {
+  background:
+    radial-gradient(circle, rgba(255, 251, 232, 0.14) 0 1px, transparent 1.7px),
+    radial-gradient(circle, rgba(244, 215, 121, 0.10) 0 1px, transparent 1.8px),
+    linear-gradient(135deg, rgba(255, 251, 232, 0.035), transparent 44%, rgba(47, 106, 61, 0.055)) !important;
+  background-size: 132px 96px, 176px 124px, auto !important;
+  background-position: 0 0, 48px 22px, center !important;
+  opacity: 1 !important;
+}
+/* Woodland Sun shell END */
+
+/* Woodland Sun glass panels START */
+body[data-theme="woodland-sun"] .panel,
+body[data-theme="woodland-sun"] .main-panel,
+body[data-theme="woodland-sun"] .chat-panel,
+body[data-theme="woodland-sun"] .top-stats-panel,
+body[data-theme="woodland-sun"] .nav-panel,
+body[data-theme="woodland-sun"] .right-buffs-panel,
+body[data-theme="woodland-sun"] .nami-card,
+body[data-theme="woodland-sun"] .care-card,
+body[data-theme="woodland-sun"] .zone-list,
+body[data-theme="woodland-sun"] .combat-panel,
+body[data-theme="woodland-sun"] .task-card,
+body[data-theme="woodland-sun"] .placeholder-copy,
+body[data-theme="woodland-sun"] .settings-card,
+body[data-theme="woodland-sun"] .wardrobe-panel,
+body[data-theme="woodland-sun"] .equipment-card,
+body[data-theme="woodland-sun"] .inventory-item-card,
+body[data-theme="woodland-sun"] .right-buff-group {
+  border-color: rgba(216, 235, 145, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(44, 92, 42, 0.28), rgba(19, 45, 24, 0.22)) !important;
+  color: #fffbe8 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.14),
+    0 18px 42px rgba(19, 39, 16, 0.28),
+    0 0 22px rgba(244, 215, 121, 0.06) !important;
+  backdrop-filter: blur(9px) saturate(1.12);
+  -webkit-backdrop-filter: blur(9px) saturate(1.12);
+}
+
+body[data-theme="woodland-sun"] .panel-title,
+body[data-theme="woodland-sun"] .collapse-toggle {
+  color: #fffbe8 !important;
+  background:
+    linear-gradient(180deg, rgba(74, 122, 53, 0.36), rgba(23, 55, 28, 0.30)) !important;
+  border-bottom-color: rgba(216, 235, 145, 0.30) !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.76) !important;
+}
+
+body[data-theme="woodland-sun"] h1,
+body[data-theme="woodland-sun"] h2,
+body[data-theme="woodland-sun"] h3,
+body[data-theme="woodland-sun"] .eyebrow,
+body[data-theme="woodland-sun"] .top-stats-panel h2,
+body[data-theme="woodland-sun"] .stat-group.compact h2 {
+  color: #fffbe8 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.72);
+}
+
+body[data-theme="woodland-sun"] .eyebrow {
+  color: #f4d779 !important;
+  letter-spacing: 0.11em;
+}
+
+body[data-theme="woodland-sun"] .muted,
+body[data-theme="woodland-sun"] .placeholder-copy,
+body[data-theme="woodland-sun"] .equipment-slot-label,
+body[data-theme="woodland-sun"] .gear-level-tag,
+body[data-theme="woodland-sun"] .gear-tailoring-tag {
+  color: #d8eec6 !important;
+}
+
+body[data-theme="woodland-sun"] strong,
+body[data-theme="woodland-sun"] b,
+body[data-theme="woodland-sun"] .gear-card-name,
+body[data-theme="woodland-sun"] .wardrobe-bonus-row strong {
+  color: #fffbe8 !important;
+}
+/* Woodland Sun glass panels END */
+
+/* Woodland Sun inner surfaces START */
+body[data-theme="woodland-sun"] .top-stats-compact,
+body[data-theme="woodland-sun"] .stat-group.compact,
+body[data-theme="woodland-sun"] .menu-status-card,
+body[data-theme="woodland-sun"] .buff-card,
+body[data-theme="woodland-sun"] .stat-lines,
+body[data-theme="woodland-sun"] .compact-grid-lines,
+body[data-theme="woodland-sun"] .nami-message,
+body[data-theme="woodland-sun"] .chat-form,
+body[data-theme="woodland-sun"] .chat-log,
+body[data-theme="woodland-sun"] .equipment-slot,
+body[data-theme="woodland-sun"] .wardrobe-bonus-card,
+body[data-theme="woodland-sun"] .wardrobe-bonus-row,
+body[data-theme="woodland-sun"] .settings-field,
+body[data-theme="woodland-sun"] .nami-progression-card,
+body[data-theme="woodland-sun"] .nami-need-card,
+body[data-theme="woodland-sun"] .care-status-compact,
+body[data-theme="woodland-sun"] .nami-care-summary,
+body[data-theme="woodland-sun"] .right-buff-list,
+body[data-theme="woodland-sun"] .right-buff-group {
+  border-color: rgba(216, 235, 145, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(19, 45, 24, 0.22), rgba(19, 39, 16, 0.16)) !important;
+  color: #d8eec6 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.08),
+    0 8px 22px rgba(19, 39, 16, 0.12) !important;
+}
+
+body[data-theme="woodland-sun"] .meter-track,
+body[data-theme="woodland-sun"] .stat-bar,
+body[data-theme="woodland-sun"] .progress-track {
+  background:
+    linear-gradient(180deg, rgba(19, 39, 16, 0.30), rgba(19, 45, 24, 0.20)) !important;
+  border-color: rgba(216, 235, 145, 0.22) !important;
+}
+
+body[data-theme="woodland-sun"] .meter-fill,
+body[data-theme="woodland-sun"] .stat-fill,
+body[data-theme="woodland-sun"] .tick-fill,
+body[data-theme="woodland-sun"] .xp-fill {
+  box-shadow: 0 0 14px rgba(244, 215, 121, 0.18) !important;
+}
+/* Woodland Sun inner surfaces END */
+
+/* Woodland Sun navigation START */
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item {
+  border-color: rgba(216, 235, 145, 0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(74, 122, 53, 0.28), rgba(19, 45, 24, 0.20)) !important;
+  color: #d8eec6 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.10),
+    0 8px 18px rgba(19, 39, 16, 0.18) !important;
+}
+
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-icon,
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-label {
+  color: inherit !important;
+}
+
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item:hover {
+  border-color: rgba(244, 215, 121, 0.50) !important;
+  color: #fffbe8 !important;
+  background:
+    linear-gradient(180deg, rgba(94, 145, 62, 0.34), rgba(23, 55, 28, 0.24)) !important;
+}
+
+body[data-theme="woodland-sun"] .main-nav.menu-grid .nav-item.active {
+  border-color: rgba(244, 215, 121, 0.64) !important;
+  color: #fffbe8 !important;
+  background:
+    radial-gradient(circle at 16% 12%, rgba(255, 255, 220, 0.18), transparent 2.7rem),
+    linear-gradient(135deg, rgba(244, 215, 121, 0.34), rgba(159, 210, 106, 0.22), rgba(47, 106, 61, 0.20)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.16),
+    0 0 18px rgba(244, 215, 121, 0.16),
+    0 0 18px rgba(159, 210, 106, 0.10) !important;
+}
+/* Woodland Sun navigation END */
+
+/* Woodland Sun home stage START */
+body[data-theme="woodland-sun"] .nami-placeholder,
+body[data-theme="woodland-sun"] .nami-room-stage {
+  border-color: rgba(244, 215, 121, 0.34) !important;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(244, 215, 121, 0.12), transparent 12rem),
+    radial-gradient(circle at 50% 90%, rgba(159, 210, 106, 0.10), transparent 14rem),
+    linear-gradient(180deg, rgba(19, 45, 24, 0.20), rgba(19, 39, 16, 0.18)) !important;
+}
+
+body[data-theme="woodland-sun"] .nami-message,
+body[data-theme="woodland-sun"] .nami-message-log-card {
+  color: #fffbe8 !important;
+  background:
+    linear-gradient(180deg, rgba(19, 45, 24, 0.24), rgba(19, 39, 16, 0.18)) !important;
+  border-color: rgba(216, 235, 145, 0.22) !important;
+}
+/* Woodland Sun home stage END */
+
+/* Woodland Sun controls START */
+body[data-theme="woodland-sun"] .chat-log {
+  color: #fffbe8 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.62) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-input,
+body[data-theme="woodland-sun"] input,
+body[data-theme="woodland-sun"] select,
+body[data-theme="woodland-sun"] textarea {
+  color: #fffbe8 !important;
+  background: rgba(15, 37, 19, 0.32) !important;
+  border-color: rgba(216, 235, 145, 0.30) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-input:empty::before {
+  color: rgba(216, 238, 198, 0.64) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-form button,
+body[data-theme="woodland-sun"] .secondary-button,
+body[data-theme="woodland-sun"] #logout-button,
+body[data-theme="woodland-sun"] #dev-spawn-wardrobe-item-button,
+body[data-theme="woodland-sun"] .wardrobe-item-actions button,
+body[data-theme="woodland-sun"] .wardrobe-item-modal-close,
+body[data-theme="woodland-sun"] .inventory-item-card button,
+body[data-theme="woodland-sun"] .equipment-card button,
+body[data-theme="woodland-sun"] .task-card button {
+  border-color: rgba(216, 235, 145, 0.34) !important;
+  background:
+    linear-gradient(180deg, rgba(74, 122, 53, 0.36), rgba(23, 55, 28, 0.30)) !important;
+  color: #fffbe8 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 220, 0.12),
+    0 8px 18px rgba(19, 39, 16, 0.20) !important;
+}
+
+body[data-theme="woodland-sun"] .chat-form button:hover,
+body[data-theme="woodland-sun"] .secondary-button:hover,
+body[data-theme="woodland-sun"] #logout-button:hover,
+body[data-theme="woodland-sun"] #dev-spawn-wardrobe-item-button:hover,
+body[data-theme="woodland-sun"] .wardrobe-item-actions button:hover,
+body[data-theme="woodland-sun"] .wardrobe-item-modal-close:hover,
+body[data-theme="woodland-sun"] .inventory-item-card button:hover,
+body[data-theme="woodland-sun"] .equipment-card button:hover,
+body[data-theme="woodland-sun"] .task-card button:hover {
+  border-color: rgba(244, 215, 121, 0.52) !important;
+  color: #ffffff !important;
+}
+/* Woodland Sun controls END */
+
+/* Woodland Sun wardrobe modal skin START */
+body[data-theme="woodland-sun"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(216, 235, 145, 0.40) !important;
+  background:
+    linear-gradient(180deg, rgba(31, 67, 32, 0.94), rgba(14, 34, 18, 0.96)) !important;
+  color: #fffbe8 !important;
+  box-shadow:
+    0 24px 60px rgba(19, 39, 16, 0.42),
+    inset 0 1px 0 rgba(255, 255, 220, 0.12) !important;
+}
+
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-item-modal-header,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(216, 235, 145, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(74, 122, 53, 0.30), rgba(19, 45, 24, 0.24)) !important;
+  color: #fffbe8 !important;
+}
+
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgba(14, 34, 18, 0.92) !important;
+}
+
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="woodland-sun"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #fffbe8 !important;
+  -webkit-text-fill-color: #fffbe8 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.70) !important;
+}
+
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="woodland-sun"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #d8eec6 !important;
+  -webkit-text-fill-color: #d8eec6 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.46) !important;
+}
+
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="woodland-sun"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #f4d779 !important;
+  -webkit-text-fill-color: #f4d779 !important;
+}
+/* Woodland Sun wardrobe modal skin END */
+
+/* Woodland Sun responsive START */
+@media (max-width: 980px) {
+  body[data-theme="woodland-sun"] {
+    background-attachment: scroll !important;
+  }
+}
+/* Woodland Sun responsive END */
+
+/* Woodland Sun theme END */

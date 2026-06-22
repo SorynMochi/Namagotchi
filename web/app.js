@@ -134,6 +134,7 @@ const THEME_STORAGE_KEY = "namigotchi_theme_v1";
 const THEME_FILES = {
   "nami-days": "/themes/nami-days.css",
   "pearl-tide": "/themes/pearl-tide.css",
+  "woodland-sun": "/themes/woodland-sun.css",
   "nami-default": "/themes/nami-default.css",
   midnight: "/themes/midnight.css",
   strawberry: "/themes/strawberry.css",
