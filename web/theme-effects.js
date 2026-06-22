@@ -35,6 +35,10 @@
     return themeKey === "pearl-tide";
   }
 
+  function isWoodlandSunTheme(themeKey) {
+    return themeKey === "woodland-sun";
+  }
+
   function clearThemeEffects() {
     if (petalTimer) {
       window.clearInterval(petalTimer);
@@ -61,8 +65,8 @@
       activeLayer = null;
     }
 
-    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide");
-    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide");
+    document.documentElement.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide", "theme-effect-woodland-sun");
+    document.body?.classList.remove("theme-effect-sakura", "theme-effect-tokyo-night", "theme-effect-candy", "theme-effect-cafe", "theme-effect-rainy-mood", "theme-effect-pearl-tide", "theme-effect-woodland-sun");
     document.querySelectorAll(".tokyo-night-rail-signs, .tokyo-night-left-signs").forEach((node) => node.remove());
   }
 
@@ -91,6 +95,10 @@
 
     if (isPearlTideTheme(themeKey)) {
       startPearlTideThemeEffect();
+    }
+
+    if (isWoodlandSunTheme(themeKey)) {
+      startWoodlandSunThemeEffect();
     }
   }
 
@@ -571,6 +579,131 @@
 
 
 
+
+  /* Woodland Sun forest light effect START */
+  function startWoodlandSunThemeEffect() {
+    document.documentElement.classList.add("theme-effect-woodland-sun");
+    document.body?.classList.add("theme-effect-woodland-sun");
+
+    const layer = document.createElement("div");
+    layer.className = "theme-effects-layer theme-effects-woodland-sun";
+    layer.setAttribute("aria-hidden", "true");
+
+    const atmosphere = document.createElement("div");
+    atmosphere.className = "woodland-sun-atmosphere";
+
+    const shaftField = document.createElement("div");
+    shaftField.className = "woodland-sun-shaft-field";
+
+    const bokehField = document.createElement("div");
+    bokehField.className = "woodland-sun-bokeh-field";
+
+    layer.append(atmosphere, shaftField, bokehField);
+    document.body.append(layer);
+    activeLayer = layer;
+
+    const reducedMotion = reduceMotionQuery.matches;
+    const viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
+    const viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+    const viewportArea = viewportWidth * viewportHeight;
+
+    if (reducedMotion) {
+      layer.classList.add("theme-effects-reduced-motion");
+    }
+
+    function configureLightShaft(shaft, isInitial) {
+      const duration = randomBetween(26, 52);
+      const width = randomBetween(12, 31);
+      const height = randomBetween(92, 172);
+      const left = randomBetween(-22, 94);
+      const top = randomBetween(-24, 18);
+      const rotation = randomBetween(-19, 15);
+      const drift = randomBetween(-2.8, 3.6);
+      const strength = randomBetween(0.34, 0.62);
+      const blur = randomBetween(6, 15);
+
+      shaft.style.setProperty("--shaft-left", `${left.toFixed(2)}vw`);
+      shaft.style.setProperty("--shaft-top", `${top.toFixed(2)}vh`);
+      shaft.style.setProperty("--shaft-width", `${width.toFixed(2)}vw`);
+      shaft.style.setProperty("--shaft-height", `${height.toFixed(2)}vh`);
+      shaft.style.setProperty("--shaft-rotation", `${rotation.toFixed(2)}deg`);
+      shaft.style.setProperty("--shaft-drift", `${drift.toFixed(2)}vw`);
+      shaft.style.setProperty("--shaft-strength", strength.toFixed(3));
+      shaft.style.setProperty("--shaft-blur", `${blur.toFixed(2)}px`);
+      shaft.style.setProperty("--shaft-warmth", randomBetween(0.22, 0.38).toFixed(3));
+      shaft.style.animationDuration = `${duration.toFixed(2)}s`;
+      shaft.style.animationDelay = isInitial
+        ? `${randomBetween(-duration * 0.82, 0).toFixed(2)}s`
+        : "0s";
+    }
+
+    function configureBokehLight(bokeh, isInitial) {
+      const duration = randomBetween(18, 42);
+      const size = randomBetween(34, 128);
+      const left = randomBetween(-8, 104);
+      const top = randomBetween(4, 98);
+      const driftX = randomBetween(-34, 34);
+      const driftY = randomBetween(-26, 20);
+      const alpha = randomBetween(0.26, 0.52);
+      const core = Math.min(alpha + randomBetween(0.16, 0.32), 0.78);
+      const blur = randomBetween(0.8, 4.8);
+
+      bokeh.style.setProperty("--bokeh-size", `${size.toFixed(2)}px`);
+      bokeh.style.setProperty("--bokeh-left", `${left.toFixed(2)}vw`);
+      bokeh.style.setProperty("--bokeh-top", `${top.toFixed(2)}vh`);
+      bokeh.style.setProperty("--bokeh-drift-x", `${driftX.toFixed(2)}px`);
+      bokeh.style.setProperty("--bokeh-drift-y", `${driftY.toFixed(2)}px`);
+      bokeh.style.setProperty("--bokeh-alpha", alpha.toFixed(3));
+      bokeh.style.setProperty("--bokeh-core", core.toFixed(3));
+      bokeh.style.setProperty("--bokeh-blur", `${blur.toFixed(2)}px`);
+      bokeh.style.setProperty("--bokeh-scale", randomBetween(0.74, 1.36).toFixed(3));
+      bokeh.style.animationDuration = `${duration.toFixed(2)}s`;
+      bokeh.style.animationDelay = isInitial
+        ? `${randomBetween(-duration, 0).toFixed(2)}s`
+        : "0s";
+    }
+
+    const shaftCount = reducedMotion
+      ? 7
+      : Math.max(10, Math.min(18, Math.round(viewportWidth / 250)));
+
+    for (let index = 0; index < shaftCount; index += 1) {
+      const shaft = document.createElement("span");
+      shaft.className = "woodland-sun-light-shaft";
+      configureLightShaft(shaft, true);
+
+      if (!reducedMotion) {
+        shaft.addEventListener("animationiteration", () => {
+          if (isWoodlandSunTheme(activeThemeKey) && shaft.isConnected) {
+            configureLightShaft(shaft, false);
+          }
+        });
+      }
+
+      shaftField.append(shaft);
+    }
+
+    const bokehCount = reducedMotion
+      ? Math.max(22, Math.min(40, Math.round(viewportArea / 160000)))
+      : Math.max(54, Math.min(118, Math.round(viewportArea / 62000)));
+
+    for (let index = 0; index < bokehCount; index += 1) {
+      const bokeh = document.createElement("span");
+      bokeh.className = `woodland-sun-bokeh bokeh-${(index % 5) + 1}`;
+      configureBokehLight(bokeh, true);
+
+      if (!reducedMotion) {
+        bokeh.addEventListener("animationiteration", () => {
+          if (isWoodlandSunTheme(activeThemeKey) && bokeh.isConnected) {
+            configureBokehLight(bokeh, false);
+          }
+        });
+      }
+
+      bokehField.append(bokeh);
+    }
+  }
+  /* Woodland Sun forest light effect END */
 
   /* Pearl Tide bubble canvas effect START */
   function startPearlTideThemeEffect() {
