@@ -914,10 +914,10 @@
     }
 
     function makeMoonbeam(now, initialDelay = 0) {
-      const duration = randomBetween(96, 164) * 1000;
+      const duration = randomBetween(118, 190) * 1000;
       const startDelay = initialDelay * 1000;
-      const beamWidth = randomBetween(viewportWidth * 0.10, viewportWidth * 0.28);
-      const beamHeight = randomBetween(viewportHeight * 1.05, viewportHeight * 1.78);
+      const beamWidth = randomBetween(viewportWidth * 0.08, viewportWidth * 0.22);
+      const beamHeight = randomBetween(viewportHeight * 1.10, viewportHeight * 1.88);
 
       return {
         startTime: now + startDelay,
@@ -926,12 +926,12 @@
         y: randomBetween(-viewportHeight * 0.24, viewportHeight * 0.08),
         width: beamWidth,
         height: beamHeight,
-        rotation: randomBetween(-0.26, 0.12),
-        driftX: randomBetween(-viewportWidth * 0.030, viewportWidth * 0.038),
-        driftY: randomBetween(viewportHeight * 0.010, viewportHeight * 0.036),
-        alpha: randomBetween(0.18, 0.34),
-        coolAlpha: randomBetween(0.30, 0.52),
-        blur: randomBetween(11, 22),
+        rotation: randomBetween(-0.22, 0.10),
+        driftX: randomBetween(-viewportWidth * 0.020, viewportWidth * 0.030),
+        driftY: randomBetween(viewportHeight * 0.008, viewportHeight * 0.028),
+        alpha: randomBetween(0.14, 0.26),
+        coolAlpha: randomBetween(0.42, 0.68),
+        blur: randomBetween(18, 32),
       };
     }
 
@@ -1010,8 +1010,8 @@
         return;
       }
 
-      const fadeIn = smoothStep(0.10, 0.36, phase);
-      const fadeOut = 1 - smoothStep(0.72, 0.96, phase);
+      const fadeIn = smoothStep(0.12, 0.42, phase);
+      const fadeOut = 1 - smoothStep(0.68, 0.98, phase);
       const lifeAlpha = fadeIn * fadeOut;
       const drift = smoothStep(0, 1, phase);
       const alpha = beam.alpha * lifeAlpha;
@@ -1028,7 +1028,7 @@
       ctx.globalCompositeOperation = "source-over";
       ctx.translate(x, y);
       ctx.rotate(beam.rotation);
-      ctx.transform(1, 0, -0.09, 1, 0, 0);
+      ctx.transform(1, 0, -0.065, 1, 0, 0);
 
       if ("filter" in ctx) {
         ctx.filter = "blur(" + beam.blur.toFixed(1) + "px)";
@@ -1036,9 +1036,9 @@
 
       const gradient = ctx.createLinearGradient(-beam.width * 0.5, 0, beam.width * 0.5, 0);
       gradient.addColorStop(0.00, "rgba(232, 241, 255, 0)");
-      gradient.addColorStop(0.20, "rgba(232, 241, 255, " + (beam.coolAlpha * 0.42).toFixed(3) + ")");
-      gradient.addColorStop(0.50, "rgba(182, 209, 255, " + (beam.coolAlpha).toFixed(3) + ")");
-      gradient.addColorStop(0.80, "rgba(232, 241, 255, " + (beam.coolAlpha * 0.36).toFixed(3) + ")");
+      gradient.addColorStop(0.22, "rgba(236, 245, 255, " + (beam.coolAlpha * 0.28).toFixed(3) + ")");
+      gradient.addColorStop(0.50, "rgba(188, 214, 255, " + (beam.coolAlpha * 0.74).toFixed(3) + ")");
+      gradient.addColorStop(0.78, "rgba(236, 245, 255, " + (beam.coolAlpha * 0.24).toFixed(3) + ")");
       gradient.addColorStop(1.00, "rgba(232, 241, 255, 0)");
 
       ctx.fillStyle = gradient;

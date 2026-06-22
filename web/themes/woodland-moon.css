@@ -1596,3 +1596,220 @@ body[data-theme="woodland-moon"] .left-rail [data-online-users] {
 }
 
 /* Woodland Moon recolor END */
+
+/* Woodland Moon polish pass START */
+/* Cool down bark buttons, deepen modal glass, and refine moon-coded progress accents. */
+
+body[data-theme="woodland-moon"] {
+  --woodland-moon-button-bark:
+    radial-gradient(circle at 18% 0%, rgba(226, 238, 255, 0.12), transparent 4.4rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(236, 246, 255, 0.045) 0 8px,
+      rgba(79, 55, 36, 0.00) 8px 16px,
+      rgba(20, 31, 44, 0.12) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(76, 58, 47, 0.74), rgba(38, 42, 54, 0.82));
+
+  --woodland-moon-button-bark-active:
+    radial-gradient(circle at 18% 0%, rgba(226, 238, 255, 0.18), transparent 4.8rem),
+    repeating-linear-gradient(
+      102deg,
+      rgba(236, 246, 255, 0.052) 0 8px,
+      rgba(79, 55, 36, 0.00) 8px 16px,
+      rgba(20, 31, 44, 0.14) 16px 24px
+    ),
+    linear-gradient(180deg, rgba(88, 70, 56, 0.84), rgba(43, 52, 67, 0.90));
+}
+
+/* Shared bark buttons, cooled from orange bark into night bark. */
+body[data-theme="woodland-moon"] .chat-form button,
+body[data-theme="woodland-moon"] .secondary-button,
+body[data-theme="woodland-moon"] #logout-button,
+body[data-theme="woodland-moon"] #dev-spawn-wardrobe-item-button,
+body[data-theme="woodland-moon"] .wardrobe-item-actions button,
+body[data-theme="woodland-moon"] .wardrobe-item-modal-close,
+body[data-theme="woodland-moon"] .inventory-item-card button,
+body[data-theme="woodland-moon"] .equipment-card button,
+body[data-theme="woodland-moon"] .task-card button,
+body[data-theme="woodland-moon"] #section-work .task-card button,
+body[data-theme="woodland-moon"] #section-work .work-card button,
+body[data-theme="woodland-moon"] #section-work .task-panel button,
+body[data-theme="woodland-moon"] .care-card button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="woodland-moon"] .care-actions button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled),
+body[data-theme="woodland-moon"] button.care-action-button:not(.care-button-active):not(.care-button-queued):not(.care-button-blocked):not(:disabled) {
+  border-color: rgba(178, 205, 242, 0.34) !important;
+  background: var(--woodland-moon-button-bark) !important;
+  color: #edf5c4 !important;
+  text-shadow: 0 1px 1px rgba(8, 13, 20, 0.78) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(236, 246, 255, 0.11),
+    0 8px 18px rgba(5, 10, 18, 0.22),
+    0 0 12px rgba(144, 191, 240, 0.045) !important;
+}
+
+/* Active/hover bark states: still bark, but less campfire-orange. */
+body[data-theme="woodland-moon"] .chat-form button:hover,
+body[data-theme="woodland-moon"] .secondary-button:hover,
+body[data-theme="woodland-moon"] #logout-button:hover,
+body[data-theme="woodland-moon"] #dev-spawn-wardrobe-item-button:hover,
+body[data-theme="woodland-moon"] .wardrobe-item-actions button:hover,
+body[data-theme="woodland-moon"] .wardrobe-item-modal-close:hover,
+body[data-theme="woodland-moon"] .inventory-item-card button:hover,
+body[data-theme="woodland-moon"] .equipment-card button:hover,
+body[data-theme="woodland-moon"] .task-card button:hover,
+body[data-theme="woodland-moon"] #section-work .task-card button:hover,
+body[data-theme="woodland-moon"] #section-work .work-card button:hover,
+body[data-theme="woodland-moon"] #section-work .task-panel button:hover,
+body[data-theme="woodland-moon"] #section-work .task-card.active button,
+body[data-theme="woodland-moon"] #section-work .task-card.is-active button,
+body[data-theme="woodland-moon"] #section-work .work-card.active button,
+body[data-theme="woodland-moon"] #section-work .work-card.is-active button,
+body[data-theme="woodland-moon"] #section-work .task-card[data-state="active"] button,
+body[data-theme="woodland-moon"] #section-work .work-card[data-state="active"] button,
+body[data-theme="woodland-moon"] .care-button-active,
+body[data-theme="woodland-moon"] button.care-button-active {
+  border-color: rgba(216, 234, 134, 0.50) !important;
+  background: var(--woodland-moon-button-bark-active) !important;
+  color: #fffbd1 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(236, 246, 255, 0.15),
+    0 10px 22px rgba(5, 10, 18, 0.24),
+    0 0 16px rgba(144, 191, 240, 0.08),
+    0 0 14px rgba(216, 234, 134, 0.08) !important;
+}
+
+/* Queued and disabled care buttons. */
+body[data-theme="woodland-moon"] .care-button-queued,
+body[data-theme="woodland-moon"] button.care-button-queued {
+  border-color: rgba(164, 194, 230, 0.42) !important;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(226, 238, 255, 0.10), transparent 4rem),
+    linear-gradient(180deg, rgba(45, 66, 91, 0.78), rgba(26, 39, 57, 0.82)) !important;
+  color: #dde9fa !important;
+}
+
+body[data-theme="woodland-moon"] .care-button-blocked,
+body[data-theme="woodland-moon"] button.care-button-blocked,
+body[data-theme="woodland-moon"] .care-actions button:disabled,
+body[data-theme="woodland-moon"] button:disabled.care-button-blocked,
+body[data-theme="woodland-moon"] button.care-button-blocked:disabled {
+  border-color: rgba(104, 120, 142, 0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(46, 53, 66, 0.52), rgba(24, 29, 38, 0.60)) !important;
+  color: #b9c1cc !important;
+  opacity: 1 !important;
+}
+
+/* Moon-coded progress bars: bark into blue into firefly, less neon-green. */
+body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-button-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button-active .care-button-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-progress-fill,
+body[data-theme="woodland-moon"] #section-home .care-button-active .care-progress-fill {
+  background:
+    linear-gradient(90deg, #3e2a1f 0%, #486f94 52%, #d8ea86 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 246, 255, 0.20),
+    0 0 12px rgba(144, 191, 240, 0.12),
+    0 0 10px rgba(216, 234, 134, 0.10) !important;
+}
+
+body[data-theme="woodland-moon"] #section-home .care-status-compact .fill,
+body[data-theme="woodland-moon"] #section-home .care-status-compact .stat-fill,
+body[data-theme="woodland-moon"] #section-home .care-status-compact .mood-fill {
+  background:
+    linear-gradient(90deg, #33251e 0%, #365b7b 58%, #d8ea86 100%) !important;
+}
+
+/* Popup/modal pass: cooler moon-glass, stronger section separation, better text hierarchy. */
+body[data-theme="woodland-moon"] #wardrobe-item-modal.wardrobe-item-modal-backdrop,
+body[data-theme="woodland-moon"] .modal-backdrop,
+body[data-theme="woodland-moon"] .dialog-backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-card,
+body[data-theme="woodland-moon"] .modal-card,
+body[data-theme="woodland-moon"] .dialog-card,
+body[data-theme="woodland-moon"] [role="dialog"] {
+  border-color: rgba(190, 212, 245, 0.38) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(224, 235, 255, 0.12), transparent 13rem),
+    radial-gradient(circle at 88% 12%, rgba(216, 234, 134, 0.055), transparent 12rem),
+    linear-gradient(180deg, rgba(16, 29, 48, 0.98), rgba(5, 11, 21, 0.985)) !important;
+  color: #eef4ff !important;
+  box-shadow:
+    0 24px 62px rgba(3, 8, 16, 0.58),
+    0 0 0 1px rgba(236, 246, 255, 0.045),
+    inset 0 1px 0 rgba(236, 246, 255, 0.12) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-header,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-section,
+body[data-theme="woodland-moon"] .modal-card header,
+body[data-theme="woodland-moon"] .modal-section,
+body[data-theme="woodland-moon"] .dialog-section {
+  border-color: rgba(190, 212, 245, 0.22) !important;
+  background:
+    linear-gradient(180deg, rgba(33, 55, 82, 0.42), rgba(9, 18, 31, 0.30)) !important;
+  color: #eef4ff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(236, 246, 255, 0.07) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-title,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="woodland-moon"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-section h3,
+body[data-theme="woodland-moon"] .modal-card h2,
+body[data-theme="woodland-moon"] .modal-card h3,
+body[data-theme="woodland-moon"] [role="dialog"] h2,
+body[data-theme="woodland-moon"] [role="dialog"] h3 {
+  color: #eef4ff !important;
+  -webkit-text-fill-color: #eef4ff !important;
+  text-shadow:
+    0 1px 1px rgba(8, 14, 22, 0.78),
+    0 0 10px rgba(144, 191, 240, 0.08) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="woodland-moon"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-item-modal-meta *,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row span,
+body[data-theme="woodland-moon"] .modal-card p,
+body[data-theme="woodland-moon"] .modal-card span,
+body[data-theme="woodland-moon"] [role="dialog"] p,
+body[data-theme="woodland-moon"] [role="dialog"] span {
+  color: #c4d4e6 !important;
+  -webkit-text-fill-color: #c4d4e6 !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.58) !important;
+}
+
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row strong,
+body[data-theme="woodland-moon"] .modal-card strong,
+body[data-theme="woodland-moon"] [role="dialog"] strong {
+  color: #d8ea86 !important;
+  -webkit-text-fill-color: #d8ea86 !important;
+}
+
+/* Keep destructive actions readable but not tomato-bright. */
+body[data-theme="woodland-moon"] .danger-button,
+body[data-theme="woodland-moon"] #wardrobe-item-modal .danger-button,
+body[data-theme="woodland-moon"] [role="dialog"] .danger-button {
+  border-color: rgba(220, 137, 137, 0.36) !important;
+  background:
+    linear-gradient(180deg, rgba(94, 52, 58, 0.76), rgba(55, 31, 38, 0.82)) !important;
+  color: #ffd3d3 !important;
+}
+
+/* Woodland Moon polish pass END */
