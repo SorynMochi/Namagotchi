@@ -660,3 +660,84 @@ body[data-theme="phantom-rebel"] .care-button-label .care-button-timer-text {
 }
 
 /* Phantom Rebel rail title and care timer polish END */
+
+/* Phantom Rebel parallelogram progress bars START */
+/* Theme-specific angular progress bars: hard black/red split, no soft gradient blending. */
+
+body[data-theme="phantom-rebel"] {
+  --phantom-bar-track-bg:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.045)),
+    linear-gradient(90deg, rgba(4, 5, 8, 0.92), rgba(14, 15, 20, 0.88));
+  --phantom-bar-fill-bg:
+    linear-gradient(90deg, #050507 0%, #050507 50%, #e31b23 50%, #e31b23 100%);
+  --phantom-bar-clip: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  --phantom-bar-clip-small: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+}
+
+/* Main page progress tracks. */
+body[data-theme="phantom-rebel"] .bar,
+body[data-theme="phantom-rebel"] .stat-bar,
+body[data-theme="phantom-rebel"] .task-xp-bar,
+body[data-theme="phantom-rebel"] .care-status-compact .bar,
+body[data-theme="phantom-rebel"] .nami-progression-card .bar,
+body[data-theme="phantom-rebel"] .combat-panel .bar,
+body[data-theme="phantom-rebel"] .zone-card .bar {
+  height: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  border-radius: 0 !important;
+  background: var(--phantom-bar-track-bg) !important;
+  clip-path: var(--phantom-bar-clip) !important;
+  overflow: hidden !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.62),
+    0 0 10px rgba(227, 27, 35, 0.10) !important;
+}
+
+/* Main page progress fills. */
+body[data-theme="phantom-rebel"] .bar .fill,
+body[data-theme="phantom-rebel"] .stat-bar .fill,
+body[data-theme="phantom-rebel"] .task-xp-bar .fill,
+body[data-theme="phantom-rebel"] .care-status-compact .fill,
+body[data-theme="phantom-rebel"] .care-status-compact .stat-fill,
+body[data-theme="phantom-rebel"] .care-status-compact .mood-fill,
+body[data-theme="phantom-rebel"] .nami-progression-card .fill,
+body[data-theme="phantom-rebel"] .combat-panel .fill,
+body[data-theme="phantom-rebel"] .zone-card .fill,
+body[data-theme="phantom-rebel"] .xp-fill,
+body[data-theme="phantom-rebel"] .hp-fill,
+body[data-theme="phantom-rebel"] .stat-fill,
+body[data-theme="phantom-rebel"] .mood-fill,
+body[data-theme="phantom-rebel"] .task-xp-fill {
+  height: 100% !important;
+  min-height: 0 !important;
+  border-radius: 0 !important;
+  background: var(--phantom-bar-fill-bg) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 10px rgba(227, 27, 35, 0.18) !important;
+}
+
+/* Active care action progress fill, inside the care buttons. */
+body[data-theme="phantom-rebel"] .care-button-progress-fill,
+body[data-theme="phantom-rebel"] .care-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button.care-button-active .care-button-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button-active .care-button-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button.care-button-active .care-progress-fill,
+body[data-theme="phantom-rebel"] #section-home .care-button-active .care-progress-fill {
+  border-radius: 0 !important;
+  clip-path: var(--phantom-bar-clip-small) !important;
+  background: var(--phantom-bar-fill-bg) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 10px rgba(227, 27, 35, 0.16) !important;
+}
+
+/* If the active care button itself clips children, keep the shape angular too. */
+body[data-theme="phantom-rebel"] .care-button-active,
+body[data-theme="phantom-rebel"] button.care-button-active {
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%) !important;
+  border-radius: 0 !important;
+}
+
+/* Phantom Rebel parallelogram progress bars END */
