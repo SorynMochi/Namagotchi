@@ -936,5 +936,209 @@ body[data-theme="pearl-tide"] .theme-effects-pearl-tide.theme-effects-reduced-mo
 }
 /* Pearl Tide bubble canvas layer END */
 
+/* Pearl Tide chat rework START */
+/* Make chat readable lagoon glass without changing the rest of Pearl Tide. */
+
+body[data-theme="pearl-tide"] .chat-panel {
+  border-color: rgba(171, 244, 255, 0.42) !important;
+  background:
+    linear-gradient(180deg, rgba(9, 43, 62, 0.34), rgba(4, 20, 39, 0.30)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.14),
+    0 18px 42px rgba(0, 10, 24, 0.30),
+    0 0 24px rgba(110, 233, 245, 0.08) !important;
+  backdrop-filter: blur(8px) saturate(1.14) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(1.14) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-panel::before {
+  background:
+    linear-gradient(90deg, rgba(255, 143, 184, 0.16), transparent 28%, transparent 72%, rgba(110, 233, 245, 0.18)) !important;
+  opacity: 0.72 !important;
+}
+
+body[data-theme="pearl-tide"] .chat-resize-handle {
+  width: 72px !important;
+  height: 4px !important;
+  background:
+    linear-gradient(90deg, rgba(110, 233, 245, 0.70), rgba(143, 244, 207, 0.74), rgba(255, 143, 184, 0.68)) !important;
+  box-shadow:
+    0 0 10px rgba(110, 233, 245, 0.20),
+    0 0 12px rgba(255, 143, 184, 0.12) !important;
+  opacity: 0.95 !important;
+}
+
+body[data-theme="pearl-tide"] .chat-tabs {
+  min-height: 34px !important;
+  border-bottom-color: rgba(171, 244, 255, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(6, 31, 50, 0.46), rgba(3, 17, 33, 0.34)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.08),
+    0 8px 18px rgba(0, 10, 24, 0.10) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-tab {
+  border-color: rgba(171, 244, 255, 0.24) !important;
+  background:
+    linear-gradient(180deg, rgba(9, 43, 62, 0.36), rgba(4, 20, 39, 0.28)) !important;
+  color: rgba(225, 247, 252, 0.76) !important;
+  text-shadow: 0 1px 2px rgba(0, 10, 24, 0.58) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-tab:hover:not(.active) {
+  border-color: rgba(143, 244, 207, 0.44) !important;
+  color: #f3fbff !important;
+  background:
+    linear-gradient(180deg, rgba(13, 60, 78, 0.42), rgba(4, 24, 42, 0.32)) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-tab.active {
+  border-color: rgba(255, 183, 213, 0.42) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 143, 184, 0.52), rgba(200, 183, 255, 0.30)) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 0 16px rgba(255, 143, 184, 0.18) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-log {
+  padding: 8px 12px !important;
+  border-top: 0 !important;
+  border-bottom: 1px solid rgba(171, 244, 255, 0.16) !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(110, 233, 245, 0.08), transparent 18rem),
+    linear-gradient(180deg, rgba(3, 17, 33, 0.50), rgba(4, 20, 39, 0.42)) !important;
+  color: #f1fbff !important;
+  font-size: 0.78rem !important;
+  line-height: 1.34 !important;
+  text-shadow: 0 1px 2px rgba(0, 10, 24, 0.72) !important;
+  box-shadow:
+    inset 0 10px 28px rgba(0, 10, 24, 0.20),
+    inset 0 -10px 24px rgba(0, 10, 24, 0.10) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-message {
+  margin: 2px 0 !important;
+  color: #f1fbff !important;
+}
+
+body[data-theme="pearl-tide"] .chat-time {
+  color: rgba(205, 231, 240, 0.70) !important;
+  font-weight: 800 !important;
+}
+
+body[data-theme="pearl-tide"] .chat-name,
+body[data-theme="pearl-tide"] .chat-player-name,
+body[data-theme="pearl-tide"] .chat-mention {
+  color: #ffb7d5 !important;
+  text-shadow:
+    0 1px 2px rgba(0, 10, 24, 0.70),
+    0 0 10px rgba(255, 143, 184, 0.14) !important;
+}
+
+body[data-theme="pearl-tide"] .system-name {
+  color: #8ff4cf !important;
+}
+
+body[data-theme="pearl-tide"] .chat-text {
+  color: #f3fbff !important;
+}
+
+body[data-theme="pearl-tide"] .chat-message.chat-emote {
+  color: #ffd7e8 !important;
+}
+
+body[data-theme="pearl-tide"] .chat-message.chat-whisper {
+  color: #d9ccff !important;
+}
+
+body[data-theme="pearl-tide"] .chat-message.chat-mentioned {
+  border-left-color: #ffe8ad !important;
+  background:
+    linear-gradient(90deg, rgba(255, 232, 173, 0.18), rgba(4, 20, 39, 0.16)) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form {
+  min-height: 42px !important;
+  border-top-color: rgba(171, 244, 255, 0.18) !important;
+  background:
+    linear-gradient(180deg, rgba(4, 20, 39, 0.42), rgba(2, 12, 25, 0.48)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.08) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form input,
+body[data-theme="pearl-tide"] #chat-input {
+  height: 31px !important;
+  border-color: rgba(171, 244, 255, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(2, 12, 25, 0.56), rgba(4, 20, 39, 0.46)) !important;
+  color: #f3fbff !important;
+  box-shadow:
+    inset 0 1px 4px rgba(0, 10, 24, 0.42),
+    0 0 0 1px rgba(255, 255, 255, 0.025) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form input::placeholder,
+body[data-theme="pearl-tide"] #chat-input::placeholder {
+  color: rgba(218, 241, 248, 0.58) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form .chat-emoji-button,
+body[data-theme="pearl-tide"] .chat-form .chat-toggle-button,
+body[data-theme="pearl-tide"] .chat-form button[type="submit"] {
+  border-color: rgba(171, 244, 255, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(13, 60, 78, 0.44), rgba(4, 20, 39, 0.36)) !important;
+  color: #f3fbff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(234, 252, 255, 0.10),
+    0 6px 14px rgba(0, 10, 24, 0.18) !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form button[type="submit"] {
+  border-color: rgba(143, 244, 207, 0.44) !important;
+  color: #eafff8 !important;
+}
+
+body[data-theme="pearl-tide"] .chat-form .chat-emoji-button:hover,
+body[data-theme="pearl-tide"] .chat-form .chat-toggle-button:hover,
+body[data-theme="pearl-tide"] .chat-form button[type="submit"]:hover {
+  border-color: rgba(255, 183, 213, 0.52) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 143, 184, 0.30), rgba(6, 31, 50, 0.32)) !important;
+  color: #ffffff !important;
+}
+
+body[data-theme="pearl-tide"] .chat-panel.chat-hidden .chat-form {
+  background:
+    linear-gradient(180deg, rgba(4, 20, 39, 0.36), rgba(2, 12, 25, 0.42)) !important;
+}
+
+body[data-theme="pearl-tide"] body > .emoji-picker-floating,
+body[data-theme="pearl-tide"] .emoji-picker,
+body[data-theme="pearl-tide"] .emoji-picker-floating {
+  border-color: rgba(171, 244, 255, 0.36) !important;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(143, 244, 207, 0.12), transparent 7rem),
+    linear-gradient(180deg, rgba(4, 20, 39, 0.94), rgba(2, 12, 25, 0.96)) !important;
+  color: #f3fbff !important;
+  box-shadow:
+    0 22px 58px rgba(0, 10, 24, 0.54),
+    inset 0 1px 0 rgba(234, 252, 255, 0.12) !important;
+}
+
+body[data-theme="pearl-tide"] .emoji-picker-tabs,
+body[data-theme="pearl-tide"] .emoji-picker-floating .emoji-picker-tabs,
+body[data-theme="pearl-tide"] body > .emoji-picker-floating .emoji-picker-tabs {
+  background:
+    linear-gradient(180deg, rgba(4, 20, 39, 0.98), rgba(2, 12, 25, 0.94)) !important;
+  border-bottom-color: rgba(171, 244, 255, 0.18) !important;
+}
+
+/* Pearl Tide chat rework END */
+
 /* Pearl Tide theme END */
 
