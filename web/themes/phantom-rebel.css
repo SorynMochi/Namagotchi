@@ -1040,7 +1040,7 @@ body[data-theme="phantom-rebel"] .nav-panel .main-nav.menu-grid .nav-item.active
   border-radius: 0 !important;
   border-color: rgba(255, 255, 255, 0.42) !important;
   background:
-    linear-gradient(135deg, #ff3642 0%, #ff3642 49.85%, #050507 49.85%, #050507 100%) !important;
+    linear-gradient(135deg, #050507 0%, #050507 49.85%, #ff3642 49.85%, #ff3642 100%) !important;
   color: #ffffff !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
