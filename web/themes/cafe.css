@@ -1835,3 +1835,14 @@ body[data-theme="cafe"] .chat-item-link {
 }
 
 /* Cafe rarity text bridge END */
+
+/* Cafe inventory category label restore START */
+/* Restore inventory category names to pure white, no shadow. */
+
+body[data-theme="cafe"] #section-inventory .inventory-group-label {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+/* Cafe inventory category label restore END */
