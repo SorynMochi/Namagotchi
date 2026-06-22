@@ -601,3 +601,62 @@ body[data-theme="phantom-rebel"] #section-work .task-panel button {
 }
 
 /* Phantom Rebel display sizing test END */
+
+/* Phantom Rebel rail title and care timer polish START */
+/* Rail title labels match KEY INFORMATION size; care button timers use the normal UI font. */
+
+/* Left/right rail top headings: Menu and Buffs. */
+body[data-theme="phantom-rebel"] .left-rail .rail-toggle .collapse-label,
+body[data-theme="phantom-rebel"] .right-rail .rail-toggle .collapse-label {
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 1.00rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.070em !important;
+}
+
+/* Keep rail collapse glyphs as Google Material Symbols, not the display font. */
+body[data-theme="phantom-rebel"] .left-rail .rail-toggle .collapse-glyph,
+body[data-theme="phantom-rebel"] .right-rail .rail-toggle .collapse-glyph,
+body[data-theme="phantom-rebel"] .left-rail .rail-toggle .material-symbols-rounded,
+body[data-theme="phantom-rebel"] .right-rail .rail-toggle .material-symbols-rounded {
+  font-family: "Material Symbols Rounded" !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 1.12rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  word-wrap: normal !important;
+  direction: ltr !important;
+  font-feature-settings: "liga" !important;
+  -webkit-font-feature-settings: "liga" !important;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 700,
+    "GRAD" 0,
+    "opsz" 24 !important;
+}
+
+/* Care button action text keeps the Phantom Rebel display font. */
+body[data-theme="phantom-rebel"] .care-button-label .care-button-action-text {
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 0.84rem !important;
+  font-weight: 400 !important;
+  line-height: 0.86 !important;
+  letter-spacing: 0.055em !important;
+}
+
+/* Care button timer text returns to the normal UI font. */
+body[data-theme="phantom-rebel"] .care-button-label .care-button-timer-text {
+  font-family: var(--font-ui, "Nunito", ui-sans-serif, system-ui, sans-serif) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.015em !important;
+  vertical-align: 0.04em !important;
+  opacity: 0.94;
+}
+
+/* Phantom Rebel rail title and care timer polish END */

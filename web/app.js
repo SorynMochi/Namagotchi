@@ -3050,12 +3050,31 @@ function ensureCareButtonContents(button) {
 
 function setCareButtonLabel(button, text) {
   const label = button.querySelector(".care-button-label");
+  const safeText = String(text || "");
+  const timerMatch = safeText.match(/^(.*?)(\s+\([^)]*\))$/);
 
   if (label) {
-    label.textContent = text;
-  } else {
-    button.textContent = text;
+    if (timerMatch) {
+      const actionText = document.createElement("span");
+      actionText.className = "care-button-action-text";
+      actionText.textContent = timerMatch[1].trimEnd();
+
+      const timerText = document.createElement("span");
+      timerText.className = "care-button-timer-text";
+      timerText.textContent = timerMatch[2].trim();
+
+      label.replaceChildren(actionText, " ", timerText);
+      return;
+    }
+
+    if (label.textContent !== safeText || label.children.length > 0) {
+      label.textContent = safeText;
+    }
+
+    return;
   }
+
+  button.textContent = safeText;
 }
 
 function setCareButtonProgress(button, percentValue) {
