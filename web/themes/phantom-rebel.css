@@ -824,3 +824,79 @@ body[data-theme="phantom-rebel"] .care-button-label {
 }
 
 /* Phantom Rebel progress bars state cleanup END */
+
+/* Phantom Rebel Nami status and message polish START */
+/* Home Nami headings + Nami message log readability. */
+
+body[data-theme="phantom-rebel"] #section-home .nami-care-summary h2,
+body[data-theme="phantom-rebel"] #section-home .care-status-compact h2 {
+  color: #ff3642 !important;
+  -webkit-text-fill-color: #ff3642 !important;
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 1.12rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.065em !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 10px rgba(227, 27, 35, 0.18) !important;
+}
+
+/* Nami Messages panel: solid black at 20% background opacity without dimming text. */
+body[data-theme="phantom-rebel"] #section-home .nami-message-log-card,
+body[data-theme="phantom-rebel"] #section-home #nami-message-log,
+body[data-theme="phantom-rebel"] #section-home .nami-message-log {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  background: rgba(0, 0, 0, 0.20) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 10px 24px rgba(0, 0, 0, 0.20) !important;
+}
+
+/* Nami Messages timestamps. */
+body[data-theme="phantom-rebel"] #section-home .nami-log-time {
+  color: #ff3642 !important;
+  -webkit-text-fill-color: #ff3642 !important;
+  font-weight: 950 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 8px rgba(227, 27, 35, 0.16) !important;
+}
+
+/* Nami Messages body text. */
+body[data-theme="phantom-rebel"] #section-home .nami-log-message,
+body[data-theme="phantom-rebel"] #section-home .nami-log-text {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.78) !important;
+}
+
+/* Empty/muted message state should stay readable too. */
+body[data-theme="phantom-rebel"] #section-home .nami-message-log-card .muted,
+body[data-theme="phantom-rebel"] #section-home #nami-message-log .muted {
+  color: rgba(255, 255, 255, 0.72) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Phantom Rebel Nami status and message polish END */
+
+/* Phantom Rebel right rail buff group headings START */
+/* Global Buffs / Personal Buffs only. */
+
+body[data-theme="phantom-rebel"] .right-buffs-panel .right-buff-group h3,
+body[data-theme="phantom-rebel"] .right-rail .right-buff-group h3,
+body[data-theme="phantom-rebel"] .right-buff-group > h3 {
+  color: #ff3642 !important;
+  -webkit-text-fill-color: #ff3642 !important;
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 1.02rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.070em !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 10px rgba(227, 27, 35, 0.20) !important;
+}
+
+/* Phantom Rebel right rail buff group headings END */
