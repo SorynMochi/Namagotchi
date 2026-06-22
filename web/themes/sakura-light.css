@@ -2123,3 +2123,78 @@ body[data-theme="sakura-light"] .sakura-petal {
     animation: none;
   }
 }
+
+/* Theme wardrobe modal skin START */
+/* Theme-scoped popup modal surface. Keeps modals from inheriting one shared visual skin. */
+
+body[data-theme="sakura-light"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: radial-gradient(circle at top, rgba(232, 100, 156, 0.10), transparent 30rem), rgba(255, 250, 246, 0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(232, 100, 156, 0.42) !important;
+  background: linear-gradient(180deg, rgba(255, 249, 245, 0.99), rgba(255, 236, 242, 0.98)) !important;
+  color: #4d2d35 !important;
+  box-shadow: 0 20px 54px rgba(114, 77, 88, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-item-modal-header {
+  border-bottom-color: rgba(232, 100, 156, 0.24) !important;
+  background: linear-gradient(180deg, rgba(255, 247, 244, 0.99), rgba(255, 221, 234, 0.96)) !important;
+  color: #4d2d35 !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgba(255, 249, 245, 0.98) !important;
+  color: #4d2d35 !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(232, 100, 156, 0.24) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 234, 242, 0.62)) !important;
+  color: #4d2d35 !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="sakura-light"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #d95291 !important;
+  -webkit-text-fill-color: #d95291 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.80) !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="sakura-light"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #6d4650 !important;
+  -webkit-text-fill-color: #6d4650 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.68) !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #c94f82 !important;
+  -webkit-text-fill-color: #c94f82 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.68) !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-comparison-row.positive strong {
+  color: #6a9a70 !important;
+  -webkit-text-fill-color: #6a9a70 !important;
+}
+
+body[data-theme="sakura-light"] #wardrobe-item-modal .wardrobe-comparison-row.negative strong {
+  color: #d9567f !important;
+  -webkit-text-fill-color: #d9567f !important;
+}
+
+/* Theme wardrobe modal skin END */

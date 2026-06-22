@@ -7,3 +7,78 @@ body[data-theme="nami-default"] {
     linear-gradient(rgba(5, 8, 18, 0.18), rgba(5, 8, 18, 0.34)),
     url("/images/nami_nights.webp") center center / cover no-repeat fixed;
 }
+
+/* Theme wardrobe modal skin START */
+/* Theme-scoped popup modal surface. Keeps modals from inheriting one shared visual skin. */
+
+body[data-theme="nami-default"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: radial-gradient(circle at top, rgba(255, 109, 196, 0.16), transparent 32rem), rgba(3, 6, 18, 0.16) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(255, 109, 196, 0.38) !important;
+  background: linear-gradient(180deg, rgba(43, 22, 58, 0.96), rgba(15, 12, 34, 0.98)) !important;
+  color: #fff7fb !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.46), 0 0 34px rgba(255, 109, 196, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-item-modal-header {
+  border-bottom-color: rgba(77, 211, 255, 0.18) !important;
+  background: linear-gradient(180deg, rgba(57, 27, 72, 0.96), rgba(24, 14, 44, 0.98)) !important;
+  color: #fff7fb !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgba(13, 10, 30, 0.96) !important;
+  color: #fff7fb !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(77, 211, 255, 0.18) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 109, 196, 0.045)) !important;
+  color: #fff7fb !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="nami-default"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #ff8ccc !important;
+  -webkit-text-fill-color: #ff8ccc !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.72) !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="nami-default"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #ead7f3 !important;
+  -webkit-text-fill-color: #ead7f3 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.62) !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #77dcff !important;
+  -webkit-text-fill-color: #77dcff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.62) !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-comparison-row.positive strong {
+  color: #a8ffc4 !important;
+  -webkit-text-fill-color: #a8ffc4 !important;
+}
+
+body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-comparison-row.negative strong {
+  color: #ff6f9f !important;
+  -webkit-text-fill-color: #ff6f9f !important;
+}
+
+/* Theme wardrobe modal skin END */

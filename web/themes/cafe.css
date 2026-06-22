@@ -1846,3 +1846,78 @@ body[data-theme="cafe"] #section-inventory .inventory-group-label {
 }
 
 /* Cafe inventory category label restore END */
+
+/* Theme wardrobe modal skin START */
+/* Theme-scoped popup modal surface. Keeps modals from inheriting one shared visual skin. */
+
+body[data-theme="cafe"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: radial-gradient(circle at top, rgba(185, 122, 82, 0.12), transparent 30rem), rgba(255, 248, 239, 0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(94, 53, 36, 0.32) !important;
+  background: linear-gradient(180deg, rgba(255, 248, 239, 0.99), rgba(234, 211, 189, 0.96)) !important;
+  color: #321c13 !important;
+  box-shadow: 0 22px 58px rgba(75, 39, 23, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.76) !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-item-modal-header {
+  border-bottom-color: rgba(94, 53, 36, 0.18) !important;
+  background: linear-gradient(180deg, rgba(255, 248, 239, 0.98), rgba(232, 207, 184, 0.94)) !important;
+  color: #321c13 !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgba(255, 248, 239, 0.98) !important;
+  color: #321c13 !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(94, 53, 36, 0.18) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(234, 211, 189, 0.52)) !important;
+  color: #321c13 !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="cafe"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #442416 !important;
+  -webkit-text-fill-color: #442416 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.76) !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="cafe"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #5d3828 !important;
+  -webkit-text-fill-color: #5d3828 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.68) !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #9b5d28 !important;
+  -webkit-text-fill-color: #9b5d28 !important;
+  text-shadow: 0 1px 0 rgba(255, 248, 239, 0.68) !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-comparison-row.positive strong {
+  color: #3f642a !important;
+  -webkit-text-fill-color: #3f642a !important;
+}
+
+body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-comparison-row.negative strong {
+  color: #9f3e2e !important;
+  -webkit-text-fill-color: #9f3e2e !important;
+}
+
+/* Theme wardrobe modal skin END */

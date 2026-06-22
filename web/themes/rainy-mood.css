@@ -1183,3 +1183,78 @@ body[data-theme="rainy-mood"] .chat-form {
 }
 
 /* Rainy Mood pass 4 window room identity END */
+
+/* Theme wardrobe modal skin START */
+/* Theme-scoped popup modal surface. Keeps modals from inheriting one shared visual skin. */
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: radial-gradient(circle at top, rgba(243, 199, 127, 0.12), transparent 30rem), rgba(248, 251, 250, 0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(46, 73, 88, 0.28) !important;
+  background: linear-gradient(180deg, rgba(248, 251, 250, 0.99), rgba(220, 233, 238, 0.96)) !important;
+  color: #1f2b35 !important;
+  box-shadow: 0 22px 58px rgba(23, 36, 49, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.76) !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-header {
+  border-bottom-color: rgba(46, 73, 88, 0.18) !important;
+  background: linear-gradient(180deg, rgba(248, 251, 250, 0.98), rgba(220, 233, 238, 0.92)) !important;
+  color: #1f2b35 !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgba(248, 251, 250, 0.98) !important;
+  color: #1f2b35 !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(46, 73, 88, 0.18) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(220, 233, 238, 0.54)) !important;
+  color: #1f2b35 !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="rainy-mood"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #243544 !important;
+  -webkit-text-fill-color: #243544 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="rainy-mood"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #4b5e6b !important;
+  -webkit-text-fill-color: #4b5e6b !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.62) !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #8c6246 !important;
+  -webkit-text-fill-color: #8c6246 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.62) !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-comparison-row.positive strong {
+  color: #4f786d !important;
+  -webkit-text-fill-color: #4f786d !important;
+}
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-comparison-row.negative strong {
+  color: #a65e5e !important;
+  -webkit-text-fill-color: #a65e5e !important;
+}
+
+/* Theme wardrobe modal skin END */

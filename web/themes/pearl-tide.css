@@ -1142,3 +1142,77 @@ body[data-theme="pearl-tide"] body > .emoji-picker-floating .emoji-picker-tabs {
 
 /* Pearl Tide theme END */
 
+/* Theme wardrobe modal skin START */
+/* Theme-scoped popup modal surface. Keeps modals from inheriting one shared visual skin. */
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: radial-gradient(circle at top, rgba(110, 233, 245, 0.12), transparent 32rem), rgba(2, 14, 28, 0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-card {
+  border-color: rgba(126, 233, 246, 0.46) !important;
+  background: linear-gradient(180deg, rgba(7, 31, 53, 0.82), rgba(4, 20, 38, 0.76)) !important;
+  color: #f3fbff !important;
+  box-shadow: 0 22px 58px rgba(0, 10, 24, 0.42), 0 0 24px rgba(110, 233, 245, 0.10), inset 0 1px 0 rgba(234, 252, 255, 0.14) !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-header {
+  border-bottom-color: rgba(126, 233, 246, 0.28) !important;
+  background: linear-gradient(180deg, rgba(10, 43, 66, 0.78), rgba(5, 24, 45, 0.72)) !important;
+  color: #f3fbff !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-body {
+  background: rgba(5, 24, 45, 0.58) !important;
+  color: #f3fbff !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-section {
+  border-color: rgba(126, 233, 246, 0.28) !important;
+  background: linear-gradient(180deg, rgba(10, 43, 66, 0.58), rgba(4, 22, 42, 0.44)) !important;
+  color: #f3fbff !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-header h2,
+body[data-theme="pearl-tide"] #wardrobe-item-modal #wardrobe-item-modal-title,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-section h3 {
+  color: #8ff4cf !important;
+  -webkit-text-fill-color: #8ff4cf !important;
+  text-shadow: 0 1px 2px rgba(0, 10, 24, 0.76) !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="pearl-tide"] #wardrobe-item-modal #wardrobe-item-modal-meta,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-compare-target,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-stat-line,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-comparison-row,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-stat-line span,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-comparison-row span {
+  color: #c8e8f0 !important;
+  -webkit-text-fill-color: #c8e8f0 !important;
+  text-shadow: 0 1px 2px rgba(0, 10, 24, 0.70) !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-stat-line strong,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-stat-source-implicit strong,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-comparison-row strong {
+  color: #ffb7d5 !important;
+  -webkit-text-fill-color: #ffb7d5 !important;
+  text-shadow: 0 1px 2px rgba(0, 10, 24, 0.70) !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-comparison-row.positive strong {
+  color: #8ff4cf !important;
+  -webkit-text-fill-color: #8ff4cf !important;
+}
+
+body[data-theme="pearl-tide"] #wardrobe-item-modal .wardrobe-comparison-row.negative strong {
+  color: #ff8fb8 !important;
+  -webkit-text-fill-color: #ff8fb8 !important;
+}
+
+/* Theme wardrobe modal skin END */
