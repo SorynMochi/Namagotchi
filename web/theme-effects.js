@@ -673,9 +673,9 @@
         alpha: randomBetween(0.46, 0.78),
         pulse: randomBetween(0, Math.PI * 2),
         pulseSpeed: randomBetween(0.000045, 0.00012),
-        driftX: randomBetween(-viewportWidth * 0.08, viewportWidth * 0.08),
-        driftY: randomBetween(-viewportHeight * 0.05, viewportHeight * 0.05),
-        driftSpeed: randomBetween(0.000018, 0.000046),
+        driftX: randomBetween(-viewportWidth * 0.13, viewportWidth * 0.13),
+        driftY: randomBetween(-viewportHeight * 0.08, viewportHeight * 0.08),
+        driftSpeed: randomBetween(0.000026, 0.000062),
         blur: randomBetween(0.0, 1.8),
         palette,
       };
@@ -774,8 +774,17 @@
     function drawBokehLight(light, now) {
       const driftTime = now * light.driftSpeed + light.pulse;
       const pulseTime = now * light.pulseSpeed + light.pulse;
-      const x = light.x + Math.sin(driftTime) * light.driftX + Math.cos(driftTime * 0.73) * light.driftX * 0.28;
-      const y = light.y + Math.cos(driftTime * 0.84) * light.driftY + Math.sin(driftTime * 0.51) * light.driftY * 0.20;
+      const x =
+        light.x +
+        Math.sin(driftTime) * light.driftX +
+        Math.cos(driftTime * 0.47) * light.driftX * 0.46 +
+        Math.sin(driftTime * 1.31) * light.driftX * 0.10;
+
+      const y =
+        light.y +
+        Math.cos(driftTime * 0.82) * light.driftY +
+        Math.sin(driftTime * 0.56) * light.driftY * 0.34 +
+        Math.cos(driftTime * 1.18) * light.driftY * 0.12;
       const pulse = 0.86 + Math.sin(pulseTime) * 0.14;
       const radius = light.size * pulse;
       const alpha = light.alpha * (0.88 + Math.cos(pulseTime * 0.71) * 0.12);
