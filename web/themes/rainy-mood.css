@@ -1258,3 +1258,32 @@ body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-comparison-row.nega
 }
 
 /* Theme wardrobe modal skin END */
+
+/* Rainy Mood modal brightness correction START */
+/* Prevent the popup backdrop from brightening the whole game. */
+
+body[data-theme="rainy-mood"] #wardrobe-item-modal.wardrobe-item-modal-backdrop {
+  background: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Slot + rarity line: dark rainy blue, no pale shadow. */
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-meta,
+body[data-theme="rainy-mood"] #wardrobe-item-modal #wardrobe-item-modal-meta {
+  color: #243544 !important;
+  -webkit-text-fill-color: #243544 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* Keep any nested text inside the meta line from inheriting the general rainy light text rules. */
+body[data-theme="rainy-mood"] #wardrobe-item-modal .wardrobe-item-modal-meta *,
+body[data-theme="rainy-mood"] #wardrobe-item-modal #wardrobe-item-modal-meta * {
+  color: #243544 !important;
+  -webkit-text-fill-color: #243544 !important;
+  text-shadow: none !important;
+}
+
+/* Rainy Mood modal brightness correction END */

@@ -1390,3 +1390,20 @@ body[data-theme="cafe"] .top-stats-panel .top-user-info #nami-xp-label .metric-v
 }
 
 /* Cafe top rail readability END */
+
+/* Rainy Mood top rail value readability START */
+/* Values only. Labels already read well against the dark rainy top rail. */
+
+body[data-theme="rainy-mood"] .top-stats-panel .stat-group.compact .stat-lines strong,
+body[data-theme="rainy-mood"] .top-stats-panel .stat-group.compact .compact-grid-lines strong,
+body[data-theme="rainy-mood"] .top-user-info .top-user-meter-list .metric-value,
+body[data-theme="rainy-mood"] .top-user-info #current-action-label .metric-value,
+body[data-theme="rainy-mood"] .top-user-info #playdeck-hp-label .metric-value,
+body[data-theme="rainy-mood"] .top-user-info #playdeck-xp-label .metric-value,
+body[data-theme="rainy-mood"] .top-user-info #nami-xp-label .metric-value {
+  color: #d8ebf2 !important;
+  -webkit-text-fill-color: #d8ebf2 !important;
+  text-shadow: 0 1px 2px rgba(4, 13, 24, 0.74) !important;
+}
+
+/* Rainy Mood top rail value readability END */
