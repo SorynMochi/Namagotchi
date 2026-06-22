@@ -1087,7 +1087,7 @@ body[data-theme="woodland-moon"] {
   --woodland-moon-mist: #b8c9dd;
   --woodland-moon-moonlight: #eef4ff;
   --woodland-moon-frost: #d9e6ff;
-  --woodland-moon-firefly: #d8ea86;
+  --woodland-moon-firefly: #4892ff;
   --woodland-moon-firefly-soft: #eef7b5;
   --woodland-moon-aqua: #90bff0;
   --woodland-moon-bark: #6c472c;
@@ -1096,7 +1096,7 @@ body[data-theme="woodland-moon"] {
   --woodland-moon-border-bright: rgba(220, 234, 255, 0.40);
 
   --theme-chat-text: #eef4ff;
-  --theme-chat-name: #d8ea86;
+  --theme-chat-name: #4892ff;
   --theme-chat-input-placeholder: rgba(192, 210, 232, 0.66);
   --theme-meter-label-text: #eef4ff;
   --theme-meter-label-shadow: 0 1px 2px rgba(9, 15, 24, 0.82), 0 0 8px rgba(9, 15, 24, 0.32);
@@ -1182,7 +1182,7 @@ body[data-theme="woodland-moon"] .right-buff-group {
 
 body[data-theme="woodland-moon"] .panel-title,
 body[data-theme="woodland-moon"] .collapse-toggle {
-  color: #d8ea86 !important;
+  color: #4892ff !important;
   background:
     linear-gradient(180deg, rgba(40, 63, 91, 0.38), rgba(18, 31, 48, 0.32)) !important;
   border-bottom-color: rgba(190, 212, 245, 0.24) !important;
@@ -1198,7 +1198,7 @@ body[data-theme="woodland-moon"] .eyebrow {
 }
 
 body[data-theme="woodland-moon"] .eyebrow {
-  color: #d8ea86 !important;
+  color: #4892ff !important;
   letter-spacing: 0.11em;
 }
 
@@ -1397,7 +1397,7 @@ body[data-theme="woodland-moon"] #section-home .care-button-active .care-button-
 body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-progress-fill,
 body[data-theme="woodland-moon"] #section-home .care-button-active .care-progress-fill {
   background:
-    linear-gradient(90deg, #4d3420 0%, #4c7396 50%, #d8ea86 100%) !important;
+    linear-gradient(90deg, #4d3420 0%, #4c7396 50%, #4892ff 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 251, 220, 0.22),
     0 0 12px rgba(216, 234, 134, 0.20) !important;
@@ -1413,7 +1413,7 @@ body[data-theme="woodland-moon"] #section-home .care-status-compact .fill,
 body[data-theme="woodland-moon"] #section-home .care-status-compact .stat-fill,
 body[data-theme="woodland-moon"] #section-home .care-status-compact .mood-fill {
   background:
-    linear-gradient(90deg, #3f2a1b 0%, #325a71 54%, #d8ea86 100%) !important;
+    linear-gradient(90deg, #3f2a1b 0%, #325a71 54%, #4892ff 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(240, 246, 255, 0.18),
     0 0 12px rgba(144, 191, 240, 0.10),
@@ -1473,8 +1473,8 @@ body[data-theme="woodland-moon"] .chat-time {
 }
 
 body[data-theme="woodland-moon"] .chat-name {
-  color: #d8ea86 !important;
-  -webkit-text-fill-color: #d8ea86 !important;
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
   text-shadow:
     0 1px 1px rgba(23, 18, 9, 0.76),
     0 0 8px rgba(216, 234, 134, 0.10) !important;
@@ -1494,7 +1494,7 @@ body[data-theme="woodland-moon"] .chat-log::-webkit-scrollbar-thumb {
   border-radius: 999px !important;
   border: 2px solid rgba(12, 22, 35, 0.76) !important;
   background:
-    linear-gradient(180deg, #d8ea86, #96b6db 56%, #503522) !important;
+    linear-gradient(180deg, #4892ff, #96b6db 56%, #503522) !important;
   box-shadow:
     inset 0 1px 0 rgba(240, 246, 255, 0.28),
     0 0 10px rgba(216, 234, 134, 0.14) !important;
@@ -1558,8 +1558,8 @@ body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-impl
 body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-suffix strong,
 body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-prefix strong,
 body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row strong {
-  color: #d8ea86 !important;
-  -webkit-text-fill-color: #d8ea86 !important;
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
 }
 
 /* Left/right rail text */
@@ -1588,8 +1588,8 @@ body[data-theme="woodland-moon"] .left-rail #online-users,
 body[data-theme="woodland-moon"] .left-rail #online-users *,
 body[data-theme="woodland-moon"] .left-rail [data-server-time],
 body[data-theme="woodland-moon"] .left-rail [data-online-users] {
-  color: #d8ea86 !important;
-  -webkit-text-fill-color: #d8ea86 !important;
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
   text-shadow:
     0 1px 1px rgba(16, 12, 8, 0.72),
     0 0 10px rgba(216, 234, 134, 0.10) !important;
@@ -1707,7 +1707,7 @@ body[data-theme="woodland-moon"] #section-home .care-button-active .care-button-
 body[data-theme="woodland-moon"] #section-home .care-button.care-button-active .care-progress-fill,
 body[data-theme="woodland-moon"] #section-home .care-button-active .care-progress-fill {
   background:
-    linear-gradient(90deg, #3e2a1f 0%, #486f94 52%, #d8ea86 100%) !important;
+    linear-gradient(90deg, #3e2a1f 0%, #486f94 52%, #4892ff 100%) !important;
   box-shadow:
     inset 0 1px 0 rgba(240, 246, 255, 0.20),
     0 0 12px rgba(144, 191, 240, 0.12),
@@ -1718,7 +1718,7 @@ body[data-theme="woodland-moon"] #section-home .care-status-compact .fill,
 body[data-theme="woodland-moon"] #section-home .care-status-compact .stat-fill,
 body[data-theme="woodland-moon"] #section-home .care-status-compact .mood-fill {
   background:
-    linear-gradient(90deg, #33251e 0%, #365b7b 58%, #d8ea86 100%) !important;
+    linear-gradient(90deg, #33251e 0%, #365b7b 58%, #4892ff 100%) !important;
 }
 
 /* Popup/modal pass: cooler moon-glass, stronger section separation, better text hierarchy. */
@@ -1798,8 +1798,8 @@ body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-stat-source-pref
 body[data-theme="woodland-moon"] #wardrobe-item-modal .wardrobe-comparison-row strong,
 body[data-theme="woodland-moon"] .modal-card strong,
 body[data-theme="woodland-moon"] [role="dialog"] strong {
-  color: #d8ea86 !important;
-  -webkit-text-fill-color: #d8ea86 !important;
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
 }
 
 /* Keep destructive actions readable but not tomato-bright. */
@@ -1813,3 +1813,22 @@ body[data-theme="woodland-moon"] [role="dialog"] .danger-button {
 }
 
 /* Woodland Moon polish pass END */
+
+/* Woodland Moon blue menu glyph override START */
+/* Menu glyphs only: blue on hover/active, without changing button backgrounds. */
+
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover .nav-icon *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item:hover svg *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active .nav-icon,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active .nav-icon *,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg,
+body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg * {
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
+  fill: #4892ff !important;
+  stroke: #4892ff !important;
+}
+
+/* Woodland Moon blue menu glyph override END */

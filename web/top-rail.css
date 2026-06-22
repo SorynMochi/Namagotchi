@@ -1499,7 +1499,7 @@ body[data-theme="woodland-moon"] {
   --top-player-tick-bg:
     radial-gradient(circle at 18% 0%, rgba(224, 235, 255, 0.24), transparent 5rem),
     linear-gradient(180deg, rgba(31, 53, 79, 0.84), rgba(13, 23, 37, 0.88));
-  --top-player-tick-fill: linear-gradient(90deg, #dfe8ff, #9ebee4, #d8ea86);
+  --top-player-tick-fill: linear-gradient(90deg, #dfe8ff, #9ebee4, #4892ff);
   --top-player-tick-border: rgba(190, 212, 245, 0.38);
   --top-player-tick-text: #eef4ff;
   --top-player-tick-shadow: 0 10px 22px rgba(7, 12, 20, 0.30), inset 0 1px 0 rgba(240, 246, 255, 0.18);
@@ -1517,8 +1517,8 @@ body[data-theme="woodland-moon"] .top-user-info .top-player-name-button.top-play
 body[data-theme="woodland-moon"] .top-user-info .top-player-name-button.top-player-tick-pill *,
 body[data-theme="woodland-moon"] .top-user-info .top-player-name-button .top-player-name,
 body[data-theme="woodland-moon"] .top-user-info .top-player-name-button #top-player-name {
-  color: #d8ea86 !important;
-  -webkit-text-fill-color: #d8ea86 !important;
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
   text-shadow:
     0 1px 1px rgba(18, 12, 8, 0.78),
     0 0 10px rgba(216, 234, 134, 0.12) !important;
