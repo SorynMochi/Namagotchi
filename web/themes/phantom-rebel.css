@@ -1734,7 +1734,7 @@ body[data-theme="phantom-rebel"] :where(
 /* Phantom Rebel low opacity surfaces END */
 
 /* Phantom Rebel theme switcher dropdown START */
-/* Theme select control: hard-edged Phantom Rebel styling. */
+/* Theme select control: clipped hard-edge Phantom Rebel styling. */
 
 body[data-theme="phantom-rebel"] #section-settings .settings-field[for="theme-select"] {
   position: relative !important;
@@ -1742,7 +1742,8 @@ body[data-theme="phantom-rebel"] #section-settings .settings-field[for="theme-se
   border-radius: 0 !important;
   background: rgba(0, 0, 0, 0.10) !important;
   color: #ffffff !important;
-  overflow: visible !important;
+  overflow: hidden !important;
+  contain: paint !important;
 }
 
 body[data-theme="phantom-rebel"] #section-settings .settings-field[for="theme-select"] > span {
@@ -1759,15 +1760,20 @@ body[data-theme="phantom-rebel"] #section-settings .settings-field[for="theme-se
 body[data-theme="phantom-rebel"] #theme-select {
   appearance: none !important;
   -webkit-appearance: none !important;
+  display: block !important;
   width: 100% !important;
+  max-width: 100% !important;
   min-height: 42px !important;
   border: 1px solid rgba(255, 255, 255, 0.30) !important;
   border-radius: 0 !important;
   clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
   padding: 10px 48px 10px 22px !important;
   background:
-    linear-gradient(135deg, transparent 0 78%, rgba(255, 0, 0, 0.96) 78% 100%),
+    linear-gradient(135deg, transparent 0 78%, #ff0000 78% 100%),
     linear-gradient(180deg, rgba(30, 33, 40, 0.98), rgba(8, 9, 12, 0.98)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-position: 0 0, 0 0 !important;
+  background-repeat: no-repeat !important;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   font-family: var(--phantom-body-font, "Courier Prime", "Courier New", ui-monospace, monospace) !important;
@@ -1780,6 +1786,21 @@ body[data-theme="phantom-rebel"] #theme-select {
     0 8px 18px rgba(0, 0, 0, 0.24) !important;
   color-scheme: dark !important;
   cursor: pointer !important;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    filter 140ms ease !important;
+}
+
+body[data-theme="phantom-rebel"] #theme-select:hover {
+  border-color: rgba(255, 255, 255, 0.46) !important;
+  background:
+    linear-gradient(135deg, transparent 0 78%, #ff0000 78% 100%),
+    linear-gradient(180deg, rgba(42, 46, 56, 0.98), rgba(10, 11, 15, 0.98)) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-position: 0 0, 0 0 !important;
+  background-repeat: no-repeat !important;
+  filter: brightness(1.05) !important;
 }
 
 body[data-theme="phantom-rebel"] #section-settings .settings-field[for="theme-select"]::after {
@@ -1795,13 +1816,6 @@ body[data-theme="phantom-rebel"] #section-settings .settings-field[for="theme-se
   line-height: 1 !important;
   pointer-events: none !important;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.88) !important;
-}
-
-body[data-theme="phantom-rebel"] #theme-select:hover {
-  border-color: rgba(255, 255, 255, 0.46) !important;
-  background:
-    linear-gradient(135deg, transparent 0 78%, rgba(255, 0, 0, 1) 78% 100%),
-    linear-gradient(180deg, rgba(42, 46, 56, 0.98), rgba(10, 11, 15, 0.98)) !important;
 }
 
 body[data-theme="phantom-rebel"] #theme-select:focus,
