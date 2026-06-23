@@ -1607,3 +1607,128 @@ body[data-theme="phantom-rebel"] *::-webkit-scrollbar-corner {
 }
 
 /* Phantom Rebel global scrollbar red END */
+
+/* Phantom Rebel low opacity surfaces START */
+/* Black surface backgrounds at 10% opacity. Buttons, bars, meters, fills, and scrollbars are excluded. */
+
+body[data-theme="phantom-rebel"] {
+  --phantom-surface-low-bg: rgba(0, 0, 0, 0.10);
+}
+
+/* Primary shells across all screens and chat. */
+body[data-theme="phantom-rebel"] :where(
+  .panel,
+  .main-panel,
+  .content-section,
+  .top-stats-panel,
+  .nav-panel,
+  .right-buffs-panel,
+  .chat-panel,
+  .nami-card,
+  .care-card,
+  .zone-list,
+  .combat-panel,
+  .combat-enemy-card,
+  .combat-log,
+  .task-card,
+  .placeholder-copy,
+  .settings-card,
+  .wardrobe-panel,
+  .wardrobe-item-modal-card,
+  .equipment-card,
+  .inventory-item-card,
+  .right-buff-group
+):not(button):not(.bar):not(.stat-bar):not(.meter-track):not(.task-xp-bar):not(.xp-bar):not(.hp-bar):not(.need-bar):not(.mood-bar):not(.progress-bar) {
+  background: var(--phantom-surface-low-bg) !important;
+}
+
+/* Inner surfaces, logs, chat areas, and small cards. */
+body[data-theme="phantom-rebel"] :where(
+  .top-stats-compact,
+  .stat-group.compact,
+  .menu-status-card,
+  .buff-card,
+  .right-buff-list,
+  .stat-lines,
+  .compact-grid-lines,
+  .nami-message,
+  .nami-message-log-card,
+  .nami-message-log,
+  #nami-message-log,
+  .chat-tabs,
+  .chat-log,
+  .chat-messages,
+  .chat-form,
+  .chat-input,
+  .emoji-picker,
+  .equipment-slot,
+  .wardrobe-bonus-card,
+  .wardrobe-bonus-row,
+  .settings-field,
+  .nami-progression-card,
+  .nami-need-card,
+  .care-status-compact,
+  .nami-care-summary,
+  .work-nami-stage,
+  .log-list,
+  #combat-log-list,
+  #combat-status-card,
+  .combat-success,
+  .combat-warning,
+  .combat-failure
+):not(button):not(.bar):not(.stat-bar):not(.meter-track):not(.task-xp-bar):not(.xp-bar):not(.hp-bar):not(.need-bar):not(.mood-bar):not(.progress-bar):not(.fill):not(.meter-fill):not(.tick-fill):not(.xp-fill):not(.hp-fill):not(.stat-fill):not(.mood-fill):not(.task-xp-fill):not(.progress-fill) {
+  background: var(--phantom-surface-low-bg) !important;
+}
+
+/* Wardrobe/modal nested panels that are surfaces, not controls. */
+body[data-theme="phantom-rebel"] #wardrobe-item-modal :where(
+  .wardrobe-item-modal-header,
+  .wardrobe-item-modal-section,
+  .wardrobe-compare-titlebar,
+  .wardrobe-stat-line,
+  .wardrobe-comparison-row
+):not(button) {
+  background: var(--phantom-surface-low-bg) !important;
+}
+
+/* Explicit protection for buttons, bars, meters, and their fills. */
+body[data-theme="phantom-rebel"] :where(
+  button,
+  .button,
+  .secondary-button,
+  .care-button,
+  .care-action-button,
+  .chat-tab,
+  .chat-form button,
+  .task-card button,
+  .zone-card,
+  .nav-item,
+  .bar,
+  .stat-bar,
+  .meter-track,
+  .task-xp-bar,
+  .xp-bar,
+  .hp-bar,
+  .need-bar,
+  .mood-bar,
+  .progress-bar,
+  .fill,
+  .meter-fill,
+  .tick-fill,
+  .xp-fill,
+  .hp-fill,
+  .stat-fill,
+  .mood-fill,
+  .task-xp-fill,
+  .progress-fill,
+  .care-button-progress,
+  .care-progress,
+  .care-button-progress-track,
+  .care-progress-track,
+  .care-button-progress-fill,
+  .care-progress-fill
+) {
+  opacity: 1;
+}
+
+/* Phantom Rebel low opacity surfaces END */
