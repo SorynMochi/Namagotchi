@@ -1149,3 +1149,60 @@ body[data-theme="phantom-rebel"] #chat-panel .chat-tabs {
 }
 
 /* Phantom Rebel chat channel bar grey END */
+
+/* Phantom Rebel interlocking chat tabs START */
+/* Interlocking parallelogram chat channel tabs. */
+
+body[data-theme="phantom-rebel"] .chat-panel .chat-tabs,
+body[data-theme="phantom-rebel"] #chat-panel .chat-tabs {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 0 !important;
+  overflow: visible !important;
+  padding: 10px 18px !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-panel .chat-tab,
+body[data-theme="phantom-rebel"] #chat-panel .chat-tab {
+  position: relative !important;
+  flex: 0 0 auto !important;
+  min-width: 108px !important;
+  padding: 8px 18px 8px 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  border-radius: 0 !important;
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
+  background: linear-gradient(180deg, rgba(30, 33, 40, 0.98), rgba(8, 9, 12, 0.98)) !important;
+  color: #ffffff !important;
+  line-height: 1 !important;
+  z-index: 1 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 6px 14px rgba(0, 0, 0, 0.20) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-panel .chat-tab + .chat-tab,
+body[data-theme="phantom-rebel"] #chat-panel .chat-tab + .chat-tab {
+  margin-left: -14px !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-panel .chat-tab:hover,
+body[data-theme="phantom-rebel"] #chat-panel .chat-tab:hover {
+  background: linear-gradient(180deg, rgba(42, 46, 56, 0.98), rgba(10, 11, 15, 0.98)) !important;
+  color: #ffffff !important;
+  z-index: 2 !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-panel .chat-tab.active,
+body[data-theme="phantom-rebel"] #chat-panel .chat-tab.active {
+  border-color: rgba(255, 255, 255, 0.36) !important;
+  background: linear-gradient(135deg, #050507 0%, #050507 49.85%, #ff0000 49.85%, #ff0000 100%) !important;
+  color: #ffffff !important;
+  z-index: 3 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 8px 18px rgba(0, 0, 0, 0.26),
+    0 0 12px rgba(255, 0, 0, 0.14) !important;
+}
+
+/* Phantom Rebel interlocking chat tabs END */
