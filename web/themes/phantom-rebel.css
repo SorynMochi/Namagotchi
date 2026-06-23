@@ -1557,29 +1557,33 @@ body[data-theme="phantom-rebel"] #section-playdeck .combat-stat-grid strong {
 
 /* Phantom Rebel playdeck color lockdown END */
 
-/* Phantom Rebel playdeck scrollbar red START */
-/* Playdeck scrollbars: pure red thumb, black track. */
+/* Phantom Rebel global scrollbar red START */
+/* No blue scrollbars in Phantom Rebel. Red thumb, black track, sharp edges. */
 
-body[data-theme="phantom-rebel"] #section-playdeck,
-body[data-theme="phantom-rebel"] #section-playdeck * {
+html:has(body[data-theme="phantom-rebel"]),
+body[data-theme="phantom-rebel"],
+body[data-theme="phantom-rebel"] * {
   scrollbar-color: #ff0000 #050507 !important;
 }
 
-body[data-theme="phantom-rebel"] #section-playdeck::-webkit-scrollbar,
-body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar {
+html:has(body[data-theme="phantom-rebel"])::-webkit-scrollbar,
+body[data-theme="phantom-rebel"]::-webkit-scrollbar,
+body[data-theme="phantom-rebel"] *::-webkit-scrollbar {
   width: 10px !important;
   height: 10px !important;
 }
 
-body[data-theme="phantom-rebel"] #section-playdeck::-webkit-scrollbar-track,
-body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar-track {
+html:has(body[data-theme="phantom-rebel"])::-webkit-scrollbar-track,
+body[data-theme="phantom-rebel"]::-webkit-scrollbar-track,
+body[data-theme="phantom-rebel"] *::-webkit-scrollbar-track {
   background: #050507 !important;
   border: 1px solid rgba(255, 255, 255, 0.16) !important;
   border-radius: 0 !important;
 }
 
-body[data-theme="phantom-rebel"] #section-playdeck::-webkit-scrollbar-thumb,
-body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar-thumb {
+html:has(body[data-theme="phantom-rebel"])::-webkit-scrollbar-thumb,
+body[data-theme="phantom-rebel"]::-webkit-scrollbar-thumb,
+body[data-theme="phantom-rebel"] *::-webkit-scrollbar-thumb {
   background: #ff0000 !important;
   border: 1px solid rgba(255, 255, 255, 0.26) !important;
   border-radius: 0 !important;
@@ -1588,10 +1592,18 @@ body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar-thumb {
     0 0 8px rgba(255, 0, 0, 0.20) !important;
 }
 
-body[data-theme="phantom-rebel"] #section-playdeck::-webkit-scrollbar-corner,
-body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar-corner {
+html:has(body[data-theme="phantom-rebel"])::-webkit-scrollbar-thumb:hover,
+body[data-theme="phantom-rebel"]::-webkit-scrollbar-thumb:hover,
+body[data-theme="phantom-rebel"] *::-webkit-scrollbar-thumb:hover {
+  background: #ff0000 !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+}
+
+html:has(body[data-theme="phantom-rebel"])::-webkit-scrollbar-corner,
+body[data-theme="phantom-rebel"]::-webkit-scrollbar-corner,
+body[data-theme="phantom-rebel"] *::-webkit-scrollbar-corner {
   background: #050507 !important;
   border-radius: 0 !important;
 }
 
-/* Phantom Rebel playdeck scrollbar red END */
+/* Phantom Rebel global scrollbar red END */
