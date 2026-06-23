@@ -1206,3 +1206,392 @@ body[data-theme="phantom-rebel"] #chat-panel .chat-tab.active {
 }
 
 /* Phantom Rebel interlocking chat tabs END */
+
+/* Phantom Rebel playdeck and work screen polish START */
+/* Match the home-screen red heading polish on Playdeck and Work. */
+
+/* Playdeck / Work page labels. */
+body[data-theme="phantom-rebel"] #section-playdeck .section-header .eyebrow,
+body[data-theme="phantom-rebel"] #section-playdeck .section-header h1,
+body[data-theme="phantom-rebel"] #section-gathering .section-header .eyebrow,
+body[data-theme="phantom-rebel"] #section-gathering .section-header h1 {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.075em !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 10px rgba(255, 0, 0, 0.20) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .section-header .eyebrow,
+body[data-theme="phantom-rebel"] #section-gathering .section-header .eyebrow {
+  font-size: 0.98rem !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .section-header h1,
+body[data-theme="phantom-rebel"] #section-gathering .section-header h1 {
+  font-size: 1.22rem !important;
+}
+
+/* Playdeck card headings: Zones, Combat Status, Combat Log. */
+body[data-theme="phantom-rebel"] #section-playdeck .zone-list h2,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-panel > h2,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log-header h2 {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 1.12rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.070em !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 10px rgba(255, 0, 0, 0.20) !important;
+}
+
+/* Work task headings: Streaming, Doom Scrolling, Cleaning, etc. */
+body[data-theme="phantom-rebel"] #section-gathering .task-card h2,
+body[data-theme="phantom-rebel"] #section-gathering .task-card-header h2 {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 1.12rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.070em !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 10px rgba(255, 0, 0, 0.20) !important;
+}
+
+/* Playdeck Combat Log: same black/red/white readability treatment as Nami Messages. */
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log .log-list,
+body[data-theme="phantom-rebel"] #section-playdeck #combat-log-list {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  background: rgba(0, 0, 0, 0.20) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 10px 24px rgba(0, 0, 0, 0.20) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log .log-list p,
+body[data-theme="phantom-rebel"] #section-playdeck #combat-log-list p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.78) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log .log-list span,
+body[data-theme="phantom-rebel"] #section-playdeck #combat-log-list span,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log-tag {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
+  font-weight: 950 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 8px rgba(255, 0, 0, 0.18) !important;
+}
+
+/* Phantom Rebel playdeck and work screen polish END */
+
+/* Phantom Rebel work button states START */
+/* Work screen task buttons: active/inactive state treatment. */
+
+body[data-theme="phantom-rebel"] #section-gathering .task-card button,
+body[data-theme="phantom-rebel"] #section-work .task-card button {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+  clip-path: polygon(16px 0, 100% 0, calc(100% - 16px) 100%, 0 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-size: 0.88rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.060em !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.88),
+    0 0 8px rgba(0, 0, 0, 0.24) !important;
+}
+
+/* Inactive work task buttons: dark grey shell. */
+body[data-theme="phantom-rebel"] #section-gathering .task-card:not(.active) button,
+body[data-theme="phantom-rebel"] #section-work .task-card:not(.active) button {
+  border-color: rgba(255, 255, 255, 0.30) !important;
+  background:
+    linear-gradient(180deg, rgba(30, 33, 40, 0.98), rgba(8, 9, 12, 0.98)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 7px 16px rgba(0, 0, 0, 0.22) !important;
+}
+
+/* Active work task button: pure-red Phantom Rebel active state. */
+body[data-theme="phantom-rebel"] #section-gathering .task-card.active button,
+body[data-theme="phantom-rebel"] #section-work .task-card.active button {
+  border-color: rgba(255, 0, 0, 0.78) !important;
+  background:
+    linear-gradient(135deg, #ff0000 0%, #ff0000 49.85%, #050507 49.85%, #050507 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 9px 20px rgba(0, 0, 0, 0.30),
+    0 0 16px rgba(255, 0, 0, 0.20) !important;
+}
+
+/* Hover: inactive gets a brighter grey, active keeps the red/black identity. */
+body[data-theme="phantom-rebel"] #section-gathering .task-card:not(.active) button:hover,
+body[data-theme="phantom-rebel"] #section-work .task-card:not(.active) button:hover {
+  border-color: rgba(255, 255, 255, 0.44) !important;
+  background:
+    linear-gradient(180deg, rgba(42, 46, 56, 0.98), rgba(10, 11, 15, 0.98)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 8px 18px rgba(0, 0, 0, 0.26) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-gathering .task-card.active button:hover,
+body[data-theme="phantom-rebel"] #section-work .task-card.active button:hover {
+  border-color: rgba(255, 255, 255, 0.46) !important;
+  background:
+    linear-gradient(135deg, #050507 0%, #050507 49.85%, #ff0000 49.85%, #ff0000 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 10px 22px rgba(0, 0, 0, 0.34),
+    0 0 18px rgba(255, 0, 0, 0.24) !important;
+}
+
+/* Phantom Rebel work button states END */
+
+/* Phantom Rebel active work badge START */
+/* Active work task badge: white text on pure red. */
+
+body[data-theme="phantom-rebel"] #section-gathering .task-card.active .task-status,
+body[data-theme="phantom-rebel"] #section-work .task-card.active .task-status {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.36) !important;
+  border-radius: 0 !important;
+  padding: 3px 8px !important;
+  background: #ff0000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-family: var(--phantom-body-font, "Courier Prime", "Courier New", ui-monospace, monospace) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.065em !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.85) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 10px rgba(255, 0, 0, 0.18) !important;
+}
+
+/* Phantom Rebel active work badge END */
+
+/* Phantom Rebel combat log token colors START */
+/* Playdeck Combat Log: [000] and [LOG] white, remaining log text pure red. */
+
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log .log-list p,
+body[data-theme="phantom-rebel"] #section-playdeck #combat-log-list p,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log .log-list .combat-log-empty,
+body[data-theme="phantom-rebel"] #section-playdeck #combat-log-list .combat-log-empty,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log .log-list :is(.combat-log-enemy, .combat-log-damage, .combat-log-xp, .combat-log-credits, .combat-log-nibbles),
+body[data-theme="phantom-rebel"] #section-playdeck #combat-log-list :is(.combat-log-enemy, .combat-log-damage, .combat-log-xp, .combat-log-credits, .combat-log-nibbles) {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.82),
+    0 0 8px rgba(255, 0, 0, 0.16) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .combat-log .log-list :is(.combat-log-tag, .combat-log-outcome, .combat-log-empty-label),
+body[data-theme="phantom-rebel"] #section-playdeck #combat-log-list :is(.combat-log-tag, .combat-log-outcome, .combat-log-empty-label),
+body[data-theme="phantom-rebel"] #section-playdeck #combat-log-list p > span:first-child {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 950 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.88),
+    0 0 8px rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Phantom Rebel combat log token colors END */
+
+/* Phantom Rebel playdeck color lockdown START */
+/* Playdeck should only show red, black, white, and greys. */
+
+/* Zone list shell. */
+body[data-theme="phantom-rebel"] #section-playdeck .zone-list {
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 0 !important;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 25, 0.92), rgba(4, 5, 8, 0.94)) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(0, 0, 0, 0.24) !important;
+}
+
+/* Zone cards: inactive/default. */
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card {
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  border-radius: 0 !important;
+  background:
+    linear-gradient(180deg, rgba(30, 33, 40, 0.98), rgba(8, 9, 12, 0.98)) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 7px 16px rgba(0, 0, 0, 0.22) !important;
+}
+
+/* Active zone card: pure-red/black Phantom Rebel state. */
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card.active {
+  border-color: rgba(255, 0, 0, 0.78) !important;
+  background:
+    linear-gradient(180deg, rgba(8, 9, 12, 0.98), rgba(0, 0, 0, 0.98)) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 9px 20px rgba(0, 0, 0, 0.30),
+    0 0 16px rgba(255, 0, 0, 0.20) !important;
+}
+
+/* Locked zones: greyed out, no non-theme colors. */
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card.locked,
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card:disabled {
+  border-color: rgba(160, 160, 160, 0.26) !important;
+  background:
+    linear-gradient(180deg, rgba(52, 55, 64, 0.74), rgba(20, 22, 27, 0.82)) !important;
+  color: rgba(255, 255, 255, 0.66) !important;
+  opacity: 1 !important;
+}
+
+/* Zone card text. */
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card strong {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.86) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card span {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 8px rgba(255, 0, 0, 0.16) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card small {
+  color: rgba(255, 255, 255, 0.72) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.72) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card.locked strong,
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card.locked span,
+body[data-theme="phantom-rebel"] #section-playdeck .zone-card.locked small {
+  color: rgba(210, 210, 210, 0.68) !important;
+  -webkit-text-fill-color: rgba(210, 210, 210, 0.68) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.78) !important;
+}
+
+/* Ready / recovering / status panel: remove green and any success-color styling. */
+body[data-theme="phantom-rebel"] #section-playdeck #combat-status-card,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-success,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-warning,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-failure {
+  border: 1px solid rgba(255, 0, 0, 0.66) !important;
+  border-radius: 0 !important;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 25, 0.96), rgba(4, 5, 8, 0.98)) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 9px 22px rgba(0, 0, 0, 0.26),
+    0 0 14px rgba(255, 0, 0, 0.16) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck #combat-status-title {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
+  font-family: var(--phantom-display-font, "Phantom Rebel Display", "Arial Black", Impact, system-ui, sans-serif) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.070em !important;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.86),
+    0 0 10px rgba(255, 0, 0, 0.20) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck #combat-status-copy {
+  color: rgba(255, 255, 255, 0.82) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.82) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.78) !important;
+}
+
+/* Combat enemy card and mini labels: remove stray accent colors. */
+body[data-theme="phantom-rebel"] #section-playdeck .combat-enemy-card {
+  border-color: rgba(255, 255, 255, 0.20) !important;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 25, 0.92), rgba(4, 5, 8, 0.94)) !important;
+  color: #ffffff !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .mini-label,
+body[data-theme="phantom-rebel"] #section-playdeck .mini-stat-line span,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-stat-grid span {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: #ff0000 !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck .combat-enemy-header strong,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-enemy-header span,
+body[data-theme="phantom-rebel"] #section-playdeck .mini-stat-line strong,
+body[data-theme="phantom-rebel"] #section-playdeck .combat-stat-grid strong {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Phantom Rebel playdeck color lockdown END */
+
+/* Phantom Rebel playdeck scrollbar red START */
+/* Playdeck scrollbars: pure red thumb, black track. */
+
+body[data-theme="phantom-rebel"] #section-playdeck,
+body[data-theme="phantom-rebel"] #section-playdeck * {
+  scrollbar-color: #ff0000 #050507 !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck::-webkit-scrollbar,
+body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck::-webkit-scrollbar-track,
+body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar-track {
+  background: #050507 !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 0 !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck::-webkit-scrollbar-thumb,
+body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar-thumb {
+  background: #ff0000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+  border-radius: 0 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 8px rgba(255, 0, 0, 0.20) !important;
+}
+
+body[data-theme="phantom-rebel"] #section-playdeck::-webkit-scrollbar-corner,
+body[data-theme="phantom-rebel"] #section-playdeck *::-webkit-scrollbar-corner {
+  background: #050507 !important;
+  border-radius: 0 !important;
+}
+
+/* Phantom Rebel playdeck scrollbar red END */

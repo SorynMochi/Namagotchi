@@ -1805,10 +1805,13 @@ function createCombatLogRow(entry) {
     const tag = document.createElement("span");
     tag.className = "combat-log-tag";
 
+    const label = document.createElement("span");
+    label.className = "combat-log-empty-label";
+
     const text = document.createElement("span");
     text.className = "combat-log-empty";
 
-    row.append(tag, " ", text);
+    row.append(tag, " ", label, " ", text);
     return row;
   }
 
@@ -1844,7 +1847,8 @@ function updateCombatLogRow(row, entry) {
   if (entry.empty) {
     setClassNameIfChanged(row, "");
     setTextIfChanged(row.querySelector(".combat-log-tag"), "[000]");
-    setTextIfChanged(row.querySelector(".combat-log-empty"), "[LOG] No combat logs yet.");
+    setTextIfChanged(row.querySelector(".combat-log-empty-label"), "[LOG]");
+    setTextIfChanged(row.querySelector(".combat-log-empty"), "No combat logs yet.");
     return;
   }
 
