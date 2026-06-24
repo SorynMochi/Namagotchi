@@ -1315,3 +1315,35 @@ body[data-theme="rainy-mood"] #wardrobe-item-modal .icon-button {
 }
 
 /* Rainy Mood modal reskin END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="rainy-mood"] {
+  --top-player-tick-bg:
+    linear-gradient(180deg, rgba(154,195,224,0.16), rgba(5,16,30,0.54)),
+    linear-gradient(90deg, rgba(23,54,82,0.54), rgba(5,16,30,0.62));
+  --top-player-tick-fill: linear-gradient(90deg, #f0c575, #68a9c6, #244d71);
+  --top-player-tick-border: rgba(154, 195, 224, 0.38);
+  --top-player-tick-text: #f5fbff;
+  --top-player-tick-shadow: 0 10px 22px rgba(2,8,18,0.30), inset 0 1px 0 rgba(226,244,255,0.18);
+}
+
+body[data-theme="rainy-mood"] {
+  --top-user-label-color: #c8d9e4;
+  --top-user-value-color: #f5fbff;
+}
+
+body[data-theme="rainy-mood"] .top-stats-panel .stat-group.compact .stat-lines strong,
+body[data-theme="rainy-mood"] .top-stats-panel .stat-group.compact .compact-grid-lines strong,
+body[data-theme="rainy-mood"] .top-user-info .top-user-meter-list .metric-value,
+body[data-theme="rainy-mood"] .top-user-info #current-action-label .metric-value,
+body[data-theme="rainy-mood"] .top-user-info #playdeck-hp-label .metric-value,
+body[data-theme="rainy-mood"] .top-user-info #playdeck-xp-label .metric-value,
+body[data-theme="rainy-mood"] .top-user-info #nami-xp-label .metric-value {
+  color: #d8ebf2 !important;
+  -webkit-text-fill-color: #d8ebf2 !important;
+  text-shadow: 0 1px 2px rgba(4, 13, 24, 0.74) !important;
+}
+
+/* Migrated top rail theme overrides END */

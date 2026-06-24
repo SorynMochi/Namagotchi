@@ -2681,3 +2681,18 @@ body[data-theme="tokyo-night"] #wardrobe-item-modal .wardrobe-comparison-row.neg
 }
 
 /* Theme wardrobe modal skin END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="tokyo-night"] {
+  --top-player-tick-bg:
+    radial-gradient(circle at 88% 0%, rgba(0,229,255,0.20), transparent 5rem),
+    linear-gradient(90deg, rgba(16,18,52,0.94), rgba(5,8,20,0.98));
+  --top-player-tick-fill: linear-gradient(90deg, #ff3ccf, #00e5ff, #4b5bff);
+  --top-player-tick-border: rgba(0, 229, 255, 0.48);
+  --top-player-tick-text: #f4fbff;
+  --top-player-tick-shadow: 0 0 18px rgba(0,229,255,0.18), 0 8px 18px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.16);
+}
+
+/* Migrated top rail theme overrides END */

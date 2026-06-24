@@ -1921,3 +1921,80 @@ body[data-theme="cafe"] #wardrobe-item-modal .wardrobe-comparison-row.negative s
 }
 
 /* Theme wardrobe modal skin END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="cafe"] {
+  --top-player-tick-bg:
+    linear-gradient(180deg, rgba(255,248,238,0.16), rgba(68,36,22,0.76)),
+    linear-gradient(90deg, rgba(143,84,54,0.92), rgba(68,36,22,0.94));
+  --top-player-tick-fill: linear-gradient(90deg, #f3d2b8, #d5914c, #6e3c22);
+  --top-player-tick-border: rgba(213, 145, 76, 0.46);
+  --top-player-tick-text: #fff3e6;
+}
+
+body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-name {
+  color: var(--muted) !important;
+}
+
+body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-value {
+  color: var(--text) !important;
+}
+
+body[data-theme="cafe"] .top-user-info {
+  --top-user-label-color: #f3d2b8;
+  --top-user-value-color: #fff8ef;
+}
+
+body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-name {
+  color: #f3d2b8 !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.72) !important;
+}
+
+body[data-theme="cafe"] .top-user-info .top-user-meter-list .metric-value {
+  color: #fff8ef !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.78) !important;
+}
+
+body[data-theme="cafe"] {
+  --top-rail-header-color: #fff8ef;
+  --top-rail-header-divider-color: rgba(243, 210, 184, 0.34);
+  --top-rail-compact-label-color: #f3d2b8;
+  --top-rail-compact-value-color: #fff8ef;
+}
+
+body[data-theme="cafe"] .top-stats-compact > .stat-group.compact > h2,
+body[data-theme="cafe"] .top-user-info .top-player-name-button,
+body[data-theme="cafe"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="cafe"] .top-user-info .top-player-name-button.top-player-tick-pill * {
+  color: #fff8ef !important;
+  -webkit-text-fill-color: #fff8ef !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.82) !important;
+}
+
+body[data-theme="cafe"] .top-stats-panel .stat-group.compact .stat-lines span,
+body[data-theme="cafe"] .top-stats-panel .stat-group.compact .compact-grid-lines span,
+body[data-theme="cafe"] .top-stats-panel .top-user-info .top-user-meter-list .metric-name,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #current-action-label .metric-name,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-name,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-name,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #nami-xp-label .metric-name {
+  color: #f3d2b8 !important;
+  -webkit-text-fill-color: #f3d2b8 !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.72) !important;
+}
+
+body[data-theme="cafe"] .top-stats-panel .stat-group.compact .stat-lines strong,
+body[data-theme="cafe"] .top-stats-panel .stat-group.compact .compact-grid-lines strong,
+body[data-theme="cafe"] .top-stats-panel .top-user-info .top-user-meter-list .metric-value,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #current-action-label .metric-value,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-value,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-value,
+body[data-theme="cafe"] .top-stats-panel .top-user-info #nami-xp-label .metric-value {
+  color: #fff8ef !important;
+  -webkit-text-fill-color: #fff8ef !important;
+  text-shadow: 0 1px 0 rgba(44, 22, 14, 0.78) !important;
+}
+
+/* Migrated top rail theme overrides END */

@@ -1873,3 +1873,116 @@ body[data-theme="woodland-moon"] .main-nav.menu-grid .nav-item.active svg * {
 }
 
 /* Woodland Moon firefly buff text END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="woodland-moon"] {
+  --top-player-tick-bg:
+    radial-gradient(circle at 18% 0%, rgba(224, 235, 255, 0.24), transparent 5rem),
+    linear-gradient(180deg, rgba(31, 53, 79, 0.84), rgba(13, 23, 37, 0.88));
+  --top-player-tick-fill: linear-gradient(90deg, #dfe8ff, #9ebee4, #4892ff);
+  --top-player-tick-border: rgba(190, 212, 245, 0.38);
+  --top-player-tick-text: #eef4ff;
+  --top-player-tick-shadow: 0 10px 22px rgba(7, 12, 20, 0.30), inset 0 1px 0 rgba(240, 246, 255, 0.18);
+
+  --top-user-label-color: #c0d0e2;
+  --top-user-value-color: #eef4ff;
+}
+
+body[data-theme="woodland-moon"] .top-stats-panel .panel-title,
+body[data-theme="woodland-moon"] .top-stats-panel .top-panel-toggle,
+body[data-theme="woodland-moon"] .top-stats-panel .top-panel-toggle *,
+body[data-theme="woodland-moon"] .top-stats-compact > .stat-group.compact > h2,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button #top-player-name {
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
+  text-shadow:
+    0 1px 1px rgba(18, 12, 8, 0.78),
+    0 0 10px rgba(216, 234, 134, 0.12) !important;
+}
+
+body[data-theme="woodland-moon"] .top-stats-panel .stat-group.compact .stat-lines span,
+body[data-theme="woodland-moon"] .top-stats-panel .stat-group.compact .compact-grid-lines span,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info .top-user-meter-list .metric-name,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #current-action-label .metric-name,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-name,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-name,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #nami-xp-label .metric-name {
+  color: #c0d0e2 !important;
+  -webkit-text-fill-color: #c0d0e2 !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.68) !important;
+}
+
+body[data-theme="woodland-moon"] .top-stats-panel .stat-group.compact .stat-lines strong,
+body[data-theme="woodland-moon"] .top-stats-panel .stat-group.compact .compact-grid-lines strong,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info .top-user-meter-list .metric-value,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #current-action-label .metric-value,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-value,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-value,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #nami-xp-label .metric-value {
+  color: #eef4ff !important;
+  -webkit-text-fill-color: #eef4ff !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.76) !important;
+}
+
+body[data-theme="woodland-moon"] {
+  --top-player-tick-fill: linear-gradient(90deg, #2b4f86 0%, #3a649b 42%, #547db2 100%) !important;
+  --top-user-label-color: #d8ea86 !important;
+  --top-user-value-color: #eef4ff !important;
+}
+
+body[data-theme="woodland-moon"] .top-stats-panel .panel-title,
+body[data-theme="woodland-moon"] .top-stats-panel .top-panel-toggle,
+body[data-theme="woodland-moon"] .top-stats-panel .top-panel-toggle *,
+body[data-theme="woodland-moon"] .top-stats-compact > .stat-group.compact > h2 {
+  color: #4892ff !important;
+  -webkit-text-fill-color: #4892ff !important;
+  text-shadow:
+    0 1px 1px rgba(8, 14, 22, 0.78),
+    0 0 10px rgba(72, 146, 255, 0.16) !important;
+}
+
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="woodland-moon"] .top-user-info .top-player-name-button #top-player-name {
+  color: #d8ea86 !important;
+  -webkit-text-fill-color: #d8ea86 !important;
+  text-shadow:
+    0 1px 1px rgba(18, 12, 8, 0.80),
+    0 0 10px rgba(216, 234, 134, 0.18) !important;
+}
+
+body[data-theme="woodland-moon"] .top-stats-panel .stat-group.compact .stat-lines span,
+body[data-theme="woodland-moon"] .top-stats-panel .stat-group.compact .compact-grid-lines span,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info .top-user-meter-list .metric-name,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #current-action-label .metric-name,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-name,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-name,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #nami-xp-label .metric-name {
+  color: #d8ea86 !important;
+  -webkit-text-fill-color: #d8ea86 !important;
+  text-shadow:
+    0 1px 1px rgba(18, 12, 8, 0.72),
+    0 0 8px rgba(216, 234, 134, 0.12) !important;
+}
+
+body[data-theme="woodland-moon"] .top-stats-panel .stat-group.compact .stat-lines strong,
+body[data-theme="woodland-moon"] .top-stats-panel .stat-group.compact .compact-grid-lines strong,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info .top-user-meter-list .metric-value,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #current-action-label .metric-value,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-value,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-value,
+body[data-theme="woodland-moon"] .top-stats-panel .top-user-info #nami-xp-label .metric-value {
+  color: #eef4ff !important;
+  -webkit-text-fill-color: #eef4ff !important;
+  text-shadow: 0 1px 1px rgba(8, 14, 22, 0.76) !important;
+}
+
+/* Migrated top rail theme overrides END */

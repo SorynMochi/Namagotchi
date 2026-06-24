@@ -1075,3 +1075,77 @@ body[data-theme="woodland-sun"] .game-shell {
   }
 }
 /* Woodland Sun canvas light effects END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="woodland-sun"] {
+  --top-player-tick-bg:
+    radial-gradient(circle at 18% 0%, rgba(255, 241, 170, 0.34), transparent 5rem),
+    linear-gradient(180deg, rgba(87, 128, 54, 0.76), rgba(38, 76, 39, 0.82));
+  --top-player-tick-fill: linear-gradient(90deg, #f4d779, #9fd26a, #3f8a49);
+  --top-player-tick-border: rgba(216, 235, 145, 0.46);
+  --top-player-tick-text: #fffbe8;
+  --top-player-tick-shadow: 0 10px 22px rgba(22, 42, 18, 0.28), inset 0 1px 0 rgba(255, 255, 220, 0.22);
+
+  --top-user-label-color: #d8eec6;
+  --top-user-value-color: #fffbe8;
+}
+
+body[data-theme="woodland-sun"] .top-stats-compact > .stat-group.compact > h2,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button.top-player-tick-pill * {
+  color: #fffbe8 !important;
+  -webkit-text-fill-color: #fffbe8 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.76) !important;
+}
+
+body[data-theme="woodland-sun"] .top-stats-panel .stat-group.compact .stat-lines span,
+body[data-theme="woodland-sun"] .top-stats-panel .stat-group.compact .compact-grid-lines span,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info .top-user-meter-list .metric-name,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #current-action-label .metric-name,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-name,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-name,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #nami-xp-label .metric-name {
+  color: #d8eec6 !important;
+  -webkit-text-fill-color: #d8eec6 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.64) !important;
+}
+
+body[data-theme="woodland-sun"] .top-stats-panel .stat-group.compact .stat-lines strong,
+body[data-theme="woodland-sun"] .top-stats-panel .stat-group.compact .compact-grid-lines strong,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info .top-user-meter-list .metric-value,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #current-action-label .metric-value,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #playdeck-hp-label .metric-value,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #playdeck-xp-label .metric-value,
+body[data-theme="woodland-sun"] .top-stats-panel .top-user-info #nami-xp-label .metric-value {
+  color: #fffbe8 !important;
+  -webkit-text-fill-color: #fffbe8 !important;
+  text-shadow: 0 1px 1px rgba(19, 39, 16, 0.72) !important;
+}
+
+body[data-theme="woodland-sun"] .top-stats-panel .panel-title,
+body[data-theme="woodland-sun"] .top-stats-panel .top-panel-toggle,
+body[data-theme="woodland-sun"] .top-stats-panel .top-panel-toggle *,
+body[data-theme="woodland-sun"] .top-stats-compact > .stat-group.compact > h2 {
+  color: #f4d779 !important;
+  -webkit-text-fill-color: #f4d779 !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.72),
+    0 0 10px rgba(244, 215, 121, 0.12) !important;
+}
+
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="woodland-sun"] .top-user-info .top-player-name-button #top-player-name {
+  color: #f4d779 !important;
+  -webkit-text-fill-color: #f4d779 !important;
+  text-shadow:
+    0 1px 1px rgba(41, 24, 10, 0.76),
+    0 0 10px rgba(244, 215, 121, 0.14) !important;
+}
+
+/* Migrated top rail theme overrides END */

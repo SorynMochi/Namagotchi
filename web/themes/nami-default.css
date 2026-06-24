@@ -82,3 +82,17 @@ body[data-theme="nami-default"] #wardrobe-item-modal .wardrobe-comparison-row.ne
 }
 
 /* Theme wardrobe modal skin END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="nami-default"] {
+  --top-player-tick-bg:
+    linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08)),
+    linear-gradient(90deg, rgba(255,140,204,0.38), rgba(73,199,255,0.24));
+  --top-player-tick-fill: linear-gradient(90deg, #ffe1f2, #98ddff, #ff8ccc);
+  --top-player-tick-border: rgba(255, 215, 240, 0.52);
+  --top-player-tick-text: #fff7fb;
+}
+
+/* Migrated top rail theme overrides END */

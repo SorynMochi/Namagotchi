@@ -670,3 +670,17 @@ body[data-theme="sakura-dark"] #wardrobe-item-modal .wardrobe-comparison-row.neg
 }
 
 /* Theme wardrobe modal skin END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="sakura-dark"] {
+  --top-player-tick-bg:
+    linear-gradient(180deg, rgba(255,183,213,0.18), rgba(28,16,38,0.78)),
+    linear-gradient(90deg, rgba(88,36,68,0.88), rgba(26,16,38,0.94));
+  --top-player-tick-fill: linear-gradient(90deg, #ffd7e9, #ff9fc6, #6d2a59);
+  --top-player-tick-border: rgba(255, 198, 225, 0.42);
+  --top-player-tick-text: #fff4fa;
+}
+
+/* Migrated top rail theme overrides END */

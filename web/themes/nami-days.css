@@ -2469,3 +2469,46 @@ body[data-theme="nami-days"] #wardrobe-item-modal .wardrobe-comparison-row.negat
 }
 
 /* Theme wardrobe modal skin END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="nami-days"] {
+  --top-rail-compact-label-color: #74465c;
+  --top-rail-compact-value-color: #3f1f35;
+}
+
+body[data-theme="nami-days"] {
+  --top-rail-compact-label-color: #74465c;
+  --top-rail-compact-value-color: #3f1f35;
+}
+
+body[data-theme="nami-days"] {
+  --top-player-tick-shadow: none;
+}
+
+body[data-theme="nami-days"] .top-player-name-button.top-player-tick-pill {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .top-player-name-button.top-player-tick-pill::before {
+  box-shadow: none !important;
+}
+
+body[data-theme="nami-days"] .top-player-name-button.top-player-tick-pill::after {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 62%) !important;
+}
+
+body[data-theme="nami-days"] {
+  --top-rail-header-color: #ff2aa3;
+  --top-rail-header-divider-color: rgba(57, 174, 202, 0.20);
+}
+
+body[data-theme="nami-days"] {
+  --top-rail-header-color: #ff2aa3;
+  --top-rail-header-divider-color: rgba(57, 174, 202, 0.20);
+}
+
+/* Migrated top rail theme overrides END */

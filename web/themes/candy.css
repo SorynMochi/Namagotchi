@@ -1901,3 +1901,18 @@ body[data-theme="candy"] #wardrobe-item-modal .wardrobe-comparison-row.negative 
 }
 
 /* Theme wardrobe modal skin END */
+
+/* Migrated top rail theme overrides START */
+/* Theme-specific top rail CSS migrated from web/top-rail.css. */
+
+body[data-theme="candy"] {
+  --top-player-tick-bg:
+    linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,226,250,0.62)),
+    linear-gradient(90deg, rgba(255,188,232,0.94), rgba(157,224,255,0.86), rgba(255,226,150,0.86));
+  --top-player-tick-fill: linear-gradient(90deg, #ff7fc8, #8ddbff, #ffe287);
+  --top-player-tick-border: rgba(255, 92, 191, 0.38);
+  --top-player-tick-text: #432047;
+  --top-player-tick-shadow: 0 8px 18px rgba(91,54,118,0.14), inset 0 1px 0 rgba(255,255,255,0.82);
+}
+
+/* Migrated top rail theme overrides END */
