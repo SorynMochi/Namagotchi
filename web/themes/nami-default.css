@@ -121,3 +121,23 @@ body[data-theme="nami-default"] {
 }
 
 /* Migrated dropdown theme overrides END */
+
+/* Top rail color correction START */
+/* Late per-theme top rail color repair after top-rail.css migration. */
+
+body[data-theme="nami-default"] #top-stats-body > section > h2,
+body[data-theme="nami-default"] .top-stats-compact > .stat-group.compact > h2 {
+  color: #6e36e0 !important;
+  -webkit-text-fill-color: #6e36e0 !important;
+}
+
+body[data-theme="nami-default"] .top-user-info .top-player-name-button,
+body[data-theme="nami-default"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="nami-default"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="nami-default"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="nami-default"] .top-user-info .top-player-name-button #top-player-name {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Top rail color correction END */

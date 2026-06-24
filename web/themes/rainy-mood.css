@@ -1371,3 +1371,14 @@ body[data-theme="rainy-mood"] {
 }
 
 /* Migrated dropdown theme overrides END */
+
+/* Top rail color correction START */
+/* Late per-theme top rail color repair after top-rail.css migration. */
+
+body[data-theme="rainy-mood"] #top-stats-body > section > h2,
+body[data-theme="rainy-mood"] .top-stats-compact > .stat-group.compact > h2 {
+  color: #d8ebf2 !important;
+  -webkit-text-fill-color: #d8ebf2 !important;
+}
+
+/* Top rail color correction END */

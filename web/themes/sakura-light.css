@@ -2237,3 +2237,17 @@ body[data-theme="sakura-light"] {
 }
 
 /* Migrated dropdown theme overrides END */
+
+/* Top rail color correction START */
+/* Late per-theme top rail color repair after top-rail.css migration. */
+
+body[data-theme="sakura-light"] .top-user-info .top-player-name-button,
+body[data-theme="sakura-light"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="sakura-light"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="sakura-light"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="sakura-light"] .top-user-info .top-player-name-button #top-player-name {
+  color: #d74d8d !important;
+  -webkit-text-fill-color: #d74d8d !important;
+}
+
+/* Top rail color correction END */

@@ -2722,3 +2722,17 @@ body[data-theme="tokyo-night"] {
 }
 
 /* Migrated dropdown theme overrides END */
+
+/* Top rail color correction START */
+/* Late per-theme top rail color repair after top-rail.css migration. */
+
+body[data-theme="tokyo-night"] .top-user-info .top-player-name-button,
+body[data-theme="tokyo-night"] .top-user-info .top-player-name-button.top-player-tick-pill,
+body[data-theme="tokyo-night"] .top-user-info .top-player-name-button.top-player-tick-pill *,
+body[data-theme="tokyo-night"] .top-user-info .top-player-name-button .top-player-name,
+body[data-theme="tokyo-night"] .top-user-info .top-player-name-button #top-player-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Top rail color correction END */
