@@ -100,6 +100,7 @@ const railToggleButtons = document.querySelectorAll("[data-rail-toggle]");
 const gameShell = document.querySelector(".game-shell");
 const themeStylesheet = document.querySelector("#theme-stylesheet");
 const themeSelect = document.querySelector("#theme-select");
+const menuLogo = document.querySelector(".menu-logo");
 const authLanding = document.querySelector("#auth-landing");
 const authPrelandingCard = document.querySelector("#auth-prelanding-card");
 const authLoginCard = document.querySelector("#auth-login-card");
@@ -148,6 +149,17 @@ const THEME_FILES = {
   "rainy-mood": "/themes/rainy-mood.css",
 };
 
+const DEFAULT_MENU_LOGO = {
+  src: "/images/namigotchi_logo.webp",
+  alt: "Namigotchi Idle",
+};
+
+const THEME_MENU_LOGOS = {
+  "phantom-rebel": {
+    src: "/images/phantom-rebel-logo.png",
+    alt: "Phantom Rebel",
+  },
+};
 let activeWardrobeModalItemId = 0;
 let activeWardrobeModalCompareSlot = "";
 let activeWardrobeModalDetail = null;
@@ -225,6 +237,21 @@ async function csrfFetch(input, options = {}) {
 
   return fetch(input, requestOptions);
 }
+function updateThemeMenuLogo(themeKey) {
+  if (!menuLogo) {
+    return;
+  }
+
+  const logoConfig = THEME_MENU_LOGOS[themeKey] || DEFAULT_MENU_LOGO;
+
+  if (menuLogo.getAttribute("src") !== logoConfig.src) {
+    menuLogo.setAttribute("src", logoConfig.src);
+  }
+
+  if (menuLogo.getAttribute("alt") !== logoConfig.alt) {
+    menuLogo.setAttribute("alt", logoConfig.alt);
+  }
+}
 function setTheme(themeKey) {
   const normalizedThemeKey = themeKey === "sakura" ? "sakura-dark" : themeKey;
   const safeThemeKey = Object.hasOwn(THEME_FILES, normalizedThemeKey) ? normalizedThemeKey : "nami-default";
@@ -236,6 +263,8 @@ function setTheme(themeKey) {
   if (document.body) {
     document.body.dataset.theme = safeThemeKey;
   }
+
+  updateThemeMenuLogo(safeThemeKey);
 
   if (themeSelect) {
     themeSelect.value = safeThemeKey;
