@@ -3707,19 +3707,19 @@ function clampChatHeight(height) {
 function submitChatMessage(event) {
   event.preventDefault();
 
-  const text = normalizeChatText(chatInput.value);
+  const text = normalizeChatText(getChatInputValue());
   if (!text) {
     return;
   }
 
   if (currentChatChannel === "system") {
     addChatMessage("System", "System chat is read-only. Tiny velvet rope deployed.", "system");
-    chatInput.value = "";
+    clearChatInput();
     return;
   }
 
   handleChatInput(text);
-  chatInput.value = "";
+  clearChatInput();
 }
 
 function switchChatChannel(channel) {
@@ -3737,15 +3737,15 @@ function switchChatChannel(channel) {
     button.classList.toggle("has-unread", unreadChannels.has(button.dataset.chatChannel));
   });
 
-  chatInput.placeholder = `Message [${CHAT_LABELS[channel]}]...`;
-  chatInput.disabled = channel === "system";
+  setChatInputPlaceholder(`Message [${CHAT_LABELS[channel]}]...`);
+  setChatInputDisabled(channel === "system");
 
   if (channel === "system") {
-    chatInput.placeholder = "System messages are read-only.";
+    setChatInputPlaceholder("System messages are read-only.");
   }
 
-  if (channel === "whispers" && lastWhisperName && !chatInput.value.trim()) {
-    chatInput.value = `/w ${lastWhisperName} `;
+  if (channel === "whispers" && lastWhisperName && !getChatInputValue().trim()) {
+    setChatInputValue(`/w ${lastWhisperName} `);
     setChatCursorToEnd();
   }
 
@@ -4369,13 +4369,97 @@ function positionFloatingElement(element, anchorElement) {
   element.style.top = `${top}px`;
 }
 
+function getChatInputValue() {
+  if (!chatInput) {
+    return "";
+  }
+
+  if (chatInput.isContentEditable || chatInput.getAttribute("contenteditable") !== null) {
+    return chatInput.textContent || "";
+  }
+
+  return chatInput.value || "";
+}
+
+function setChatInputValue(value) {
+  if (!chatInput) {
+    return;
+  }
+
+  const safeValue = Array.from(String(value || "")).slice(0, 255).join("");
+
+  if (chatInput.isContentEditable || chatInput.getAttribute("contenteditable") !== null) {
+    if (chatInput.textContent !== safeValue) {
+      chatInput.textContent = safeValue;
+    }
+  } else if (chatInput.value !== safeValue) {
+    chatInput.value = safeValue;
+  }
+
+  chatInput.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function clearChatInput() {
+  setChatInputValue("");
+}
+
+function setChatInputPlaceholder(value) {
+  if (!chatInput) {
+    return;
+  }
+
+  const safeValue = String(value || "");
+
+  if ("placeholder" in chatInput) {
+    chatInput.placeholder = safeValue;
+  }
+
+  chatInput.dataset.placeholder = safeValue;
+}
+
+function setChatInputDisabled(disabled) {
+  if (!chatInput) {
+    return;
+  }
+
+  if ("disabled" in chatInput) {
+    chatInput.disabled = disabled;
+  }
+
+  if (chatInput.getAttribute("contenteditable") !== null) {
+    chatInput.setAttribute("contenteditable", disabled ? "false" : "true");
+  }
+
+  chatInput.setAttribute("aria-disabled", String(disabled));
+  chatInput.classList.toggle("is-disabled", disabled);
+}
+
 function insertIntoChatInput(text) {
-  chatInput.value = `${chatInput.value}${text}`;
-  chatInput.focus();
+  setChatInputValue(`${getChatInputValue()}${text}`);
+  chatInput?.focus();
   setChatCursorToEnd();
 }
 
 function setChatCursorToEnd() {
+  if (!chatInput) {
+    return;
+  }
+
+  if (chatInput.isContentEditable || chatInput.getAttribute("contenteditable") !== null) {
+    const selection = window.getSelection?.();
+
+    if (!selection) {
+      return;
+    }
+
+    const range = document.createRange();
+    range.selectNodeContents(chatInput);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    return;
+  }
+
   const end = chatInput.value.length;
   chatInput.setSelectionRange(end, end);
 }
@@ -4657,9 +4741,7 @@ emojiPicker.style.setProperty("--emoji-picker-y", "-9999px");
 }
 
 function addEmojiToChat(emoji) {
-  const currentValue = chatInput.value;
-  chatInput.value = Array.from(`${currentValue}${emoji}`).slice(0, 255).join("");
-  chatInput.focus();
+  insertIntoChatInput(emoji);
 
   emojiUsage[emoji] = (emojiUsage[emoji] ?? 0) + 1;
   saveEmojiUsage();
