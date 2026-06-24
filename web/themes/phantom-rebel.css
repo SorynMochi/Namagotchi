@@ -2093,3 +2093,67 @@ body[data-theme="phantom-rebel"] .chat-input[data-placeholder].is-empty::before 
 }
 
 /* Phantom Rebel chat placeholder grey END */
+
+/* Phantom Rebel hidden chat repair START */
+/* Hidden chat must show only the tiny handle + Show Chat button, never channel tabs. */
+
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden {
+  grid-template-rows: 6px 40px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  max-height: 46px !important;
+  overflow: hidden !important;
+}
+
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden .chat-tabs,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden .chat-tabs,
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden #chat-tabs,
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden .chat-log,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden .chat-log,
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden #chat-log {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden .chat-form,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden .chat-form {
+  height: 40px !important;
+  min-height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  padding: 4px 10px 7px !important;
+  border-top: 0 !important;
+  background: rgba(0, 0, 0, 0.10) !important;
+}
+
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden .emoji-wrapper,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden .emoji-wrapper,
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden #chat-input,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden #chat-input,
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden .chat-input,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden .chat-input,
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden .chat-form button[type="submit"],
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden .chat-form button[type="submit"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden #chat-toggle-button,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden #chat-toggle-button,
+body[data-theme="phantom-rebel"] #chat-panel.chat-hidden .chat-toggle-button,
+body[data-theme="phantom-rebel"] .chat-panel.chat-hidden .chat-toggle-button {
+  display: inline-flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  margin-left: auto !important;
+}
+
+/* Phantom Rebel hidden chat repair END */
