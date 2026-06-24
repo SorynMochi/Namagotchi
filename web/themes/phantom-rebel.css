@@ -2079,3 +2079,17 @@ body[data-theme="phantom-rebel"] > .emoji-picker-floating::-webkit-scrollbar-tra
 }
 
 /* Phantom Rebel emoji picker polish END */
+
+/* Phantom Rebel chat placeholder grey START */
+/* Chat input placeholder: grey, not pink. */
+
+body[data-theme="phantom-rebel"] #chat-input[data-placeholder]:empty::before,
+body[data-theme="phantom-rebel"] .chat-input[data-placeholder]:empty::before,
+body[data-theme="phantom-rebel"] #chat-input[data-placeholder].is-empty::before,
+body[data-theme="phantom-rebel"] .chat-input[data-placeholder].is-empty::before {
+  color: rgba(190, 194, 202, 0.82) !important;
+  -webkit-text-fill-color: rgba(190, 194, 202, 0.82) !important;
+  text-shadow: none !important;
+}
+
+/* Phantom Rebel chat placeholder grey END */
