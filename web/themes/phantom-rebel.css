@@ -1889,31 +1889,193 @@ body[data-theme="phantom-rebel"] .left-rail [data-server-time] * {
 /* Phantom Rebel server clock tiny text END */
 
 /* Phantom Rebel chat resize handle START */
-/* Chat resize handle: white/red 50/50 split parallelogram leaning right. */
+/* Chat resize handle: compact white/red 50/50 split parallelogram leaning right. */
 
 body[data-theme="phantom-rebel"] #chat-panel .chat-resize-handle,
 body[data-theme="phantom-rebel"] #chat-resize-handle {
-  width: min(220px, calc(100% - 28px)) !important;
-  height: 12px !important;
-  margin: 8px auto 7px !important;
-  border: 1px solid rgba(255, 255, 255, 0.38) !important;
+  width: 96px !important;
+  height: 5px !important;
+  min-height: 0 !important;
+  margin: 4px auto 3px !important;
+  padding: 0 !important;
+  border: 0 !important;
   border-radius: 0 !important;
-  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%) !important;
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%) !important;
   background:
     linear-gradient(135deg, #ffffff 0%, #ffffff 49.85%, #ff0000 49.85%, #ff0000 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 0 10px rgba(255, 0, 0, 0.16),
-    0 5px 12px rgba(0, 0, 0, 0.28) !important;
+    0 0 5px rgba(255, 0, 0, 0.18),
+    0 2px 5px rgba(0, 0, 0, 0.24) !important;
   cursor: ns-resize !important;
 }
 
 body[data-theme="phantom-rebel"] #chat-panel .chat-resize-handle:hover,
 body[data-theme="phantom-rebel"] #chat-resize-handle:hover {
-  border-color: rgba(255, 255, 255, 0.58) !important;
+  width: 96px !important;
+  height: 5px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
   background:
     linear-gradient(135deg, #ffffff 0%, #ffffff 49.85%, #ff0000 49.85%, #ff0000 100%) !important;
   filter: brightness(1.08) !important;
 }
 
 /* Phantom Rebel chat resize handle END */
+
+/* Phantom Rebel emoji picker polish START */
+/* Emoji trigger + picker: centered trigger, solid picker modal, transparent emoji buttons. */
+
+body[data-theme="phantom-rebel"] .chat-form .emoji-wrapper {
+  display: flex !important;
+  align-self: stretch !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 30px !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-form .chat-emoji-button,
+body[data-theme="phantom-rebel"] #emoji-button {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  align-self: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.62) !important;
+  border-radius: 0 !important;
+  background: #050507 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+  font-size: 1.08rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  text-shadow: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 0 8px rgba(255, 0, 0, 0.12) !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-form .chat-emoji-button:hover,
+body[data-theme="phantom-rebel"] #emoji-button:hover {
+  border-color: #ff0000 !important;
+  background: #050507 !important;
+}
+
+/* Solid modal shell. */
+body[data-theme="phantom-rebel"] .chat-form .emoji-picker,
+body[data-theme="phantom-rebel"] .emoji-picker-floating,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating {
+  border: 1px solid rgba(255, 255, 255, 0.34) !important;
+  border-radius: 0 !important;
+  background: #050507 !important;
+  background-color: #050507 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.60),
+    0 0 0 1px rgba(255, 0, 0, 0.28),
+    0 0 18px rgba(255, 0, 0, 0.16) !important;
+}
+
+/* Solid internal picker areas so chat text cannot show through between emoji rows. */
+body[data-theme="phantom-rebel"] .chat-form .emoji-picker .emoji-picker-tabs,
+body[data-theme="phantom-rebel"] .emoji-picker-floating .emoji-picker-tabs,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating .emoji-picker-tabs,
+body[data-theme="phantom-rebel"] .chat-form .emoji-picker .emoji-grid,
+body[data-theme="phantom-rebel"] .emoji-picker-floating .emoji-grid,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating .emoji-grid {
+  background: #050507 !important;
+  background-color: #050507 !important;
+  background-image: none !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-form .emoji-picker .emoji-picker-tabs,
+body[data-theme="phantom-rebel"] .emoji-picker-floating .emoji-picker-tabs,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating .emoji-picker-tabs {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Category buttons: inactive black + white border. */
+body[data-theme="phantom-rebel"] .chat-form .emoji-category-tab,
+body[data-theme="phantom-rebel"] .emoji-picker-floating .emoji-category-tab,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating .emoji-category-tab {
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+  border-radius: 0 !important;
+  background: #050507 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-form .emoji-category-tab:hover,
+body[data-theme="phantom-rebel"] .emoji-picker-floating .emoji-category-tab:hover,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating .emoji-category-tab:hover {
+  border-color: #ff0000 !important;
+  background: #050507 !important;
+}
+
+/* Active category: black background + red border. */
+body[data-theme="phantom-rebel"] .chat-form .emoji-category-tab.active,
+body[data-theme="phantom-rebel"] .emoji-picker-floating .emoji-category-tab.active,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating .emoji-category-tab.active {
+  border-color: #ff0000 !important;
+  background: #050507 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 0 10px rgba(255, 0, 0, 0.18) !important;
+}
+
+/* Individual emoji buttons stay transparent, but square. */
+body[data-theme="phantom-rebel"] .chat-form .emoji-picker .emoji-option,
+body[data-theme="phantom-rebel"] .emoji-picker-floating .emoji-option,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating .emoji-option {
+  border: 1px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+body[data-theme="phantom-rebel"] .chat-form .emoji-picker .emoji-option:hover,
+body[data-theme="phantom-rebel"] .emoji-picker-floating .emoji-option:hover,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating .emoji-option:hover {
+  border-color: #ff0000 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Picker scrollbars: red on black, square. */
+body[data-theme="phantom-rebel"] .emoji-picker,
+body[data-theme="phantom-rebel"] .emoji-picker-floating,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating {
+  scrollbar-color: #ff0000 #050507 !important;
+}
+
+body[data-theme="phantom-rebel"] .emoji-picker::-webkit-scrollbar-thumb,
+body[data-theme="phantom-rebel"] .emoji-picker-floating::-webkit-scrollbar-thumb,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating::-webkit-scrollbar-thumb {
+  border-radius: 0 !important;
+  background: #ff0000 !important;
+}
+
+body[data-theme="phantom-rebel"] .emoji-picker::-webkit-scrollbar-track,
+body[data-theme="phantom-rebel"] .emoji-picker-floating::-webkit-scrollbar-track,
+body[data-theme="phantom-rebel"] > .emoji-picker-floating::-webkit-scrollbar-track {
+  border-radius: 0 !important;
+  background: #050507 !important;
+}
+
+/* Phantom Rebel emoji picker polish END */
