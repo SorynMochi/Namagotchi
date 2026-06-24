@@ -1998,3 +1998,26 @@ body[data-theme="cafe"] .top-stats-panel .top-user-info #nami-xp-label .metric-v
 }
 
 /* Migrated top rail theme overrides END */
+
+/* Migrated dropdown theme overrides START */
+/* Theme-specific dropdown/select variables migrated from web/dropdowns.css. */
+
+body[data-theme="cafe"] {
+  --dropdown-bg:
+    radial-gradient(circle at 16% 0%, rgba(255, 248, 238, 0.18), transparent 5rem),
+    linear-gradient(135deg, rgba(122, 74, 50, 0.96), rgba(68, 36, 22, 0.94));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 16% 0%, rgba(255, 248, 238, 0.28), transparent 5.3rem),
+    linear-gradient(135deg, rgba(143, 84, 54, 0.98), rgba(75, 39, 23, 0.96));
+  --dropdown-border: rgba(255, 243, 230, 0.30);
+  --dropdown-border-hover: rgba(213, 145, 76, 0.62);
+  --dropdown-text: #fff3e6;
+  --dropdown-label: #f3d2b8;
+  --dropdown-arrow: #f2c991;
+  --dropdown-accent: #d5914c;
+  --dropdown-focus: rgba(213, 145, 76, 0.48);
+  --dropdown-option-bg: #442416;
+  --dropdown-option-text: #fff3e6;
+}
+
+/* Migrated dropdown theme overrides END */

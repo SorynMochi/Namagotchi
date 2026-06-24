@@ -96,3 +96,28 @@ body[data-theme="nami-default"] {
 }
 
 /* Migrated top rail theme overrides END */
+
+/* Migrated dropdown theme overrides START */
+/* Theme-specific dropdown/select variables migrated from web/dropdowns.css. */
+
+body[data-theme="nami-default"] {
+  --dropdown-bg:
+    radial-gradient(circle at 16% 0%, rgba(255, 140, 204, 0.34), transparent 5rem),
+    linear-gradient(135deg, rgba(255, 140, 204, 0.26), rgba(73, 199, 255, 0.14)),
+    rgba(35, 16, 47, 0.92);
+  --dropdown-bg-hover:
+    radial-gradient(circle at 16% 0%, rgba(255, 140, 204, 0.46), transparent 5.4rem),
+    linear-gradient(135deg, rgba(255, 140, 204, 0.34), rgba(73, 199, 255, 0.20)),
+    rgba(35, 16, 47, 0.95);
+  --dropdown-border: rgba(255, 207, 234, 0.34);
+  --dropdown-border-hover: rgba(152, 221, 255, 0.54);
+  --dropdown-text: #fff6fb;
+  --dropdown-label: #ffd9ef;
+  --dropdown-arrow: #98ddff;
+  --dropdown-accent: #ff8ccc;
+  --dropdown-focus: rgba(255, 140, 204, 0.56);
+  --dropdown-option-bg: #23102f;
+  --dropdown-option-text: #fff6fb;
+}
+
+/* Migrated dropdown theme overrides END */

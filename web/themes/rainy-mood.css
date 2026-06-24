@@ -1347,3 +1347,27 @@ body[data-theme="rainy-mood"] .top-user-info #nami-xp-label .metric-value {
 }
 
 /* Migrated top rail theme overrides END */
+
+/* Migrated dropdown theme overrides START */
+/* Theme-specific dropdown/select variables migrated from web/dropdowns.css. */
+
+body[data-theme="rainy-mood"] {
+  --dropdown-bg:
+    radial-gradient(circle at 15% 0%, rgba(154, 195, 224, 0.12), transparent 5rem),
+    linear-gradient(135deg, rgba(23, 54, 82, 0.46), rgba(5, 16, 30, 0.42));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 15% 0%, rgba(154, 195, 224, 0.18), transparent 5.3rem),
+    linear-gradient(135deg, rgba(28, 67, 102, 0.54), rgba(5, 16, 30, 0.48));
+  --dropdown-border: rgba(154, 195, 224, 0.30);
+  --dropdown-border-hover: rgba(243, 199, 127, 0.42);
+  --dropdown-text: #f5fbff;
+  --dropdown-label: #c8d9e4;
+  --dropdown-arrow: #d6e9f5;
+  --dropdown-accent: #f0c575;
+  --dropdown-focus: rgba(154, 195, 224, 0.42);
+  --dropdown-shadow: 0 14px 30px rgba(2, 8, 18, 0.26), inset 0 1px 0 rgba(226,244,255,0.16);
+  --dropdown-option-bg: #07131f;
+  --dropdown-option-text: #f5fbff;
+}
+
+/* Migrated dropdown theme overrides END */

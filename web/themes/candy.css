@@ -1916,3 +1916,27 @@ body[data-theme="candy"] {
 }
 
 /* Migrated top rail theme overrides END */
+
+/* Migrated dropdown theme overrides START */
+/* Theme-specific dropdown/select variables migrated from web/dropdowns.css. */
+
+body[data-theme="candy"] {
+  --dropdown-bg:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.70), transparent 5rem),
+    linear-gradient(135deg, rgba(255, 188, 232, 0.92), rgba(157, 224, 255, 0.88), rgba(255, 226, 150, 0.88));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.88), transparent 5.2rem),
+    linear-gradient(135deg, rgba(255, 178, 228, 0.98), rgba(141, 219, 255, 0.96), rgba(255, 222, 135, 0.96));
+  --dropdown-border: rgba(119, 65, 128, 0.28);
+  --dropdown-border-hover: rgba(255, 92, 191, 0.50);
+  --dropdown-text: #432047;
+  --dropdown-label: #6c3b76;
+  --dropdown-arrow: #d94cae;
+  --dropdown-accent: #ff5cbf;
+  --dropdown-focus: rgba(255, 92, 191, 0.34);
+  --dropdown-shadow: 0 12px 24px rgba(91, 54, 118, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  --dropdown-option-bg: #fff4fb;
+  --dropdown-option-text: #432047;
+}
+
+/* Migrated dropdown theme overrides END */

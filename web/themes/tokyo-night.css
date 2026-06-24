@@ -2696,3 +2696,29 @@ body[data-theme="tokyo-night"] {
 }
 
 /* Migrated top rail theme overrides END */
+
+/* Migrated dropdown theme overrides START */
+/* Theme-specific dropdown/select variables migrated from web/dropdowns.css. */
+
+body[data-theme="tokyo-night"] {
+  --dropdown-bg:
+    radial-gradient(circle at 18% 0%, rgba(255, 40, 180, 0.24), transparent 5rem),
+    radial-gradient(circle at 92% 10%, rgba(0, 229, 255, 0.22), transparent 5.6rem),
+    linear-gradient(135deg, rgba(18, 18, 48, 0.94), rgba(4, 7, 18, 0.96));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 18% 0%, rgba(255, 40, 180, 0.34), transparent 5.2rem),
+    radial-gradient(circle at 92% 10%, rgba(0, 229, 255, 0.34), transparent 5.8rem),
+    linear-gradient(135deg, rgba(28, 22, 64, 0.98), rgba(5, 8, 20, 0.98));
+  --dropdown-border: rgba(0, 229, 255, 0.34);
+  --dropdown-border-hover: rgba(255, 40, 180, 0.62);
+  --dropdown-text: #f4fbff;
+  --dropdown-label: #9cf2ff;
+  --dropdown-arrow: #ff3ccf;
+  --dropdown-accent: #00e5ff;
+  --dropdown-focus: rgba(0, 229, 255, 0.52);
+  --dropdown-shadow: 0 0 18px rgba(0, 229, 255, 0.16), 0 12px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+  --dropdown-option-bg: #080a18;
+  --dropdown-option-text: #f4fbff;
+}
+
+/* Migrated dropdown theme overrides END */

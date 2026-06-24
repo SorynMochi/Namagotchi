@@ -684,3 +684,26 @@ body[data-theme="sakura-dark"] {
 }
 
 /* Migrated top rail theme overrides END */
+
+/* Migrated dropdown theme overrides START */
+/* Theme-specific dropdown/select variables migrated from web/dropdowns.css. */
+
+body[data-theme="sakura-dark"] {
+  --dropdown-bg:
+    radial-gradient(circle at 18% 0%, rgba(255, 183, 213, 0.30), transparent 5rem),
+    linear-gradient(135deg, rgba(70, 29, 56, 0.94), rgba(26, 16, 38, 0.94));
+  --dropdown-bg-hover:
+    radial-gradient(circle at 18% 0%, rgba(255, 183, 213, 0.44), transparent 5.3rem),
+    linear-gradient(135deg, rgba(88, 36, 68, 0.96), rgba(34, 20, 48, 0.96));
+  --dropdown-border: rgba(255, 198, 225, 0.34);
+  --dropdown-border-hover: rgba(255, 210, 232, 0.62);
+  --dropdown-text: #fff4fa;
+  --dropdown-label: #ffd7e9;
+  --dropdown-arrow: #ffd7e9;
+  --dropdown-accent: #ff9fc6;
+  --dropdown-focus: rgba(255, 159, 198, 0.52);
+  --dropdown-option-bg: #261026;
+  --dropdown-option-text: #fff4fa;
+}
+
+/* Migrated dropdown theme overrides END */
