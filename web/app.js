@@ -1651,7 +1651,7 @@ function renderPlayerStatus(status) {
 
   setTopUserMetricLabel(
     currentActionLabel,
-    "Streak:",
+    "Chain:",
     `${currentStreak.toLocaleString()} / ${maxStreak.toLocaleString()}`
   );
   setWidthIfChanged(tickFill, `${streakPercent}%`);
