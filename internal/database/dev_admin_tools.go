@@ -737,7 +737,7 @@ for update
 
 				if _, err := tx.Exec(ctx, `
 update players
-set level = 0,
+set level = 1,
 total_xp = 0,
 xp_into_level = 0,
 updated_at = now()
@@ -758,7 +758,7 @@ for update
 
 				if _, err := tx.Exec(ctx, `
 update companion_states
-set level = 0,
+set level = 1,
 total_xp = 0,
 xp_into_level = 0,
 last_xp_gained = 0,
@@ -771,7 +771,7 @@ where player_id = $1
 			case "activity":
 				if _, err := tx.Exec(ctx, `
 insert into player_activity_skills (player_id, activity_key, level, total_xp, xp_into_level)
-values ($1, $2, 0, 0, 0)
+values ($1, $2, 1, 0, 0)
 on conflict (player_id, activity_key) do nothing
 `, player.ID, spec.Key); err != nil {
 					return DevResetLevelsResult{}, fmt.Errorf("ensure activity level for %s / %s: %w", player.Name, spec.Label, err)
@@ -789,7 +789,7 @@ for update
 
 				if _, err := tx.Exec(ctx, `
 update player_activity_skills
-set level = 0,
+set level = 1,
 total_xp = 0,
 xp_into_level = 0,
 updated_at = now()
@@ -800,7 +800,7 @@ and activity_key = $2
 				}
 			}
 
-			entry.AfterLevel = 0
+			entry.AfterLevel = 1
 			entry.AfterTotalXP = 0
 			entry.AfterXPIntoLevel = 0
 			playerResult.Resets = append(playerResult.Resets, entry)
