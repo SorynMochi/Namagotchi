@@ -1637,19 +1637,14 @@ const TOP_PLAYER_SLOT_OPTIONS = {
     settingsLabel: "Outfit Score",
     label: "Outfit Score",
     render(status) {
-      return formatTopRailNumber(
-        status?.wardrobe?.outfitScore ??
-        status?.wardrobe?.averageEquippedLevel ??
-        status?.outfitScore ??
-        0
-      );
+      return formatTopRailScore(getOutfitScore(status));
     },
   },
   playtime: {
     settingsLabel: "Playtime",
     label: "Playtime",
-    render() {
-      return formatTopRailPlaytime((Date.now() - TOP_PLAYER_SESSION_STARTED_AT_MS) / 1000);
+    render(status) {
+      return formatTopRailPlaytime(status?.player?.onlineSeconds ?? 0);
     },
   },
   ranking_playdeck: {
@@ -1880,6 +1875,77 @@ function getTotalIngredients(status) {
 
   return Object.values(ingredients).reduce((total, value) => total + Math.max(0, Number(value) || 0), 0);
 }
+
+
+
+/* Top player computed stat helpers START */
+
+function getOutfitScore(status) {
+  const equipment = Array.isArray(status?.playdeck?.equipment)
+    ? status.playdeck.equipment
+    : Array.isArray(status?.wardrobe?.equipment)
+      ? status.wardrobe.equipment
+      : [];
+
+  const slotDefinitions = typeof WARDROBE_EQUIP_SLOT_ORDER !== "undefined" && Array.isArray(WARDROBE_EQUIP_SLOT_ORDER)
+    ? WARDROBE_EQUIP_SLOT_ORDER
+    : [];
+
+  const slotCount = slotDefinitions.length > 0 ? slotDefinitions.length : 8;
+  const powerBySlot = new Map();
+
+  equipment.forEach((slot) => {
+    const slotKey = String(slot?.slotKey || "").toLowerCase();
+
+    if (!slotKey || Number(slot?.itemId ?? 0) <= 0) {
+      return;
+    }
+
+    const powerLevel = Number(
+      slot?.powerLevel ??
+      slot?.itemLevel ??
+      slot?.level ??
+      0
+    );
+
+    powerBySlot.set(slotKey, Number.isFinite(powerLevel) ? Math.max(0, powerLevel) : 0);
+  });
+
+  let totalPower = 0;
+
+  if (slotDefinitions.length > 0) {
+    slotDefinitions.forEach((definition) => {
+      totalPower += powerBySlot.get(String(definition.slotKey || "").toLowerCase()) || 0;
+    });
+  } else {
+    equipment.slice(0, slotCount).forEach((slot) => {
+      if (Number(slot?.itemId ?? 0) <= 0) {
+        return;
+      }
+
+      const powerLevel = Number(slot?.powerLevel ?? slot?.itemLevel ?? slot?.level ?? 0);
+      totalPower += Number.isFinite(powerLevel) ? Math.max(0, powerLevel) : 0;
+    });
+  }
+
+  return totalPower / Math.max(1, slotCount);
+}
+
+function formatTopRailScore(value) {
+  const number = Number(value ?? 0);
+
+  if (!Number.isFinite(number)) {
+    return "0";
+  }
+
+  if (Math.abs(number) >= 1000) {
+    return formatTopRailNumber(number);
+  }
+
+  return trimCompactDecimals(number);
+}
+
+/* Top player computed stat helpers END */
 
 function formatTopRailRank(value) {
   if (value === undefined || value === null || value === "") {
@@ -6346,3 +6412,4 @@ function shareActiveWardrobeItemToChat() {
   chatInput?.focus();
   setChatCursorToEnd();
 }
+

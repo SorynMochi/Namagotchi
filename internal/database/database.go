@@ -51,16 +51,18 @@ type PlayerStatus struct {
 }
 
 type Player struct {
-	ID            int64  `json:"id"`
-	DisplayName   string `json:"displayName"`
-	Level         int    `json:"level"`
-	TotalXP       int64  `json:"totalXp"`
-	XPIntoLevel   int64  `json:"xpIntoLevel"`
-	XPToNext      int64  `json:"xpToNext"`
-	CurrencyCents int64  `json:"currencyCents"`
-	CreditsCents  int64  `json:"creditsCents"`
-	Nibbles       int64  `json:"nibbles"`
-	NamiCoin      int64  `json:"namiCoin"`
+	ID            int64     `json:"id"`
+	DisplayName   string    `json:"displayName"`
+	CreatedAt     time.Time `json:"createdAt"`
+	OnlineSeconds int64     `json:"onlineSeconds"`
+	Level         int       `json:"level"`
+	TotalXP       int64     `json:"totalXp"`
+	XPIntoLevel   int64     `json:"xpIntoLevel"`
+	XPToNext      int64     `json:"xpToNext"`
+	CurrencyCents int64     `json:"currencyCents"`
+	CreditsCents  int64     `json:"creditsCents"`
+	Nibbles       int64     `json:"nibbles"`
+	NamiCoin      int64     `json:"namiCoin"`
 }
 
 type CompanionState struct {
@@ -4625,6 +4627,38 @@ returning max_streak
 
 	return maxStreak, nil
 }
+
+/* Player online time tracking START */
+
+func (s *Store) TrackPlayerOnlineTime(ctx context.Context, playerID int64) (int64, error) {
+	var onlineSeconds int64
+
+	if err := s.Pool.QueryRow(ctx, `
+update players
+set online_seconds = greatest(0, online_seconds) +
+case
+when last_seen_at is null then 0
+else least(
+30::bigint,
+greatest(
+0::bigint,
+floor(extract(epoch from (now() - last_seen_at)))::bigint
+)
+)
+end,
+last_seen_at = now(),
+updated_at = now()
+where id = $1
+returning online_seconds
+`, playerID).Scan(&onlineSeconds); err != nil {
+		return 0, fmt.Errorf("track player online time: %w", err)
+	}
+
+	return onlineSeconds, nil
+}
+
+/* Player online time tracking END */
+
 func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 	var status PlayerStatus
 
@@ -4638,6 +4672,8 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 			p.currency_cents,
 			p.nibbles,
 			p.namicoin,
+			p.created_at,
+			p.online_seconds,
 			c.companion_name,
 			c.level,
 			c.total_xp,
@@ -4682,6 +4718,8 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 		&status.Player.CurrencyCents,
 		&status.Player.Nibbles,
 		&status.Player.NamiCoin,
+		&status.Player.CreatedAt,
+		&status.Player.OnlineSeconds,
 		&status.Companion.CompanionName,
 		&status.Companion.Level,
 		&status.Companion.TotalXP,
@@ -4718,6 +4756,12 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 		return nil, fmt.Errorf("get dev player status: %w", err)
 	}
 
+	onlineSeconds, err := s.TrackPlayerOnlineTime(ctx, status.Player.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	status.Player.OnlineSeconds = onlineSeconds
 	activities, err := s.GetPlayerActivitySkills(ctx, status.Player.ID)
 	if err != nil {
 		return nil, err
