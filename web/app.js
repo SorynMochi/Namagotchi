@@ -4277,7 +4277,14 @@ async function setGatheringTask(task) {
     }
 
     addChatMessage("System", payload?.message || `Gathering task set to ${labelForTask(safeTask)}.`, "system");
-    await loadPlayerCoreStatus({ sync: false });
+
+    if (payload?.status) {
+      const status = mergePlayerCoreStatus(payload.status);
+      syncTopPlayerOnlineSeconds(status);
+      renderPlayerCoreStatus(status);
+    } else {
+      await loadPlayerCoreStatus({ sync: false });
+    }
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Could not change gathering task. The task clipboard ran away.", "system");

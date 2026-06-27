@@ -34,15 +34,23 @@ type PlayerResourcesStatusResponse struct {
 	Tick       database.TickState       `json:"tick"`
 }
 
-func writePlayerCoreStatus(w http.ResponseWriter, r *http.Request, status *database.PlayerStatus) {
-	writeJSON(w, http.StatusOK, PlayerCoreStatusResponse{
+func playerCoreStatusResponse(status *database.PlayerStatus) *PlayerCoreStatusResponse {
+	if status == nil {
+		return nil
+	}
+
+	return &PlayerCoreStatusResponse{
 		Player:     status.Player,
 		Companion:  status.Companion,
 		Resources:  status.Resources,
 		Activities: status.Activities,
 		Tick:       status.Tick,
 		Wardrobe:   status.Wardrobe,
-	})
+	}
+}
+
+func writePlayerCoreStatus(w http.ResponseWriter, r *http.Request, status *database.PlayerStatus) {
+	writeJSON(w, http.StatusOK, playerCoreStatusResponse(status))
 }
 
 func (s *Server) coreStatusForRequest(r *http.Request) (*database.PlayerStatus, error) {

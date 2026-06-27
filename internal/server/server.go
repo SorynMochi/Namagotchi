@@ -64,6 +64,11 @@ type WardrobeItemActionResponse struct {
 type GatheringRequest struct {
 	Task string `json:"task"`
 }
+type GatheringResponse struct {
+	OK      bool                      `json:"ok"`
+	Message string                    `json:"message"`
+	Status  *PlayerCoreStatusResponse `json:"status,omitempty"`
+}
 
 type CareActionRequest struct {
 	Action string `json:"action"`
@@ -474,9 +479,22 @@ func (s *Server) HandleGatheringTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, MessageResponse{
+	message := "Gathering task updated."
+
+	status, err := s.coreStatusForRequest(r)
+	if err != nil {
+		log.Printf("get player core status after gathering task failed: %v", err)
+		writeJSON(w, http.StatusOK, GatheringResponse{
+			OK:      true,
+			Message: message,
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, GatheringResponse{
 		OK:      true,
-		Message: "Gathering task updated.",
+		Message: message,
+		Status:  playerCoreStatusResponse(status),
 	})
 }
 
