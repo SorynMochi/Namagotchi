@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/SorynMochi/Namagotchi/internal/database"
@@ -15,7 +16,13 @@ import (
 type Server struct {
 	Store     *database.Store
 	StartedAt time.Time
+
+	statusMu               sync.Mutex
+	cachedDatabaseStatus   string
+	cachedDatabaseStatusAt time.Time
 }
+
+const databaseStatusCacheDuration = 15 * time.Second
 
 type StatusResponse struct {
 	Server      string `json:"server"`
@@ -103,6 +110,11 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/dev", s.requireDev(s.HandleDevConsolePage))
 	mux.HandleFunc("/dev/", s.requireDev(s.HandleDevConsolePage))
 	mux.HandleFunc("/api/player/status", s.requireAuth(s.HandlePlayerStatus))
+	mux.HandleFunc("/api/player/core", s.requireAuth(s.HandlePlayerCoreStatus))
+	mux.HandleFunc("/api/player/care/status", s.requireAuth(s.HandlePlayerCareStatus))
+	mux.HandleFunc("/api/player/playdeck/status", s.requireAuth(s.HandlePlayerPlaydeckStatus))
+	mux.HandleFunc("/api/player/wardrobe/status", s.requireAuth(s.HandlePlayerWardrobeStatus))
+	mux.HandleFunc("/api/player/resources/status", s.requireAuth(s.HandlePlayerResourcesStatus))
 	mux.HandleFunc("/api/player/sync", s.requireAuth(s.requireCSRF(s.HandlePlayerSync)))
 	mux.HandleFunc("/api/player/online-tick", s.requireAuth(s.requireCSRF(s.HandlePlayerOnlineTick)))
 	mux.HandleFunc("/api/player/wardrobe/item", s.requireAuth(s.HandleWardrobeItemDetail))
@@ -513,15 +525,31 @@ func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) databaseStatus() string {
+	now := time.Now()
+
+	s.statusMu.Lock()
+	if s.cachedDatabaseStatus != "" && now.Sub(s.cachedDatabaseStatusAt) < databaseStatusCacheDuration {
+		status := s.cachedDatabaseStatus
+		s.statusMu.Unlock()
+		return status
+	}
+	s.statusMu.Unlock()
+
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
+	status := "online"
 	if err := s.Store.Pool.Ping(ctx); err != nil {
 		log.Printf("database status check failed: %v", err)
-		return "offline"
+		status = "offline"
 	}
 
-	return "online"
+	s.statusMu.Lock()
+	s.cachedDatabaseStatus = status
+	s.cachedDatabaseStatusAt = now
+	s.statusMu.Unlock()
+
+	return status
 }
 
 func writeJSON(w http.ResponseWriter, statusCode int, payload any) {
