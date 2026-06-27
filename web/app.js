@@ -127,6 +127,7 @@ const TOP_PLAYER_SLOT_COUNT = 3;
 const TOP_PLAYER_ONLINE_TICK_MS = 10000;
 let topPlayerOnlineTickInFlight = false;
 let topPlayerOnlineSecondsDisplayMax = 0;
+let topPlayerOnlineFinalTickSentAt = 0;
 let playerCoreStatusInFlight = false;
 let playerCareStatusInFlight = false;
 const NAMI_MESSAGES_MIN_REFRESH_MS = 60000;
@@ -250,6 +251,49 @@ async function csrfFetch(input, options = {}) {
 
   return fetch(input, requestOptions);
 }
+function sendFinalPlayerOnlineTick() {
+  const now = Date.now();
+
+  if (now - topPlayerOnlineFinalTickSentAt < 5000) {
+    return;
+  }
+
+  topPlayerOnlineFinalTickSentAt = now;
+
+  const csrfToken = readCookieValue(CSRF_COOKIE_NAME);
+  if (!csrfToken) {
+    return;
+  }
+
+  fetch("/api/player/online-tick", {
+    method: "POST",
+    headers: {
+      [CSRF_HEADER_NAME]: csrfToken,
+    },
+    cache: "no-store",
+    credentials: "same-origin",
+    keepalive: true,
+  }).catch(() => {
+    // The browser may abort final keepalive requests during shutdown.
+  });
+}
+
+function initializeFinalOnlineTickFlush() {
+  if (window.NamigotchiFinalOnlineTickReady) {
+    return;
+  }
+
+  window.NamigotchiFinalOnlineTickReady = true;
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      sendFinalPlayerOnlineTick();
+    }
+  });
+
+  window.addEventListener("pagehide", sendFinalPlayerOnlineTick);
+}
+
 function updateThemeMenuLogo(themeKey) {
   if (!menuLogo) {
     return;
@@ -6232,6 +6276,7 @@ initializeTopPlayerVisibilityRefresh();
 renderTopPlayerSlots(latestPlayerStatus);
 loadStatus();
 initializeAuthGate();
+initializeFinalOnlineTickFlush();
 
 setInterval(updateLiveServerClock, 250);
 setInterval(updateTickProgressBar, 100);
