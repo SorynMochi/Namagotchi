@@ -153,12 +153,14 @@ const devConsoleHTML = `<!doctype html>
 
       <div class="card">
         <h2>Playdeck</h2>
-        <button data-endpoint="/api/dev/reset-playdeck-streak">Reset Streak</button>
+        <button data-endpoint="/api/dev/reset-chain" data-method="POST" data-inputs="playerName">Reset Chain</button>
+        <button data-endpoint="/api/dev/reset-max-chain" data-method="POST" data-inputs="playerName">Reset Max Chain</button>
       </div>
 
       <div class="card">
         <h2>Wardrobe</h2>
         <button data-endpoint="/api/dev/spawn-wardrobe-item">Spawn Random Item</button>
+        <button data-endpoint="/api/dev/clear-wardrobe" data-method="POST" data-inputs="playerName">Clear Wardrobe</button>
       </div>
       <div class="card">
   <h2>Audit</h2>
@@ -263,6 +265,42 @@ const devConsoleHTML = `<!doctype html>
       }
     }
 
+    const DEV_INPUT_LABELS = {
+      playerName: "Player name, exact match only. Use RESETALL to affect every player."
+    };
+
+    function devCommandInputKeys(button) {
+      return String(button.dataset.inputs || "")
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+    }
+
+    function buildDevCommandPayload(button) {
+      const inputKeys = devCommandInputKeys(button);
+
+      if (inputKeys.length === 0) {
+        return null;
+      }
+
+      const payload = {};
+
+      for (const key of inputKeys) {
+        const label = DEV_INPUT_LABELS[key] || key;
+        const value = window.prompt(label);
+
+        if (value === null) {
+          const cancelled = new Error("cancelled");
+          cancelled.name = "DevCommandCancelled";
+          throw cancelled;
+        }
+
+        payload[key] = value.trim();
+      }
+
+      return payload;
+    }
+
     async function runDevCommand(endpoint, button) {
       const originalText = button.textContent;
 
@@ -271,27 +309,41 @@ const devConsoleHTML = `<!doctype html>
 
       try {
         const method = button.dataset.method || "POST";
-        const response = await csrfFetch(endpoint, { method });
+        const requestOptions = { method };
+        const payload = buildDevCommandPayload(button);
+
+        if (payload) {
+          requestOptions.headers = {
+            "Content-Type": "application/json"
+          };
+          requestOptions.body = JSON.stringify(payload);
+        }
+
+        const response = await csrfFetch(endpoint, requestOptions);
         const text = await response.text();
 
-        let payload = text;
+        let responsePayload = text;
         try {
-          payload = text ? JSON.parse(text) : {};
+          responsePayload = text ? JSON.parse(text) : {};
         } catch {
-          payload = text;
+          responsePayload = text;
         }
 
         if (!response.ok) {
           writeLog({
             ok: false,
             status: response.status,
-            response: payload
+            response: responsePayload
           });
           return;
         }
 
-        writeLog(payload);
+        writeLog(responsePayload);
       } catch (error) {
+        if (error && error.name === "DevCommandCancelled") {
+          return;
+        }
+
         writeLog({
           ok: false,
           message: error.message
