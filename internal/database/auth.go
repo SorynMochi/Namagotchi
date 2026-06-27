@@ -338,6 +338,7 @@ values ($1, $2, now() + $3::interval)
 
 func (s *Store) AccountByAuthSession(ctx context.Context, token string) (AuthAccount, error) {
 	var account AuthAccount
+	var shouldTouch bool
 
 	tokenHash := hashAuthToken(strings.TrimSpace(token))
 	if tokenHash == "" {
@@ -345,7 +346,15 @@ func (s *Store) AccountByAuthSession(ctx context.Context, token string) (AuthAcc
 	}
 
 	err := s.Pool.QueryRow(ctx, `
-select a.id, a.display_name, a.email, a.avatar_url, a.created_at, a.updated_at, a.last_login_at
+select
+a.id,
+a.display_name,
+a.email,
+a.avatar_url,
+a.created_at,
+a.updated_at,
+a.last_login_at,
+coalesce(s.last_seen_at <= now() - interval '5 minutes', true)
 from auth_sessions s
 join auth_accounts a on a.id = s.account_id
 where s.session_hash = $1
@@ -358,6 +367,7 @@ and s.expires_at > now()
 		&account.CreatedAt,
 		&account.UpdatedAt,
 		&account.LastLoginAt,
+		&shouldTouch,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return account, ErrAuthInvalidSession
@@ -366,7 +376,8 @@ and s.expires_at > now()
 		return account, err
 	}
 
-	_, _ = s.Pool.Exec(ctx, `
+	if shouldTouch {
+		_, _ = s.Pool.Exec(ctx, `
 update auth_sessions
 set last_seen_at = now()
 where session_hash = $1
@@ -375,6 +386,7 @@ last_seen_at is null
 or last_seen_at <= now() - interval '5 minutes'
 )
 `, tokenHash)
+	}
 
 	return account, nil
 }
