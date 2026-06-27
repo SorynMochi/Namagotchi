@@ -4630,6 +4630,55 @@ returning max_streak
 
 /* Player online time tracking START */
 
+func validPlayerCreatedAt(createdAt time.Time) bool {
+	now := time.Now().UTC()
+
+	return !createdAt.IsZero() &&
+		createdAt.Year() >= 2020 &&
+		!createdAt.After(now.Add(24*time.Hour))
+}
+
+func (s *Store) ResolvePlayerCreatedAt(ctx context.Context, playerID int64, current time.Time) (time.Time, error) {
+	if validPlayerCreatedAt(current) {
+		return current, nil
+	}
+
+	nextCreatedAt := time.Now().UTC()
+
+	if accountID, ok := AuthAccountIDFromContext(ctx); ok {
+		var accountCreatedAt time.Time
+
+		err := s.Pool.QueryRow(ctx, `
+select created_at
+from auth_accounts
+where id = $1
+`, accountID).Scan(&accountCreatedAt)
+
+		if err != nil && err != pgx.ErrNoRows {
+			return time.Time{}, fmt.Errorf("load auth account created_at: %w", err)
+		}
+
+		if validPlayerCreatedAt(accountCreatedAt) {
+			nextCreatedAt = accountCreatedAt
+		}
+	}
+
+	if _, err := s.Pool.Exec(ctx, `
+update players
+set created_at = $2,
+updated_at = now()
+where id = $1
+and (
+created_at < '2020-01-01'::timestamptz
+or created_at > now() + interval '1 day'
+)
+`, playerID, nextCreatedAt); err != nil {
+		return time.Time{}, fmt.Errorf("repair player created_at: %w", err)
+	}
+
+	return nextCreatedAt, nil
+}
+
 func (s *Store) TrackPlayerOnlineTime(ctx context.Context, playerID int64) (int64, error) {
 	var onlineSeconds int64
 
@@ -4756,12 +4805,20 @@ func (s *Store) GetDevPlayerStatus(ctx context.Context) (*PlayerStatus, error) {
 		return nil, fmt.Errorf("get dev player status: %w", err)
 	}
 
+	createdAt, err := s.ResolvePlayerCreatedAt(ctx, status.Player.ID, status.Player.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	status.Player.CreatedAt = createdAt
+
 	onlineSeconds, err := s.TrackPlayerOnlineTime(ctx, status.Player.ID)
 	if err != nil {
 		return nil, err
 	}
 
 	status.Player.OnlineSeconds = onlineSeconds
+
 	activities, err := s.GetPlayerActivitySkills(ctx, status.Player.ID)
 	if err != nil {
 		return nil, err

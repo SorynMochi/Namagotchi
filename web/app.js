@@ -124,7 +124,8 @@ const ACTIVE_SECTION_KEY = "namigotchi_active_section_v1";
 const TOP_PLAYER_SLOT_SETTINGS_KEY = "namigotchi_top_player_slots_v1";
 const TOP_PLAYER_SLOT_DEFAULTS = ["wardrobe", "studio", "treasure"];
 const TOP_PLAYER_SLOT_COUNT = 3;
-const TOP_PLAYER_SESSION_STARTED_AT_MS = Date.now();
+let topPlayerOnlineSecondsBase = 0;
+let topPlayerOnlineSecondsSyncedAtMs = Date.now();
 const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
 const AUTH_LANDING_SKIP_PRELANDING_KEY = "namigotchi_auth_skip_prelanding_once_v1";
 let authLandingMusicAutoplayBlocked = false;
@@ -1486,6 +1487,7 @@ async function loadPlayerStatus() {
 
     const status = await response.json();
     latestPlayerStatus = status;
+    syncTopPlayerOnlineSeconds(status);
     renderPlayerStatus(status);
     await loadNamiMessagesFromServer();
   } catch (error) {
@@ -1644,7 +1646,7 @@ const TOP_PLAYER_SLOT_OPTIONS = {
     settingsLabel: "Playtime",
     label: "Playtime",
     render(status) {
-      return formatTopRailPlaytime(status?.player?.onlineSeconds ?? 0);
+      return formatTopRailPlaytime(getTopPlayerOnlineSeconds(status));
     },
   },
   ranking_playdeck: {
@@ -1846,6 +1848,27 @@ function renderTopPlayerSlots(status) {
   });
 }
 
+function syncTopPlayerOnlineSeconds(status) {
+  const serverSeconds = Number(status?.player?.onlineSeconds ?? 0);
+  const currentDisplayedSeconds = getTopPlayerOnlineSeconds();
+
+  topPlayerOnlineSecondsBase = Math.max(
+    currentDisplayedSeconds,
+    Number.isFinite(serverSeconds) ? Math.max(0, serverSeconds) : 0
+  );
+  topPlayerOnlineSecondsSyncedAtMs = Date.now();
+}
+
+function getTopPlayerOnlineSeconds() {
+  const elapsedSeconds = Math.max(0, Math.floor((Date.now() - topPlayerOnlineSecondsSyncedAtMs) / 1000));
+
+  return Math.max(0, topPlayerOnlineSecondsBase + elapsedSeconds);
+}
+
+function refreshTopPlayerSlotDisplay() {
+  renderTopPlayerSlots(latestPlayerStatus);
+}
+
 function getAccountAgeDays(status) {
   const createdAt =
     status?.player?.createdAt ||
@@ -1854,12 +1877,18 @@ function getAccountAgeDays(status) {
     status?.accountCreatedAt;
 
   const createdAtMs = Date.parse(createdAt);
+  const now = Date.now();
+  const earliestValidCreatedAtMs = Date.parse("2020-01-01T00:00:00Z");
 
-  if (Number.isNaN(createdAtMs)) {
+  if (
+    !Number.isFinite(createdAtMs) ||
+    createdAtMs < earliestValidCreatedAtMs ||
+    createdAtMs > now + 86_400_000
+  ) {
     return 0;
   }
 
-  return Math.max(0, Math.floor((Date.now() - createdAtMs) / 86_400_000));
+  return Math.max(0, Math.floor((now - createdAtMs) / 86_400_000));
 }
 
 function getTotalIngredients(status) {
@@ -1985,7 +2014,7 @@ function formatTopRailPlaytime(totalSeconds) {
   const hours = Math.floor(safeSeconds / 3600);
   const minutes = Math.floor((safeSeconds % 3600) / 60);
 
-  return `${hours}:${pad2(minutes)}`;
+  return `${hours}h${minutes}m`;
 }
 
 function formatTopRailTimer(totalSeconds) {
@@ -5720,13 +5749,8 @@ initializeAuthGate();
 setInterval(updateLiveServerClock, 250);
 setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
-
-
-
-
-
-
-/* Wardrobe item sharing override layer */
+setInterval(loadPlayerStatus, 30000);
+setInterval(refreshTopPlayerSlotDisplay, 15000);/* Wardrobe item sharing override layer */
 
 function submitChatMessage(event) {
   event.preventDefault();
