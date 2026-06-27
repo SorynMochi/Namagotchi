@@ -1733,8 +1733,18 @@ function applyCareActionPayload(payload) {
     care: payload.care || latestPlayerStatus.care || { active: null, queued: [], slots: 3 },
   };
 
-  renderCareStats(latestPlayerStatus.companion);
-  renderPlayerCareStatus(latestPlayerStatus);
+  const hasCoreShell =
+    latestPlayerStatus?.player &&
+    Object.keys(latestPlayerStatus.player).length > 0 &&
+    latestPlayerStatus?.tick &&
+    Object.keys(latestPlayerStatus.tick).length > 0;
+
+  if (hasCoreShell) {
+    renderPlayerCoreStatus(latestPlayerStatus);
+  } else {
+    renderCareStats(latestPlayerStatus.companion);
+    renderPlayerCareStatus(latestPlayerStatus);
+  }
 
   return latestPlayerStatus;
 }
@@ -4320,9 +4330,9 @@ async function performCareAction(buttonAction) {
         kind: Number(payload?.levelUps ?? 0) > 0 ? "level-up" : "normal",
       });
       applyCareActionPayload(payload);
+    } else {
+      await loadPlayerCoreStatus({ sync: false });
     }
-
-    await loadPlayerCoreStatus({ sync: false });
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Could not perform that care action. Nami-chan's tiny schedule book snapped shut.", "system");
