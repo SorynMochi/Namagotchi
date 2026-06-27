@@ -1759,6 +1759,42 @@ async function loadPlayerCareStatus() {
   }
 }
 
+function isMeaningfulCompanionPayload(companion) {
+  if (!companion || typeof companion !== "object") {
+    return false;
+  }
+
+  const textFields = [
+    "name",
+    "status",
+    "moodLabel",
+    "primaryNeed",
+    "caption",
+    "suggestedAction",
+    "lastAction",
+  ];
+
+  if (textFields.some((key) => String(companion[key] || "").trim() !== "")) {
+    return true;
+  }
+
+  const numericFields = [
+    "level",
+    "totalXp",
+    "xpIntoLevel",
+    "xpToNext",
+    "moodScore",
+    "satiety",
+    "connection",
+    "energy",
+    "comfort",
+    "playfulness",
+    "inspiration",
+    "cleanliness",
+  ];
+
+  return numericFields.some((key) => Number(companion[key] || 0) > 0);
+}
 function applyCareActionPayload(payload) {
   if (!payload || typeof payload !== "object") {
     return latestPlayerStatus;
@@ -1777,12 +1813,16 @@ function applyCareActionPayload(payload) {
     };
   }
 
+  const companionPayload = isMeaningfulCompanionPayload(payload.companion)
+    ? payload.companion
+    : null;
+
   latestPlayerStatus = {
     ...latestPlayerStatus,
-    companion: payload.companion
+    companion: companionPayload
       ? {
           ...(latestPlayerStatus.companion || {}),
-          ...payload.companion,
+          ...companionPayload,
         }
       : latestPlayerStatus.companion,
     care: payload.care || latestPlayerStatus.care || { active: null, queued: [], slots: 3 },

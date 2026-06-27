@@ -196,18 +196,18 @@ type CareActionState struct {
 }
 
 type CareActionResult struct {
-	OK           bool           `json:"ok"`
-	Action       string         `json:"action"`
-	ActionName   string         `json:"actionName"`
-	Mode         string         `json:"mode"`
-	XPGained     int64          `json:"xpGained"`
-	LevelUps     int            `json:"levelUps"`
-	CurrentLevel int            `json:"currentLevel"`
-	XPIntoLevel  int64          `json:"xpIntoLevel"`
-	XPToNext     int64          `json:"xpToNext"`
-	Companion    CompanionState `json:"companion"`
-	Care         CareQueueState `json:"care"`
-	Message      string         `json:"message"`
+	OK           bool            `json:"ok"`
+	Action       string          `json:"action"`
+	ActionName   string          `json:"actionName"`
+	Mode         string          `json:"mode"`
+	XPGained     int64           `json:"xpGained"`
+	LevelUps     int             `json:"levelUps"`
+	CurrentLevel int             `json:"currentLevel"`
+	XPIntoLevel  int64           `json:"xpIntoLevel"`
+	XPToNext     int64           `json:"xpToNext"`
+	Companion    *CompanionState `json:"companion,omitempty"`
+	Care         CareQueueState  `json:"care"`
+	Message      string          `json:"message"`
 }
 
 type CareActionRule struct {
@@ -1041,7 +1041,7 @@ func (s *Store) StartOrQueueDevCareAction(ctx context.Context, action string) (*
 		CurrentLevel: resultCompanion.Level,
 		XPIntoLevel:  resultCompanion.XPIntoLevel,
 		XPToNext:     resultCompanion.XPToNext,
-		Companion:    resultCompanion,
+		Companion:    &resultCompanion,
 		Care:         state,
 		Message:      fmt.Sprintf("%s started.", activeAction.ActionName),
 	}, nil
@@ -4328,7 +4328,7 @@ func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareAct
 		CurrentLevel: companion.Level,
 		XPIntoLevel:  companion.XPIntoLevel,
 		XPToNext:     companion.XPToNext,
-		Companion:    companion,
+		Companion:    &companion,
 		Message:      namiMessageText,
 	}, nil
 }
