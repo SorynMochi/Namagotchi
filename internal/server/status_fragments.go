@@ -83,7 +83,7 @@ func (s *Server) HandlePlayerCoreSync(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := s.syncPlayerState(r.Context()); err != nil {
+	if err := s.syncPlayerState(r.Context(), false); err != nil {
 		log.Printf("sync player core state failed: %v", err)
 		writeError(w, http.StatusInternalServerError, "player core sync failed")
 		return

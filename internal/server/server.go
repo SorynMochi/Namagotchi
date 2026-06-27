@@ -224,7 +224,7 @@ func (s *Server) HandlePlayerSync(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := s.syncPlayerState(r.Context()); err != nil {
+	if err := s.syncPlayerState(r.Context(), true); err != nil {
 		log.Printf("sync player state failed: %v", err)
 		writeError(w, http.StatusInternalServerError, "player sync failed")
 		return
@@ -267,8 +267,7 @@ func (s *Server) HandlePlayerOnlineTick(w http.ResponseWriter, r *http.Request) 
 		OnlineSeconds: onlineSeconds,
 	})
 }
-func (s *Server) syncPlayerState(ctx context.Context) error {
-
+func (s *Server) syncPlayerState(ctx context.Context, includePassiveMessages bool) error {
 	if _, err := s.Store.SettleDevTicks(ctx, 0); err != nil {
 		return err
 	}
@@ -281,8 +280,10 @@ func (s *Server) syncPlayerState(ctx context.Context) error {
 		return err
 	}
 
-	if err := s.Store.GenerateDevPassiveNamiMessages(ctx); err != nil {
-		return err
+	if includePassiveMessages {
+		if err := s.Store.GenerateDevPassiveNamiMessages(ctx); err != nil {
+			return err
+		}
 	}
 
 	return nil
