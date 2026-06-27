@@ -14,6 +14,10 @@ const devConsoleHTML = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Namigotchi Dev Console</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -23,9 +27,9 @@ const devConsoleHTML = `<!doctype html>
     }
 
     main {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 32px 18px 48px;
+      padding: 28px 18px 40px;
     }
 
     a {
@@ -33,36 +37,67 @@ const devConsoleHTML = `<!doctype html>
       font-weight: 800;
     }
 
+    h1 {
+      margin: 28px 0 12px;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1.05;
+    }
+
+    p {
+      color: #d9c6e5;
+      line-height: 1.45;
+    }
+
     .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
     }
 
     .card {
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.16);
-      border-radius: 16px;
-      background: #21162e;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .card h2 {
+      display: none;
     }
 
     button {
-      width: 100%;
+      width: auto;
+      min-width: 132px;
+      min-height: 36px;
       border: 0;
       border-radius: 999px;
-      padding: 11px 14px;
+      padding: 8px 14px;
       cursor: pointer;
       background: #ff8fc7;
       color: #1f1022;
+      font-size: 0.88rem;
       font-weight: 900;
+      line-height: 1.1;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+    }
+
+    button:focus-visible {
+      outline: 2px solid rgba(255,255,255,0.75);
+      outline-offset: 2px;
     }
 
     button.danger {
-      background: #ff6b6b;
+      background: #ff8fc7;
+      color: #1f1022;
     }
 
     button.secondary {
+      width: 100%;
       margin-bottom: 18px;
       color: #fcefff;
       background: rgba(255,255,255,0.12);
@@ -70,7 +105,8 @@ const devConsoleHTML = `<!doctype html>
     }
 
     pre {
-      min-height: 220px;
+      min-height: 190px;
+      max-height: 420px;
       margin-top: 18px;
       padding: 14px;
       overflow: auto;
@@ -78,6 +114,22 @@ const devConsoleHTML = `<!doctype html>
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.16);
       background: rgba(0,0,0,0.35);
+    }
+
+    @media (max-width: 560px) {
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      button {
+        width: 100%;
+        min-width: 0;
+      }
+
+      button.secondary {
+        grid-column: 1 / -1;
+      }
     }
   </style>
 </head>
@@ -101,7 +153,7 @@ const devConsoleHTML = `<!doctype html>
 
       <div class="card">
         <h2>Playdeck</h2>
-        <button class="danger" data-endpoint="/api/dev/reset-playdeck-streak">Reset Streak</button>
+        <button data-endpoint="/api/dev/reset-playdeck-streak">Reset Streak</button>
       </div>
 
       <div class="card">
@@ -118,7 +170,7 @@ const devConsoleHTML = `<!doctype html>
       </div>
       <div class="card">
         <h2>Security</h2>
-        <button data-endpoint="/api/dev/security-events" data-method="GET">Refresh Security Events</button>
+        <button data-endpoint="/api/dev/security-events" data-method="GET">Security Logs</button>
       </div>
 
       <div class="card">

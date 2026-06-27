@@ -37,19 +37,24 @@ const devConsoleUnlockHTML = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Unlock Namigotchi Dev Console</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
       display: grid;
       place-items: center;
+      padding: 24px;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #120c18;
       color: #fcefff;
     }
 
     main {
-      width: min(480px, calc(100vw - 32px));
-      padding: 24px;
+      width: min(420px, calc(100vw - 32px));
+      padding: 22px;
       border: 1px solid rgba(255,255,255,0.16);
       border-radius: 18px;
       background: #21162e;
@@ -58,10 +63,13 @@ const devConsoleUnlockHTML = `<!doctype html>
 
     h1 {
       margin: 0 0 10px;
+      font-size: clamp(1.7rem, 5vw, 2.2rem);
+      line-height: 1.05;
     }
 
     p {
       color: #d9c6e5;
+      line-height: 1.45;
     }
 
     label {
@@ -72,13 +80,20 @@ const devConsoleUnlockHTML = `<!doctype html>
     }
 
     input {
+      display: block;
       width: 100%;
-      padding: 12px 14px;
-      border: 1px solid rgba(255,255,255,0.16);
+      max-width: 100%;
+      padding: 11px 13px;
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: 12px;
       background: rgba(0,0,0,0.35);
       color: #fcefff;
       font: inherit;
+    }
+
+    input:focus {
+      outline: 2px solid rgba(255,143,199,0.75);
+      outline-offset: 2px;
     }
 
     button {
@@ -86,7 +101,7 @@ const devConsoleUnlockHTML = `<!doctype html>
       margin-top: 16px;
       border: 0;
       border-radius: 999px;
-      padding: 12px 14px;
+      padding: 11px 14px;
       cursor: pointer;
       background: #ff8fc7;
       color: #1f1022;
