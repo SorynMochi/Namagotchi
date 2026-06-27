@@ -1,8 +1,10 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
+	"time"
 )
 
 const devConsoleHTML = `<!doctype html>
@@ -117,6 +119,11 @@ const devConsoleHTML = `<!doctype html>
       <div class="card">
         <h2>Security</h2>
         <button data-endpoint="/api/dev/security-events" data-method="GET">Refresh Security Events</button>
+      </div>
+
+      <div class="card">
+        <h2>Account</h2>
+        <button data-endpoint="/api/dev/account-age" data-method="GET">Show Account Age</button>
       </div>
     </section>
 
@@ -256,6 +263,54 @@ const devConsoleHTML = `<!doctype html>
 </body>
 </html>`
 
+type DevAccountAgeResponse struct {
+	OK         bool   `json:"ok"`
+	Display    string `json:"display"`
+	ExactAge   string `json:"exactAge"`
+	AgeSeconds int64  `json:"ageSeconds"`
+	CreatedAt  string `json:"createdAt"`
+	Now        string `json:"now"`
+}
+
+func formatExactAccountAge(duration time.Duration) (string, int64) {
+	totalSeconds := int64(duration / time.Second)
+	if totalSeconds < 0 {
+		totalSeconds = 0
+	}
+
+	days := totalSeconds / 86400
+	hours := (totalSeconds % 86400) / 3600
+	minutes := (totalSeconds % 3600) / 60
+	seconds := totalSeconds % 60
+
+	return fmt.Sprintf("%dd%dh%dm%ds", days, hours, minutes, seconds), totalSeconds
+}
+
+func (s *Server) HandleDevAccountAge(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	status, err := s.playerStatusForRequest(r)
+	if err != nil {
+		writeError(w, http.StatusNotFound, "player status not found")
+		return
+	}
+
+	now := time.Now().UTC()
+	createdAt := status.Player.CreatedAt.UTC()
+	exactAge, ageSeconds := formatExactAccountAge(now.Sub(createdAt))
+
+	writeJSON(w, http.StatusOK, DevAccountAgeResponse{
+		OK:         true,
+		Display:    "Account Age: " + exactAge,
+		ExactAge:   exactAge,
+		AgeSeconds: ageSeconds,
+		CreatedAt:  createdAt.Format(time.RFC3339),
+		Now:        now.Format(time.RFC3339),
+	})
+}
 func (s *Server) HandleDevConsolePage(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
