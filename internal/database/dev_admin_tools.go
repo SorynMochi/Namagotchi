@@ -369,46 +369,119 @@ func parseDevAdminAmount(raw string) (int64, bool, error) {
 	return int64(math.Round(expanded)), false, nil
 }
 
-func normalizeDevCurrencyType(raw string, allowAll bool) ([]string, string, error) {
+type devCurrencyAsset struct {
+	Key     string
+	JSONKey string
+	Label   string
+	Kind    string
+}
+
+func devCurrencyAssets() []devCurrencyAsset {
+	return []devCurrencyAsset{
+		{Key: "credits", JSONKey: "credits", Label: "Credits", Kind: "player"},
+		{Key: "nibbles", JSONKey: "nibbles", Label: "Nibbles", Kind: "player"},
+		{Key: "namicoin", JSONKey: "namiCoins", Label: "NamiCoins", Kind: "player"},
+		{Key: "fans", JSONKey: "fans", Label: "Fans", Kind: "resource"},
+		{Key: "memes", JSONKey: "memes", Label: "Memes", Kind: "resource"},
+		{Key: "lost_items", JSONKey: "lostItems", Label: "Lost Items", Kind: "resource"},
+		{Key: "confidence", JSONKey: "confidence", Label: "Confidence", Kind: "resource"},
+		{Key: "receipts", JSONKey: "receipts", Label: "Receipts", Kind: "resource"},
+		{Key: "patterns", JSONKey: "patterns", Label: "Patterns", Kind: "resource"},
+	}
+}
+
+func normalizeDevCurrencyType(raw string, allowAll bool) ([]devCurrencyAsset, string, error) {
 	value := strings.TrimSpace(strings.ToLower(raw))
 	value = strings.ReplaceAll(value, "_", "")
 	value = strings.ReplaceAll(value, "-", "")
 	value = strings.ReplaceAll(value, " ", "")
 
+	allAssets := devCurrencyAssets()
+
 	if allowAll && value == "all" {
-		return []string{"credits", "nibbles", "namicoin"}, "ALL", nil
+		return allAssets, "ALL", nil
 	}
 
-	switch value {
-	case "credit", "credits":
-		return []string{"credits"}, "Credits", nil
-	case "nibble", "nibbles":
-		return []string{"nibbles"}, "Nibbles", nil
-	case "namicoin", "namicoins", "nami", "namic":
-		return []string{"namicoin"}, "NamiCoins", nil
-	default:
-		if allowAll {
-			return nil, "", fmt.Errorf("currencyType must be Credits, Nibbles, NamiCoins, or ALL")
+	for _, asset := range allAssets {
+		switch asset.Key {
+		case "credits":
+			if value == "credit" || value == "credits" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
+		case "nibbles":
+			if value == "nibble" || value == "nibbles" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
+		case "namicoin":
+			if value == "namicoin" || value == "namicoins" || value == "nami" || value == "namic" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
+		case "fans":
+			if value == "fan" || value == "fans" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
+		case "memes":
+			if value == "meme" || value == "memes" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
+		case "lost_items":
+			if value == "lostitem" || value == "lostitems" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
+		case "confidence":
+			if value == "confidence" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
+		case "receipts":
+			if value == "receipt" || value == "receipts" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
+		case "patterns":
+			if value == "pattern" || value == "patterns" {
+				return []devCurrencyAsset{asset}, asset.Label, nil
+			}
 		}
-
-		return nil, "", fmt.Errorf("currencyType must be Credits, Nibbles, or NamiCoins")
 	}
+
+	if allowAll {
+		return nil, "", fmt.Errorf("currencyType must be Credits, Nibbles, NamiCoins, Fans, Memes, Lost Items, Confidence, Receipts, Patterns, or ALL")
+	}
+
+	return nil, "", fmt.Errorf("currencyType must be Credits, Nibbles, NamiCoins, Fans, Memes, Lost Items, Confidence, Receipts, or Patterns")
 }
 
-func currencyMap(creditsCents, nibbles, namiCoin int64) map[string]int64 {
+func currencyMap(
+	creditsCents int64,
+	nibbles int64,
+	namiCoin int64,
+	fans int64,
+	memes int64,
+	lostItems int64,
+	confidence int64,
+	receipts int64,
+	patterns int64,
+) map[string]int64 {
 	return map[string]int64{
-		"credits":   creditsCents / 100,
-		"nibbles":   nibbles,
-		"namiCoins": namiCoin,
+		"credits":    creditsCents / 100,
+		"nibbles":    nibbles,
+		"namiCoins":  namiCoin,
+		"fans":       fans,
+		"memes":      memes,
+		"lostItems":  lostItems,
+		"confidence": confidence,
+		"receipts":   receipts,
+		"patterns":   patterns,
 	}
 }
 
 func changedCurrencyMap() map[string]int64 {
-	return map[string]int64{
-		"credits":   0,
-		"nibbles":   0,
-		"namiCoins": 0,
+	changed := map[string]int64{}
+
+	for _, asset := range devCurrencyAssets() {
+		changed[asset.JSONKey] = 0
 	}
+
+	return changed
 }
 
 func addSafeInt64(before int64, delta int64) int64 {
@@ -425,7 +498,7 @@ func (s *Store) DevAddCurrency(ctx context.Context, playerName string, currencyT
 		return DevCurrencyResult{}, err
 	}
 
-	currencies, currencyLabel, err := normalizeDevCurrencyType(currencyType, false)
+	assets, currencyLabel, err := normalizeDevCurrencyType(currencyType, true)
 	if err != nil {
 		return DevCurrencyResult{}, err
 	}
@@ -462,6 +535,14 @@ func (s *Store) DevAddCurrency(ctx context.Context, playerName string, currencyT
 			ChangedBy:  changedCurrencyMap(),
 		}
 
+		if _, err := tx.Exec(ctx, `
+insert into player_resources (player_id)
+values ($1)
+on conflict (player_id) do nothing
+`, player.ID); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("ensure resources for %s: %w", player.Name, err)
+		}
+
 		if err := tx.QueryRow(ctx, `
 select currency_cents, nibbles, namicoin
 from players
@@ -471,25 +552,59 @@ for update
 			return DevCurrencyResult{}, fmt.Errorf("load currency for %s: %w", player.Name, err)
 		}
 
-		creditsDeltaCents := int64(0)
-		nibblesDelta := int64(0)
-		namiCoinDelta := int64(0)
+		var fansBefore, memesBefore, lostItemsBefore, confidenceBefore, receiptsBefore, patternsBefore int64
+		if err := tx.QueryRow(ctx, `
+select fans, memes, lost_items, confidence, receipts, patterns
+from player_resources
+where player_id = $1
+for update
+`, player.ID).Scan(
+			&fansBefore,
+			&memesBefore,
+			&lostItemsBefore,
+			&confidenceBefore,
+			&receiptsBefore,
+			&patternsBefore,
+		); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("load resources for %s: %w", player.Name, err)
+		}
 
-		for _, currency := range currencies {
-			switch currency {
+		creditsAfter := entry.CreditsBefore
+		nibblesAfter := entry.NibblesBefore
+		namiCoinAfter := entry.NamiCoinBefore
+		fansAfter := fansBefore
+		memesAfter := memesBefore
+		lostItemsAfter := lostItemsBefore
+		confidenceAfter := confidenceBefore
+		receiptsAfter := receiptsBefore
+		patternsAfter := patternsBefore
+
+		for _, asset := range assets {
+			switch asset.Key {
 			case "credits":
 				if amount > devAdminMaxInt64/100 {
 					return DevCurrencyResult{}, fmt.Errorf("credits amount is too large")
 				}
-				creditsDeltaCents = amount * 100
-				entry.ChangedBy["credits"] = amount
+				creditsAfter = addSafeInt64(creditsAfter, amount*100)
 			case "nibbles":
-				nibblesDelta = amount
-				entry.ChangedBy["nibbles"] = amount
+				nibblesAfter = addSafeInt64(nibblesAfter, amount)
 			case "namicoin":
-				namiCoinDelta = amount
-				entry.ChangedBy["namiCoins"] = amount
+				namiCoinAfter = addSafeInt64(namiCoinAfter, amount)
+			case "fans":
+				fansAfter = addSafeInt64(fansAfter, amount)
+			case "memes":
+				memesAfter = addSafeInt64(memesAfter, amount)
+			case "lost_items":
+				lostItemsAfter = addSafeInt64(lostItemsAfter, amount)
+			case "confidence":
+				confidenceAfter = addSafeInt64(confidenceAfter, amount)
+			case "receipts":
+				receiptsAfter = addSafeInt64(receiptsAfter, amount)
+			case "patterns":
+				patternsAfter = addSafeInt64(patternsAfter, amount)
 			}
+
+			entry.ChangedBy[asset.JSONKey] = amount
 		}
 
 		if err := tx.QueryRow(ctx, `
@@ -502,15 +617,45 @@ where id = $1
 returning currency_cents, nibbles, namicoin
 `,
 			player.ID,
-			addSafeInt64(entry.CreditsBefore, creditsDeltaCents),
-			addSafeInt64(entry.NibblesBefore, nibblesDelta),
-			addSafeInt64(entry.NamiCoinBefore, namiCoinDelta),
+			creditsAfter,
+			nibblesAfter,
+			namiCoinAfter,
 		).Scan(&entry.CreditsAfter, &entry.NibblesAfter, &entry.NamiCoinAfter); err != nil {
 			return DevCurrencyResult{}, fmt.Errorf("add currency for %s: %w", player.Name, err)
 		}
 
-		entry.Before = currencyMap(entry.CreditsBefore, entry.NibblesBefore, entry.NamiCoinBefore)
-		entry.After = currencyMap(entry.CreditsAfter, entry.NibblesAfter, entry.NamiCoinAfter)
+		if err := tx.QueryRow(ctx, `
+update player_resources
+set fans = $2,
+memes = $3,
+lost_items = $4,
+confidence = $5,
+receipts = $6,
+patterns = $7,
+updated_at = now()
+where player_id = $1
+returning fans, memes, lost_items, confidence, receipts, patterns
+`,
+			player.ID,
+			fansAfter,
+			memesAfter,
+			lostItemsAfter,
+			confidenceAfter,
+			receiptsAfter,
+			patternsAfter,
+		).Scan(
+			&fansAfter,
+			&memesAfter,
+			&lostItemsAfter,
+			&confidenceAfter,
+			&receiptsAfter,
+			&patternsAfter,
+		); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("add resources for %s: %w", player.Name, err)
+		}
+
+		entry.Before = currencyMap(entry.CreditsBefore, entry.NibblesBefore, entry.NamiCoinBefore, fansBefore, memesBefore, lostItemsBefore, confidenceBefore, receiptsBefore, patternsBefore)
+		entry.After = currencyMap(entry.CreditsAfter, entry.NibblesAfter, entry.NamiCoinAfter, fansAfter, memesAfter, lostItemsAfter, confidenceAfter, receiptsAfter, patternsAfter)
 		result.Players = append(result.Players, entry)
 	}
 
@@ -518,7 +663,7 @@ returning currency_cents, nibbles, namicoin
 		return DevCurrencyResult{}, fmt.Errorf("commit add currency: %w", err)
 	}
 
-	result.Message = fmt.Sprintf("Added %d %s to %d player(s).", amount, currencyLabel, len(players))
+	result.Message = fmt.Sprintf("Added %d to %s for %d player(s).", amount, currencyLabel, len(players))
 	return result, nil
 }
 
@@ -528,7 +673,7 @@ func (s *Store) DevRemoveCurrency(ctx context.Context, playerName string, curren
 		return DevCurrencyResult{}, err
 	}
 
-	currencies, currencyLabel, err := normalizeDevCurrencyType(currencyType, true)
+	assets, currencyLabel, err := normalizeDevCurrencyType(currencyType, true)
 	if err != nil {
 		return DevCurrencyResult{}, err
 	}
@@ -562,6 +707,14 @@ func (s *Store) DevRemoveCurrency(ctx context.Context, playerName string, curren
 			ChangedBy:  changedCurrencyMap(),
 		}
 
+		if _, err := tx.Exec(ctx, `
+insert into player_resources (player_id)
+values ($1)
+on conflict (player_id) do nothing
+`, player.ID); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("ensure resources for %s: %w", player.Name, err)
+		}
+
 		if err := tx.QueryRow(ctx, `
 select currency_cents, nibbles, namicoin
 from players
@@ -571,12 +724,35 @@ for update
 			return DevCurrencyResult{}, fmt.Errorf("load currency for %s: %w", player.Name, err)
 		}
 
+		var fansBefore, memesBefore, lostItemsBefore, confidenceBefore, receiptsBefore, patternsBefore int64
+		if err := tx.QueryRow(ctx, `
+select fans, memes, lost_items, confidence, receipts, patterns
+from player_resources
+where player_id = $1
+for update
+`, player.ID).Scan(
+			&fansBefore,
+			&memesBefore,
+			&lostItemsBefore,
+			&confidenceBefore,
+			&receiptsBefore,
+			&patternsBefore,
+		); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("load resources for %s: %w", player.Name, err)
+		}
+
 		creditsAfter := entry.CreditsBefore
 		nibblesAfter := entry.NibblesBefore
 		namiCoinAfter := entry.NamiCoinBefore
+		fansAfter := fansBefore
+		memesAfter := memesBefore
+		lostItemsAfter := lostItemsBefore
+		confidenceAfter := confidenceBefore
+		receiptsAfter := receiptsBefore
+		patternsAfter := patternsBefore
 
-		for _, currency := range currencies {
-			switch currency {
+		for _, asset := range assets {
+			switch asset.Key {
 			case "credits":
 				removeCreditsCents := int64(0)
 				if amountWasAll {
@@ -591,21 +767,63 @@ for update
 					}
 				}
 				creditsAfter = entry.CreditsBefore - removeCreditsCents
-				entry.ChangedBy["credits"] = removeCreditsCents / 100
+				entry.ChangedBy[asset.JSONKey] = removeCreditsCents / 100
 			case "nibbles":
 				removeNibbles := amount
 				if amountWasAll || removeNibbles > entry.NibblesBefore {
 					removeNibbles = entry.NibblesBefore
 				}
 				nibblesAfter = entry.NibblesBefore - removeNibbles
-				entry.ChangedBy["nibbles"] = removeNibbles
+				entry.ChangedBy[asset.JSONKey] = removeNibbles
 			case "namicoin":
 				removeNamiCoin := amount
 				if amountWasAll || removeNamiCoin > entry.NamiCoinBefore {
 					removeNamiCoin = entry.NamiCoinBefore
 				}
 				namiCoinAfter = entry.NamiCoinBefore - removeNamiCoin
-				entry.ChangedBy["namiCoins"] = removeNamiCoin
+				entry.ChangedBy[asset.JSONKey] = removeNamiCoin
+			case "fans":
+				removeFans := amount
+				if amountWasAll || removeFans > fansBefore {
+					removeFans = fansBefore
+				}
+				fansAfter = fansBefore - removeFans
+				entry.ChangedBy[asset.JSONKey] = removeFans
+			case "memes":
+				removeMemes := amount
+				if amountWasAll || removeMemes > memesBefore {
+					removeMemes = memesBefore
+				}
+				memesAfter = memesBefore - removeMemes
+				entry.ChangedBy[asset.JSONKey] = removeMemes
+			case "lost_items":
+				removeLostItems := amount
+				if amountWasAll || removeLostItems > lostItemsBefore {
+					removeLostItems = lostItemsBefore
+				}
+				lostItemsAfter = lostItemsBefore - removeLostItems
+				entry.ChangedBy[asset.JSONKey] = removeLostItems
+			case "confidence":
+				removeConfidence := amount
+				if amountWasAll || removeConfidence > confidenceBefore {
+					removeConfidence = confidenceBefore
+				}
+				confidenceAfter = confidenceBefore - removeConfidence
+				entry.ChangedBy[asset.JSONKey] = removeConfidence
+			case "receipts":
+				removeReceipts := amount
+				if amountWasAll || removeReceipts > receiptsBefore {
+					removeReceipts = receiptsBefore
+				}
+				receiptsAfter = receiptsBefore - removeReceipts
+				entry.ChangedBy[asset.JSONKey] = removeReceipts
+			case "patterns":
+				removePatterns := amount
+				if amountWasAll || removePatterns > patternsBefore {
+					removePatterns = patternsBefore
+				}
+				patternsAfter = patternsBefore - removePatterns
+				entry.ChangedBy[asset.JSONKey] = removePatterns
 			}
 		}
 
@@ -626,8 +844,38 @@ returning currency_cents, nibbles, namicoin
 			return DevCurrencyResult{}, fmt.Errorf("remove currency for %s: %w", player.Name, err)
 		}
 
-		entry.Before = currencyMap(entry.CreditsBefore, entry.NibblesBefore, entry.NamiCoinBefore)
-		entry.After = currencyMap(entry.CreditsAfter, entry.NibblesAfter, entry.NamiCoinAfter)
+		if err := tx.QueryRow(ctx, `
+update player_resources
+set fans = $2,
+memes = $3,
+lost_items = $4,
+confidence = $5,
+receipts = $6,
+patterns = $7,
+updated_at = now()
+where player_id = $1
+returning fans, memes, lost_items, confidence, receipts, patterns
+`,
+			player.ID,
+			fansAfter,
+			memesAfter,
+			lostItemsAfter,
+			confidenceAfter,
+			receiptsAfter,
+			patternsAfter,
+		).Scan(
+			&fansAfter,
+			&memesAfter,
+			&lostItemsAfter,
+			&confidenceAfter,
+			&receiptsAfter,
+			&patternsAfter,
+		); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("remove resources for %s: %w", player.Name, err)
+		}
+
+		entry.Before = currencyMap(entry.CreditsBefore, entry.NibblesBefore, entry.NamiCoinBefore, fansBefore, memesBefore, lostItemsBefore, confidenceBefore, receiptsBefore, patternsBefore)
+		entry.After = currencyMap(entry.CreditsAfter, entry.NibblesAfter, entry.NamiCoinAfter, fansAfter, memesAfter, lostItemsAfter, confidenceAfter, receiptsAfter, patternsAfter)
 		result.Players = append(result.Players, entry)
 	}
 
@@ -636,14 +884,13 @@ returning currency_cents, nibbles, namicoin
 	}
 
 	if amountWasAll {
-		result.Message = fmt.Sprintf("Removed all selected currency from %d player(s).", len(players))
+		result.Message = fmt.Sprintf("Removed all selected assets from %d player(s).", len(players))
 	} else {
-		result.Message = fmt.Sprintf("Removed up to %d %s from %d player(s).", amount, currencyLabel, len(players))
+		result.Message = fmt.Sprintf("Removed up to %d from %s for %d player(s).", amount, currencyLabel, len(players))
 	}
 
 	return result, nil
 }
-
 func normalizeDevLevelResetSpecs(raw string) ([]devLevelResetSpec, string, error) {
 	value := strings.TrimSpace(strings.ToLower(raw))
 	value = strings.ReplaceAll(value, "_", " ")

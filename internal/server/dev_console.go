@@ -270,8 +270,8 @@ const devConsoleHTML = `<!doctype html>
 
     const DEV_INPUT_LABELS = {
       playerName: "Player name, exact match only. Use RESETALL where supported, or GIVEALL for Add Currency.",
-      currencyType: "Currency type: Credits, Nibbles, NamiCoins. Remove Currency also supports ALL.",
-      currencyAmount: "Currency amount. Supports 50k, 1m, 100b, etc. Remove Currency also supports ALL.",
+      currencyType: "Asset type: Credits, Nibbles, NamiCoins, Fans, Memes, Lost Items, Confidence, Receipts, Patterns, or ALL.",
+      currencyAmount: "Amount. Supports 50k, 1m, 100b, etc. Remove Currency also supports ALL.",
       activityName: "Activity/level to reset: Playdeck Level, Nami Level, Streaming, Doom Scrolling, Cleaning, Exercise, Shopping, Designing, or ALL."
     };
 
