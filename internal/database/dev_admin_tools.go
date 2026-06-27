@@ -1063,3 +1063,438 @@ and activity_key = $2
 	result.Message = fmt.Sprintf("Reset %s for %d player(s).", activityLabel, len(players))
 	return result, nil
 }
+
+type DevResetServerResult struct {
+	OK                          bool    `json:"ok"`
+	Message                     string  `json:"message"`
+	PreservedDisplayName        string  `json:"preservedDisplayName"`
+	PreservedPlayerIDs          []int64 `json:"preservedPlayerIds"`
+	PreservedAccountIDs         []int64 `json:"preservedAccountIds"`
+	DeletedPlayers              int64   `json:"deletedPlayers"`
+	DeletedAuthAccounts         int64   `json:"deletedAuthAccounts"`
+	DeletedAuthSessions         int64   `json:"deletedAuthSessions"`
+	DeletedAuthCredentials      int64   `json:"deletedAuthCredentials"`
+	DeletedAuthIdentities       int64   `json:"deletedAuthIdentities"`
+	DeletedWardrobeItems        int64   `json:"deletedWardrobeItems"`
+	DeletedCareActions          int64   `json:"deletedCareActions"`
+	DeletedNamiMessages         int64   `json:"deletedNamiMessages"`
+	DeletedActivityLogs         int64   `json:"deletedActivityLogs"`
+	DeletedPlaydeckCombatLogs   int64   `json:"deletedPlaydeckCombatLogs"`
+	ResetPlayers                int64   `json:"resetPlayers"`
+	ResetResourceRows           int64   `json:"resetResourceRows"`
+	ResetActivitySkillRows      int64   `json:"resetActivitySkillRows"`
+	ResetCompanionRows          int64   `json:"resetCompanionRows"`
+	ResetTickStateRows          int64   `json:"resetTickStateRows"`
+	ResetPlaydeckStateRows      int64   `json:"resetPlaydeckStateRows"`
+	ResetPlaydeckZoneRecordRows int64   `json:"resetPlaydeckZoneRecordRows"`
+}
+
+func devInt64ListSQL(ids []int64) string {
+	seen := map[int64]bool{}
+	parts := []string{}
+
+	for _, id := range ids {
+		if id <= 0 || seen[id] {
+			continue
+		}
+
+		seen[id] = true
+		parts = append(parts, strconv.FormatInt(id, 10))
+	}
+
+	if len(parts) == 0 {
+		return ""
+	}
+
+	return strings.Join(parts, ", ")
+}
+
+func (s *Store) DevResetServer(ctx context.Context) (DevResetServerResult, error) {
+	const preservedDisplayName = "Soryn"
+
+	if err := s.ensurePlaydeckZoneRecordsTable(ctx); err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("begin reset server: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	tableExists := func(tableName string) (bool, error) {
+		var exists bool
+		err := tx.QueryRow(ctx, `
+select to_regclass($1) is not null
+`, "public."+tableName).Scan(&exists)
+		if err != nil {
+			return false, fmt.Errorf("check table %s: %w", tableName, err)
+		}
+
+		return exists, nil
+	}
+
+	columnExists := func(tableName string, columnName string) (bool, error) {
+		var exists bool
+		err := tx.QueryRow(ctx, `
+select exists (
+select 1
+from information_schema.columns
+where table_schema = 'public'
+and table_name = $1
+and column_name = $2
+)
+`, tableName, columnName).Scan(&exists)
+		if err != nil {
+			return false, fmt.Errorf("check column %s.%s: %w", tableName, columnName, err)
+		}
+
+		return exists, nil
+	}
+
+	deleteAllIfExists := func(tableName string) (int64, error) {
+		exists, err := tableExists(tableName)
+		if err != nil {
+			return 0, err
+		}
+
+		if !exists {
+			return 0, nil
+		}
+
+		commandTag, err := tx.Exec(ctx, fmt.Sprintf(`delete from %s`, tableName))
+		if err != nil {
+			return 0, fmt.Errorf("delete from %s: %w", tableName, err)
+		}
+
+		return commandTag.RowsAffected(), nil
+	}
+
+	deleteWhereAccountIDIfExists := func(tableName string, accountIDFilter string) (int64, error) {
+		exists, err := tableExists(tableName)
+		if err != nil {
+			return 0, err
+		}
+
+		if !exists {
+			return 0, nil
+		}
+
+		commandTag, err := tx.Exec(ctx, fmt.Sprintf(`delete from %s where %s`, tableName, accountIDFilter))
+		if err != nil {
+			return 0, fmt.Errorf("delete from %s: %w", tableName, err)
+		}
+
+		return commandTag.RowsAffected(), nil
+	}
+
+	result := DevResetServerResult{
+		OK:                   true,
+		PreservedDisplayName: preservedDisplayName,
+	}
+
+	preservedAccountIDs := map[int64]bool{}
+
+	accountRows, err := tx.Query(ctx, `
+select id
+from auth_accounts
+where lower(display_name) = lower($1)
+`, preservedDisplayName)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("load preserved auth accounts: %w", err)
+	}
+
+	for accountRows.Next() {
+		var accountID int64
+		if err := accountRows.Scan(&accountID); err != nil {
+			accountRows.Close()
+			return DevResetServerResult{}, fmt.Errorf("scan preserved auth account: %w", err)
+		}
+
+		preservedAccountIDs[accountID] = true
+	}
+	if err := accountRows.Err(); err != nil {
+		accountRows.Close()
+		return DevResetServerResult{}, fmt.Errorf("iterate preserved auth accounts: %w", err)
+	}
+	accountRows.Close()
+
+	hasPlayerAccountID, err := columnExists("players", "account_id")
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	if hasPlayerAccountID {
+		rows, err := tx.Query(ctx, `
+select coalesce(account_id, 0)
+from players
+where lower(display_name) = lower($1)
+`, preservedDisplayName)
+		if err != nil {
+			return DevResetServerResult{}, fmt.Errorf("load preserved player account ids: %w", err)
+		}
+
+		for rows.Next() {
+			var accountID int64
+			if err := rows.Scan(&accountID); err != nil {
+				rows.Close()
+				return DevResetServerResult{}, fmt.Errorf("scan preserved player account id: %w", err)
+			}
+
+			if accountID > 0 {
+				preservedAccountIDs[accountID] = true
+			}
+		}
+		if err := rows.Err(); err != nil {
+			rows.Close()
+			return DevResetServerResult{}, fmt.Errorf("iterate preserved player account ids: %w", err)
+		}
+		rows.Close()
+	}
+
+	for accountID := range preservedAccountIDs {
+		result.PreservedAccountIDs = append(result.PreservedAccountIDs, accountID)
+	}
+
+	commandTag, err := tx.Exec(ctx, `
+delete from players
+where lower(display_name) <> lower($1)
+`, preservedDisplayName)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("delete non-Soryn players: %w", err)
+	}
+	result.DeletedPlayers = commandTag.RowsAffected()
+
+	accountIDFilter := "true"
+	accountIDList := devInt64ListSQL(result.PreservedAccountIDs)
+	if accountIDList != "" {
+		accountIDFilter = "account_id not in (" + accountIDList + ")"
+	}
+
+	result.DeletedAuthSessions, err = deleteWhereAccountIDIfExists("auth_sessions", accountIDFilter)
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	result.DeletedAuthCredentials, err = deleteWhereAccountIDIfExists("auth_credentials", accountIDFilter)
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	result.DeletedAuthIdentities, err = deleteWhereAccountIDIfExists("auth_identities", accountIDFilter)
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	authAccountFilter := "true"
+	if accountIDList != "" {
+		authAccountFilter = "id not in (" + accountIDList + ")"
+	}
+
+	commandTag, err = tx.Exec(ctx, "delete from auth_accounts where "+authAccountFilter)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("delete non-Soryn auth accounts: %w", err)
+	}
+	result.DeletedAuthAccounts = commandTag.RowsAffected()
+
+	rows, err := tx.Query(ctx, `
+select id
+from players
+where lower(display_name) = lower($1)
+order by id
+`, preservedDisplayName)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("load preserved players: %w", err)
+	}
+
+	for rows.Next() {
+		var playerID int64
+		if err := rows.Scan(&playerID); err != nil {
+			rows.Close()
+			return DevResetServerResult{}, fmt.Errorf("scan preserved player: %w", err)
+		}
+
+		result.PreservedPlayerIDs = append(result.PreservedPlayerIDs, playerID)
+	}
+	if err := rows.Err(); err != nil {
+		rows.Close()
+		return DevResetServerResult{}, fmt.Errorf("iterate preserved players: %w", err)
+	}
+	rows.Close()
+
+	if len(result.PreservedPlayerIDs) == 0 {
+		return DevResetServerResult{}, fmt.Errorf("cannot reset server: preserved player %q was not found", preservedDisplayName)
+	}
+
+	if err := tx.QueryRow(ctx, `
+select count(*)::bigint
+from player_inventory_items
+`).Scan(&result.DeletedWardrobeItems); err != nil {
+		return DevResetServerResult{}, fmt.Errorf("count wardrobe items before reset: %w", err)
+	}
+
+	if _, err := tx.Exec(ctx, `
+truncate table player_inventory_items restart identity cascade
+`); err != nil {
+		return DevResetServerResult{}, fmt.Errorf("truncate wardrobe inventory: %w", err)
+	}
+
+	result.DeletedCareActions, err = deleteAllIfExists("companion_care_actions")
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	result.DeletedNamiMessages, err = deleteAllIfExists("nami_messages")
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	result.DeletedActivityLogs, err = deleteAllIfExists("activity_log")
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	combatLogCountA, err := deleteAllIfExists("playdeck_combat_log")
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	combatLogCountB, err := deleteAllIfExists("playdeck_combat_logs")
+	if err != nil {
+		return DevResetServerResult{}, err
+	}
+
+	result.DeletedPlaydeckCombatLogs = combatLogCountA + combatLogCountB
+
+	commandTag, err = tx.Exec(ctx, `
+update players
+set level = 1,
+total_xp = 0,
+xp_into_level = 0,
+currency_cents = 0,
+nibbles = 0,
+namicoin = 0,
+updated_at = now()
+`)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("reset remaining players: %w", err)
+	}
+	result.ResetPlayers = commandTag.RowsAffected()
+
+	if _, err := tx.Exec(ctx, `delete from player_resources`); err != nil {
+		return DevResetServerResult{}, fmt.Errorf("clear player resources: %w", err)
+	}
+
+	commandTag, err = tx.Exec(ctx, `
+insert into player_resources (player_id)
+select id
+from players
+`)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("recreate player resources: %w", err)
+	}
+	result.ResetResourceRows = commandTag.RowsAffected()
+
+	if _, err := tx.Exec(ctx, `delete from player_activity_skills`); err != nil {
+		return DevResetServerResult{}, fmt.Errorf("clear activity skills: %w", err)
+	}
+
+	commandTag, err = tx.Exec(ctx, `
+insert into player_activity_skills (player_id, activity_key)
+select p.id, task.activity_key
+from players p
+cross join (
+values
+('streaming'),
+('doom_scrolling'),
+('cleaning'),
+('exercising'),
+('shopping'),
+('designing')
+) as task(activity_key)
+`)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("recreate activity skills: %w", err)
+	}
+	result.ResetActivitySkillRows = commandTag.RowsAffected()
+
+	if _, err := tx.Exec(ctx, `delete from companion_states`); err != nil {
+		return DevResetServerResult{}, fmt.Errorf("clear companion states: %w", err)
+	}
+
+	commandTag, err = tx.Exec(ctx, `
+insert into companion_states (
+player_id,
+companion_name,
+mood_score,
+satiety,
+connection,
+energy,
+comfort,
+playfulness,
+inspiration,
+cleanliness,
+status,
+last_interaction_at,
+last_decay_at
+)
+select
+id,
+'Nami-chan',
+80.00,
+85,
+95,
+75,
+90,
+80,
+80,
+80,
+'awake',
+now(),
+now()
+from players
+`)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("recreate companion states: %w", err)
+	}
+	result.ResetCompanionRows = commandTag.RowsAffected()
+
+	if _, err := tx.Exec(ctx, `delete from player_tick_state`); err != nil {
+		return DevResetServerResult{}, fmt.Errorf("clear player tick state: %w", err)
+	}
+
+	commandTag, err = tx.Exec(ctx, `
+insert into player_tick_state (player_id)
+select id
+from players
+`)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("recreate player tick state: %w", err)
+	}
+	result.ResetTickStateRows = commandTag.RowsAffected()
+
+	commandTag, err = tx.Exec(ctx, `delete from player_playdeck_zone_records`)
+	if err != nil {
+		return DevResetServerResult{}, fmt.Errorf("clear playdeck zone records: %w", err)
+	}
+	result.ResetPlaydeckZoneRecordRows = commandTag.RowsAffected()
+
+	if _, err := tx.Exec(ctx, `delete from playdeck_combat_state`); err != nil {
+		return DevResetServerResult{}, fmt.Errorf("clear playdeck combat state: %w", err)
+	}
+
+	for _, playerID := range result.PreservedPlayerIDs {
+		if err := ensurePlaydeckStateTx(ctx, tx, playerID); err != nil {
+			return DevResetServerResult{}, fmt.Errorf("recreate playdeck combat state for player %d: %w", playerID, err)
+		}
+		result.ResetPlaydeckStateRows++
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return DevResetServerResult{}, fmt.Errorf("commit reset server: %w", err)
+	}
+
+	result.Message = "Server reset complete. Soryn was preserved; other player accounts were deleted and core player state was reset."
+
+	return result, nil
+}

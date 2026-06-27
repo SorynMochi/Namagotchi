@@ -203,3 +203,18 @@ func (s *Server) HandleDevResetLevels(w http.ResponseWriter, r *http.Request) {
 
 	writeJSON(w, http.StatusOK, result)
 }
+func (s *Server) HandleDevResetServer(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	result, err := s.Store.DevResetServer(r.Context())
+	if err != nil {
+		log.Printf("reset server failed: %v", err)
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	writeJSON(w, http.StatusOK, result)
+}

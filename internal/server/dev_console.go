@@ -116,6 +116,66 @@ const devConsoleHTML = `<!doctype html>
       background: rgba(0,0,0,0.35);
     }
 
+    .server-reset-button {
+      background: #ff4f64;
+      color: #fff7fb;
+      letter-spacing: 0.08em;
+    }
+
+    .reset-server-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0,0,0,0.72);
+    }
+
+    .reset-server-modal {
+      width: min(560px, 100%);
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 22px;
+      background: #24162d;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+    }
+
+    .reset-server-modal h2 {
+      margin: 0 0 10px;
+      color: #ff8a98;
+      font-size: clamp(1.4rem, 5vw, 2rem);
+      letter-spacing: 0.04em;
+    }
+
+    .reset-server-modal p,
+    .reset-server-modal li {
+      color: #f1ddeb;
+    }
+
+    .reset-server-modal ul {
+      margin: 12px 0 18px;
+      padding-left: 22px;
+    }
+
+    .reset-server-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .reset-server-confirm {
+      background: #ff4f64;
+      color: #fff7fb;
+      min-width: 210px;
+    }
+
+    .reset-server-cancel {
+      background: rgba(255,255,255,0.12);
+      color: #fcefff;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
     @media (max-width: 560px) {
       .grid {
         display: grid;
@@ -164,6 +224,7 @@ const devConsoleHTML = `<!doctype html>
         <button data-endpoint="/api/dev/add-currency" data-method="POST" data-inputs="playerName,currencyType,currencyAmount">Add Currency</button>
         <button data-endpoint="/api/dev/remove-currency" data-method="POST" data-inputs="playerName,currencyType,currencyAmount">Remove Currency</button>
         <button data-endpoint="/api/dev/reset-levels" data-method="POST" data-inputs="playerName,activityName">Reset Levels</button>
+        <button id="reset-server-button" class="server-reset-button" type="button">RESET SERVER</button>
       </div>
       <div class="card">
   <h2>Audit</h2>
@@ -190,6 +251,7 @@ const devConsoleHTML = `<!doctype html>
   <script>
     const log = document.querySelector("#dev-log");
     const lockButton = document.querySelector("#dev-lock-button");
+    const resetServerButton = document.querySelector("#reset-server-button");
     const CSRF_COOKIE_NAME = "namigotchi_csrf";
     const CSRF_HEADER_NAME = "X-CSRF-Token";
     let csrfTokenPromise = null;
@@ -360,8 +422,103 @@ const devConsoleHTML = `<!doctype html>
       }
     }
 
+    function openResetServerWarning() {
+      let clickCount = 0;
+
+      const overlay = document.createElement("div");
+      overlay.className = "reset-server-overlay";
+      overlay.innerHTML =
+        "<section class=\"reset-server-modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"reset-server-title\">" +
+          "<h2 id=\"reset-server-title\">RESET SERVER</h2>" +
+          "<p><strong>This is destructive.</strong> Clicking outside this warning cancels the action.</p>" +
+          "<ul>" +
+            "<li>Deletes all player accounts except Soryn.</li>" +
+            "<li>Deletes every wardrobe item and restarts item IDs.</li>" +
+            "<li>Resets currencies, work resources, work levels, Playdeck level, and Nami level.</li>" +
+            "<li>Returns Nami care status to the initial starting values.</li>" +
+          "</ul>" +
+          "<div class=\"reset-server-actions\">" +
+            "<button class=\"reset-server-confirm\" type=\"button\">Confirm Reset (0 / 3)</button>" +
+            "<button class=\"reset-server-cancel\" type=\"button\">Cancel</button>" +
+          "</div>" +
+        "</section>";
+
+      const confirmButton = overlay.querySelector(".reset-server-confirm");
+      const cancelButton = overlay.querySelector(".reset-server-cancel");
+
+      function closeModal() {
+        document.removeEventListener("keydown", handleKeyDown);
+        overlay.remove();
+      }
+
+      function handleKeyDown(event) {
+        if (event.key === "Escape") {
+          closeModal();
+        }
+      }
+
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) {
+          closeModal();
+        }
+      });
+
+      cancelButton.addEventListener("click", closeModal);
+
+      confirmButton.addEventListener("click", async () => {
+        clickCount += 1;
+
+        if (clickCount < 3) {
+          confirmButton.textContent = "Confirm Reset (" + clickCount + " / 3)";
+          return;
+        }
+
+        confirmButton.disabled = true;
+        cancelButton.disabled = true;
+        confirmButton.textContent = "Resetting...";
+
+        try {
+          const response = await csrfFetch("/api/dev/reset-server", { method: "POST" });
+          const text = await response.text();
+
+          let responsePayload = text;
+          try {
+            responsePayload = text ? JSON.parse(text) : {};
+          } catch {
+            responsePayload = text;
+          }
+
+          if (!response.ok) {
+            writeLog({
+              ok: false,
+              status: response.status,
+              response: responsePayload
+            });
+            closeModal();
+            return;
+          }
+
+          writeLog(responsePayload);
+          closeModal();
+        } catch (error) {
+          writeLog({
+            ok: false,
+            message: error.message
+          });
+          closeModal();
+        }
+      });
+
+      document.addEventListener("keydown", handleKeyDown);
+      document.body.appendChild(overlay);
+      confirmButton.focus();
+    }
     if (lockButton) {
       lockButton.addEventListener("click", lockDevConsole);
+    }
+
+    if (resetServerButton) {
+      resetServerButton.addEventListener("click", openResetServerWarning);
     }
 
     document.querySelectorAll("[data-endpoint]").forEach((button) => {

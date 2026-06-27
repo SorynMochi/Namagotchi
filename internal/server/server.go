@@ -96,6 +96,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/api/dev/add-currency", s.requireDev(s.requireDevUnlock(s.withDevAudit("add-currency", s.requireCSRF(s.HandleDevAddCurrency)))))
 	mux.HandleFunc("/api/dev/remove-currency", s.requireDev(s.requireDevUnlock(s.withDevAudit("remove-currency", s.requireCSRF(s.HandleDevRemoveCurrency)))))
 	mux.HandleFunc("/api/dev/reset-levels", s.requireDev(s.requireDevUnlock(s.withDevAudit("reset-levels", s.requireCSRF(s.HandleDevResetLevels)))))
+	mux.HandleFunc("/api/dev/reset-server", s.requireDev(s.requireDevUnlock(s.withDevAudit("reset-server", s.requireCSRF(s.HandleDevResetServer)))))
 	mux.HandleFunc("/api/dev/audit-logs", s.requireDev(s.requireDevUnlock(s.HandleDevAuditLogs)))
 	mux.HandleFunc("/api/dev/security-events", s.requireDev(s.requireDevUnlock(s.HandleDevSecurityEvents)))
 	mux.HandleFunc("/api/dev/account-age", s.requireDev(s.requireDevUnlock(s.HandleDevAccountAge)))
