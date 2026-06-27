@@ -161,6 +161,9 @@ const devConsoleHTML = `<!doctype html>
         <h2>Wardrobe</h2>
         <button data-endpoint="/api/dev/spawn-wardrobe-item">Spawn Random Item</button>
         <button data-endpoint="/api/dev/clear-wardrobe" data-method="POST" data-inputs="playerName">Clear Wardrobe</button>
+        <button data-endpoint="/api/dev/add-currency" data-method="POST" data-inputs="playerName,currencyType,currencyAmount">Add Currency</button>
+        <button data-endpoint="/api/dev/remove-currency" data-method="POST" data-inputs="playerName,currencyType,currencyAmount">Remove Currency</button>
+        <button data-endpoint="/api/dev/reset-levels" data-method="POST" data-inputs="playerName,activityName">Reset Levels</button>
       </div>
       <div class="card">
   <h2>Audit</h2>
@@ -266,7 +269,10 @@ const devConsoleHTML = `<!doctype html>
     }
 
     const DEV_INPUT_LABELS = {
-      playerName: "Player name, exact match only. Use RESETALL to affect every player."
+      playerName: "Player name, exact match only. Use RESETALL where supported, or GIVEALL for Add Currency.",
+      currencyType: "Currency type: Credits, Nibbles, NamiCoins. Remove Currency also supports ALL.",
+      currencyAmount: "Currency amount. Supports 50k, 1m, 100b, etc. Remove Currency also supports ALL.",
+      activityName: "Activity/level to reset: Playdeck Level, Nami Level, Streaming, Doom Scrolling, Cleaning, Exercise, Shopping, Designing, or ALL."
     };
 
     function devCommandInputKeys(button) {

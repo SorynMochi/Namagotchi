@@ -3,8 +3,12 @@ package database
 import (
 	"context"
 	"fmt"
+	"math"
+	"strconv"
 	"strings"
 )
+
+const devAdminMaxInt64 = int64(^uint64(0) >> 1)
 
 type DevTargetSummary struct {
 	Mode        string   `json:"mode"`
@@ -44,9 +48,66 @@ type DevClearWardrobeResult struct {
 	Players      []DevClearWardrobePlayer `json:"players"`
 }
 
+type DevCurrencyPlayer struct {
+	PlayerID       int64            `json:"playerId"`
+	PlayerName     string           `json:"playerName"`
+	Before         map[string]int64 `json:"before"`
+	ChangedBy      map[string]int64 `json:"changedBy"`
+	After          map[string]int64 `json:"after"`
+	CreditsBefore  int64            `json:"creditsBefore"`
+	CreditsAfter   int64            `json:"creditsAfter"`
+	NibblesBefore  int64            `json:"nibblesBefore"`
+	NibblesAfter   int64            `json:"nibblesAfter"`
+	NamiCoinBefore int64            `json:"namiCoinBefore"`
+	NamiCoinAfter  int64            `json:"namiCoinAfter"`
+}
+
+type DevCurrencyResult struct {
+	OK           bool                `json:"ok"`
+	Message      string              `json:"message"`
+	Operation    string              `json:"operation"`
+	Currency     string              `json:"currency"`
+	AmountInput  string              `json:"amountInput"`
+	Amount       int64               `json:"amount"`
+	AmountWasAll bool                `json:"amountWasAll"`
+	Target       DevTargetSummary    `json:"target"`
+	Players      []DevCurrencyPlayer `json:"players"`
+}
+
+type DevLevelResetPlayer struct {
+	PlayerID   int64                `json:"playerId"`
+	PlayerName string               `json:"playerName"`
+	Resets     []DevLevelResetEntry `json:"resets"`
+}
+
+type DevLevelResetEntry struct {
+	Key               string `json:"key"`
+	Label             string `json:"label"`
+	BeforeLevel       int    `json:"beforeLevel"`
+	BeforeTotalXP     int64  `json:"beforeTotalXp"`
+	BeforeXPIntoLevel int64  `json:"beforeXpIntoLevel"`
+	AfterLevel        int    `json:"afterLevel"`
+	AfterTotalXP      int64  `json:"afterTotalXp"`
+	AfterXPIntoLevel  int64  `json:"afterXpIntoLevel"`
+}
+
+type DevResetLevelsResult struct {
+	OK            bool                  `json:"ok"`
+	Message       string                `json:"message"`
+	ActivityInput string                `json:"activityInput"`
+	Target        DevTargetSummary      `json:"target"`
+	Players       []DevLevelResetPlayer `json:"players"`
+}
+
 type devTargetPlayer struct {
 	ID   int64
 	Name string
+}
+
+type devLevelResetSpec struct {
+	Key   string
+	Label string
+	Kind  string
 }
 
 func (s *Store) resolveDevTargetPlayers(ctx context.Context, rawPlayerName string, allToken string) (DevTargetSummary, []devTargetPlayer, error) {
@@ -254,5 +315,504 @@ and container = 'wardrobe'
 
 	result.Message = fmt.Sprintf("Deleted %d wardrobe item(s) for %d player(s).", result.DeletedItems, len(players))
 
+	return result, nil
+}
+
+func parseDevAdminAmount(raw string) (int64, bool, error) {
+	value := strings.TrimSpace(raw)
+	if value == "" {
+		return 0, false, fmt.Errorf("amount is required")
+	}
+
+	if strings.EqualFold(value, "ALL") {
+		return 0, true, nil
+	}
+
+	value = strings.ReplaceAll(value, ",", "")
+	value = strings.ReplaceAll(value, "_", "")
+
+	multiplier := float64(1)
+	last := strings.ToLower(value[len(value)-1:])
+
+	switch last {
+	case "k":
+		multiplier = 1_000
+		value = strings.TrimSpace(value[:len(value)-1])
+	case "m":
+		multiplier = 1_000_000
+		value = strings.TrimSpace(value[:len(value)-1])
+	case "b":
+		multiplier = 1_000_000_000
+		value = strings.TrimSpace(value[:len(value)-1])
+	case "t":
+		multiplier = 1_000_000_000_000
+		value = strings.TrimSpace(value[:len(value)-1])
+	case "q":
+		multiplier = 1_000_000_000_000_000
+		value = strings.TrimSpace(value[:len(value)-1])
+	}
+
+	if value == "" {
+		return 0, false, fmt.Errorf("amount is invalid")
+	}
+
+	number, err := strconv.ParseFloat(value, 64)
+	if err != nil || math.IsNaN(number) || math.IsInf(number, 0) || number < 0 {
+		return 0, false, fmt.Errorf("amount must be a non-negative number")
+	}
+
+	expanded := number * multiplier
+	if expanded > float64(devAdminMaxInt64) {
+		return 0, false, fmt.Errorf("amount is too large")
+	}
+
+	return int64(math.Round(expanded)), false, nil
+}
+
+func normalizeDevCurrencyType(raw string, allowAll bool) ([]string, string, error) {
+	value := strings.TrimSpace(strings.ToLower(raw))
+	value = strings.ReplaceAll(value, "_", "")
+	value = strings.ReplaceAll(value, "-", "")
+	value = strings.ReplaceAll(value, " ", "")
+
+	if allowAll && value == "all" {
+		return []string{"credits", "nibbles", "namicoin"}, "ALL", nil
+	}
+
+	switch value {
+	case "credit", "credits":
+		return []string{"credits"}, "Credits", nil
+	case "nibble", "nibbles":
+		return []string{"nibbles"}, "Nibbles", nil
+	case "namicoin", "namicoins", "nami", "namic":
+		return []string{"namicoin"}, "NamiCoins", nil
+	default:
+		if allowAll {
+			return nil, "", fmt.Errorf("currencyType must be Credits, Nibbles, NamiCoins, or ALL")
+		}
+
+		return nil, "", fmt.Errorf("currencyType must be Credits, Nibbles, or NamiCoins")
+	}
+}
+
+func currencyMap(creditsCents, nibbles, namiCoin int64) map[string]int64 {
+	return map[string]int64{
+		"credits":   creditsCents / 100,
+		"nibbles":   nibbles,
+		"namiCoins": namiCoin,
+	}
+}
+
+func changedCurrencyMap() map[string]int64 {
+	return map[string]int64{
+		"credits":   0,
+		"nibbles":   0,
+		"namiCoins": 0,
+	}
+}
+
+func addSafeInt64(before int64, delta int64) int64 {
+	if delta > 0 && before > devAdminMaxInt64-delta {
+		return devAdminMaxInt64
+	}
+
+	return before + delta
+}
+
+func (s *Store) DevAddCurrency(ctx context.Context, playerName string, currencyType string, amountInput string) (DevCurrencyResult, error) {
+	target, players, err := s.resolveDevTargetPlayers(ctx, playerName, "GIVEALL")
+	if err != nil {
+		return DevCurrencyResult{}, err
+	}
+
+	currencies, currencyLabel, err := normalizeDevCurrencyType(currencyType, false)
+	if err != nil {
+		return DevCurrencyResult{}, err
+	}
+
+	amount, amountWasAll, err := parseDevAdminAmount(amountInput)
+	if err != nil {
+		return DevCurrencyResult{}, err
+	}
+
+	if amountWasAll {
+		return DevCurrencyResult{}, fmt.Errorf("ALL amount is only supported for Remove Currency")
+	}
+
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return DevCurrencyResult{}, fmt.Errorf("begin add currency: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	result := DevCurrencyResult{
+		OK:          true,
+		Operation:   "add",
+		Currency:    currencyLabel,
+		AmountInput: strings.TrimSpace(amountInput),
+		Amount:      amount,
+		Target:      target,
+		Players:     make([]DevCurrencyPlayer, 0, len(players)),
+	}
+
+	for _, player := range players {
+		entry := DevCurrencyPlayer{
+			PlayerID:   player.ID,
+			PlayerName: player.Name,
+			ChangedBy:  changedCurrencyMap(),
+		}
+
+		if err := tx.QueryRow(ctx, `
+select currency_cents, nibbles, namicoin
+from players
+where id = $1
+for update
+`, player.ID).Scan(&entry.CreditsBefore, &entry.NibblesBefore, &entry.NamiCoinBefore); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("load currency for %s: %w", player.Name, err)
+		}
+
+		creditsDeltaCents := int64(0)
+		nibblesDelta := int64(0)
+		namiCoinDelta := int64(0)
+
+		for _, currency := range currencies {
+			switch currency {
+			case "credits":
+				if amount > devAdminMaxInt64/100 {
+					return DevCurrencyResult{}, fmt.Errorf("credits amount is too large")
+				}
+				creditsDeltaCents = amount * 100
+				entry.ChangedBy["credits"] = amount
+			case "nibbles":
+				nibblesDelta = amount
+				entry.ChangedBy["nibbles"] = amount
+			case "namicoin":
+				namiCoinDelta = amount
+				entry.ChangedBy["namiCoins"] = amount
+			}
+		}
+
+		if err := tx.QueryRow(ctx, `
+update players
+set currency_cents = $2,
+nibbles = $3,
+namicoin = $4,
+updated_at = now()
+where id = $1
+returning currency_cents, nibbles, namicoin
+`,
+			player.ID,
+			addSafeInt64(entry.CreditsBefore, creditsDeltaCents),
+			addSafeInt64(entry.NibblesBefore, nibblesDelta),
+			addSafeInt64(entry.NamiCoinBefore, namiCoinDelta),
+		).Scan(&entry.CreditsAfter, &entry.NibblesAfter, &entry.NamiCoinAfter); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("add currency for %s: %w", player.Name, err)
+		}
+
+		entry.Before = currencyMap(entry.CreditsBefore, entry.NibblesBefore, entry.NamiCoinBefore)
+		entry.After = currencyMap(entry.CreditsAfter, entry.NibblesAfter, entry.NamiCoinAfter)
+		result.Players = append(result.Players, entry)
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return DevCurrencyResult{}, fmt.Errorf("commit add currency: %w", err)
+	}
+
+	result.Message = fmt.Sprintf("Added %d %s to %d player(s).", amount, currencyLabel, len(players))
+	return result, nil
+}
+
+func (s *Store) DevRemoveCurrency(ctx context.Context, playerName string, currencyType string, amountInput string) (DevCurrencyResult, error) {
+	target, players, err := s.resolveDevTargetPlayers(ctx, playerName, "RESETALL")
+	if err != nil {
+		return DevCurrencyResult{}, err
+	}
+
+	currencies, currencyLabel, err := normalizeDevCurrencyType(currencyType, true)
+	if err != nil {
+		return DevCurrencyResult{}, err
+	}
+
+	amount, amountWasAll, err := parseDevAdminAmount(amountInput)
+	if err != nil {
+		return DevCurrencyResult{}, err
+	}
+
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return DevCurrencyResult{}, fmt.Errorf("begin remove currency: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	result := DevCurrencyResult{
+		OK:           true,
+		Operation:    "remove",
+		Currency:     currencyLabel,
+		AmountInput:  strings.TrimSpace(amountInput),
+		Amount:       amount,
+		AmountWasAll: amountWasAll,
+		Target:       target,
+		Players:      make([]DevCurrencyPlayer, 0, len(players)),
+	}
+
+	for _, player := range players {
+		entry := DevCurrencyPlayer{
+			PlayerID:   player.ID,
+			PlayerName: player.Name,
+			ChangedBy:  changedCurrencyMap(),
+		}
+
+		if err := tx.QueryRow(ctx, `
+select currency_cents, nibbles, namicoin
+from players
+where id = $1
+for update
+`, player.ID).Scan(&entry.CreditsBefore, &entry.NibblesBefore, &entry.NamiCoinBefore); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("load currency for %s: %w", player.Name, err)
+		}
+
+		creditsAfter := entry.CreditsBefore
+		nibblesAfter := entry.NibblesBefore
+		namiCoinAfter := entry.NamiCoinBefore
+
+		for _, currency := range currencies {
+			switch currency {
+			case "credits":
+				removeCreditsCents := int64(0)
+				if amountWasAll {
+					removeCreditsCents = entry.CreditsBefore
+				} else {
+					if amount > devAdminMaxInt64/100 {
+						return DevCurrencyResult{}, fmt.Errorf("credits amount is too large")
+					}
+					removeCreditsCents = amount * 100
+					if removeCreditsCents > entry.CreditsBefore {
+						removeCreditsCents = entry.CreditsBefore
+					}
+				}
+				creditsAfter = entry.CreditsBefore - removeCreditsCents
+				entry.ChangedBy["credits"] = removeCreditsCents / 100
+			case "nibbles":
+				removeNibbles := amount
+				if amountWasAll || removeNibbles > entry.NibblesBefore {
+					removeNibbles = entry.NibblesBefore
+				}
+				nibblesAfter = entry.NibblesBefore - removeNibbles
+				entry.ChangedBy["nibbles"] = removeNibbles
+			case "namicoin":
+				removeNamiCoin := amount
+				if amountWasAll || removeNamiCoin > entry.NamiCoinBefore {
+					removeNamiCoin = entry.NamiCoinBefore
+				}
+				namiCoinAfter = entry.NamiCoinBefore - removeNamiCoin
+				entry.ChangedBy["namiCoins"] = removeNamiCoin
+			}
+		}
+
+		if err := tx.QueryRow(ctx, `
+update players
+set currency_cents = $2,
+nibbles = $3,
+namicoin = $4,
+updated_at = now()
+where id = $1
+returning currency_cents, nibbles, namicoin
+`,
+			player.ID,
+			creditsAfter,
+			nibblesAfter,
+			namiCoinAfter,
+		).Scan(&entry.CreditsAfter, &entry.NibblesAfter, &entry.NamiCoinAfter); err != nil {
+			return DevCurrencyResult{}, fmt.Errorf("remove currency for %s: %w", player.Name, err)
+		}
+
+		entry.Before = currencyMap(entry.CreditsBefore, entry.NibblesBefore, entry.NamiCoinBefore)
+		entry.After = currencyMap(entry.CreditsAfter, entry.NibblesAfter, entry.NamiCoinAfter)
+		result.Players = append(result.Players, entry)
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return DevCurrencyResult{}, fmt.Errorf("commit remove currency: %w", err)
+	}
+
+	if amountWasAll {
+		result.Message = fmt.Sprintf("Removed all selected currency from %d player(s).", len(players))
+	} else {
+		result.Message = fmt.Sprintf("Removed up to %d %s from %d player(s).", amount, currencyLabel, len(players))
+	}
+
+	return result, nil
+}
+
+func normalizeDevLevelResetSpecs(raw string) ([]devLevelResetSpec, string, error) {
+	value := strings.TrimSpace(strings.ToLower(raw))
+	value = strings.ReplaceAll(value, "_", " ")
+	value = strings.ReplaceAll(value, "-", " ")
+	value = strings.Join(strings.Fields(value), " ")
+
+	allSpecs := []devLevelResetSpec{
+		{Key: "playdeck", Label: "Playdeck Level", Kind: "player"},
+		{Key: "nami", Label: "Nami Level", Kind: "companion"},
+		{Key: "streaming", Label: "Streaming Work Level", Kind: "activity"},
+		{Key: "doom_scrolling", Label: "Doom Scrolling Work Level", Kind: "activity"},
+		{Key: "cleaning", Label: "Cleaning Work Level", Kind: "activity"},
+		{Key: "exercising", Label: "Exercise Work Level", Kind: "activity"},
+		{Key: "shopping", Label: "Shopping Work Level", Kind: "activity"},
+		{Key: "designing", Label: "Designing Work Level", Kind: "activity"},
+	}
+
+	if value == "all" {
+		return allSpecs, "ALL", nil
+	}
+
+	switch value {
+	case "playdeck", "playdeck level", "player level":
+		return []devLevelResetSpec{allSpecs[0]}, allSpecs[0].Label, nil
+	case "nami", "nami level", "companion", "companion level":
+		return []devLevelResetSpec{allSpecs[1]}, allSpecs[1].Label, nil
+	case "streaming", "streaming level", "streaming work", "streaming work level":
+		return []devLevelResetSpec{allSpecs[2]}, allSpecs[2].Label, nil
+	case "doom scrolling", "doom scrolling level", "doom scrolling work", "doom scrolling work level", "scrolling", "scrolling level":
+		return []devLevelResetSpec{allSpecs[3]}, allSpecs[3].Label, nil
+	case "cleaning", "cleaning level", "cleaning work", "cleaning work level":
+		return []devLevelResetSpec{allSpecs[4]}, allSpecs[4].Label, nil
+	case "exercising", "exercise", "exercise level", "exercising level", "exercise work", "exercise work level", "exercising work level":
+		return []devLevelResetSpec{allSpecs[5]}, allSpecs[5].Label, nil
+	case "shopping", "shopping level", "shopping work", "shopping work level":
+		return []devLevelResetSpec{allSpecs[6]}, allSpecs[6].Label, nil
+	case "designing", "designing level", "designing work", "designing work level":
+		return []devLevelResetSpec{allSpecs[7]}, allSpecs[7].Label, nil
+	default:
+		return nil, "", fmt.Errorf("activityName must be Playdeck Level, Nami Level, one of the six work levels, or ALL")
+	}
+}
+
+func (s *Store) DevResetLevels(ctx context.Context, playerName string, activityName string) (DevResetLevelsResult, error) {
+	target, players, err := s.resolveDevTargetPlayers(ctx, playerName, "RESETALL")
+	if err != nil {
+		return DevResetLevelsResult{}, err
+	}
+
+	specs, activityLabel, err := normalizeDevLevelResetSpecs(activityName)
+	if err != nil {
+		return DevResetLevelsResult{}, err
+	}
+
+	tx, err := s.Pool.Begin(ctx)
+	if err != nil {
+		return DevResetLevelsResult{}, fmt.Errorf("begin reset levels: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	result := DevResetLevelsResult{
+		OK:            true,
+		ActivityInput: activityLabel,
+		Target:        target,
+		Players:       make([]DevLevelResetPlayer, 0, len(players)),
+	}
+
+	for _, player := range players {
+		playerResult := DevLevelResetPlayer{
+			PlayerID:   player.ID,
+			PlayerName: player.Name,
+			Resets:     make([]DevLevelResetEntry, 0, len(specs)),
+		}
+
+		for _, spec := range specs {
+			entry := DevLevelResetEntry{
+				Key:   spec.Key,
+				Label: spec.Label,
+			}
+
+			switch spec.Kind {
+			case "player":
+				if err := tx.QueryRow(ctx, `
+select level, total_xp, xp_into_level
+from players
+where id = $1
+for update
+`, player.ID).Scan(&entry.BeforeLevel, &entry.BeforeTotalXP, &entry.BeforeXPIntoLevel); err != nil {
+					return DevResetLevelsResult{}, fmt.Errorf("load playdeck level for %s: %w", player.Name, err)
+				}
+
+				if _, err := tx.Exec(ctx, `
+update players
+set level = 0,
+total_xp = 0,
+xp_into_level = 0,
+updated_at = now()
+where id = $1
+`, player.ID); err != nil {
+					return DevResetLevelsResult{}, fmt.Errorf("reset playdeck level for %s: %w", player.Name, err)
+				}
+
+			case "companion":
+				if err := tx.QueryRow(ctx, `
+select level, total_xp, xp_into_level
+from companion_states
+where player_id = $1
+for update
+`, player.ID).Scan(&entry.BeforeLevel, &entry.BeforeTotalXP, &entry.BeforeXPIntoLevel); err != nil {
+					return DevResetLevelsResult{}, fmt.Errorf("load Nami level for %s: %w", player.Name, err)
+				}
+
+				if _, err := tx.Exec(ctx, `
+update companion_states
+set level = 0,
+total_xp = 0,
+xp_into_level = 0,
+last_xp_gained = 0,
+updated_at = now()
+where player_id = $1
+`, player.ID); err != nil {
+					return DevResetLevelsResult{}, fmt.Errorf("reset Nami level for %s: %w", player.Name, err)
+				}
+
+			case "activity":
+				if _, err := tx.Exec(ctx, `
+insert into player_activity_skills (player_id, activity_key, level, total_xp, xp_into_level)
+values ($1, $2, 0, 0, 0)
+on conflict (player_id, activity_key) do nothing
+`, player.ID, spec.Key); err != nil {
+					return DevResetLevelsResult{}, fmt.Errorf("ensure activity level for %s / %s: %w", player.Name, spec.Label, err)
+				}
+
+				if err := tx.QueryRow(ctx, `
+select level, total_xp, xp_into_level
+from player_activity_skills
+where player_id = $1
+and activity_key = $2
+for update
+`, player.ID, spec.Key).Scan(&entry.BeforeLevel, &entry.BeforeTotalXP, &entry.BeforeXPIntoLevel); err != nil {
+					return DevResetLevelsResult{}, fmt.Errorf("load activity level for %s / %s: %w", player.Name, spec.Label, err)
+				}
+
+				if _, err := tx.Exec(ctx, `
+update player_activity_skills
+set level = 0,
+total_xp = 0,
+xp_into_level = 0,
+updated_at = now()
+where player_id = $1
+and activity_key = $2
+`, player.ID, spec.Key); err != nil {
+					return DevResetLevelsResult{}, fmt.Errorf("reset activity level for %s / %s: %w", player.Name, spec.Label, err)
+				}
+			}
+
+			entry.AfterLevel = 0
+			entry.AfterTotalXP = 0
+			entry.AfterXPIntoLevel = 0
+			playerResult.Resets = append(playerResult.Resets, entry)
+		}
+
+		result.Players = append(result.Players, playerResult)
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return DevResetLevelsResult{}, fmt.Errorf("commit reset levels: %w", err)
+	}
+
+	result.Message = fmt.Sprintf("Reset %s for %d player(s).", activityLabel, len(players))
 	return result, nil
 }
