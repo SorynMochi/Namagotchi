@@ -124,7 +124,7 @@ const ACTIVE_SECTION_KEY = "namigotchi_active_section_v1";
 const TOP_PLAYER_SLOT_SETTINGS_KEY = "namigotchi_top_player_slots_v1";
 const TOP_PLAYER_SLOT_DEFAULTS = ["wardrobe", "studio", "treasure"];
 const TOP_PLAYER_SLOT_COUNT = 3;
-const TOP_PLAYER_ONLINE_TICK_MS = 5000;
+const TOP_PLAYER_ONLINE_TICK_MS = 10000;
 let topPlayerOnlineTickInFlight = false;
 let topPlayerOnlineSecondsDisplayMax = 0;const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
 const AUTH_LANDING_SKIP_PRELANDING_KEY = "namigotchi_auth_skip_prelanding_once_v1";

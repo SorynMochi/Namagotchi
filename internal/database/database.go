@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"hash/fnv"
 	"math"
@@ -16,11 +17,13 @@ import (
 )
 
 const (
-	TickSeconds             = 5
-	SyncXPPerTick           = int64(10)
-	ActivityXPPerTick       = int64(10)
-	MaxOfflineTicks         = int64(8640)
-	NamiMessageStorageLimit = 50
+	TickSeconds                   = 5
+	OnlineTickWriteMinimumSeconds = 30
+	OnlineTickMaxAwardSeconds     = 45
+	SyncXPPerTick                 = int64(10)
+	ActivityXPPerTick             = int64(10)
+	MaxOfflineTicks               = int64(8640)
+	NamiMessageStorageLimit       = 50
 
 	CareDecayMinimumSeconds      = 5 * 60
 	SleepEnergyRecoveryPerHour   = 10.0
@@ -4680,31 +4683,80 @@ or created_at > now() + interval '1 day'
 }
 
 func (s *Store) TrackPlayerOnlineTime(ctx context.Context, playerID int64) (int64, error) {
-	const onlineTickCapSeconds = TickSeconds + 2
-	const onlineTickGraceSeconds = TickSeconds * 4
+	now := time.Now().UTC()
 
 	var onlineSeconds int64
+	var lastSeenAt time.Time
 
-	if err := s.Pool.QueryRow(ctx, `
+	err := s.Pool.QueryRow(ctx, `
+select
+online_seconds,
+coalesce(online_last_seen_at, '0001-01-01 00:00:00+00'::timestamptz)
+from players
+where id = $1
+`, playerID).Scan(&onlineSeconds, &lastSeenAt)
+	if err != nil {
+		return 0, fmt.Errorf("load online time: %w", err)
+	}
+
+	if lastSeenAt.Year() <= 1 || now.Before(lastSeenAt) {
+		if err := s.Pool.QueryRow(ctx, `
 update players
-set online_seconds = greatest(0, online_seconds) +
-case
-when last_seen_at is null then 0
-when floor(extract(epoch from (now() - last_seen_at)))::bigint > $3 then 0
-else least(
-$2::bigint,
-greatest(
-0::bigint,
-floor(extract(epoch from (now() - last_seen_at)))::bigint
-)
-)
-end,
-last_seen_at = now(),
+set online_last_seen_at = $2,
 updated_at = now()
 where id = $1
 returning online_seconds
-`, playerID, onlineTickCapSeconds, onlineTickGraceSeconds).Scan(&onlineSeconds); err != nil {
-		return 0, fmt.Errorf("track player online time: %w", err)
+`, playerID, now).Scan(&onlineSeconds); err != nil {
+			return 0, fmt.Errorf("initialize online heartbeat: %w", err)
+		}
+
+		return onlineSeconds, nil
+	}
+
+	elapsed := now.Sub(lastSeenAt)
+	if elapsed < time.Duration(OnlineTickWriteMinimumSeconds)*time.Second {
+		return onlineSeconds, nil
+	}
+
+	awardSeconds := int64(elapsed.Seconds())
+	if awardSeconds < 0 {
+		awardSeconds = 0
+	}
+	if awardSeconds > OnlineTickMaxAwardSeconds {
+		awardSeconds = OnlineTickMaxAwardSeconds
+	}
+	if awardSeconds == 0 {
+		return onlineSeconds, nil
+	}
+
+	err = s.Pool.QueryRow(ctx, `
+update players
+set online_seconds = online_seconds + $2,
+online_last_seen_at = $3,
+updated_at = now()
+where id = $1
+and (
+online_last_seen_at is null
+or $3 - online_last_seen_at >= ($4::double precision * interval '1 second')
+or online_last_seen_at > $3
+)
+returning online_seconds
+`, playerID, awardSeconds, now, OnlineTickWriteMinimumSeconds).Scan(&onlineSeconds)
+
+	if errors.Is(err, pgx.ErrNoRows) {
+		if err := s.Pool.QueryRow(ctx, `
+select online_seconds
+from players
+where id = $1
+`, playerID).Scan(&onlineSeconds); err != nil {
+			return 0, fmt.Errorf("reload online time after skipped heartbeat write: %w", err)
+		}
+
+		return onlineSeconds, nil
+	}
+
+	if err != nil {
+		return 0, fmt.Errorf("track online time: %w", err)
 	}
 
 	return onlineSeconds, nil
