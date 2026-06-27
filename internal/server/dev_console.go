@@ -27,7 +27,7 @@ const devConsoleHTML = `<!doctype html>
     }
 
     main {
-      max-width: 980px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 28px 18px 40px;
     }
@@ -49,37 +49,27 @@ const devConsoleHTML = `<!doctype html>
     }
 
     .grid {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 10px;
-      margin-top: 18px;
-    }
-
-    .card {
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-    }
-
-    .card h2 {
-      display: none;
+      margin-top: 20px;
     }
 
     button {
-      width: auto;
-      min-width: 132px;
-      min-height: 36px;
+      width: 100%;
+      min-width: 0;
+      min-height: 40px;
       border: 0;
       border-radius: 999px;
-      padding: 8px 14px;
+      padding: 9px 14px;
       cursor: pointer;
       background: #ff8fc7;
       color: #1f1022;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 900;
       line-height: 1.1;
+      text-align: center;
+      white-space: nowrap;
     }
 
     button:hover {
@@ -89,11 +79,6 @@ const devConsoleHTML = `<!doctype html>
     button:focus-visible {
       outline: 2px solid rgba(255,255,255,0.75);
       outline-offset: 2px;
-    }
-
-    button.danger {
-      background: #ff8fc7;
-      color: #1f1022;
     }
 
     button.secondary {
@@ -107,7 +92,7 @@ const devConsoleHTML = `<!doctype html>
     pre {
       min-height: 190px;
       max-height: 420px;
-      margin-top: 18px;
+      margin-top: 22px;
       padding: 14px;
       overflow: auto;
       white-space: pre-wrap;
@@ -116,7 +101,23 @@ const devConsoleHTML = `<!doctype html>
       background: rgba(0,0,0,0.35);
     }
 
+    .reset-server-zone {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .reset-server-zone-label {
+      margin: 0 0 10px;
+      color: #ff8a98;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
     .server-reset-button {
+      width: min(260px, 100%);
       background: #ff4f64;
       color: #fff7fb;
       letter-spacing: 0.08em;
@@ -165,10 +166,14 @@ const devConsoleHTML = `<!doctype html>
       margin-top: 16px;
     }
 
+    .reset-server-actions button {
+      width: auto;
+      min-width: 180px;
+    }
+
     .reset-server-confirm {
       background: #ff4f64;
       color: #fff7fb;
-      min-width: 210px;
     }
 
     .reset-server-cancel {
@@ -176,19 +181,20 @@ const devConsoleHTML = `<!doctype html>
       color: #fcefff;
       border: 1px solid rgba(255,255,255,0.18);
     }
+
     @media (max-width: 560px) {
       .grid {
-        display: grid;
         grid-template-columns: 1fr 1fr;
       }
 
       button {
-        width: 100%;
-        min-width: 0;
+        min-height: 38px;
+        font-size: 0.82rem;
+        white-space: normal;
       }
 
-      button.secondary {
-        grid-column: 1 / -1;
+      .reset-server-actions button {
+        width: 100%;
       }
     }
   </style>
@@ -199,53 +205,28 @@ const devConsoleHTML = `<!doctype html>
     <button id="dev-lock-button" class="secondary" type="button">Lock Dev Console</button>
     <h1>Namigotchi Dev Console</h1>
     <p>This page is served only after the backend verifies your dev access.</p>
-
-    <section class="grid">
-      <div class="card">
-        <h2>Setup</h2>
-        <button data-endpoint="/api/dev/seed-player">Seed Player</button>
-      </div>
-
-      <div class="card">
-        <h2>Playdeck</h2>
-        <button data-endpoint="/api/dev/force-tick">Force Tick</button>
-      </div>
-
-      <div class="card">
-        <h2>Playdeck</h2>
-        <button data-endpoint="/api/dev/reset-chain" data-method="POST" data-inputs="playerName">Reset Chain</button>
-        <button data-endpoint="/api/dev/reset-max-chain" data-method="POST" data-inputs="playerName">Reset Max Chain</button>
-      </div>
-
-      <div class="card">
-        <h2>Wardrobe</h2>
-        <button data-endpoint="/api/dev/spawn-wardrobe-item">Spawn Random Item</button>
-        <button data-endpoint="/api/dev/clear-wardrobe" data-method="POST" data-inputs="playerName">Clear Wardrobe</button>
-        <button data-endpoint="/api/dev/add-currency" data-method="POST" data-inputs="playerName,currencyType,currencyAmount">Add Currency</button>
-        <button data-endpoint="/api/dev/remove-currency" data-method="POST" data-inputs="playerName,currencyType,currencyAmount">Remove Currency</button>
-        <button data-endpoint="/api/dev/reset-levels" data-method="POST" data-inputs="playerName,activityName">Reset Levels</button>
-        <button id="reset-server-button" class="server-reset-button" type="button">RESET SERVER</button>
-      </div>
-      <div class="card">
-  <h2>Audit</h2>
-  <button data-endpoint="/api/dev/audit-logs" data-method="GET">Refresh Audit Logs</button>
-</div>
-      <div class="card">
-        <h2>Care Testing</h2>
-        <button data-endpoint="/api/dev/finish-care" data-method="POST">Finish Care</button>
-      </div>
-      <div class="card">
-        <h2>Security</h2>
-        <button data-endpoint="/api/dev/security-events" data-method="GET">Security Logs</button>
-      </div>
-
-      <div class="card">
-        <h2>Account</h2>
-        <button data-endpoint="/api/dev/account-age" data-method="GET">Show Account Age</button>
-      </div>
+    <section class="grid" aria-label="Dev commands">
+      <button data-endpoint="/api/dev/seed-player">Seed Player</button>
+      <button data-endpoint="/api/dev/force-tick">Force Tick</button>
+      <button data-endpoint="/api/dev/reset-chain" data-method="POST" data-inputs="playerName">Reset Chain</button>
+      <button data-endpoint="/api/dev/reset-max-chain" data-method="POST" data-inputs="playerName">Reset Max Chain</button>
+      <button data-endpoint="/api/dev/spawn-wardrobe-item">Spawn Random Item</button>
+      <button data-endpoint="/api/dev/clear-wardrobe" data-method="POST" data-inputs="playerName">Clear Wardrobe</button>
+      <button data-endpoint="/api/dev/add-currency" data-method="POST" data-inputs="playerName,currencyType,currencyAmount">Add Currency</button>
+      <button data-endpoint="/api/dev/remove-currency" data-method="POST" data-inputs="playerName,currencyType,currencyAmount">Remove Currency</button>
+      <button data-endpoint="/api/dev/reset-levels" data-method="POST" data-inputs="playerName,activityName">Reset Levels</button>
+      <button data-endpoint="/api/dev/audit-logs" data-method="GET">Refresh Audit Logs</button>
+      <button data-endpoint="/api/dev/finish-care" data-method="POST">Finish Care</button>
+      <button data-endpoint="/api/dev/security-events" data-method="GET">Security Logs</button>
+      <button data-endpoint="/api/dev/account-age" data-method="GET">Show Account Age</button>
     </section>
 
     <pre id="dev-log">Ready.</pre>
+
+    <section class="reset-server-zone" aria-label="Dangerous dev commands">
+      <p class="reset-server-zone-label">Danger Zone</p>
+      <button id="reset-server-button" class="server-reset-button" type="button">RESET SERVER</button>
+    </section>
   </main>
 
   <script>
