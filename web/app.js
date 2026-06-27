@@ -128,6 +128,9 @@ const TOP_PLAYER_ONLINE_TICK_MS = 10000;
 let topPlayerOnlineTickInFlight = false;
 let topPlayerOnlineSecondsDisplayMax = 0;
 let playerCoreStatusInFlight = false;
+const NAMI_MESSAGES_MIN_REFRESH_MS = 60000;
+let namiMessagesRequestInFlight = null;
+let namiMessagesLastLoadedAt = 0;
 const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
 const AUTH_LANDING_SKIP_PRELANDING_KEY = "namigotchi_auth_skip_prelanding_once_v1";
 let authLandingMusicAutoplayBlocked = false;
@@ -1385,7 +1388,7 @@ async function initializeAuthGate() {
     }
 
     hideAuthLanding();
-    await loadPlayerStatus();
+    await loadPlayerCoreStatus({ sync: false });
   } catch (error) {
     console.error(error);
     showAuthLanding("Could not check your login yet. Try refreshing, or continue with Google.");
@@ -1492,7 +1495,7 @@ async function loadPlayerStatus() {
     syncTopPlayerOnlineSeconds(status);
     renderPlayerStatus(status);
     await trackPlayerOnlineTick();
-    await loadNamiMessagesFromServer();
+    await loadNamiMessagesFromServer({ force: true });
   } catch (error) {
     console.error(error);
     careStats.innerHTML = `<p class="muted">Could not load player status.</p>`;
@@ -4166,7 +4169,7 @@ async function setGatheringTask(task) {
     }
 
     addChatMessage("System", payload?.message || `Gathering task set to ${labelForTask(safeTask)}.`, "system");
-    await loadPlayerStatus();
+    await loadPlayerCoreStatus({ sync: false });
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Could not change gathering task. The task clipboard ran away.", "system");
@@ -4203,7 +4206,7 @@ async function performCareAction(buttonAction) {
       });
     }
 
-    await loadPlayerStatus();
+    await loadPlayerCoreStatus({ sync: false });
   } catch (error) {
     console.error(error);
     addChatMessage("System", "Could not perform that care action. Nami-chan's tiny schedule book snapped shut.", "system");
@@ -4223,30 +4226,52 @@ async function loadNamiMessagesFromServer(options = {}) {
     return;
   }
 
-  try {
-    const response = await fetch("/api/nami/messages");
+  const force = options.force === true;
+  const now = Date.now();
 
-    if (!response.ok) {
-      throw new Error(`Load Nami messages failed: ${response.status}`);
-    }
-
-    const messages = await response.json();
-
-    namiMessages = Array.isArray(messages)
-      ? messages.slice(-MAX_NAMI_MESSAGES).map((message) => {
-          return {
-            text: normalizeChatText(message.message ?? "", 500),
-            timestamp: formatNamiMessageTimestamp(message.createdAt),
-            kind: message.severity === "happy" ? "level-up" : "normal",
-          };
-        })
-      : [];
-
+  if (!force && namiMessagesLastLoadedAt > 0 && now - namiMessagesLastLoadedAt < NAMI_MESSAGES_MIN_REFRESH_MS) {
     renderNamiMessages(options);
-  } catch (error) {
-    console.error(error);
-    renderNamiMessages(options);
+    return;
   }
+
+  if (namiMessagesRequestInFlight) {
+    await namiMessagesRequestInFlight;
+    renderNamiMessages(options);
+    return;
+  }
+
+  namiMessagesRequestInFlight = (async () => {
+    try {
+      const response = await fetch("/api/nami/messages", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Load Nami messages failed: ${response.status}`);
+      }
+
+      const messages = await response.json();
+
+      namiMessages = Array.isArray(messages)
+        ? messages.slice(-MAX_NAMI_MESSAGES).map((message) => {
+            return {
+              text: normalizeChatText(message.message ?? "", 500),
+              timestamp: formatNamiMessageTimestamp(message.createdAt),
+              kind: message.severity === "happy" ? "level-up" : "normal",
+            };
+          })
+        : [];
+
+      namiMessagesLastLoadedAt = Date.now();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      namiMessagesRequestInFlight = null;
+    }
+  })();
+
+  await namiMessagesRequestInFlight;
+  renderNamiMessages(options);
 }
 
 function formatNamiMessageTimestamp(value) {
