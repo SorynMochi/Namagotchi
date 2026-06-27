@@ -34,21 +34,7 @@ type PlayerResourcesStatusResponse struct {
 	Tick       database.TickState       `json:"tick"`
 }
 
-func (s *Server) HandlePlayerCoreStatus(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
-		return
-	}
-
-	status, err := s.playerStatusForRequest(r)
-	if err != nil {
-		log.Printf("get player core status failed: %v", err)
-		writeError(w, http.StatusNotFound, "player status not found")
-		return
-	}
-
-	s.applyAccountCreatedAtToStatus(r, status)
-
+func writePlayerCoreStatus(w http.ResponseWriter, r *http.Request, status *database.PlayerStatus) {
 	writeJSON(w, http.StatusOK, PlayerCoreStatusResponse{
 		Player:     status.Player,
 		Companion:  status.Companion,
@@ -57,6 +43,60 @@ func (s *Server) HandlePlayerCoreStatus(w http.ResponseWriter, r *http.Request) 
 		Tick:       status.Tick,
 		Wardrobe:   status.Wardrobe,
 	})
+}
+
+func (s *Server) coreStatusForRequest(r *http.Request) (*database.PlayerStatus, error) {
+	playerID, err := s.playerIDForRequest(r)
+	if err != nil {
+		return nil, err
+	}
+
+	status, err := s.Store.GetPlayerCoreStatus(r.Context(), playerID)
+	if err != nil {
+		return nil, err
+	}
+
+	s.applyAccountCreatedAtToStatus(r, status)
+
+	return status, nil
+}
+
+func (s *Server) HandlePlayerCoreStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	status, err := s.coreStatusForRequest(r)
+	if err != nil {
+		log.Printf("get player core status failed: %v", err)
+		writeError(w, http.StatusNotFound, "player status not found")
+		return
+	}
+
+	writePlayerCoreStatus(w, r, status)
+}
+
+func (s *Server) HandlePlayerCoreSync(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	if err := s.syncPlayerState(r.Context()); err != nil {
+		log.Printf("sync player core state failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "player core sync failed")
+		return
+	}
+
+	status, err := s.coreStatusForRequest(r)
+	if err != nil {
+		log.Printf("get player core status after sync failed: %v", err)
+		writeError(w, http.StatusNotFound, "player status not found")
+		return
+	}
+
+	writePlayerCoreStatus(w, r, status)
 }
 
 func (s *Server) HandlePlayerCareStatus(w http.ResponseWriter, r *http.Request) {
@@ -140,7 +180,7 @@ func (s *Server) HandlePlayerResourcesStatus(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	status, err := s.playerStatusForRequest(r)
+	status, err := s.coreStatusForRequest(r)
 	if err != nil {
 		log.Printf("get player resources status failed: %v", err)
 		writeError(w, http.StatusNotFound, "player status not found")

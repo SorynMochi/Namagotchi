@@ -127,6 +127,7 @@ const TOP_PLAYER_SLOT_COUNT = 3;
 const TOP_PLAYER_ONLINE_TICK_MS = 10000;
 let topPlayerOnlineTickInFlight = false;
 let topPlayerOnlineSecondsDisplayMax = 0;
+let playerCoreStatusInFlight = false;
 const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
 const AUTH_LANDING_SKIP_PRELANDING_KEY = "namigotchi_auth_skip_prelanding_once_v1";
 let authLandingMusicAutoplayBlocked = false;
@@ -1498,6 +1499,174 @@ async function loadPlayerStatus() {
   }
 }
 
+function mergePlayerCoreStatus(coreStatus) {
+  if (!coreStatus || typeof coreStatus !== "object") {
+    return latestPlayerStatus;
+  }
+
+  if (!latestPlayerStatus) {
+    latestPlayerStatus = {
+      player: coreStatus.player || {},
+      companion: coreStatus.companion || {},
+      resources: coreStatus.resources || {},
+      activities: coreStatus.activities || {},
+      tick: coreStatus.tick || {},
+      wardrobe: coreStatus.wardrobe || { used: 0, capacity: 100 },
+      care: { active: null, queued: [], slots: 3 },
+      playdeck: {},
+    };
+
+    return latestPlayerStatus;
+  }
+
+  latestPlayerStatus = {
+    ...latestPlayerStatus,
+    player: {
+      ...(latestPlayerStatus.player || {}),
+      ...(coreStatus.player || {}),
+    },
+    companion: {
+      ...(latestPlayerStatus.companion || {}),
+      ...(coreStatus.companion || {}),
+    },
+    resources: {
+      ...(latestPlayerStatus.resources || {}),
+      ...(coreStatus.resources || {}),
+    },
+    activities: {
+      ...(latestPlayerStatus.activities || {}),
+      ...(coreStatus.activities || {}),
+    },
+    tick: {
+      ...(latestPlayerStatus.tick || {}),
+      ...(coreStatus.tick || {}),
+    },
+    wardrobe: {
+      ...(latestPlayerStatus.wardrobe || {}),
+      ...(coreStatus.wardrobe || {}),
+    },
+  };
+
+  return latestPlayerStatus;
+}
+
+function renderPlayerCoreStatus(status) {
+  if (!status?.player || !status?.companion || !status?.tick) {
+    return;
+  }
+
+  const player = status.player;
+  const companion = status.companion;
+  const tick = status.tick;
+  const bonus = getMoodBonus(companion.moodScore);
+  const namiXpPercent = percent(companion.xpIntoLevel, companion.xpToNext);
+
+  updateTopPlayerName(player);
+
+  setTextIfChanged(namiLevel, Number(companion.level ?? 1).toLocaleString());
+  setTextIfChanged(
+    namiXpLabel,
+    `${Number(companion.xpIntoLevel ?? 0).toLocaleString()} / ${Number(companion.xpToNext ?? 120).toLocaleString()}`
+  );
+  setWidthIfChanged(namiXpFill, `${namiXpPercent}%`);
+  setTextIfChanged(namiMoodLabel, companion.moodLabel || "Okay");
+  setTextIfChanged(namiPrimaryNeed, companion.primaryNeed || "Waiting");
+  setTextIfChanged(namiSuggestedAction, companion.suggestedAction || "Any care action");
+
+  setTextIfChanged(wealthCredits, formatTopRailNumber(Math.round(Number(player.creditsCents ?? player.currencyCents ?? 0) / 100)));
+  setTextIfChanged(wealthNibbles, formatTopRailNumber(player.nibbles ?? 0));
+  setTextIfChanged(wealthNamiCoin, formatTopRailNumber(player.namiCoin ?? 0));
+
+  const wardrobe = status.wardrobe || { used: 0, capacity: 100 };
+  const wardrobeCountText = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
+
+  setTextIfChanged(topWardrobe, wardrobeCountText);
+  renderTopPlayerSlots(status);
+  setTextIfChanged(topMood, Math.round(Number(companion.moodScore ?? 0)));
+  setTextIfChanged(topNamiStatus, capitalize(companion.status));
+  setTextIfChanged(personalMoodBonus, `+${bonus}% Resource Gain`);
+
+  setTextIfChanged(playdeckTopLevel, Number(player.level ?? 1).toLocaleString());
+
+  setTextIfChanged(resFans, formatTopRailNumber(status.resources?.fans ?? 0));
+  setTextIfChanged(resMemes, formatTopRailNumber(status.resources?.memes ?? 0));
+  setTextIfChanged(resLostItems, formatTopRailNumber(status.resources?.lostItems ?? 0));
+  setTextIfChanged(resConfidence, formatTopRailNumber(status.resources?.confidence ?? 0));
+  setTextIfChanged(resReceipts, formatTopRailNumber(status.resources?.receipts ?? 0));
+  setTextIfChanged(resPatterns, formatTopRailNumber(status.resources?.patterns ?? 0));
+
+  setTextIfChanged(actStreaming, activityLevel(status.activities?.streaming));
+  setTextIfChanged(actDoomScrolling, activityLevel(status.activities?.doomScrolling));
+  setTextIfChanged(actCleaning, activityLevel(status.activities?.cleaning));
+  setTextIfChanged(actExercising, activityLevel(status.activities?.exercising));
+  setTextIfChanged(actShopping, activityLevel(status.activities?.shopping));
+  setTextIfChanged(actDesigning, activityLevel(status.activities?.designing));
+
+  const xpPercent = percent(player.xpIntoLevel, player.xpToNext);
+  setTopUserMetricLabel(
+    playdeckXpLabel,
+    "XP:",
+    `${Number(player.xpIntoLevel ?? 0).toLocaleString()} / ${Number(player.xpToNext ?? 720).toLocaleString()}`
+  );
+  setWidthIfChanged(playdeckXpFill, `${xpPercent}%`);
+
+  const currentStreak = Math.max(0, Number(tick.playdeckStreak ?? 0));
+  const maxStreak = Math.max(currentStreak, Number(tick.playdeckMaxStreak ?? currentStreak));
+  const streakPercent = percent(currentStreak, maxStreak);
+
+  setTopUserMetricLabel(
+    currentActionLabel,
+    "Chain:",
+    `${currentStreak.toLocaleString()} / ${maxStreak.toLocaleString()}`
+  );
+  setWidthIfChanged(tickFill, `${streakPercent}%`);
+  syncTopPlayerTickPill(tick);
+  scheduleNextPlayerStatusRefresh(tick);
+
+  updateGatheringCards(status);
+  updateHomeStage(status);
+
+  setTextIfChanged(namiMessage, companion.caption || "Nami-chan is waiting sweetly.");
+}
+
+async function loadPlayerCoreStatus(options = {}) {
+  if (playerCoreStatusInFlight) {
+    return;
+  }
+
+  if (!latestPlayerStatus) {
+    await loadPlayerStatus();
+    return;
+  }
+
+  playerCoreStatusInFlight = true;
+
+  try {
+    const shouldSync = options.sync ?? true;
+    const response = shouldSync
+      ? await csrfFetch("/api/player/core/sync", { method: "POST" })
+      : await fetch("/api/player/core");
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        showAuthLanding("Please sign in with Google to keep taking care of Nami-chan.");
+        return;
+      }
+
+      throw new Error(`Player core status request failed: ${response.status}`);
+    }
+
+    const coreStatus = await response.json();
+    const status = mergePlayerCoreStatus(coreStatus);
+
+    syncTopPlayerOnlineSeconds(status);
+    renderPlayerCoreStatus(status);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    playerCoreStatusInFlight = false;
+  }
+}
 async function forceTick() {
   // Dev controls are server-gated at /dev.
 }
@@ -5651,14 +5820,14 @@ function scheduleNextPlayerStatusRefresh(tick) {
 
   const nextTickMs = Date.parse(tick.nextTickAt);
   if (Number.isNaN(nextTickMs)) {
-    playerStatusRefreshTimer = setTimeout(loadPlayerStatus, 5000);
+    playerStatusRefreshTimer = setTimeout(() => loadPlayerCoreStatus({ sync: true }), 5000);
     return;
   }
 
   const now = Date.now() + serverClockOffsetMs;
   const delay = Math.max(150, nextTickMs - now + 150);
 
-  playerStatusRefreshTimer = setTimeout(loadPlayerStatus, Math.min(delay, 6000));
+  playerStatusRefreshTimer = setTimeout(() => loadPlayerCoreStatus({ sync: true }), Math.min(delay, 6000));
 }
 
 function syncServerClock(timestamp) {

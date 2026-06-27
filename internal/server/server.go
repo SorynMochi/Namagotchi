@@ -111,6 +111,7 @@ func (s *Server) Routes() http.Handler {
 	mux.HandleFunc("/dev/", s.requireDev(s.HandleDevConsolePage))
 	mux.HandleFunc("/api/player/status", s.requireAuth(s.HandlePlayerStatus))
 	mux.HandleFunc("/api/player/core", s.requireAuth(s.HandlePlayerCoreStatus))
+	mux.HandleFunc("/api/player/core/sync", s.requireAuth(s.requireCSRF(s.HandlePlayerCoreSync)))
 	mux.HandleFunc("/api/player/care/status", s.requireAuth(s.HandlePlayerCareStatus))
 	mux.HandleFunc("/api/player/playdeck/status", s.requireAuth(s.HandlePlayerPlaydeckStatus))
 	mux.HandleFunc("/api/player/wardrobe/status", s.requireAuth(s.HandlePlayerWardrobeStatus))
