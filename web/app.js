@@ -1475,6 +1475,17 @@ onlineUsers.textContent = status.onlineUsers ?? 1;
   }
 }
 
+function applyPlayerStatusPayload(status) {
+  if (!status || typeof status !== "object") {
+    return false;
+  }
+
+  latestPlayerStatus = status;
+  syncTopPlayerOnlineSeconds(latestPlayerStatus);
+  renderPlayerStatus(latestPlayerStatus);
+
+  return true;
+}
 async function loadPlayerStatus() {
   try {
     const response = await csrfFetch("/api/player/sync", {
@@ -3740,7 +3751,9 @@ async function equipWardrobeItem(itemID, slotKey = "") {
 
     const result = await response.json();
 
-    await loadPlayerStatus();
+    if (!applyPlayerStatusPayload(result?.status)) {
+      await loadPlayerStatus();
+    }
 
     if (result?.detail) {
       renderWardrobeItemModal(result.detail);
@@ -3779,7 +3792,9 @@ async function unequipWardrobeItem(itemID, slotKey = "") {
       wardrobeItemModalTitle?.textContent ||
       "Item";
 
-    await loadPlayerStatus();
+    if (!applyPlayerStatusPayload(result?.status)) {
+      await loadPlayerStatus();
+    }
     closeWardrobeItemModal();
 
     addChatMessage("System", `${itemName} removed from Nami-Chan's outfit.`, "system");

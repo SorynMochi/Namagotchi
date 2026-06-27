@@ -59,6 +59,7 @@ type WardrobeItemActionResponse struct {
 	OK      bool                        `json:"ok"`
 	Message string                      `json:"message"`
 	Detail  database.WardrobeItemDetail `json:"detail"`
+	Status  *database.PlayerStatus      `json:"status,omitempty"`
 }
 
 type GatheringRequest struct {
@@ -204,6 +205,17 @@ func (s *Server) applyAccountCreatedAtToStatus(r *http.Request, status *database
 	}
 
 	status.Player.CreatedAt = account.CreatedAt.UTC()
+}
+func (s *Server) wardrobeActionStatusForRequest(r *http.Request) *database.PlayerStatus {
+	status, err := s.playerStatusForRequest(r)
+	if err != nil {
+		log.Printf("get player status after wardrobe action failed: %v", err)
+		return nil
+	}
+
+	s.applyAccountCreatedAtToStatus(r, status)
+
+	return status
 }
 func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -623,6 +635,7 @@ func (s *Server) HandleEquipWardrobeItem(w http.ResponseWriter, r *http.Request)
 		OK:      true,
 		Message: "Wardrobe item equipped.",
 		Detail:  detail,
+		Status:  s.wardrobeActionStatusForRequest(r),
 	})
 }
 
@@ -661,6 +674,7 @@ func (s *Server) HandleUnequipWardrobeItem(w http.ResponseWriter, r *http.Reques
 		OK:      true,
 		Message: "Wardrobe item removed.",
 		Detail:  detail,
+		Status:  s.wardrobeActionStatusForRequest(r),
 	})
 }
 
