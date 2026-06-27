@@ -128,6 +128,7 @@ const TOP_PLAYER_ONLINE_TICK_MS = 10000;
 let topPlayerOnlineTickInFlight = false;
 let topPlayerOnlineSecondsDisplayMax = 0;
 let playerCoreStatusInFlight = false;
+let playerCareStatusInFlight = false;
 const NAMI_MESSAGES_MIN_REFRESH_MS = 60000;
 let namiMessagesRequestInFlight = null;
 let namiMessagesLastLoadedAt = 0;
@@ -1626,10 +1627,116 @@ function renderPlayerCoreStatus(status) {
   syncTopPlayerTickPill(tick);
   scheduleNextPlayerStatusRefresh(tick);
 
+  renderCareStats(companion);
   updateGatheringCards(status);
+  renderCareButtons(status);
   updateHomeStage(status);
 
   setTextIfChanged(namiMessage, companion.caption || "Nami-chan is waiting sweetly.");
+}
+
+function mergePlayerCareStatus(careStatus) {
+  if (!careStatus || typeof careStatus !== "object") {
+    return latestPlayerStatus;
+  }
+
+  const care = careStatus.care || careStatus;
+
+  if (!latestPlayerStatus) {
+    latestPlayerStatus = {
+      player: {},
+      companion: {},
+      resources: {},
+      activities: {},
+      tick: {},
+      wardrobe: { used: 0, capacity: 100 },
+      care: care || { active: null, queued: [], slots: 3 },
+      playdeck: {},
+    };
+
+    return latestPlayerStatus;
+  }
+
+  latestPlayerStatus = {
+    ...latestPlayerStatus,
+    care: care || latestPlayerStatus.care || { active: null, queued: [], slots: 3 },
+  };
+
+  return latestPlayerStatus;
+}
+
+function renderPlayerCareStatus(status) {
+  if (!status) {
+    return;
+  }
+
+  renderCareButtons(status);
+}
+
+async function loadPlayerCareStatus() {
+  if (playerCareStatusInFlight) {
+    return;
+  }
+
+  playerCareStatusInFlight = true;
+
+  try {
+    const response = await fetch("/api/player/care/status", {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        showAuthLanding("Please sign in with Google to keep taking care of Nami-chan.");
+        return;
+      }
+
+      throw new Error(`Player care status request failed: ${response.status}`);
+    }
+
+    const careStatus = await response.json();
+    const status = mergePlayerCareStatus(careStatus);
+    renderPlayerCareStatus(status);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    playerCareStatusInFlight = false;
+  }
+}
+
+function applyCareActionPayload(payload) {
+  if (!payload || typeof payload !== "object") {
+    return latestPlayerStatus;
+  }
+
+  if (!latestPlayerStatus) {
+    latestPlayerStatus = {
+      player: {},
+      companion: {},
+      resources: {},
+      activities: {},
+      tick: {},
+      wardrobe: { used: 0, capacity: 100 },
+      care: { active: null, queued: [], slots: 3 },
+      playdeck: {},
+    };
+  }
+
+  latestPlayerStatus = {
+    ...latestPlayerStatus,
+    companion: payload.companion
+      ? {
+          ...(latestPlayerStatus.companion || {}),
+          ...payload.companion,
+        }
+      : latestPlayerStatus.companion,
+    care: payload.care || latestPlayerStatus.care || { active: null, queued: [], slots: 3 },
+  };
+
+  renderCareStats(latestPlayerStatus.companion);
+  renderPlayerCareStatus(latestPlayerStatus);
+
+  return latestPlayerStatus;
 }
 
 async function loadPlayerCoreStatus(options = {}) {
@@ -4086,7 +4193,8 @@ function refreshCareStatusWhenComplete(status) {
 
   careCompletionRefreshInFlight = true;
 
-  loadPlayerStatus()
+  loadPlayerCoreStatus({ sync: true })
+    .then(() => loadPlayerCareStatus())
     .finally(() => {
       careCompletionRefreshInFlight = false;
     });
@@ -4204,6 +4312,7 @@ async function performCareAction(buttonAction) {
       addNamiMessage(namiCareMessage(payload), {
         kind: Number(payload?.levelUps ?? 0) > 0 ? "level-up" : "normal",
       });
+      applyCareActionPayload(payload);
     }
 
     await loadPlayerCoreStatus({ sync: false });
