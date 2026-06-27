@@ -4425,13 +4425,16 @@ async function performCareAction(buttonAction) {
     }
 
     if (payload?.ok) {
-      if (shouldAddNamiCareMessage(payload)) {
-        addNamiMessage(namiCareMessage(payload), {
-          kind: Number(payload?.levelUps ?? 0) > 0 ? "level-up" : "normal",
-        });
-      }
+      const shouldRefreshNamiMessages = shouldAddNamiCareMessage(payload);
 
       applyCareActionPayload(payload);
+
+      if (shouldRefreshNamiMessages) {
+        await loadNamiMessagesFromServer({
+          force: true,
+          scrollToBottom: true,
+        });
+      }
     } else {
       await loadPlayerCoreStatus({ sync: false });
     }

@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -4058,6 +4059,8 @@ func cleanNamiMessage(value string) string {
 		return "Nami-chan makes a tiny thoughtful noise."
 	}
 
+	value = capitalizeNamiMessageSentences(value)
+
 	runes := []rune(value)
 	if len(runes) > 500 {
 		value = string(runes[:500])
@@ -4066,6 +4069,51 @@ func cleanNamiMessage(value string) string {
 	}
 
 	return value
+}
+
+func capitalizeNamiMessageSentences(value string) string {
+	runes := []rune(value)
+	capitalizeNext := true
+	parenthesesDepth := 0
+
+	for index, character := range runes {
+		switch character {
+		case '(':
+			parenthesesDepth++
+			continue
+		case ')':
+			if parenthesesDepth > 0 {
+				parenthesesDepth--
+			}
+			continue
+		case '.', '!', '?':
+			if parenthesesDepth == 0 {
+				capitalizeNext = true
+			}
+			continue
+		}
+
+		if parenthesesDepth > 0 {
+			continue
+		}
+
+		if unicode.IsSpace(character) || character == '"' || character == '\'' || character == '“' || character == '”' {
+			continue
+		}
+
+		if unicode.IsLetter(character) {
+			if capitalizeNext {
+				runes[index] = unicode.ToUpper(character)
+			}
+
+			capitalizeNext = false
+			continue
+		}
+
+		capitalizeNext = false
+	}
+
+	return string(runes)
 }
 
 func (s *Store) ApplyDevCareAction(ctx context.Context, action string) (*CareActionResult, error) {
