@@ -126,7 +126,8 @@ const TOP_PLAYER_SLOT_DEFAULTS = ["wardrobe", "studio", "treasure"];
 const TOP_PLAYER_SLOT_COUNT = 3;
 const TOP_PLAYER_ONLINE_TICK_MS = 10000;
 let topPlayerOnlineTickInFlight = false;
-let topPlayerOnlineSecondsDisplayMax = 0;const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
+let topPlayerOnlineSecondsDisplayMax = 0;
+const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
 const AUTH_LANDING_SKIP_PRELANDING_KEY = "namigotchi_auth_skip_prelanding_once_v1";
 let authLandingMusicAutoplayBlocked = false;
 let authPrelandingDismissed = false;
@@ -1799,54 +1800,147 @@ function populateTopPlayerSlotSelects(selection = getTopPlayerSlotSelection()) {
   });
 }
 
+function topPlayerSlotRowsMatch(selection) {
+  if (!topPlayerDetailList) {
+    return false;
+  }
+
+  const rows = Array.from(topPlayerDetailList.querySelectorAll("[data-top-player-slot]"));
+
+  if (rows.length !== selection.length) {
+    return false;
+  }
+
+  return selection.every((slotKey, index) => rows[index]?.dataset.topPlayerSlot === slotKey);
+}
+
+function updateTopPlayerSlotRowValue(row, slotKey, status) {
+  const optionConfig = TOP_PLAYER_SLOT_OPTIONS[slotKey];
+
+  if (!row || !optionConfig) {
+    return;
+  }
+
+  const value = row.querySelector(".metric-value");
+  const valueText = String(optionConfig.render?.(status || {}) ?? "") || "—";
+
+  setTextIfChanged(value, valueText);
+
+  if (value) {
+    if (optionConfig.title) {
+      value.title = optionConfig.title;
+    } else {
+      value.removeAttribute("title");
+    }
+  }
+}
+
+function createTopPlayerSlotRow(slotKey, status) {
+  const optionConfig = TOP_PLAYER_SLOT_OPTIONS[slotKey];
+
+  if (!optionConfig) {
+    return null;
+  }
+
+  const row = document.createElement("p");
+  row.className = "top-player-detail-row";
+  row.dataset.topPlayerSlot = slotKey;
+
+  if (optionConfig.fullRow) {
+    row.classList.add("top-player-detail-row-full");
+
+    const value = document.createElement("strong");
+    value.className = "metric-value";
+
+    row.appendChild(value);
+    updateTopPlayerSlotRowValue(row, slotKey, status);
+
+    return row;
+  }
+
+  const label = document.createElement("span");
+  label.className = "metric-name";
+  label.textContent = `${optionConfig.label || optionConfig.settingsLabel}:`;
+
+  const value = document.createElement("strong");
+  value.className = "metric-value";
+
+  row.append(label, value);
+  updateTopPlayerSlotRowValue(row, slotKey, status);
+
+  return row;
+}
+
 function renderTopPlayerSlots(status) {
   if (!topPlayerDetailList) {
     return;
   }
 
   const selection = getTopPlayerSlotSelection();
-  topPlayerDetailList.replaceChildren();
 
-  selection.forEach((slotKey) => {
-    const optionConfig = TOP_PLAYER_SLOT_OPTIONS[slotKey];
+  if (!topPlayerSlotRowsMatch(selection)) {
+    const fragment = document.createDocumentFragment();
 
-    if (!optionConfig) {
-      return;
-    }
+    selection.forEach((slotKey) => {
+      const row = createTopPlayerSlotRow(slotKey, status);
+      if (row) {
+        fragment.appendChild(row);
+      }
+    });
 
-    const row = document.createElement("p");
-    row.className = "top-player-detail-row";
-    row.dataset.topPlayerSlot = slotKey;
+    topPlayerDetailList.replaceChildren(fragment);
+    return;
+  }
 
-    const valueText = String(optionConfig.render?.(status || {}) ?? "");
-
-    if (optionConfig.fullRow) {
-      row.classList.add("top-player-detail-row-full");
-
-      const value = document.createElement("strong");
-      value.className = "metric-value";
-      value.textContent = valueText || "—";
-
-      row.appendChild(value);
-      topPlayerDetailList.appendChild(row);
-      return;
-    }
-
-    const label = document.createElement("span");
-    label.className = "metric-name";
-    label.textContent = `${optionConfig.label || optionConfig.settingsLabel}:`;
-
-    const value = document.createElement("strong");
-    value.className = "metric-value";
-    value.textContent = valueText || "—";
-
-    if (optionConfig.title) {
-      value.title = optionConfig.title;
-    }
-
-    row.append(label, value);
-    topPlayerDetailList.appendChild(row);
+  selection.forEach((slotKey, index) => {
+    const row = topPlayerDetailList.querySelectorAll("[data-top-player-slot]")[index];
+    updateTopPlayerSlotRowValue(row, slotKey, status);
   });
+}
+
+function updateTopPlayerOnlineSlotDisplay(status = latestPlayerStatus) {
+  if (!topPlayerDetailList) {
+    return;
+  }
+
+  const selection = getTopPlayerSlotSelection();
+  const playtimeIndex = selection.indexOf("playtime");
+
+  if (playtimeIndex === -1) {
+    return;
+  }
+
+  if (!topPlayerSlotRowsMatch(selection)) {
+    renderTopPlayerSlots(status);
+    return;
+  }
+
+  const row = topPlayerDetailList.querySelectorAll("[data-top-player-slot]")[playtimeIndex];
+
+  if (row?.dataset.topPlayerSlot !== "playtime") {
+    renderTopPlayerSlots(status);
+    return;
+  }
+
+  updateTopPlayerSlotRowValue(row, "playtime", status);
+}
+
+function initializeTopPlayerVisibilityRefresh() {
+  if (document.body?.dataset.topPlayerVisibilityRefreshReady === "true") {
+    return;
+  }
+
+  if (document.body) {
+    document.body.dataset.topPlayerVisibilityRefreshReady = "true";
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      refreshTopPlayerSlotDisplay();
+    }
+  });
+
+  window.addEventListener("focus", refreshTopPlayerSlotDisplay);
 }
 
 function normalizeTopPlayerOnlineSeconds(value) {
@@ -1917,7 +2011,7 @@ async function trackPlayerOnlineTick() {
 
     if (Number.isFinite(onlineSeconds)) {
       mergeTopPlayerOnlineSeconds(latestPlayerStatus, onlineSeconds);
-      renderTopPlayerSlots(latestPlayerStatus);
+      updateTopPlayerOnlineSlotDisplay(latestPlayerStatus);
     }
   } catch (error) {
     console.error(error);
@@ -5799,6 +5893,7 @@ initializeTheme();
 initializeAuthLanding();
 initializeLogoutButton();
 initializeTopPlayerSlotSettings();
+initializeTopPlayerVisibilityRefresh();
 renderTopPlayerSlots(latestPlayerStatus);
 loadStatus();
 initializeAuthGate();
@@ -5808,9 +5903,6 @@ setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
 setInterval(trackPlayerOnlineTick, TOP_PLAYER_ONLINE_TICK_MS);
 setInterval(loadPlayerStatus, 30000);
-setInterval(refreshTopPlayerSlotDisplay, 15000);
-setInterval(loadPlayerStatus, 30000);
-setInterval(refreshTopPlayerSlotDisplay, 15000);
 /* Wardrobe item sharing override layer */
 
 function submitChatMessage(event) {

@@ -370,6 +370,10 @@ and s.expires_at > now()
 update auth_sessions
 set last_seen_at = now()
 where session_hash = $1
+and (
+last_seen_at is null
+or last_seen_at <= now() - interval '5 minutes'
+)
 `, tokenHash)
 
 	return account, nil

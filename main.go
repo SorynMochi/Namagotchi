@@ -31,8 +31,53 @@ func main() {
 		log.Fatal("database migrations failed:", err)
 	}
 
+	go runSoftCleanupJob(ctx, store)
+
 	app := server.New(store, time.Now())
 
 	log.Printf("Namigotchi Idle server running at http://localhost%s", listenAddress)
 	log.Fatal(http.ListenAndServe(listenAddress, app.Routes()))
+}
+
+const softCleanupInterval = time.Hour
+
+func runSoftCleanupJob(ctx context.Context, store *database.Store) {
+	if store == nil {
+		return
+	}
+
+	runCleanup := func() {
+		cleanupCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
+		defer cancel()
+
+		result, err := store.PruneSoftLogs(cleanupCtx)
+		if err != nil {
+			log.Printf("soft cleanup failed: %v", err)
+			return
+		}
+
+		if result.TotalPruned() > 0 {
+			log.Printf(
+				"soft cleanup pruned playdeck=%d nami_messages=%d security=%d dev_audit=%d",
+				result.PlaydeckCombatLogs,
+				result.NamiMessages,
+				result.SecurityEventLogs,
+				result.DevAuditLogs,
+			)
+		}
+	}
+
+	runCleanup()
+
+	ticker := time.NewTicker(softCleanupInterval)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			runCleanup()
+		}
+	}
 }
