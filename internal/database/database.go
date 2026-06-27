@@ -4613,22 +4613,53 @@ func (s *Store) UpdateAndGetPlaydeckZoneMaxStreak(ctx context.Context, playerID 
 
 	var maxStreak int64
 
-	if err := s.Pool.QueryRow(ctx, `
+	err := s.Pool.QueryRow(ctx, `
+update player_playdeck_zone_records
+set max_streak = $3,
+updated_at = now()
+where player_id = $1
+and zone_id = $2
+and max_streak < $3
+returning max_streak
+`, playerID, zoneID, streak).Scan(&maxStreak)
+	if err == nil {
+		return normalizePlaydeckStreak(maxStreak), nil
+	}
+	if err != pgx.ErrNoRows {
+		return 0, fmt.Errorf("update playdeck zone max streak: %w", err)
+	}
+
+	err = s.Pool.QueryRow(ctx, `
 insert into player_playdeck_zone_records (
 player_id,
 zone_id,
 max_streak
 )
 values ($1, $2, $3)
-on conflict (player_id, zone_id) do update
-set max_streak = greatest(player_playdeck_zone_records.max_streak, excluded.max_streak),
-updated_at = now()
+on conflict (player_id, zone_id) do nothing
 returning max_streak
-`, playerID, zoneID, streak).Scan(&maxStreak); err != nil {
-		return 0, fmt.Errorf("upsert playdeck zone max streak: %w", err)
+`, playerID, zoneID, streak).Scan(&maxStreak)
+	if err == nil {
+		return normalizePlaydeckStreak(maxStreak), nil
+	}
+	if err != pgx.ErrNoRows {
+		return 0, fmt.Errorf("insert playdeck zone max streak: %w", err)
 	}
 
-	return maxStreak, nil
+	err = s.Pool.QueryRow(ctx, `
+select max_streak
+from player_playdeck_zone_records
+where player_id = $1
+and zone_id = $2
+`, playerID, zoneID).Scan(&maxStreak)
+	if err == pgx.ErrNoRows {
+		return 0, nil
+	}
+	if err != nil {
+		return 0, fmt.Errorf("reload playdeck zone max streak: %w", err)
+	}
+
+	return normalizePlaydeckStreak(maxStreak), nil
 }
 
 /* Player online time tracking START */
@@ -4944,22 +4975,36 @@ func (s *Store) SetDevGatheringTask(ctx context.Context, task string) error {
 	}
 
 	commandTag, err := s.Pool.Exec(ctx, `
-		update player_tick_state
-		set active_gathering_task = $1,
-			updated_at = now()
-		where player_id = (
-			select id
-			from players
-			where display_name = 'Soryn'
-		)
-	`, task)
+update player_tick_state
+set active_gathering_task = $1,
+updated_at = now()
+where player_id = (
+select id
+from players
+where display_name = 'Soryn'
+)
+and active_gathering_task is distinct from $1
+`, task)
 
 	if err != nil {
 		return fmt.Errorf("set dev gathering task: %w", err)
 	}
 
 	if commandTag.RowsAffected() == 0 {
-		return fmt.Errorf("dev player not found")
+		var exists bool
+		if err := s.Pool.QueryRow(ctx, `
+select exists (
+select 1
+from players
+where display_name = 'Soryn'
+)
+`).Scan(&exists); err != nil {
+			return fmt.Errorf("check dev player for gathering task: %w", err)
+		}
+
+		if !exists {
+			return fmt.Errorf("dev player not found")
+		}
 	}
 
 	return nil
@@ -5141,17 +5186,19 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
 		}
 	}
 
-	if _, err := tx.Exec(ctx, `
-	update players
-		set level = $1,
-			total_xp = $2,
-			xp_into_level = $3,
-			currency_cents = currency_cents + $4,
-			nibbles = nibbles + $5,
-			updated_at = now()
-		where id = $6
-	`, level, totalXP, xpIntoLevel, result.CreditsCentsGained, result.NibblesGained, playerID); err != nil {
-		return nil, fmt.Errorf("update player after ticks: %w", err)
+	if result.SyncXPGained > 0 || result.CreditsCentsGained > 0 || result.NibblesGained > 0 || result.LevelUps > 0 {
+		if _, err := tx.Exec(ctx, `
+update players
+set level = $1,
+total_xp = $2,
+xp_into_level = $3,
+currency_cents = currency_cents + $4,
+nibbles = nibbles + $5,
+updated_at = now()
+where id = $6
+`, level, totalXP, xpIntoLevel, result.CreditsCentsGained, result.NibblesGained, playerID); err != nil {
+			return nil, fmt.Errorf("update player after ticks: %w", err)
+		}
 	}
 
 	if result.ResourceAmountGained > 0 {
@@ -5201,9 +5248,10 @@ func (s *Store) SettleDevTicks(ctx context.Context, forcedTicks int64) (*TickRes
             )
             values ($1, $2, $3)
             on conflict (player_id, zone_id) do update
-            set max_streak = greatest(player_playdeck_zone_records.max_streak, excluded.max_streak),
-                updated_at = now()
-        `, playerID, normalizePlaydeckZoneID(playdeckZoneID), normalizePlaydeckStreak(playdeckStreak)); err != nil {
+set max_streak = excluded.max_streak,
+updated_at = now()
+where player_playdeck_zone_records.max_streak < excluded.max_streak
+`, playerID, normalizePlaydeckZoneID(playdeckZoneID), normalizePlaydeckStreak(playdeckStreak)); err != nil {
 			return nil, fmt.Errorf("update playdeck zone max streak: %w", err)
 		}
 	}

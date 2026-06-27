@@ -6071,7 +6071,8 @@ setInterval(updateLiveServerClock, 250);
 setInterval(updateTickProgressBar, 100);
 setInterval(loadStatus, 10000);
 setInterval(trackPlayerOnlineTick, TOP_PLAYER_ONLINE_TICK_MS);
-setInterval(loadPlayerStatus, 30000);
+setInterval(() => loadPlayerCoreStatus({ sync: false }), 30000);
+setInterval(loadPlayerStatus, 120000);
 /* Wardrobe item sharing override layer */
 
 function submitChatMessage(event) {
