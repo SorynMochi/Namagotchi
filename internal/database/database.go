@@ -363,6 +363,9 @@ func usefulCareXP(current int, delta int) int64 {
 }
 
 func (s *Store) DevPlayerID(ctx context.Context) (int64, error) {
+	if playerID, ok := AuthPlayerIDFromContext(ctx); ok {
+		return playerID, nil
+	}
 	if accountID, ok := AuthAccountIDFromContext(ctx); ok {
 		playerID, err := s.PlayerIDForAccount(ctx, accountID)
 		if err != nil {

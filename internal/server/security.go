@@ -20,6 +20,10 @@ func (s *Server) requireAuth(next http.HandlerFunc) http.HandlerFunc {
 
 		ctx := database.WithAuthAccountID(r.Context(), account.ID)
 		ctx = withAuthAccountRequestContext(ctx, account)
+		if strings.HasPrefix(r.URL.Path, "/api/player/") {
+			ctx = s.withRequestPlayerID(ctx, account.ID)
+		}
+
 		next(w, r.WithContext(ctx))
 	}
 }
@@ -54,6 +58,10 @@ func (s *Server) requireDev(next http.HandlerFunc) http.HandlerFunc {
 
 		ctx := database.WithAuthAccountID(r.Context(), account.ID)
 		ctx = withAuthAccountRequestContext(ctx, account)
+		if strings.HasPrefix(r.URL.Path, "/api/dev/") {
+			ctx = s.withRequestPlayerID(ctx, account.ID)
+		}
+
 		next(w, r.WithContext(ctx))
 	}
 }
