@@ -10733,3 +10733,23 @@ select optgroup {
 }
 
 /* Top rail player playdeck refinement END */
+
+/* Top player slot customization polish START */
+
+.top-player-detail-list .top-player-detail-row-full {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.top-player-detail-list .top-player-detail-row-full .metric-value {
+  grid-column: 1 / -1 !important;
+  justify-self: start !important;
+  text-align: left !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.top-player-slot-settings-card .settings-field + .settings-field {
+  margin-top: 0.75rem;
+}
+
+/* Top player slot customization polish END */

@@ -53,7 +53,7 @@
     <section class="stat-group compact top-user-info">
   <button class="top-player-name-button" type="button">&#128142; Player</button>
 
-  <div class="top-player-detail-list" aria-label="Player quick stats">
+  <div class="top-player-detail-list" id="top-player-detail-list" aria-label="Player quick stats">
     <p><span class="metric-name">Wardrobe:</span><strong class="metric-value" id="top-player-wardrobe">0 / 100</strong></p>
     <p><span class="metric-name">Studio:</span><strong class="metric-value" id="top-player-studio">1</strong></p>
     <p><span class="metric-name">Treasure:</span><strong class="metric-value" id="top-player-treasure" title="Treasure is not implemented yet.">1h59m58s</strong></p>
@@ -640,6 +640,28 @@
         </select>
       </label>
     </section>
+
+<!-- Top player slot settings START -->
+    <section class="settings-card top-player-slot-settings-card">
+      <h2>Top Rail Player Slots</h2>
+      <p class="muted">Choose the three player-specific stats shown in the Player section of the top rail.</p>
+
+      <label class="settings-field" for="top-player-slot-1">
+        <span>Slot 1</span>
+        <select id="top-player-slot-1" data-top-player-slot-select="0"></select>
+      </label>
+
+      <label class="settings-field" for="top-player-slot-2">
+        <span>Slot 2</span>
+        <select id="top-player-slot-2" data-top-player-slot-select="1"></select>
+      </label>
+
+      <label class="settings-field" for="top-player-slot-3">
+        <span>Slot 3</span>
+        <select id="top-player-slot-3" data-top-player-slot-select="2"></select>
+      </label>
+    </section>
+<!-- Top player slot settings END -->
 
     <section class="settings-card">
       <h2>Account</h2>

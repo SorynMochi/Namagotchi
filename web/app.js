@@ -81,9 +81,8 @@ const playdeckHpLabel = document.querySelector("#playdeck-hp-label");
 const playdeckHpFill = document.querySelector("#playdeck-hp-fill");
 const playdeckXpLabel = document.querySelector("#playdeck-xp-label");
 const playdeckXpFill = document.querySelector("#playdeck-xp-fill");
-const topPlayerWardrobe = document.querySelector("#top-player-wardrobe");
-const topPlayerStudio = document.querySelector("#top-player-studio");
-const topPlayerTreasure = document.querySelector("#top-player-treasure");
+const topPlayerDetailList = document.querySelector("#top-player-detail-list");
+const topPlayerSlotSelects = Array.from(document.querySelectorAll("[data-top-player-slot-select]"));
 
 const activeTask = document.querySelector("#active-task");
 const resourceRate = document.querySelector("#resource-rate");
@@ -122,6 +121,10 @@ const CHAT_CHANNEL_KEY = "namigotchi_chat_active_channel_v1";
 const CHAT_HIDDEN_KEY = "namigotchi_chat_hidden_v1";
 const CHAT_PREVIOUS_HEIGHT_KEY = "namigotchi_chat_previous_height_v1";
 const ACTIVE_SECTION_KEY = "namigotchi_active_section_v1";
+const TOP_PLAYER_SLOT_SETTINGS_KEY = "namigotchi_top_player_slots_v1";
+const TOP_PLAYER_SLOT_DEFAULTS = ["wardrobe", "studio", "treasure"];
+const TOP_PLAYER_SLOT_COUNT = 3;
+const TOP_PLAYER_SESSION_STARTED_AT_MS = Date.now();
 const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
 const AUTH_LANDING_SKIP_PRELANDING_KEY = "namigotchi_auth_skip_prelanding_once_v1";
 let authLandingMusicAutoplayBlocked = false;
@@ -1533,6 +1536,407 @@ function getPlaydeckCurrentAndMaxStreak(status) {
   };
 }
 
+/* Top player slot customization START */
+
+const TOP_PLAYER_SLOT_OPTIONS = {
+  account_age: {
+    settingsLabel: "Account Age",
+    label: "Account Age",
+    render(status) {
+      return `${getAccountAgeDays(status)}d`;
+    },
+  },
+  badges: {
+    settingsLabel: "Badges",
+    label: "Badges",
+    render(status) {
+      const badges = status?.badges || status?.achievements || {};
+      const current = Number(badges.unlocked ?? badges.current ?? badges.earned ?? 0);
+      const max = Number(badges.total ?? badges.max ?? badges.available ?? 0);
+      return `${formatTopRailNumber(current)} / ${formatTopRailNumber(max)}`;
+    },
+  },
+  club: {
+    settingsLabel: "Club",
+    fullRow: true,
+    render(status) {
+      const club = status?.club || status?.player?.club || {};
+      const clubName = String(club.name || club.clubName || "").trim();
+
+      if (!clubName) {
+        return "No Club";
+      }
+
+      const rank = club.rank ?? club.clubRank ?? club.ladderRank;
+
+      if (rank === undefined || rank === null || rank === "") {
+        return clubName;
+      }
+
+      return `${clubName}: #${formatTopRailNumber(rank)}`;
+    },
+  },
+  cooking_level: {
+    settingsLabel: "Cooking Level",
+    label: "Cooking",
+    render(status) {
+      return formatTopRailNumber(status?.skills?.cooking?.level ?? status?.activities?.cooking?.level ?? 1);
+    },
+  },
+  fishing_level: {
+    settingsLabel: "Fishing Level",
+    label: "Fishing",
+    render(status) {
+      return formatTopRailNumber(status?.skills?.fishing?.level ?? status?.activities?.fishing?.level ?? 1);
+    },
+  },
+  hp: {
+    settingsLabel: "HP",
+    label: "HP",
+    render(status) {
+      const playdeck = status?.playdeck || {};
+      const current = Number(playdeck.playerHp ?? playdeck.hp ?? 100);
+      const max = Number(playdeck.playerMaxHp ?? playdeck.maxHp ?? 100);
+      return `${formatTopRailNumber(current)} / ${formatTopRailNumber(max)}`;
+    },
+  },
+  ingredients: {
+    settingsLabel: "Ingredients",
+    label: "Ingredients",
+    render(status) {
+      return formatTopRailNumber(getTotalIngredients(status));
+    },
+  },
+  market: {
+    settingsLabel: "Market",
+    label: "Market",
+    render(status) {
+      return formatTopRailNumber(
+        status?.market?.wardrobeItemCount ??
+        status?.market?.listings ??
+        status?.marketListings ??
+        0
+      );
+    },
+  },
+  orders: {
+    settingsLabel: "Orders",
+    label: "Orders",
+    render(status) {
+      const orders = status?.orders || {};
+      const available = Number(orders.available ?? orders.availableToday ?? 9);
+
+      if (available > 0) {
+        return formatTopRailNumber(available);
+      }
+
+      return formatTopRailTimer(Number(orders.secondsUntilReset ?? orders.resetInSeconds ?? 24 * 60 * 60));
+    },
+  },
+  outfit_score: {
+    settingsLabel: "Outfit Score",
+    label: "Outfit Score",
+    render(status) {
+      return formatTopRailNumber(
+        status?.wardrobe?.outfitScore ??
+        status?.wardrobe?.averageEquippedLevel ??
+        status?.outfitScore ??
+        0
+      );
+    },
+  },
+  playtime: {
+    settingsLabel: "Playtime",
+    label: "Playtime",
+    render() {
+      return formatTopRailPlaytime((Date.now() - TOP_PLAYER_SESSION_STARTED_AT_MS) / 1000);
+    },
+  },
+  ranking_playdeck: {
+    settingsLabel: "Playdeck Ranking",
+    label: "Playdeck",
+    render(status) {
+      return formatTopRailRank(status?.rankings?.playdeck ?? status?.ranking?.playdeck);
+    },
+  },
+  ranking_nami_level: {
+    settingsLabel: "Nami Level Ranking",
+    label: "Nami Level",
+    render(status) {
+      return formatTopRailRank(status?.rankings?.namiLevel ?? status?.ranking?.namiLevel);
+    },
+  },
+  ranking_cooking: {
+    settingsLabel: "Cooking Ranking",
+    label: "Cooking",
+    render(status) {
+      return formatTopRailRank(status?.rankings?.cooking ?? status?.ranking?.cooking);
+    },
+  },
+  ranking_fishing: {
+    settingsLabel: "Fishing Ranking",
+    label: "Fishing",
+    render(status) {
+      return formatTopRailRank(status?.rankings?.fishing ?? status?.ranking?.fishing);
+    },
+  },
+  ranking_studio: {
+    settingsLabel: "Studio Ranking",
+    label: "Studio",
+    render(status) {
+      return formatTopRailRank(status?.rankings?.studio ?? status?.ranking?.studio);
+    },
+  },
+  studio: {
+    settingsLabel: "Studio",
+    label: "Studio",
+    render(status) {
+      return formatTopRailNumber(status?.studio?.level ?? status?.studioLevel ?? 1);
+    },
+  },
+  treasure: {
+    settingsLabel: "Treasure",
+    label: "Treasure",
+    title: "Treasure is not implemented yet.",
+    render() {
+      return "1h59m58s";
+    },
+  },
+  wardrobe: {
+    settingsLabel: "Wardrobe",
+    label: "Wardrobe",
+    render(status) {
+      const wardrobe = status?.wardrobe || { used: 0, capacity: 100 };
+      return `${formatTopRailNumber(wardrobe.used ?? 0)} / ${formatTopRailNumber(wardrobe.capacity ?? 100)}`;
+    },
+  },
+};
+
+const TOP_PLAYER_SLOT_ORDER = [
+  "account_age",
+  "badges",
+  "club",
+  "cooking_level",
+  "fishing_level",
+  "hp",
+  "ingredients",
+  "market",
+  "orders",
+  "outfit_score",
+  "playtime",
+  "ranking_playdeck",
+  "ranking_nami_level",
+  "ranking_cooking",
+  "ranking_fishing",
+  "ranking_studio",
+  "studio",
+  "treasure",
+  "wardrobe",
+];
+
+function initializeTopPlayerSlotSettings() {
+  populateTopPlayerSlotSelects();
+
+  topPlayerSlotSelects.forEach((select) => {
+    select.addEventListener("change", () => {
+      const nextSelection = sanitizeTopPlayerSlotSelection(
+        topPlayerSlotSelects.map((slotSelect) => slotSelect.value)
+      );
+
+      localStorage.setItem(TOP_PLAYER_SLOT_SETTINGS_KEY, JSON.stringify(nextSelection));
+      populateTopPlayerSlotSelects(nextSelection);
+      renderTopPlayerSlots(latestPlayerStatus);
+    });
+  });
+}
+
+function getTopPlayerSlotSelection() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(TOP_PLAYER_SLOT_SETTINGS_KEY));
+    return sanitizeTopPlayerSlotSelection(parsed);
+  } catch {
+    return [...TOP_PLAYER_SLOT_DEFAULTS];
+  }
+}
+
+function sanitizeTopPlayerSlotSelection(selection) {
+  const selected = [];
+  const input = Array.isArray(selection) ? selection : [];
+
+  [...input, ...TOP_PLAYER_SLOT_DEFAULTS, ...TOP_PLAYER_SLOT_ORDER].forEach((key) => {
+    if (selected.length >= TOP_PLAYER_SLOT_COUNT) {
+      return;
+    }
+
+    if (!TOP_PLAYER_SLOT_OPTIONS[key] || selected.includes(key)) {
+      return;
+    }
+
+    selected.push(key);
+  });
+
+  return selected.slice(0, TOP_PLAYER_SLOT_COUNT);
+}
+
+function populateTopPlayerSlotSelects(selection = getTopPlayerSlotSelection()) {
+  topPlayerSlotSelects.forEach((select, index) => {
+    const selectedKey = selection[index] || TOP_PLAYER_SLOT_DEFAULTS[index];
+    const otherSelectedKeys = new Set(selection.filter((_, selectedIndex) => selectedIndex !== index));
+
+    select.replaceChildren();
+
+    TOP_PLAYER_SLOT_ORDER.forEach((key) => {
+      const optionConfig = TOP_PLAYER_SLOT_OPTIONS[key];
+      const option = document.createElement("option");
+
+      option.value = key;
+      option.textContent = optionConfig.settingsLabel || optionConfig.label || key;
+      option.disabled = otherSelectedKeys.has(key);
+      option.selected = key === selectedKey;
+
+      select.appendChild(option);
+    });
+
+    select.value = selectedKey;
+  });
+}
+
+function renderTopPlayerSlots(status) {
+  if (!topPlayerDetailList) {
+    return;
+  }
+
+  const selection = getTopPlayerSlotSelection();
+  topPlayerDetailList.replaceChildren();
+
+  selection.forEach((slotKey) => {
+    const optionConfig = TOP_PLAYER_SLOT_OPTIONS[slotKey];
+
+    if (!optionConfig) {
+      return;
+    }
+
+    const row = document.createElement("p");
+    row.className = "top-player-detail-row";
+    row.dataset.topPlayerSlot = slotKey;
+
+    const valueText = String(optionConfig.render?.(status || {}) ?? "");
+
+    if (optionConfig.fullRow) {
+      row.classList.add("top-player-detail-row-full");
+
+      const value = document.createElement("strong");
+      value.className = "metric-value";
+      value.textContent = valueText || "—";
+
+      row.appendChild(value);
+      topPlayerDetailList.appendChild(row);
+      return;
+    }
+
+    const label = document.createElement("span");
+    label.className = "metric-name";
+    label.textContent = `${optionConfig.label || optionConfig.settingsLabel}:`;
+
+    const value = document.createElement("strong");
+    value.className = "metric-value";
+    value.textContent = valueText || "—";
+
+    if (optionConfig.title) {
+      value.title = optionConfig.title;
+    }
+
+    row.append(label, value);
+    topPlayerDetailList.appendChild(row);
+  });
+}
+
+function getAccountAgeDays(status) {
+  const createdAt =
+    status?.player?.createdAt ||
+    status?.player?.created_at ||
+    status?.account?.createdAt ||
+    status?.accountCreatedAt;
+
+  const createdAtMs = Date.parse(createdAt);
+
+  if (Number.isNaN(createdAtMs)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.floor((Date.now() - createdAtMs) / 86_400_000));
+}
+
+function getTotalIngredients(status) {
+  const ingredients = status?.ingredients || status?.inventory?.ingredients || status?.resources?.ingredients;
+
+  if (typeof ingredients === "number") {
+    return ingredients;
+  }
+
+  if (!ingredients || typeof ingredients !== "object") {
+    return 0;
+  }
+
+  return Object.values(ingredients).reduce((total, value) => total + Math.max(0, Number(value) || 0), 0);
+}
+
+function formatTopRailRank(value) {
+  if (value === undefined || value === null || value === "") {
+    return "—";
+  }
+
+  return `#${formatTopRailNumber(value)}`;
+}
+
+function formatTopRailNumber(value) {
+  const number = Number(value ?? 0);
+
+  if (!Number.isFinite(number)) {
+    return "0";
+  }
+
+  const sign = number < 0 ? "-" : "";
+  const absolute = Math.abs(number);
+
+  if (absolute < 1000) {
+    return `${sign}${Math.round(absolute).toLocaleString()}`;
+  }
+
+  const suffixes = ["", "k", "m", "b", "t", "qa", "qi", "sx", "sp", "oc", "no"];
+  let tier = Math.floor(Math.log10(absolute) / 3);
+
+  if (tier >= suffixes.length) {
+    tier = suffixes.length - 1;
+  }
+
+  const scaled = absolute / Math.pow(1000, tier);
+  return `${sign}${trimCompactDecimals(scaled)}${suffixes[tier]}`;
+}
+
+function formatTopRailPlaytime(totalSeconds) {
+  const safeSeconds = Math.max(0, Math.floor(Number(totalSeconds) || 0));
+  const hours = Math.floor(safeSeconds / 3600);
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+
+  return `${hours}:${pad2(minutes)}`;
+}
+
+function formatTopRailTimer(totalSeconds) {
+  const safeSeconds = Math.max(0, Math.floor(Number(totalSeconds) || 0));
+  const hours = Math.floor(safeSeconds / 3600);
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+  const seconds = safeSeconds % 60;
+
+  if (hours > 0) {
+    return `${hours}h${pad2(minutes)}m`;
+  }
+
+  return `${minutes}m${pad2(seconds)}s`;
+}
+
+/* Top player slot customization END */
+
 function updateTopPlayerName(player) {
   const playerPill = document.querySelector(".top-player-name-button");
   if (!playerPill) {
@@ -1607,30 +2011,27 @@ function renderPlayerStatus(status) {
   setTextIfChanged(namiPrimaryNeed, companion.primaryNeed || "Waiting");
   setTextIfChanged(namiSuggestedAction, companion.suggestedAction || "Any care action");
 
-  setTextIfChanged(wealthCredits, formatWholeCredits(player.creditsCents ?? player.currencyCents));
-  setTextIfChanged(wealthNibbles, formatCompactNumber(player.nibbles ?? 0));
-  setTextIfChanged(wealthNamiCoin, formatCompactNumber(player.namiCoin ?? 0));
+  setTextIfChanged(wealthCredits, formatTopRailNumber(Math.round(Number(player.creditsCents ?? player.currencyCents ?? 0) / 100)));
+  setTextIfChanged(wealthNibbles, formatTopRailNumber(player.nibbles ?? 0));
+  setTextIfChanged(wealthNamiCoin, formatTopRailNumber(player.namiCoin ?? 0));
 
   const wardrobe = status.wardrobe || { used: 0, capacity: 100 };
   const wardrobeCountText = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
 
   setTextIfChanged(topWardrobe, wardrobeCountText);
-  setTextIfChanged(topPlayerWardrobe, wardrobeCountText);
-  setTextIfChanged(topPlayerStudio, Number(status.studio?.level ?? status.studioLevel ?? 1).toLocaleString());
-  setTextIfChanged(topPlayerTreasure, "1h59m58s");
-  setTitleIfChanged(topPlayerTreasure, "Treasure is not implemented yet.");
+  renderTopPlayerSlots(status);
   setTextIfChanged(topMood, Math.round(Number(companion.moodScore ?? 0)));
   setTextIfChanged(topNamiStatus, capitalize(companion.status));
   setTextIfChanged(personalMoodBonus, `+${bonus}% Resource Gain`);
 
   setTextIfChanged(playdeckTopLevel, Number(player.level ?? 1).toLocaleString());
 
-  setTextIfChanged(resFans, formatCompactNumber(status.resources?.fans ?? 0));
-  setTextIfChanged(resMemes, formatCompactNumber(status.resources?.memes ?? 0));
-  setTextIfChanged(resLostItems, formatCompactNumber(status.resources?.lostItems ?? 0));
-  setTextIfChanged(resConfidence, formatCompactNumber(status.resources?.confidence ?? 0));
-  setTextIfChanged(resReceipts, formatCompactNumber(status.resources?.receipts ?? 0));
-  setTextIfChanged(resPatterns, formatCompactNumber(status.resources?.patterns ?? 0));
+  setTextIfChanged(resFans, formatTopRailNumber(status.resources?.fans ?? 0));
+  setTextIfChanged(resMemes, formatTopRailNumber(status.resources?.memes ?? 0));
+  setTextIfChanged(resLostItems, formatTopRailNumber(status.resources?.lostItems ?? 0));
+  setTextIfChanged(resConfidence, formatTopRailNumber(status.resources?.confidence ?? 0));
+  setTextIfChanged(resReceipts, formatTopRailNumber(status.resources?.receipts ?? 0));
+  setTextIfChanged(resPatterns, formatTopRailNumber(status.resources?.patterns ?? 0));
 
   setTextIfChanged(actStreaming, activityLevel(status.activities?.streaming));
   setTextIfChanged(actDoomScrolling, activityLevel(status.activities?.doomScrolling));
@@ -5245,6 +5646,8 @@ initializeDevWardrobeSpawner();
 initializeTheme();
 initializeAuthLanding();
 initializeLogoutButton();
+initializeTopPlayerSlotSettings();
+renderTopPlayerSlots(latestPlayerStatus);
 loadStatus();
 initializeAuthGate();
 
