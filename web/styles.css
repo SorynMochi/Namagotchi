@@ -10654,3 +10654,82 @@ select optgroup {
 }
 
 /* Top rail player playdeck redesign END */
+
+/* Top rail player playdeck refinement START */
+/* Equalize Player / Resources / Work Levels and force Playdeck XP label to match Level + Chain. */
+
+/*
+  Player + Resources + Work Levels shared width:
+  Previous weights: 0.83 + 1.35 + 1.35 = 3.53
+  Equalized: 3.53 / 3 = 1.1767
+*/
+.top-stats-compact {
+  grid-template-columns:
+    minmax(237px, 1.1767fr)
+    minmax(148px, 0.82fr)
+    minmax(168px, 0.90fr)
+    minmax(226px, 1.17fr)
+    minmax(237px, 1.1767fr)
+    minmax(237px, 1.1767fr) !important;
+}
+
+/* XP label/value must use the same top-rail contract as Level and Chain. */
+.top-playdeck-meter-list #playdeck-xp-label,
+.top-playdeck-meter-list #playdeck-xp-label *,
+.top-playdeck-meter-list .xp-meter .meter-label,
+.top-playdeck-meter-list .xp-meter .meter-label * {
+  font-family: inherit !important;
+  font-style: normal !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+}
+
+.top-playdeck-meter-list #playdeck-xp-label .metric-name,
+.top-playdeck-meter-list .xp-meter .metric-name {
+  color: var(--top-rail-compact-label-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-label-color) !important;
+  font-size: var(--top-rail-compact-label-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  text-align: left !important;
+}
+
+.top-playdeck-meter-list #playdeck-xp-label .metric-value,
+.top-playdeck-meter-list .xp-meter .metric-value {
+  color: var(--top-rail-compact-value-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-value-color) !important;
+  font-size: var(--top-rail-compact-value-size) !important;
+  font-weight: 900 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  text-align: right !important;
+}
+
+/* Keep the existing responsive fallbacks intact after the desktop rebalance. */
+@media (max-width: 1600px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .top-stats-compact > .stat-group.compact {
+    grid-column: auto !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .top-stats-compact {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .top-stats-compact > .stat-group.compact {
+    grid-column: auto !important;
+  }
+}
+
+/* Top rail player playdeck refinement END */
