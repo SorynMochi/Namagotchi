@@ -4425,9 +4425,12 @@ async function performCareAction(buttonAction) {
     }
 
     if (payload?.ok) {
-      addNamiMessage(namiCareMessage(payload), {
-        kind: Number(payload?.levelUps ?? 0) > 0 ? "level-up" : "normal",
-      });
+      if (shouldAddNamiCareMessage(payload)) {
+        addNamiMessage(namiCareMessage(payload), {
+          kind: Number(payload?.levelUps ?? 0) > 0 ? "level-up" : "normal",
+        });
+      }
+
       applyCareActionPayload(payload);
     } else {
       await loadPlayerCoreStatus({ sync: false });
@@ -4622,6 +4625,11 @@ function saveNamiMessages() {
   // Nami messages are backend-backed now.
 }
 
+function shouldAddNamiCareMessage(result) {
+  const mode = String(result?.mode || "").toLowerCase();
+
+  return mode === "started" || mode === "completed";
+}
 function namiCareMessage(result) {
   const actionName = result?.actionName || "Care";
   const companion = result?.companion || {};
