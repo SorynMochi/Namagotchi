@@ -312,6 +312,12 @@ func (s *Server) HandleAuthGoogleCallback(w http.ResponseWriter, r *http.Request
 }
 
 func (s *Server) AuthAccountFromRequest(r *http.Request) (database.AuthAccount, bool) {
+	if r != nil {
+		if account, ok := authAccountFromRequestContext(r.Context()); ok {
+			return account, true
+		}
+	}
+
 	token := authSessionTokenFromRequest(r)
 	if token == "" {
 		return database.AuthAccount{}, false

@@ -19,6 +19,7 @@ func (s *Server) requireAuth(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		ctx := database.WithAuthAccountID(r.Context(), account.ID)
+		ctx = withAuthAccountRequestContext(ctx, account)
 		next(w, r.WithContext(ctx))
 	}
 }
@@ -52,6 +53,7 @@ func (s *Server) requireDev(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		ctx := database.WithAuthAccountID(r.Context(), account.ID)
+		ctx = withAuthAccountRequestContext(ctx, account)
 		next(w, r.WithContext(ctx))
 	}
 }
