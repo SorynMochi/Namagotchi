@@ -126,7 +126,7 @@ const TOP_PLAYER_SLOT_DEFAULTS = ["wardrobe", "studio", "treasure"];
 const TOP_PLAYER_SLOT_COUNT = 3;
 const TOP_PLAYER_ONLINE_TICK_MS = 5000;
 let topPlayerOnlineTickInFlight = false;
-const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
+let topPlayerOnlineSecondsDisplayMax = 0;const AUTH_LANDING_MUSIC_MUTED_KEY = "namigotchi_auth_landing_music_muted_v1";
 const AUTH_LANDING_SKIP_PRELANDING_KEY = "namigotchi_auth_skip_prelanding_once_v1";
 let authLandingMusicAutoplayBlocked = false;
 let authPrelandingDismissed = false;
@@ -1489,6 +1489,7 @@ async function loadPlayerStatus() {
     latestPlayerStatus = status;
     syncTopPlayerOnlineSeconds(status);
     renderPlayerStatus(status);
+    await trackPlayerOnlineTick();
     await loadNamiMessagesFromServer();
   } catch (error) {
     console.error(error);
@@ -1848,18 +1849,43 @@ function renderTopPlayerSlots(status) {
   });
 }
 
-function syncTopPlayerOnlineSeconds(status) {
-  const serverSeconds = Number(status?.player?.onlineSeconds ?? 0);
+function normalizeTopPlayerOnlineSeconds(value) {
+  const seconds = Number(value ?? 0);
 
-  if (status?.player && Number.isFinite(serverSeconds)) {
-    status.player.onlineSeconds = Math.max(0, Math.floor(serverSeconds));
+  return Number.isFinite(seconds) ? Math.max(0, Math.floor(seconds)) : 0;
+}
+
+function mergeTopPlayerOnlineSeconds(status, value) {
+  const nextSeconds = normalizeTopPlayerOnlineSeconds(value);
+
+  topPlayerOnlineSecondsDisplayMax = Math.max(topPlayerOnlineSecondsDisplayMax, nextSeconds);
+
+  if (status?.player) {
+    status.player.onlineSeconds = Math.max(
+      normalizeTopPlayerOnlineSeconds(status.player.onlineSeconds),
+      topPlayerOnlineSecondsDisplayMax
+    );
   }
+
+  if (latestPlayerStatus?.player) {
+    latestPlayerStatus.player.onlineSeconds = Math.max(
+      normalizeTopPlayerOnlineSeconds(latestPlayerStatus.player.onlineSeconds),
+      topPlayerOnlineSecondsDisplayMax
+    );
+  }
+
+  return topPlayerOnlineSecondsDisplayMax;
+}
+
+function syncTopPlayerOnlineSeconds(status) {
+  return mergeTopPlayerOnlineSeconds(status, status?.player?.onlineSeconds);
 }
 
 function getTopPlayerOnlineSeconds(status = latestPlayerStatus) {
-  const serverSeconds = Number(status?.player?.onlineSeconds ?? 0);
-
-  return Number.isFinite(serverSeconds) ? Math.max(0, Math.floor(serverSeconds)) : 0;
+  return Math.max(
+    topPlayerOnlineSecondsDisplayMax,
+    normalizeTopPlayerOnlineSeconds(status?.player?.onlineSeconds)
+  );
 }
 
 function refreshTopPlayerSlotDisplay() {
@@ -1889,8 +1915,8 @@ async function trackPlayerOnlineTick() {
     const result = await response.json();
     const onlineSeconds = Number(result?.onlineSeconds ?? 0);
 
-    if (Number.isFinite(onlineSeconds) && latestPlayerStatus?.player) {
-      latestPlayerStatus.player.onlineSeconds = Math.max(0, Math.floor(onlineSeconds));
+    if (Number.isFinite(onlineSeconds)) {
+      mergeTopPlayerOnlineSeconds(latestPlayerStatus, onlineSeconds);
       renderTopPlayerSlots(latestPlayerStatus);
     }
   } catch (error) {
