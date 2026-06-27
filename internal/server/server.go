@@ -31,6 +31,11 @@ type MessageResponse struct {
 	Message string `json:"message"`
 }
 
+type PlayerOnlineTickResponse struct {
+	OK            bool  `json:"ok"`
+	OnlineSeconds int64 `json:"onlineSeconds"`
+}
+
 type DevWardrobeSpawnResponse struct {
 	OK      bool                        `json:"ok"`
 	Message string                      `json:"message"`
@@ -94,6 +99,7 @@ func (s *Server) Routes() http.Handler {
 
 	mux.HandleFunc("/api/player/status", s.requireAuth(s.HandlePlayerStatus))
 	mux.HandleFunc("/api/player/sync", s.requireAuth(s.requireCSRF(s.HandlePlayerSync)))
+	mux.HandleFunc("/api/player/online-tick", s.requireAuth(s.requireCSRF(s.HandlePlayerOnlineTick)))
 	mux.HandleFunc("/api/player/wardrobe/item", s.requireAuth(s.HandleWardrobeItemDetail))
 	mux.HandleFunc("/api/player/wardrobe/equip", s.requireAuth(s.requireCSRF(s.HandleEquipWardrobeItem)))
 	mux.HandleFunc("/api/player/wardrobe/unequip", s.requireAuth(s.requireCSRF(s.HandleUnequipWardrobeItem)))
@@ -202,7 +208,33 @@ func (s *Server) HandlePlayerSync(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, status)
 }
 
+func (s *Server) HandlePlayerOnlineTick(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+
+	playerID, err := s.playerIDForRequest(r)
+	if err != nil {
+		log.Printf("get player for online tick failed: %v", err)
+		writeError(w, http.StatusNotFound, "player not found")
+		return
+	}
+
+	onlineSeconds, err := s.Store.TrackPlayerOnlineTime(r.Context(), playerID)
+	if err != nil {
+		log.Printf("track player online time failed: %v", err)
+		writeError(w, http.StatusInternalServerError, "online tick failed")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, PlayerOnlineTickResponse{
+		OK:            true,
+		OnlineSeconds: onlineSeconds,
+	})
+}
 func (s *Server) syncPlayerState(ctx context.Context) error {
+
 	if _, err := s.Store.SettleDevTicks(ctx, 0); err != nil {
 		return err
 	}

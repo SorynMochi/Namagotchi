@@ -4680,6 +4680,9 @@ or created_at > now() + interval '1 day'
 }
 
 func (s *Store) TrackPlayerOnlineTime(ctx context.Context, playerID int64) (int64, error) {
+	const onlineTickCapSeconds = TickSeconds + 2
+	const onlineTickGraceSeconds = TickSeconds * 4
+
 	var onlineSeconds int64
 
 	if err := s.Pool.QueryRow(ctx, `
@@ -4687,8 +4690,9 @@ update players
 set online_seconds = greatest(0, online_seconds) +
 case
 when last_seen_at is null then 0
+when floor(extract(epoch from (now() - last_seen_at)))::bigint > $3 then 0
 else least(
-30::bigint,
+$2::bigint,
 greatest(
 0::bigint,
 floor(extract(epoch from (now() - last_seen_at)))::bigint
@@ -4699,7 +4703,7 @@ last_seen_at = now(),
 updated_at = now()
 where id = $1
 returning online_seconds
-`, playerID).Scan(&onlineSeconds); err != nil {
+`, playerID, onlineTickCapSeconds, onlineTickGraceSeconds).Scan(&onlineSeconds); err != nil {
 		return 0, fmt.Errorf("track player online time: %w", err)
 	}
 
