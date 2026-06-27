@@ -9,6 +9,8 @@ import (
 
 func (s *Store) GetPlayerCoreStatus(ctx context.Context, playerID int64) (*PlayerStatus, error) {
 	var status PlayerStatus
+	var wardrobeUsed int
+	var playdeckMaxStreak int64
 
 	err := s.Pool.QueryRow(ctx, `
 select
@@ -51,11 +53,22 @@ t.playdeck_streak,
 t.playdeck_timeout_ticks,
 t.active_gathering_task,
 t.gathering_remainder,
-t.last_tick_at
+t.last_tick_at,
+coalesce(w.wardrobe_used, 0),
+coalesce(zr.max_streak, 0)
 from players p
 join companion_states c on c.player_id = p.id
 join player_resources r on r.player_id = p.id
 join player_tick_state t on t.player_id = p.id
+left join lateral (
+select count(*)::int as wardrobe_used
+from player_inventory_items i
+where i.player_id = p.id
+and i.container = 'wardrobe'
+) w on true
+left join player_playdeck_zone_records zr
+on zr.player_id = p.id
+and zr.zone_id = greatest(t.playdeck_zone_id, 1)
 where p.id = $1
 `, playerID).Scan(
 		&status.Player.ID,
@@ -98,6 +111,8 @@ where p.id = $1
 		&status.Tick.ActiveGatheringTask,
 		&status.Tick.GatheringRemainder,
 		&status.Tick.LastTickAt,
+		&wardrobeUsed,
+		&playdeckMaxStreak,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("get player core status: %w", err)
@@ -127,19 +142,12 @@ where p.id = $1
 	status.Activities = activities
 	activeActivity := status.Activities.ByKey(status.Tick.ActiveGatheringTask)
 
-	wardrobeStatus, err := s.GetWardrobeStatus(ctx, status.Player.ID)
-	if err != nil {
-		return nil, err
+	status.Wardrobe = WardrobeStatus{
+		Used:     wardrobeUsed,
+		Capacity: WardrobeCapacity,
 	}
 
-	status.Wardrobe = wardrobeStatus
-
-	playdeckMaxStreak, err := s.GetPlaydeckZoneMaxStreak(ctx, status.Player.ID, status.Tick.PlaydeckZoneID)
-	if err != nil {
-		return nil, err
-	}
-
-	status.Tick.PlaydeckMaxStreak = playdeckMaxStreak
+	status.Tick.PlaydeckMaxStreak = normalizePlaydeckStreak(playdeckMaxStreak)
 	status.Tick.PlaydeckZoneName = ZoneName(status.Tick.PlaydeckZoneID)
 	status.Tick.ActiveGatheringName = GatheringTaskName(status.Tick.ActiveGatheringTask)
 	status.Tick.ActiveGatheringOutput = GatheringResourceName(status.Tick.ActiveGatheringTask)
