@@ -3,12 +3,94 @@ package database
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/jackc/pgx/v5"
 )
 
 const WardrobeCapacity = 100
+
+type equipmentSlotDefinition struct {
+	SlotKey     string
+	DisplayName string
+	AcceptsSlot string
+}
+
+var equipmentSlotDefinitionCache = struct {
+	sync.RWMutex
+	loaded bool
+	slots  []equipmentSlotDefinition
+}{}
+
+func copyEquipmentSlotDefinitions(slots []equipmentSlotDefinition) []equipmentSlotDefinition {
+	if len(slots) == 0 {
+		return nil
+	}
+
+	copied := make([]equipmentSlotDefinition, len(slots))
+	copy(copied, slots)
+
+	return copied
+}
+
+func loadEquipmentSlotDefinitionsTx(ctx context.Context, tx pgx.Tx) ([]equipmentSlotDefinition, error) {
+	equipmentSlotDefinitionCache.RLock()
+	if equipmentSlotDefinitionCache.loaded {
+		slots := copyEquipmentSlotDefinitions(equipmentSlotDefinitionCache.slots)
+		equipmentSlotDefinitionCache.RUnlock()
+		return slots, nil
+	}
+	equipmentSlotDefinitionCache.RUnlock()
+
+	rows, err := tx.Query(ctx, `
+select
+slot_key,
+display_name,
+accepts_slot
+from playdeck_equipment_slots
+order by sort_order
+`)
+	if err != nil {
+		return nil, fmt.Errorf("query equipment slot definitions: %w", err)
+	}
+	defer rows.Close()
+
+	var slots []equipmentSlotDefinition
+	for rows.Next() {
+		var slot equipmentSlotDefinition
+		if err := rows.Scan(
+			&slot.SlotKey,
+			&slot.DisplayName,
+			&slot.AcceptsSlot,
+		); err != nil {
+			return nil, fmt.Errorf("scan equipment slot definition: %w", err)
+		}
+
+		slots = append(slots, slot)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("iterate equipment slot definitions: %w", err)
+	}
+
+	equipmentSlotDefinitionCache.Lock()
+	if !equipmentSlotDefinitionCache.loaded {
+		equipmentSlotDefinitionCache.slots = copyEquipmentSlotDefinitions(slots)
+		equipmentSlotDefinitionCache.loaded = true
+	}
+	cachedSlots := copyEquipmentSlotDefinitions(equipmentSlotDefinitionCache.slots)
+	equipmentSlotDefinitionCache.Unlock()
+
+	return cachedSlots, nil
+}
+
+func ClearStaticDefinitionCaches() {
+	equipmentSlotDefinitionCache.Lock()
+	equipmentSlotDefinitionCache.loaded = false
+	equipmentSlotDefinitionCache.slots = nil
+	equipmentSlotDefinitionCache.Unlock()
+}
 
 type WardrobeStatus struct {
 	Used     int `json:"used"`
@@ -335,39 +417,53 @@ func loadPlaydeckEquipmentStatsTx(ctx context.Context, tx pgx.Tx, playerID int64
 }
 
 func loadEquipmentSlotsTx(ctx context.Context, tx pgx.Tx, playerID int64) ([]EquipmentSlotStatus, error) {
-	rows, err := tx.Query(ctx, `
-		select
-			s.slot_key,
-			s.display_name,
-			s.accepts_slot,
-			coalesce(i.id, 0),
-			coalesce(d.name, ''),
-			coalesce(d.rarity, ''),
-			coalesce(d.power_level, 0),
-			coalesce(d.attack_bonus, 0),
-			coalesce(d.defense_bonus, 0),
-			coalesce(d.max_hp_bonus, 0),
-			coalesce(i.tailoring_current, 0),
-			coalesce(i.tailoring_max, 0)
-		from playdeck_equipment_slots s
-		left join player_inventory_items i
-			on i.player_id = $1
-			and i.equipped_slot = s.slot_key
-		left join item_definitions d on d.id = i.item_definition_id
-		order by s.sort_order
-	`, playerID)
+	slotDefinitions, err := loadEquipmentSlotDefinitionsTx(ctx, tx)
 	if err != nil {
-		return nil, fmt.Errorf("query equipment slots: %w", err)
+		return nil, err
+	}
+
+	slots := make([]EquipmentSlotStatus, 0, len(slotDefinitions))
+	slotIndexesByKey := make(map[string]int, len(slotDefinitions))
+
+	for _, definition := range slotDefinitions {
+		slotIndexesByKey[definition.SlotKey] = len(slots)
+		slots = append(slots, EquipmentSlotStatus{
+			SlotKey:     definition.SlotKey,
+			DisplayName: definition.DisplayName,
+			AcceptsSlot: definition.AcceptsSlot,
+		})
+	}
+
+	rows, err := tx.Query(ctx, `
+select
+coalesce(i.equipped_slot, ''),
+i.id,
+coalesce(d.name, ''),
+coalesce(d.rarity, ''),
+coalesce(d.power_level, 0),
+coalesce(d.attack_bonus, 0),
+coalesce(d.defense_bonus, 0),
+coalesce(d.max_hp_bonus, 0),
+coalesce(i.tailoring_current, 0),
+coalesce(i.tailoring_max, 0)
+from player_inventory_items i
+join item_definitions d on d.id = i.item_definition_id
+where i.player_id = $1
+and i.equipped_slot is not null
+`, playerID)
+	if err != nil {
+		return nil, fmt.Errorf("query equipped wardrobe items: %w", err)
 	}
 	defer rows.Close()
 
-	var slots []EquipmentSlotStatus
+	itemIDs := make([]int64, 0, len(slots))
+
 	for rows.Next() {
+		var slotKey string
 		var slot EquipmentSlotStatus
+
 		if err := rows.Scan(
-			&slot.SlotKey,
-			&slot.DisplayName,
-			&slot.AcceptsSlot,
+			&slotKey,
 			&slot.ItemID,
 			&slot.ItemName,
 			&slot.Rarity,
@@ -378,21 +474,26 @@ func loadEquipmentSlotsTx(ctx context.Context, tx pgx.Tx, playerID int64) ([]Equ
 			&slot.TailoringCurrent,
 			&slot.TailoringMax,
 		); err != nil {
-			return nil, fmt.Errorf("scan equipment slot: %w", err)
+			return nil, fmt.Errorf("scan equipped wardrobe item: %w", err)
 		}
 
-		slots = append(slots, slot)
-	}
+		index, ok := slotIndexesByKey[slotKey]
+		if !ok {
+			continue
+		}
 
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("iterate equipment slots: %w", err)
-	}
+		slot.SlotKey = slots[index].SlotKey
+		slot.DisplayName = slots[index].DisplayName
+		slot.AcceptsSlot = slots[index].AcceptsSlot
+		slots[index] = slot
 
-	itemIDs := make([]int64, 0, len(slots))
-	for _, slot := range slots {
 		if slot.ItemID > 0 {
 			itemIDs = append(itemIDs, slot.ItemID)
 		}
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("iterate equipped wardrobe items: %w", err)
 	}
 
 	statLinesByItemID, err := loadWardrobeStatLinesForItemsTx(ctx, tx, itemIDs)
