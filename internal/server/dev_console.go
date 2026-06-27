@@ -270,6 +270,7 @@ type DevAccountAgeResponse struct {
 	AgeSeconds int64  `json:"ageSeconds"`
 	CreatedAt  string `json:"createdAt"`
 	Now        string `json:"now"`
+	Source     string `json:"source"`
 }
 
 func formatExactAccountAge(duration time.Duration) (string, int64) {
@@ -292,14 +293,14 @@ func (s *Server) HandleDevAccountAge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	status, err := s.playerStatusForRequest(r)
-	if err != nil {
-		writeError(w, http.StatusNotFound, "player status not found")
+	account, ok := s.AuthAccountFromRequest(r)
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "login required")
 		return
 	}
 
 	now := time.Now().UTC()
-	createdAt := status.Player.CreatedAt.UTC()
+	createdAt := account.CreatedAt.UTC()
 	exactAge, ageSeconds := formatExactAccountAge(now.Sub(createdAt))
 
 	writeJSON(w, http.StatusOK, DevAccountAgeResponse{
@@ -309,6 +310,7 @@ func (s *Server) HandleDevAccountAge(w http.ResponseWriter, r *http.Request) {
 		AgeSeconds: ageSeconds,
 		CreatedAt:  createdAt.Format(time.RFC3339),
 		Now:        now.Format(time.RFC3339),
+		Source:     "auth_accounts.created_at",
 	})
 }
 func (s *Server) HandleDevConsolePage(w http.ResponseWriter, r *http.Request) {

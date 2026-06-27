@@ -171,6 +171,18 @@ func (s *Server) HandleSpawnDevWardrobeItem(w http.ResponseWriter, r *http.Reque
 	})
 }
 
+func (s *Server) applyAccountCreatedAtToStatus(r *http.Request, status *database.PlayerStatus) {
+	if status == nil {
+		return
+	}
+
+	account, ok := s.AuthAccountFromRequest(r)
+	if !ok || account.CreatedAt.IsZero() {
+		return
+	}
+
+	status.Player.CreatedAt = account.CreatedAt.UTC()
+}
 func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
@@ -183,6 +195,8 @@ func (s *Server) HandlePlayerStatus(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusNotFound, "player status not found")
 		return
 	}
+
+	s.applyAccountCreatedAtToStatus(r, status)
 
 	writeJSON(w, http.StatusOK, status)
 }
@@ -205,6 +219,8 @@ func (s *Server) HandlePlayerSync(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusNotFound, "player status not found")
 		return
 	}
+
+	s.applyAccountCreatedAtToStatus(r, status)
 
 	writeJSON(w, http.StatusOK, status)
 }
@@ -408,6 +424,8 @@ func (s *Server) HandleRewindCareDecay(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "player status failed")
 		return
 	}
+
+	s.applyAccountCreatedAtToStatus(r, status)
 
 	writeJSON(w, http.StatusOK, status)
 }
