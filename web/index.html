@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -53,27 +53,10 @@
     <section class="stat-group compact top-user-info">
   <button class="top-player-name-button" type="button">&#128142; Player</button>
 
-  <div class="top-user-meter-list">
-    <div class="user-meter tick-meter">
-      <div class="meter-label" id="current-action-label"><span class="metric-name">Chain:</span><span class="metric-value">0 / 0</span></div>
-      <div class="meter-track">
-        <div class="meter-fill tick-fill" id="tick-fill"></div>
-      </div>
-    </div>
-
-    <div class="user-meter">
-      <div class="meter-label" id="playdeck-hp-label"><span class="metric-name">Sparkles:</span><span class="metric-value">100 / 100</span></div>
-      <div class="meter-track">
-        <div class="meter-fill hp-fill" id="playdeck-hp-fill" style="width: 100%"></div>
-      </div>
-    </div>
-
-    <div class="user-meter">
-      <div class="meter-label" id="playdeck-xp-label"><span class="metric-name">XP:</span><span class="metric-value">0 / 720</span></div>
-      <div class="meter-track">
-        <div class="meter-fill xp-fill" id="playdeck-xp-fill" style="width: 0%"></div>
-      </div>
-    </div>
+  <div class="top-player-detail-list" aria-label="Player quick stats">
+    <p><span class="metric-name">Wardrobe:</span><strong class="metric-value" id="top-player-wardrobe">0 / 100</strong></p>
+    <p><span class="metric-name">Studio:</span><strong class="metric-value" id="top-player-studio">1</strong></p>
+    <p><span class="metric-name">Treasure:</span><strong class="metric-value" id="top-player-treasure" title="Treasure is not implemented yet.">1h59m58s</strong></p>
   </div>
 </section>
 
@@ -95,15 +78,26 @@
         </div>
       </section>
 
-      <section class="stat-group compact">
+      <section class="stat-group compact top-playdeck-info">
         <h2>Playdeck</h2>
-        <div class="stat-lines">
-          <p><span>Level:</span><strong id="playdeck-top-level">1</strong></p>
-          <p><span>Outfit Level:</span><strong id="playdeck-equip-level">&mdash;</strong></p>
-          <p>
-            <span>Ingredients:</span>
-            <strong id="playdeck-ingredients" title="Ingredients are not implemented yet.">0</strong>
-          </p>
+        <div class="top-playdeck-meter-list" aria-label="Playdeck quick stats">
+          <div class="playdeck-meter playdeck-level-meter playdeck-meter-no-bar">
+            <div class="meter-label"><span class="metric-name">Level:</span><span class="metric-value" id="playdeck-top-level">1</span></div>
+          </div>
+
+          <div class="playdeck-meter tick-meter">
+            <div class="meter-label" id="current-action-label"><span class="metric-name">Chain:</span><span class="metric-value">0 / 0</span></div>
+            <div class="meter-track">
+              <div class="meter-fill tick-fill" id="tick-fill"></div>
+            </div>
+          </div>
+
+          <div class="playdeck-meter xp-meter">
+            <div class="meter-label" id="playdeck-xp-label"><span class="metric-name">XP:</span><span class="metric-value">0 / 720</span></div>
+            <div class="meter-track">
+              <div class="meter-fill xp-fill" id="playdeck-xp-fill" style="width: 0%"></div>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -81,6 +81,9 @@ const playdeckHpLabel = document.querySelector("#playdeck-hp-label");
 const playdeckHpFill = document.querySelector("#playdeck-hp-fill");
 const playdeckXpLabel = document.querySelector("#playdeck-xp-label");
 const playdeckXpFill = document.querySelector("#playdeck-xp-fill");
+const topPlayerWardrobe = document.querySelector("#top-player-wardrobe");
+const topPlayerStudio = document.querySelector("#top-player-studio");
+const topPlayerTreasure = document.querySelector("#top-player-treasure");
 
 const activeTask = document.querySelector("#active-task");
 const resourceRate = document.querySelector("#resource-rate");
@@ -1612,14 +1615,15 @@ function renderPlayerStatus(status) {
   const wardrobeCountText = `${Number(wardrobe.used ?? 0).toLocaleString()} / ${Number(wardrobe.capacity ?? 100).toLocaleString()}`;
 
   setTextIfChanged(topWardrobe, wardrobeCountText);
+  setTextIfChanged(topPlayerWardrobe, wardrobeCountText);
+  setTextIfChanged(topPlayerStudio, Number(status.studio?.level ?? status.studioLevel ?? 1).toLocaleString());
+  setTextIfChanged(topPlayerTreasure, "1h59m58s");
+  setTitleIfChanged(topPlayerTreasure, "Treasure is not implemented yet.");
   setTextIfChanged(topMood, Math.round(Number(companion.moodScore ?? 0)));
   setTextIfChanged(topNamiStatus, capitalize(companion.status));
   setTextIfChanged(personalMoodBonus, `+${bonus}% Resource Gain`);
 
   setTextIfChanged(playdeckTopLevel, Number(player.level ?? 1).toLocaleString());
-  setTextIfChanged(playdeckEquipLevel, formatCompactNumber(status.playdeck?.equipmentPower ?? 0));
-  setTextIfChanged(playdeckIngredients, formatCompactNumber(0));
-  setTitleIfChanged(playdeckIngredients, "Ingredients are not implemented yet.");
 
   setTextIfChanged(resFans, formatCompactNumber(status.resources?.fans ?? 0));
   setTextIfChanged(resMemes, formatCompactNumber(status.resources?.memes ?? 0));
@@ -1643,8 +1647,6 @@ function renderPlayerStatus(status) {
   );
   setWidthIfChanged(playdeckXpFill, `${xpPercent}%`);
 
-  setTopUserMetricLabel(playdeckHpLabel, "Sparkles:", "100 / 100");
-  setWidthIfChanged(playdeckHpFill, "100%");
   const currentStreak = Math.max(0, Number(tick.playdeckStreak ?? 0));
   const maxStreak = Math.max(currentStreak, Number(tick.playdeckMaxStreak ?? currentStreak));
   const streakPercent = percent(currentStreak, maxStreak);

@@ -10405,3 +10405,252 @@ select optgroup {
 }
 
 /* Migrated dropdown base END */
+
+/* Top rail player playdeck redesign START */
+/* Player loses 30% width; Playdeck gains that space and now owns Chain + XP bars. */
+
+.top-stats-compact {
+  grid-template-columns:
+    minmax(182px, 0.83fr)
+    minmax(148px, 0.82fr)
+    minmax(168px, 0.90fr)
+    minmax(226px, 1.17fr)
+    minmax(265px, 1.35fr)
+    minmax(265px, 1.35fr) !important;
+}
+
+/* Player section: tick pill header + three text-only rows. */
+.top-player-detail-list {
+  grid-row: 2 / 5 !important;
+  display: grid !important;
+  grid-template-rows: repeat(3, var(--top-rail-stat-row-height)) !important;
+  row-gap: var(--top-rail-row-gap) !important;
+  align-content: start !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.top-player-detail-list > p {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  column-gap: 8px !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.top-player-detail-list .metric-name {
+  min-width: 0 !important;
+  color: var(--top-rail-compact-label-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-label-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-label-size) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.top-player-detail-list .metric-value {
+  min-width: 0 !important;
+  color: var(--top-rail-compact-value-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-value-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-value-size) !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: right !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  white-space: nowrap !important;
+}
+
+/* Playdeck section: Level text row + Chain/XP bar rows. */
+.top-playdeck-info {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.top-playdeck-meter-list {
+  grid-row: 2 / 5 !important;
+  display: grid !important;
+  grid-template-columns:
+    minmax(54px, 0.62fr)
+    minmax(70px, auto)
+    minmax(96px, 1fr) !important;
+  grid-template-rows: repeat(3, var(--top-rail-stat-row-height)) !important;
+  column-gap: 10px !important;
+  row-gap: var(--top-rail-row-gap) !important;
+  align-content: start !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.top-playdeck-meter-list .playdeck-meter {
+  display: contents !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.top-playdeck-meter-list .meter-label {
+  display: contents !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: inherit !important;
+  font: inherit !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+}
+
+.top-playdeck-meter-list .metric-name {
+  grid-column: 1 !important;
+  justify-self: start !important;
+  align-self: center !important;
+  min-width: 0 !important;
+  color: var(--top-rail-compact-label-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-label-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-label-size) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.top-playdeck-meter-list .metric-value {
+  grid-column: 2 !important;
+  justify-self: end !important;
+  align-self: center !important;
+  min-width: 0 !important;
+  color: var(--top-rail-compact-value-color) !important;
+  -webkit-text-fill-color: var(--top-rail-compact-value-color) !important;
+  font-family: inherit !important;
+  font-size: var(--top-rail-compact-value-size) !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  line-height: var(--top-rail-compact-line-height) !important;
+  letter-spacing: 0 !important;
+  text-align: right !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  white-space: nowrap !important;
+}
+
+.top-playdeck-meter-list .meter-track {
+  grid-column: 3 !important;
+  justify-self: stretch !important;
+  align-self: center !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: 5px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.top-playdeck-meter-list .meter-track > *,
+.top-playdeck-meter-list .meter-fill,
+.top-playdeck-meter-list .fill,
+.top-playdeck-meter-list .tick-fill,
+.top-playdeck-meter-list .xp-fill {
+  height: 100% !important;
+  min-height: 0 !important;
+  border-radius: inherit !important;
+}
+
+.top-playdeck-meter-list .playdeck-meter-no-bar .metric-value {
+  grid-column: 2 / 4 !important;
+  justify-self: end !important;
+}
+
+/* Explicit row placement: Level, Chain, XP. */
+.top-playdeck-meter-list .playdeck-meter:nth-child(1) .metric-name,
+.top-playdeck-meter-list .playdeck-meter:nth-child(1) .metric-value {
+  grid-row: 1 !important;
+}
+
+.top-playdeck-meter-list .playdeck-meter:nth-child(2) .metric-name,
+.top-playdeck-meter-list .playdeck-meter:nth-child(2) .metric-value,
+.top-playdeck-meter-list .playdeck-meter:nth-child(2) .meter-track {
+  grid-row: 2 !important;
+}
+
+.top-playdeck-meter-list .playdeck-meter:nth-child(3) .metric-name,
+.top-playdeck-meter-list .playdeck-meter:nth-child(3) .metric-value,
+.top-playdeck-meter-list .playdeck-meter:nth-child(3) .meter-track {
+  grid-row: 3 !important;
+}
+
+@media (max-width: 1600px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .top-stats-compact > .stat-group.compact {
+    grid-column: auto !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .top-stats-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .top-stats-compact {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .top-stats-compact > .stat-group.compact {
+    grid-column: auto !important;
+  }
+
+  .top-playdeck-meter-list {
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto !important;
+  }
+
+  .top-playdeck-meter-list .meter-track {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Top rail player playdeck redesign END */
