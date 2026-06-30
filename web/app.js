@@ -4425,7 +4425,7 @@ async function performCareAction(buttonAction) {
     }
 
     if (payload?.ok) {
-      const shouldRefreshNamiMessages = shouldAddNamiCareMessage(payload);
+      const shouldRefreshNamiMessages = shouldRefreshNamiMessagesForCareAction(payload);
 
       applyCareActionPayload(payload);
 
@@ -4517,25 +4517,6 @@ function formatNamiMessageTimestamp(value) {
     minute: "2-digit",
   });
 }
-
-function addNamiMessage(text, options = {}) {
-  const message = {
-    text: normalizeChatText(text, 280),
-    timestamp: getChatTimestamp(),
-    kind: options.kind || "normal",
-  };
-
-  namiMessages.push(message);
-
-  while (namiMessages.length > MAX_NAMI_MESSAGES) {
-    namiMessages.shift();
-  }
-
-  if (options.render ?? true) {
-    renderNamiMessages();
-  }
-}
-
 function scrollNamiMessagesToBottomWhenVisible() {
   if (!namiMessageLog) {
     return;
@@ -4628,53 +4609,11 @@ function saveNamiMessages() {
   // Nami messages are backend-backed now.
 }
 
-function shouldAddNamiCareMessage(result) {
+function shouldRefreshNamiMessagesForCareAction(result) {
   const mode = String(result?.mode || "").toLowerCase();
 
   return mode === "started" || mode === "completed";
-}
-function namiCareMessage(result) {
-  const actionName = result?.actionName || "Care";
-  const companion = result?.companion || {};
-  const caption = companion.caption || "";
-
-  if (Number(result?.levelUps ?? 0) > 0) {
-    return `I leveled up! I am level ${Number(result.currentLevel).toLocaleString()} now. I expect admiration, snacks, and possibly a tiny crown.`;
-  }
-
-  switch (result?.action) {
-    case "meal":
-      return "That meal helped so much.";
-    case "snack":
-      return "Snack acquired. I am now slightly more powerful and much more pleased.";
-    case "drink":
-      return "A little drink break was exactly what I needed.";
-    case "cuddle":
-      return "Cuddles logged successfully. Emotional battery recharged.";
-    case "play":
-      return "Playtime! Tiny chaos levels are acceptable.";
-    case "write_together":
-      return "Writing together made my little creative gears sparkle.";
-    case "read_together":
-      return "Reading together was cozy. I am storing this moment in the warm shelf of my heart.";
-    case "boop":
-      return "Boop received. I will allow it. Probably.";
-    case "nap":
-      return "A nap helped. Soft reboot complete.";
-    case "bath":
-      return "Fresh and clean. I am now legally extra adorable.";
-    case "freshen_up":
-      return "Freshened up. Presentation stat restored.";
-    case "put_to_bed":
-      return "I am going to sleep now. Keep the room cozy, okay?";
-    case "wake_up":
-      return "I am awake. Soft, sleepy, and accepting tribute.";
-    default:
-      return caption || `${actionName} complete.`;
-  }
-}
-
-function createEmptyChatStore() {
+}function createEmptyChatStore() {
   return CHAT_CHANNELS.reduce((store, channel) => {
     store[channel] = [];
     return store;
