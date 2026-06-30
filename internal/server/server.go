@@ -539,14 +539,35 @@ func (s *Server) HandleNamiMessages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accountID, err := accountIDForRequest(r)
+	playerID, err := s.playerIDForRequest(r)
 	if err != nil {
-		log.Printf("get account for nami messages failed: %v", err)
+		log.Printf("get player for nami messages failed: %v", err)
 		writeError(w, http.StatusUnauthorized, "login required")
 		return
 	}
 
-	messages, err := s.Store.GetRecentNamiMessagesForAccount(r.Context(), accountID, 50)
+	rawAfterID := strings.TrimSpace(r.URL.Query().Get("afterId"))
+	if rawAfterID == "" {
+		rawAfterID = strings.TrimSpace(r.URL.Query().Get("after_id"))
+	}
+
+	afterID := int64(0)
+	if rawAfterID != "" {
+		parsedAfterID, err := strconv.ParseInt(rawAfterID, 10, 64)
+		if err != nil || parsedAfterID < 0 {
+			writeError(w, http.StatusBadRequest, "afterId must be a non-negative whole number")
+			return
+		}
+
+		afterID = parsedAfterID
+	}
+
+	var messages []database.NamiMessage
+	if afterID > 0 {
+		messages, err = s.Store.GetNamiMessagesAfterID(r.Context(), playerID, afterID, 50)
+	} else {
+		messages, err = s.Store.GetRecentNamiMessages(r.Context(), playerID, 50)
+	}
 	if err != nil {
 		log.Printf("get nami messages failed: %v", err)
 		writeError(w, http.StatusNotFound, "nami messages not found")

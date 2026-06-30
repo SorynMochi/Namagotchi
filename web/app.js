@@ -4471,9 +4471,15 @@ async function loadNamiMessagesFromServer(options = {}) {
     return;
   }
 
+  const afterID = latestNamiMessageID();
+  const incremental = afterID > 0;
+  const url = incremental
+    ? `/api/nami/messages?afterId=${encodeURIComponent(String(afterID))}`
+    : "/api/nami/messages";
+
   namiMessagesRequestInFlight = (async () => {
     try {
-      const response = await fetch("/api/nami/messages", {
+      const response = await fetch(url, {
         cache: "no-store",
       });
 
@@ -4483,15 +4489,9 @@ async function loadNamiMessagesFromServer(options = {}) {
 
       const messages = await response.json();
 
-      namiMessages = Array.isArray(messages)
-        ? messages.slice(-MAX_NAMI_MESSAGES).map((message) => {
-            return {
-              text: normalizeChatText(message.message ?? "", 500),
-              timestamp: formatNamiMessageTimestamp(message.createdAt),
-              kind: message.severity === "happy" ? "level-up" : "normal",
-            };
-          })
-        : [];
+      mergeServerNamiMessages(messages, {
+        replace: !incremental,
+      });
 
       namiMessagesLastLoadedAt = Date.now();
     } catch (error) {
@@ -4503,6 +4503,77 @@ async function loadNamiMessagesFromServer(options = {}) {
 
   await namiMessagesRequestInFlight;
   renderNamiMessages(options);
+}
+
+function latestNamiMessageID() {
+  return namiMessages.reduce((latest, message) => {
+    const id = Number(message?.id ?? 0);
+
+    return Number.isFinite(id) && id > latest
+      ? id
+      : latest;
+  }, 0);
+}
+
+function normalizeServerNamiMessage(message) {
+  const id = Number(message?.id ?? 0);
+
+  return {
+    id: Number.isFinite(id) && id > 0 ? id : 0,
+    text: normalizeChatText(message?.message ?? "", 500),
+    timestamp: formatNamiMessageTimestamp(message?.createdAt),
+    kind: message?.severity === "happy" ? "level-up" : "normal",
+  };
+}
+
+function mergeServerNamiMessages(messages, options = {}) {
+  const incoming = Array.isArray(messages)
+    ? messages
+        .map(normalizeServerNamiMessage)
+        .filter((message) => message.text)
+    : [];
+
+  if (options.replace) {
+    namiMessages = incoming.slice(-MAX_NAMI_MESSAGES);
+    return;
+  }
+
+  if (incoming.length === 0) {
+    return;
+  }
+
+  const seenIDs = new Set(
+    namiMessages
+      .map((message) => Number(message?.id ?? 0))
+      .filter((id) => Number.isFinite(id) && id > 0)
+  );
+
+  const seenFallbackKeys = new Set(namiMessages.map(namiMessageKey));
+
+  incoming.forEach((message) => {
+    const id = Number(message?.id ?? 0);
+
+    if (Number.isFinite(id) && id > 0) {
+      if (seenIDs.has(id)) {
+        return;
+      }
+
+      seenIDs.add(id);
+    } else {
+      const key = namiMessageKey(message);
+      if (seenFallbackKeys.has(key)) {
+        return;
+      }
+
+      seenFallbackKeys.add(key);
+    }
+
+    namiMessages.push(message);
+  });
+
+  while (namiMessages.length > MAX_NAMI_MESSAGES) {
+    namiMessages.shift();
+  }
 }
 
 function formatNamiMessageTimestamp(value) {
@@ -4559,6 +4630,7 @@ if (options.scrollToBottom) {
 
 function namiMessageKey(message) {
   return [
+    message.id || 0,
     message.timestamp,
     message.kind,
     message.text,

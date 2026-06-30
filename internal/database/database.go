@@ -555,6 +555,75 @@ func (s *Store) GetRecentNamiMessages(ctx context.Context, playerID int64, limit
 	return messages, nil
 }
 
+func (s *Store) GetNamiMessagesAfterID(ctx context.Context, playerID int64, afterID int64, limit int) ([]NamiMessage, error) {
+	if limit < 1 {
+		limit = 1
+	}
+
+	if limit > NamiMessageStorageLimit {
+		limit = NamiMessageStorageLimit
+	}
+
+	if afterID < 0 {
+		afterID = 0
+	}
+
+	rows, err := s.Pool.Query(ctx, `
+select
+id,
+player_id,
+trigger_key,
+mood_key,
+need_key,
+severity,
+message,
+metadata_json::text,
+created_at,
+coalesce(seen_at, '0001-01-01 00:00:00+00'::timestamptz)
+from nami_messages
+where player_id = $1
+and id > $2
+order by created_at desc, id desc
+limit $3
+`, playerID, afterID, limit)
+	if err != nil {
+		return nil, fmt.Errorf("get nami messages after id: %w", err)
+	}
+	defer rows.Close()
+
+	var messages []NamiMessage
+	for rows.Next() {
+		var message NamiMessage
+
+		if err := rows.Scan(
+			&message.ID,
+			&message.PlayerID,
+			&message.TriggerKey,
+			&message.MoodKey,
+			&message.NeedKey,
+			&message.Severity,
+			&message.Message,
+			&message.MetadataJSON,
+			&message.CreatedAt,
+			&message.SeenAt,
+		); err != nil {
+			return nil, fmt.Errorf("scan nami message after id: %w", err)
+		}
+
+		messages = append(messages, message)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("iterate nami messages after id: %w", err)
+	}
+
+	for left, right := 0, len(messages)-1; left < right; left, right = left+1, right-1 {
+		messages[left], messages[right] = messages[right], messages[left]
+	}
+
+	return messages, nil
+}
+
 func pruneNamiMessagesTx(ctx context.Context, tx pgx.Tx, playerID int64) error {
 	_, err := tx.Exec(ctx, `
 with ranked_messages as (
