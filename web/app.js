@@ -4599,17 +4599,7 @@ function updateNamiMessageElement(row, entry) {
   toggleClassIfChanged(row, "nami-log-level-up", message.kind === "level-up");
   setTextIfChanged(row.querySelector(".nami-log-time"), `[${message.timestamp}]`);
   setTextIfChanged(row.querySelector(".nami-log-text"), message.text);
-}
-
-function loadNamiMessages() {
-  return [];
-}
-
-function saveNamiMessages() {
-  // Nami messages are backend-backed now.
-}
-
-function shouldRefreshNamiMessagesForCareAction(result) {
+}function shouldRefreshNamiMessagesForCareAction(result) {
   const mode = String(result?.mode || "").toLowerCase();
 
   return mode === "started" || mode === "completed";
@@ -5875,32 +5865,6 @@ function tickResultMessage(result) {
 
   return `Processed ${Number(result.ticksProcessed).toLocaleString()} tick(s): +${syncXPGained.toLocaleString()} Sync XP, +${formatCredits(creditsGained)} Credits, +${nibblesGained.toLocaleString()} Nibbles, +${resourceAmountGained.toLocaleString()} ${resourceName}, +${activityXPGained.toLocaleString()} ${activityName} XP${levelText}${activityLevelText}.`;
 }
-
-function careActionMessage(result) {
-  if (!result || !result.ok) {
-    return "No care result received.";
-  }
-
-  const actionName = result.actionName || "Care";
-
-  switch (result.mode) {
-    case "started": {
-  const xpGained = Number(result.xpGained ?? 0);
-  return xpGained > 0
-    ? `${actionName} started. Nami gained ${xpGained.toLocaleString()} care XP.`
-    : `${actionName} started.`;
-}
-    case "queued":
-      return `${actionName} queued.`;
-    case "unqueued":
-      return `${actionName} removed from the queue.`;
-    case "completed":
-      return `${actionName} complete.`;
-    default:
-      return result.message || `${actionName} updated.`;
-  }
-}
-
 function getMoodBonus(mood) {
   return Math.round((Number(mood) / 200) * 100);
 }
