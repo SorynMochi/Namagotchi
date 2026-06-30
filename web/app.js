@@ -4621,11 +4621,11 @@ function renderNamiMessages(options = {}) {
 
   syncKeyedChildren(namiMessageLog, entries, createNamiMessageElement, updateNamiMessageElement);
 
-if (options.scrollToBottom) {
-  scrollNamiMessagesToBottomWhenVisible();
-} else {
-  namiMessageLog.scrollTop = previousScrollTop;
-}
+  if (options.scrollToBottom) {
+    scrollNamiMessagesToBottomWhenVisible();
+  } else {
+    namiMessageLog.scrollTop = previousScrollTop;
+  }
 }
 
 function namiMessageKey(message) {
