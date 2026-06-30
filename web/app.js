@@ -4599,11 +4599,15 @@ function updateNamiMessageElement(row, entry) {
   toggleClassIfChanged(row, "nami-log-level-up", message.kind === "level-up");
   setTextIfChanged(row.querySelector(".nami-log-time"), `[${message.timestamp}]`);
   setTextIfChanged(row.querySelector(".nami-log-text"), message.text);
-}function shouldRefreshNamiMessagesForCareAction(result) {
+}
+
+function shouldRefreshNamiMessagesForCareAction(result) {
   const mode = String(result?.mode || "").toLowerCase();
 
   return mode === "started" || mode === "completed";
-}function createEmptyChatStore() {
+}
+
+function createEmptyChatStore() {
   return CHAT_CHANNELS.reduce((store, channel) => {
     store[channel] = [];
     return store;
