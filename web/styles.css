@@ -1878,10 +1878,6 @@ body.is-resizing-chat {
   box-shadow: var(--theme-picker-shadow);
 }
 
-.emoji-picker.hidden {
-  display: none;
-}
-
 .emoji-option {
   width: 24px;
   height: 24px;
@@ -2089,10 +2085,6 @@ body.is-resizing-chat {
   border-radius: 12px !important;
   background: var(--theme-picker-bg) !important;
   box-shadow: var(--theme-picker-shadow) !important;
-}
-
-.chat-form .emoji-picker.hidden {
-  display: none !important;
 }
 
 /* Picker emoji buttons */
@@ -3387,14 +3379,6 @@ body > .emoji-picker-floating .emoji-option {
   margin: 0;
 }
 
-.nami-need-card p:nth-child(1) {
-  grid-row: 5;
-}
-
-.nami-need-card p:nth-child(2) {
-  grid-row: 6;
-}
-
 .nami-need-card p:nth-child(3) {
   grid-row: 8;
 }
@@ -3532,10 +3516,6 @@ body > .emoji-picker-floating .emoji-option {
   color: var(--text-soft);
   font-size: 0.76rem;
   line-height: 1.35;
-}
-
-.nami-log-message:last-child {
-  margin-bottom: 0;
 }
 
 .nami-log-time {

@@ -156,3 +156,17 @@ Batch 2 completed on 2026-07-10. The earlier exact duplicate global Wardrobe pan
 - `.wardrobe-bonuses-panel` earlier duplicate occurrence.
 
 Classification change: these three selectors are no longer active Risk 1 candidates in the main stylesheet. Manual visual inspection of the Wardrobe equipment, inventory, and bonuses panel shells remains recommended at `1600x1000`, `980x900`, and `560x900`, including Candy, Cafe, and Rainy Mood theme checks.
+
+## Final audit update — 2026-07-10
+
+- Original baseline line count: `10,755`; final line count after safe batches: `10,707`.
+- Original repeated same-context selector groups: `348`; final repeated same-context selector groups: `337`.
+- Total selector groups removed across cleanup batches: `11`.
+- Total CSS declarations removed across cleanup batches: `22` expanded declarations: 14 in Batch 1, 3 in Batch 2, 2 in Batch 3, and 3 in Batch 4.
+- Total selector blocks removed across cleanup batches: `10` physical CSS blocks. Batch 2 removed one grouped block covering three expanded selectors; the other batches removed individual blocks.
+- Final empty block count: `0`.
+- Final deterministic check result: `go test ./...` passed.
+- Final visual result: no automated visual regression tooling exists in this repository, so no unexplained automated visual differences were observed; manual visual verification remains required for the documented major states and viewports.
+- Intentionally retained repetitions: `:root` token append layers, browser scrollbar/fallback selectors, responsive top rail repeats, theme-effect guards, and late modal/Wardrobe repair blocks are retained because they are progressive-enhancement, fallback, or source-order dependent.
+- Unresolved risks: runtime-generated selectors and visually sensitive state selectors are retained until a browser harness or manual visual sign-off is available.
+- Proposed Category C restructuring work: global shell/rails, chat/emoji subsystem, Wardrobe modal/inventory, and top rail migration should each be reorganized as separate rollback-bounded commits with computed-style and screenshot equivalence tests.
