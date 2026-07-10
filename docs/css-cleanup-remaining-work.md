@@ -23,11 +23,16 @@ c3d8675 top rail
 
 ## Why only about 50 lines were removed
 
-The completed cleanup removed 48 stylesheet lines, from 10,755 to 10,707. That small delta does **not** mean the stylesheet has low redundancy. It means the prior cleanup prompts deliberately limited edits to exact same-selector/same-context duplicates that could be removed without changing source-order behavior and without browser visual coverage. The ledger records 11 repeated selector groups removed across four safe batches, while this audit still finds 337 repeated selector groups and 962 repeated selector blocks. Most remaining repetition is cascade layering, late repair blocks, responsive breakpoints, theme/effect guards, or component rewrites that need structural consolidation rather than simple deletion.
+The completed cleanup plus the Other screens / shared components structural batch removed 49 stylesheet lines, from 10,755 to 10,706. That small delta does **not** mean the stylesheet has low redundancy. It means the prior cleanup prompts deliberately limited edits to exact same-selector/same-context duplicates that could be removed without changing source-order behavior and without browser visual coverage. The ledger records 11 repeated selector groups removed across four safe batches, followed by a focused Other screens / shared components structural batch that flattened 10 duplicate candidate blocks/memberships; a full refreshed parser audit remains recommended before selecting the next batch. Most remaining repetition is cascade layering, late repair blocks, responsive breakpoints, theme/effect guards, or component rewrites that need structural consolidation rather than simple deletion.
+
+
+## Completed Other screens / shared components structural batch — 2026-07-10
+
+A focused structural batch flattened duplicate or appended declarations for `.log-list`, `.task-card p`, `.buff-card span`, `.buff-card small`, `.meter-fill`, `.compact-grid-lines`, `.menu-logo-wrap`, `.menu-status-card`, `#section-gathering .task-card h2`, and `#section-gathering .task-card p`. The next pass should refresh the duplicate tables before using the older line ranges below because this batch moved or removed several entries in the coverage-blocked section. Manual inspection remains recommended for combat log scrolling, gathering cards, buff cards, left menu cards, meter fills, and compact stat grids across desktop/mobile widths and collapsed rail state.
 
 ## Current calculations
 
-- Current `web/styles.css` line count: **10707**.
+- Current `web/styles.css` line count: **10706**.
 
 - Total remaining repeated selector groups: **337**.
 
