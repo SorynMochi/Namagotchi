@@ -55,10 +55,11 @@ Representative exact duplicates:
 | `.nami-need-card p:nth-child(1)` / global | lines 3390-3392 and 3617-3619 | Exact typography color rule. |
 | `.nami-need-card p:nth-child(2)` / global | lines 3394-3396 and 3621-3623 | Exact typography color rule. |
 | `.nami-log-message:last-child` / global | lines 3537-3539 and 3697-3699 | Exact border removal. |
-| `.wardrobe-equipment-panel`, `.wardrobe-inventory-panel`, `.wardrobe-bonuses-panel` / global | lines 4910-4914 and 5258-5262 | Exact grouped panel min-height block. |
 | `.equipment-card-grid` / `@media (max-width: 700px)` | lines 5194-5197 and 5459-5462 | Same media context; verify mobile wardrobe grid. |
 
 Batch 1 completed on 2026-07-10: the earlier global Wardrobe bonus row exact duplicates (`.wardrobe-bonus-list`, `.wardrobe-bonus-row`, `.wardrobe-bonus-row strong`) were removed after same-context cascade equivalence was verified. The surviving later global rules remain the canonical declarations.
+
+Batch 2 completed on 2026-07-10: the earlier exact duplicate global Wardrobe panel shell min-height rules (`.wardrobe-equipment-panel`, `.wardrobe-inventory-panel`, `.wardrobe-bonuses-panel`) were removed after same-context cascade equivalence was verified. The surviving later global grouped rule remains the canonical declaration.
 
 ## Risk 2: earlier declarations unconditionally overridden later
 
@@ -145,3 +146,13 @@ Batch 1 completed on 2026-07-10. The earlier exact duplicate global Wardrobe bon
 - `.wardrobe-bonus-row strong` earlier duplicate occurrence.
 
 Classification change: these three selectors are no longer active Risk 1 candidates in the main stylesheet. Manual visual inspection of the Wardrobe screen remains recommended at `1600x1000`, `980x900`, and `560x900`, with inventory categories populated if possible.
+
+## Completed Batch 2
+
+Batch 2 completed on 2026-07-10. The earlier exact duplicate global Wardrobe panel shell rule was removed and the later identical global declaration was preserved for these expanded selectors:
+
+- `.wardrobe-equipment-panel` earlier duplicate occurrence.
+- `.wardrobe-inventory-panel` earlier duplicate occurrence.
+- `.wardrobe-bonuses-panel` earlier duplicate occurrence.
+
+Classification change: these three selectors are no longer active Risk 1 candidates in the main stylesheet. Manual visual inspection of the Wardrobe equipment, inventory, and bonuses panel shells remains recommended at `1600x1000`, `980x900`, and `560x900`, including Candy, Cafe, and Rainy Mood theme checks.

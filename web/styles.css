@@ -4907,11 +4907,6 @@ h3 {
   margin: 0;
 }
 
-.wardrobe-equipment-panel,
-.wardrobe-inventory-panel,
-.wardrobe-bonuses-panel {
-  min-height: 0;
-}
 
 .equipment-card-grid {
   display: grid;
