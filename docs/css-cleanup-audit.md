@@ -170,3 +170,10 @@ Classification change: these three selectors are no longer active Risk 1 candida
 - Intentionally retained repetitions: `:root` token append layers, browser scrollbar/fallback selectors, responsive top rail repeats, theme-effect guards, and late modal/Wardrobe repair blocks are retained because they are progressive-enhancement, fallback, or source-order dependent.
 - Unresolved risks: runtime-generated selectors and visually sensitive state selectors are retained until a browser harness or manual visual sign-off is available.
 - Proposed Category C restructuring work: global shell/rails, chat/emoji subsystem, Wardrobe modal/inventory, and top rail migration should each be reorganized as separate rollback-bounded commits with computed-style and screenshot equivalence tests.
+
+## Other screens / shared components structural batch — 2026-07-10
+
+- Consolidated a small `Other screens / shared components` cascade batch after reviewing selector usage across `web/styles.css`, `web/index.html`, `web/app.js`, `web/themes/*.css`, and cleanup docs.
+- Effective-cascade summary: moved later duplicate or repair declarations into canonical local blocks for log lists, task-card copy, buff-card copy, meter fills, compact grid lines, left-menu logo/status cards, and scoped gathering task-card text. More specific or intentionally scoped later selectors remain later and unchanged.
+- Current/proposed cascade equivalence: all moved declarations use the same selector specificity and same values as the previous winning declarations, or are reproduced directly on the element selector before removing the later duplicate membership. Scoped overrides with greater specificity continue to win by specificity and/or source order.
+- Verification: brace-balance CSS syntax check passed, selector occurrence counts decreased for the targeted duplicate candidates, and `go test ./...` passed. No repository visual automation is present, so screenshots/computed browser snapshots could not be automated in this batch.
