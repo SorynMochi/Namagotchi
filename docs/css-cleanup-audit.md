@@ -56,12 +56,9 @@ Representative exact duplicates:
 | `.nami-need-card p:nth-child(2)` / global | lines 3394-3396 and 3621-3623 | Exact typography color rule. |
 | `.nami-log-message:last-child` / global | lines 3537-3539 and 3697-3699 | Exact border removal. |
 | `.wardrobe-equipment-panel`, `.wardrobe-inventory-panel`, `.wardrobe-bonuses-panel` / global | lines 4910-4914 and 5258-5262 | Exact grouped panel min-height block. |
-| `.wardrobe-bonus-list` / global | lines 5024-5027 and 5365-5368 | Exact gap/display block. |
-| `.wardrobe-bonus-row` / global | lines 5029-5040 and 5370-5381 | Exact row styling block. |
-| `.wardrobe-bonus-row strong` / global | lines 5042-5045 and 5383-5386 | Exact text styling block. |
 | `.equipment-card-grid` / `@media (max-width: 700px)` | lines 5194-5197 and 5459-5462 | Same media context; verify mobile wardrobe grid. |
 
-Recommended first target: the Wardrobe bonus row exact duplicates (`.wardrobe-bonus-list`, `.wardrobe-bonus-row`, `.wardrobe-bonus-row strong`) because they are global, non-state, visually localized, and do not involve media queries or pseudo-elements.
+Batch 1 completed on 2026-07-10: the earlier global Wardrobe bonus row exact duplicates (`.wardrobe-bonus-list`, `.wardrobe-bonus-row`, `.wardrobe-bonus-row strong`) were removed after same-context cascade equivalence was verified. The surviving later global rules remain the canonical declarations.
 
 ## Risk 2: earlier declarations unconditionally overridden later
 
@@ -139,12 +136,12 @@ Before treating any selector as unused, search the full repository. Important dy
 - Wardrobe: equipment/inventory group classes, rarity classes, modal classes, drag state, read-only preview, share button states.
 - Theme effects: all `.theme-effect-*`, `.theme-effects-*`, Tokyo sign classes, Sakura petals/lanterns, Candy and Cafe floating pieces, Woodland/Pearl canvases, Rainy Mood video state.
 
-## Recommended Batch 1
+## Completed Batch 1
 
-Scope: delete the earlier exact duplicate global Wardrobe bonus row rules and preserve the later identical declarations:
+Batch 1 completed on 2026-07-10. The earlier exact duplicate global Wardrobe bonus row rules were removed and the later identical global declarations were preserved:
 
-- `.wardrobe-bonus-list` from the earlier duplicate occurrence.
-- `.wardrobe-bonus-row` from the earlier duplicate occurrence.
-- `.wardrobe-bonus-row strong` from the earlier duplicate occurrence.
+- `.wardrobe-bonus-list` earlier duplicate occurrence.
+- `.wardrobe-bonus-row` earlier duplicate occurrence.
+- `.wardrobe-bonus-row strong` earlier duplicate occurrence.
 
-Verification for Batch 1 should include the Wardrobe screen at `1600x1000`, `980x900`, and `560x900`, with inventory categories populated if possible, plus a quick smoke check of `go test ./...`. No cleanup is performed in this audit task.
+Classification change: these three selectors are no longer active Risk 1 candidates in the main stylesheet. Manual visual inspection of the Wardrobe screen remains recommended at `1600x1000`, `980x900`, and `560x900`, with inventory categories populated if possible.

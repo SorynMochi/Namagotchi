@@ -91,7 +91,22 @@ Batch sizes should stay under eight repeated selector groups and about 200 chang
 
 ## Completed cleanup batches
 
-No cleanup batches have been performed yet.
+### Batch 1 — 2026-07-10 — exact global Wardrobe bonus row duplicates
+
+- Selectors examined: `.wardrobe-bonus-list`, `.wardrobe-bonus-row`, `.wardrobe-bonus-row strong` in the global cascade context.
+- Cascade context recorded: all cleaned occurrences were top-level global rules in `web/styles.css` with no enclosing `@media`, `@supports`, `@layer`, `@scope`, or container rule. No pseudo-classes, pseudo-elements, animations, transitions, vendor-prefixed declarations, `!important`, or fallback declaration pairs were present in the removed rules.
+- Usage/dynamic check: `rg -n "wardrobe-bonus-list|wardrobe-bonus-row" .` found the static bonus list in `web/index.html`, row generation in `web/app.js`, additional scoped `#section-inventory` rules in `web/styles.css`, theme overrides in `web/themes/*.css`, and the audit/ledger references. The runtime row class is generated in `web/app.js`; `.is-empty`, `.wardrobe-bonus-label`, and `.wardrobe-bonus-value.is-hidden` state selectors remain untouched.
+- Cascade timeline: the earlier global blocks at former lines 5024-5045 and the later global blocks at former lines 5365-5386 had identical selector specificity, identical declarations, identical custom-property references, and identical global context. Deleting only the earlier copies preserves the later source-order position and leaves all intervening `.inventory-card-grid`, `.inventory-item-card`, equipment-card, scoped inventory, and theme overrides in their previous relationship to the surviving rules.
+- Overlapping selectors considered: later `#section-inventory .wardrobe-bonus-*` rules have higher specificity and remain later in source order; theme selectors under `body[data-theme=...]` are loaded after `/styles.css` or are more specific and remain untouched.
+- Selectors safely cleaned: `.wardrobe-bonus-list`, `.wardrobe-bonus-row`, `.wardrobe-bonus-row strong`.
+- Selectors deferred: none in this batch.
+- Declarations and lines removed: 14 CSS declarations and 23 stylesheet lines.
+- Line count before/after: `10,755` lines before; `10,732` lines after.
+- Commands executed: `rg -n "wardrobe-bonus-list|wardrobe-bonus-row" .`; `python3` selector/count checks; `python3` brace parse for `web/styles.css`; `go test ./...`; `git diff -- web/styles.css docs/css-cleanup-ledger.md docs/css-cleanup-audit.md`; `git status --short`.
+- Verification results: CSS brace parse passed; `go test ./...` passed. No browser automation or visual-regression tooling exists in this repository, so Wardrobe visual states still need manual browser inspection at the recommended `1600x1000`, `980x900`, and `560x900` viewports.
+- Remaining repeated-selector count: `345` (baseline `348` minus these 3 exact duplicate selector groups).
+- Remaining provably redundant declarations: `1,232` (baseline `1,246` minus 14 identical declarations removed).
+- Risks/manual checks still needed: manually inspect the Wardrobe bonus panel in the default theme and in themes that override `.wardrobe-bonus-row`/`.wardrobe-bonus-row strong`, especially Pearl Tide, Woodland Moon/Sun, Phantom Rebel, Cafe, and Sakura Light inherited text behavior.
 
 ## Unresolved or intentionally repeated selector groups
 
@@ -107,6 +122,6 @@ Treat the following as unresolved/high-risk until manually proven safe:
 
 ## Remaining counts
 
-- Remaining repeated selector groups: `348`
-- Remaining provably redundant declarations: `1,246`
+- Remaining repeated selector groups: `345`
+- Remaining provably redundant declarations: `1,232`
 - Remaining high-risk/order-dependent groups: `131`

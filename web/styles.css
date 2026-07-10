@@ -5021,29 +5021,6 @@ h3 {
   color: var(--muted);
 }
 
-.wardrobe-bonus-list {
-  display: grid;
-  gap: 8px;
-}
-
-.wardrobe-bonus-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 9px 10px;
-  border: 1px solid var(--theme-wardrobe-row-border);
-  border-radius: 12px;
-  background: var(--theme-white-surface-03);
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 850;
-}
-
-.wardrobe-bonus-row strong {
-  color: var(--pink-soft);
-  font-weight: 950;
-}
-
 .inventory-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
