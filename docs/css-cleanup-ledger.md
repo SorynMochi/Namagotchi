@@ -81,7 +81,7 @@ Smallest useful tooling addition for a later task: a lightweight Playwright scri
 Batch sizes should stay under eight repeated selector groups and about 200 changed lines. Each batch should preserve cascade context and be verified with the states above.
 
 1. **Batch 1: exact global Wardrobe bonus row duplicates.** Remove only exact duplicate global rules for `.wardrobe-bonus-list`, `.wardrobe-bonus-row`, and `.wardrobe-bonus-row strong` around the first duplicated Wardrobe region, preserving the later identical declarations. Risk 1, 3 selector groups, approximately 20 changed lines.
-2. **Batch 2: exact global Wardrobe panel shell duplicates.** Handle exact duplicate global grouped panel rules for `.wardrobe-equipment-panel`, `.wardrobe-inventory-panel`, and `.wardrobe-bonuses-panel`. Risk 1, 3 selector groups.
+2. **Batch 2: completed 2026-07-10 — exact global Wardrobe panel shell duplicates.** Removed the earlier exact duplicate global grouped panel min-height block for `.wardrobe-equipment-panel`, `.wardrobe-inventory-panel`, and `.wardrobe-bonuses-panel`.
 3. **Batch 3: exact global Nami message/need text duplicates.** Handle `.nami-need-card p:nth-child(1)`, `.nami-need-card p:nth-child(2)`, and `.nami-log-message:last-child`. Risk 1, 3 selector groups.
 4. **Batch 4: exact global chat hidden-state duplicates.** Handle `.emoji-picker.hidden` and `.chat-form .emoji-picker.hidden`, then verify emoji picker hidden/open states. Risk 1, 2 selector groups.
 5. **Batch 5: exact scrollbar block duplicates.** Handle `.main-panel::-webkit-scrollbar` only after desktop scrollbar screenshots are captured. Risk 1 but browser-pseudo-sensitive.
@@ -108,6 +108,23 @@ Batch sizes should stay under eight repeated selector groups and about 200 chang
 - Remaining provably redundant declarations: `1,232` (baseline `1,246` minus 14 identical declarations removed).
 - Risks/manual checks still needed: manually inspect the Wardrobe bonus panel in the default theme and in themes that override `.wardrobe-bonus-row`/`.wardrobe-bonus-row strong`, especially Pearl Tide, Woodland Moon/Sun, Phantom Rebel, Cafe, and Sakura Light inherited text behavior.
 
+### Batch 2 — 2026-07-10 — exact global Wardrobe panel shell duplicates
+
+- Selectors examined: `.wardrobe-equipment-panel`, `.wardrobe-inventory-panel`, `.wardrobe-bonuses-panel` in the global cascade context.
+- Cascade context recorded: both duplicate grouped occurrences were top-level global rules in `web/styles.css` with no enclosing `@media`, `@supports`, `@layer`, `@scope`, or container rule. No pseudo-classes, pseudo-elements, animations, transitions, vendor-prefixed declarations, `!important`, inherited-property dependencies, custom-property values, or fallback declaration pairs were present in the removed rule.
+- Usage/dynamic check: `rg -n "wardrobe-equipment-panel|wardrobe-inventory-panel|wardrobe-bonuses-panel" .` found the static panel classes in `web/index.html`, scoped inventory-panel and bonuses-panel refinements in `web/styles.css`, theme overrides in `web/themes/candy.css`, `web/themes/cafe.css`, and `web/themes/rainy-mood.css`, backup stylesheet references, and audit/ledger references. No dynamically generated class names for these three panel shell classes were found; runtime behavior targets their static DOM elements and scoped `#section-inventory` states.
+- Cascade timeline: the earlier global grouped block at former lines 4910-4914 and the later global grouped block now at lines 5230-5234 had identical selector specificity after selector-list expansion and identical `min-height: 0` declarations. The selector order differed within the comma list, but each expanded selector had the same single declaration in the same global context. Deleting only the earlier copy preserves the later source-order position and leaves intervening `.equipment-card-grid`, `.equipment-card`, `.inventory-card-grid`, rarity, responsive Wardrobe, equipment slot, and preview rules in their prior relationship to the surviving panel shell rule.
+- Overlapping selectors considered: later `#section-inventory .wardrobe-bonuses-panel`, `#section-inventory .wardrobe-inventory-panel`, responsive `#section-inventory` inventory-panel rules, and theme-specific `body[data-theme=...]` panel overrides have higher specificity and/or remain later in source order and were not changed.
+- Selectors safely cleaned: `.wardrobe-equipment-panel`, `.wardrobe-inventory-panel`, `.wardrobe-bonuses-panel`.
+- Selectors deferred: none in this batch.
+- Declarations and lines removed: 3 expanded CSS declarations and 5 stylesheet lines.
+- Line count before/after: `10,732` lines before; `10,727` lines after.
+- Commands executed: `rg -n "wardrobe-equipment-panel|wardrobe-inventory-panel|wardrobe-bonuses-panel" .`; `python3` occurrence and selector/count checks; `python3` brace parse for `web/styles.css`; `go test ./...`; `git diff -- web/styles.css docs/css-cleanup-ledger.md docs/css-cleanup-audit.md`; `git status --short`.
+- Verification results: CSS brace parse passed; `go test ./...` passed for `github.com/SorynMochi/Namagotchi`, `internal/database`, and `internal/server`. No browser automation, visual-regression tooling, frontend build config, type-check config, or lint config exists in this repository, so Wardrobe visual states still need manual browser inspection at the recommended `1600x1000`, `980x900`, and `560x900` viewports.
+- Remaining repeated-selector count: `342` (previous `345` minus these 3 exact duplicate selector groups).
+- Remaining provably redundant declarations: `1,229` (previous `1,232` minus 3 identical expanded declarations removed).
+- Risks/manual checks still needed: manually inspect the Wardrobe equipment, inventory, and bonuses panel shells in the default theme and in themes that override these panels, especially Candy, Cafe, and Rainy Mood.
+
 ## Unresolved or intentionally repeated selector groups
 
 Treat the following as unresolved/high-risk until manually proven safe:
@@ -122,6 +139,6 @@ Treat the following as unresolved/high-risk until manually proven safe:
 
 ## Remaining counts
 
-- Remaining repeated selector groups: `345`
-- Remaining provably redundant declarations: `1,232`
+- Remaining repeated selector groups: `342`
+- Remaining provably redundant declarations: `1,229`
 - Remaining high-risk/order-dependent groups: `131`
