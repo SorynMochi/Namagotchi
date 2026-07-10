@@ -1096,6 +1096,8 @@ h2 {
   padding: 10px 12px;
   font-family: Consolas, "Courier New", monospace;
   font-size: 0.85rem;
+  scrollbar-color: var(--theme-legacy-cyan-80) var(--theme-white-surface-04);
+  scrollbar-width: thin;
 }
 
 .log-list p {
@@ -1111,6 +1113,20 @@ h2 {
 .log-list em {
   color: var(--muted);
   font-style: normal;
+}
+
+.log-list::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.log-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--theme-scrollbar-thumb-bg);
+}
+
+.log-list::-webkit-scrollbar-track {
+  background: var(--theme-white-surface-04);
 }
 
 .gathering-grid {
@@ -1136,6 +1152,7 @@ h2 {
 }
 
 .task-card p {
+  margin: 0;
   color: var(--text-soft);
 }
 
@@ -1317,6 +1334,7 @@ h2 {
 .buff-card span,
 .buff-card small {
   color: var(--muted);
+  line-height: 1.25;
 }
 
 .muted-card {
@@ -1324,30 +1342,22 @@ h2 {
 }
 
 /* Scrollbars: tiny neon rails, because the gremlins demand style. */
-.main-panel,
-.chat-log,
-.log-list {
+:is(.main-panel, .chat-log) {
   scrollbar-color: var(--theme-legacy-cyan-80) var(--theme-white-surface-04);
   scrollbar-width: thin;
 }
 
-.main-panel::-webkit-scrollbar,
-.chat-log::-webkit-scrollbar,
-.log-list::-webkit-scrollbar {
+:is(.main-panel, .chat-log)::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.main-panel::-webkit-scrollbar-thumb,
-.chat-log::-webkit-scrollbar-thumb,
-.log-list::-webkit-scrollbar-thumb {
+:is(.main-panel, .chat-log)::-webkit-scrollbar-thumb {
   border-radius: 999px;
   background: var(--theme-scrollbar-thumb-bg);
 }
 
-.main-panel::-webkit-scrollbar-track,
-.chat-log::-webkit-scrollbar-track,
-.log-list::-webkit-scrollbar-track {
+:is(.main-panel, .chat-log)::-webkit-scrollbar-track {
   background: var(--theme-white-surface-04);
 }
 
@@ -1430,6 +1440,9 @@ h2 {
 .meter-fill {
   height: 100%;
   border-radius: inherit;
+  box-shadow:
+    0 0 14px var(--theme-legacy-rose-22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
   transition: width 180ms linear;
 }
 
@@ -1515,14 +1528,6 @@ h2 {
   padding-bottom: 7px;
 }
 
-.buff-card span {
-  line-height: 1.25;
-}
-
-.buff-card small {
-  line-height: 1.25;
-}
-
 /* The Home header no longer needs button spacing */
 #section-home .section-header {
   align-items: center;
@@ -1605,12 +1610,6 @@ h2 {
 .compact-grid-lines {
   display: grid;
   gap: 4px;
-}
-
-.compact-grid-lines {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 12px;
-  row-gap: 4px;
 }
 
 .stat-group.compact p {
@@ -4110,7 +4109,6 @@ h3 {
 }
 
 .fill,
-.meter-fill,
 .tick-fill,
 .mood-fill,
 .stat-fill {
@@ -6722,8 +6720,6 @@ body.is-resizing-chat * {
   text-align: left;
 }
 
-.menu-logo-wrap,
-.menu-status-card,
 .main-nav.menu-grid {
   width: var(--left-menu-content-width) !important;
   box-sizing: border-box;
@@ -6731,6 +6727,9 @@ body.is-resizing-chat * {
 }
 
 .menu-logo-wrap {
+  width: var(--left-menu-content-width) !important;
+  box-sizing: border-box;
+  justify-self: center;
   display: grid;
   place-items: center;
   padding: 8px var(--left-menu-inner-pad) 4px;
@@ -6750,6 +6749,9 @@ body.is-resizing-chat * {
 }
 
 .menu-status-card {
+  width: var(--left-menu-content-width) !important;
+  box-sizing: border-box;
+  justify-self: center;
   display: grid;
   gap: 4px;
   padding: 8px var(--left-menu-inner-pad) 6px;
@@ -7078,12 +7080,8 @@ body.is-resizing-chat * {
   align-content: start;
 }
 
-#section-gathering .task-card h2,
-#section-gathering .task-card p {
-  margin: 0;
-}
-
 #section-gathering .task-card h2 {
+  margin: 0;
   color: var(--pink-soft);
   font-size: 0.92rem !important;
   line-height: 1.05 !important;
@@ -7095,6 +7093,7 @@ body.is-resizing-chat * {
 }
 
 #section-gathering .task-card p {
+  margin: 0;
   color: var(--text-soft);
   line-height: 1.05 !important;
 }
