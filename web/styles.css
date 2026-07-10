@@ -2954,26 +2954,6 @@ body > .emoji-picker-floating .emoji-option:hover {
   }
 }
 
-/* Performance: keep emoji picker pre-rendered instead of display:none */
-
-body > .emoji-picker-floating {
-  will-change: opacity, visibility;
-}
-
-body > .emoji-picker-floating.hidden {
-  display: block !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-body > .emoji-picker-floating:not(.hidden) {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
 /* Performance: permanently mounted emoji tray */
 
 body > .emoji-picker-floating {
@@ -3011,6 +2991,13 @@ body > .emoji-picker-floating.hidden {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: none !important;
+}
+
+body > .emoji-picker-floating:not(.hidden) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 body > .emoji-picker-floating.is-open {

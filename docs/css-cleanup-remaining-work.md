@@ -30,9 +30,13 @@ The completed cleanup plus the Other screens / shared components structural batc
 
 A focused structural batch flattened duplicate or appended declarations for `.log-list`, `.task-card p`, `.buff-card span`, `.buff-card small`, `.meter-fill`, `.compact-grid-lines`, `.menu-logo-wrap`, `.menu-status-card`, `#section-gathering .task-card h2`, and `#section-gathering .task-card p`. The next pass should refresh the duplicate tables before using the older line ranges below because this batch moved or removed several entries in the coverage-blocked section. Manual inspection remains recommended for combat log scrolling, gathering cards, buff cards, left menu cards, meter fills, and compact stat grids across desktop/mobile widths and collapsed rail state.
 
+## Completed Chat / emoji / profile structural batch — 2026-07-10
+
+A focused structural batch consolidated the mounted floating emoji picker state rules for `body > .emoji-picker-floating`, `body > .emoji-picker-floating.hidden`, and `body > .emoji-picker-floating:not(.hidden)`. It removed the obsolete pre-render performance block while preserving the final declaration snapshot for the floating picker base, hidden, not-hidden, and open states. Manual inspection remains recommended for the emoji picker hidden/open states across desktop and mobile widths because no browser automation or screenshot tooling is available in this checkout.
+
 ## Current calculations
 
-- Current `web/styles.css` line count: **10706**.
+- Current `web/styles.css` line count: **10693**.
 
 - Total remaining repeated selector groups: **337**.
 
